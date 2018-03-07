@@ -1,5 +1,5 @@
 # main text of home
-name: 林波 
+name: IT人 | 林波 
 bio: 今天你进步了吗？
 
 # twitter summary info
@@ -100,7 +100,7 @@ show-author: true
 # do you want some animations?
 animation: true
 
-gems:
+plugins:
   - jekyll-seo-tag
   - jekyll-gist
   - jekyll-feed
