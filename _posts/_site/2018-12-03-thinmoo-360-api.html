@@ -1,0 +1,25 @@
+<h3 id="是否在线get请求">是否在线（get请求）</h3>
+<p><code class="highlighter-rouge">url: http://47.97.173.58:8059/dmserver/dev_monitor?monitor_device=4113572025</code>
+判断返回值<code class="highlighter-rouge">"online": "online"</code>,<code class="highlighter-rouge">online</code> 就是在线，否则离线</p>
+
+<h3 id="一键开门post请求">一键开门（post请求）</h3>
+<ul>
+  <li><code class="highlighter-rouge">url: http://47.97.173.58:8059/dmserver/controlDevice</code></li>
+  <li>参数<code class="highlighter-rouge">{"access_token":"","operate":1,"data":{"devSn":"4113572025"}}</code></li>
+</ul>
+
+<h3 id="蓝牙开门">蓝牙开门</h3>
+<ul>
+  <li><code class="highlighter-rouge">Sn: 411352025</code></li>
+  <li><code class="highlighter-rouge">mac: 3F:49:F5:30:20:B9</code></li>
+  <li><code class="highlighter-rouge">eKey: 1729128a2ce5441b22d4b1c9961cbdfc908032977010000000000036445450831000</code></li>
+</ul>
+
+<h3 id="密码开门post请求">密码开门（post请求）</h3>
+<ul>
+  <li><code class="highlighter-rouge">url: http://120.79.243.165:9092/hmfsocialmanage/device/vetifyDevice</code></li>
+  <li>参数<code class="highlighter-rouge">{"validData":"258369","devSn":"4113572025"}</code></li>
+</ul>
+
+<h3 id="磁卡开门无">磁卡开门（无）</h3>
+

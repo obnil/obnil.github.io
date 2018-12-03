@@ -1,75 +1,18 @@
 ---
-title: About
 layout: page
+title: About
+permalink: /about/
 ---
-![Profile Image]({{ site.url }}/{{ site.picture }})
 
-#林波的简历
+This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
 
-- 4年 Android 开发经验
-- 基本信息：男 29岁 现居武汉
-- 英语: CET6
-- 电话：18963965124
-- 邮箱：821967831@qq.com
-- GitHub：https://github.com/obnil 
-- 博客：http://blog.csdn.net/lb891014
+You can find the source code for Minima at GitHub:
+[jekyll][jekyll-organization] /
+[minima](https://github.com/jekyll/minima)
 
-#教育经历
-
--  2011 --- 2014  北京航空航天大学 软件工程 研究生
--  2007 --- 2011  黄冈师范学院 计算机科学与技术 本科
-
-#工作经历 
-
-- 2014 --- 至今 武汉诚迈科技有限公司（华为 手机）  Android 开发
-- 2013 --- 2014  NEC（中国）有限公司（睿课堂 教育）  实习Android 开发
-
-#项目经历
-
-**华为手机项目**
-
-- 简介：通话，联系人，短信，小区广播功能定制
-- 主要技术：framework
-- 承担任务：project leader
- - 针对运营商的需求进行定制
- - 定位并修复海外一线提出的BUG，包括应用层和framework层的BUG
- - 分配下属员工每日任务（问题单，需求AR）
- - 组织新员工培训，确保新员工掌握工具的使用并且能够独立承担一个模块
-- 取得成就：
- - 2015年度优秀面试官
- - 代码运行在上亿台华为手机中为170个国家运营商提供定制服务 
-
-**睿课堂 APP**
-
-- 简介：NEC推出的智慧教育解决方案手机客户端
-- 主要技术：View, HttpClient, Handler, File, ViewPager
-- 独立完成：
- - 封装基础框架，业务开发，性能检测、优化
-- 承担任务：developer
- - 自动采集学生的学习记录，并进行分析后以清晰的图表方式呈现
- - 根据采集到的数据分析学生知识点掌握情况，并进行有针对性的学习方案推荐及强化资源推荐，实现一对一个性化教育
- - 家长可以通过智能手机专用应用获取自己孩子的最新在校学习情况及综合表现数据
-- 项目成就：完成了手机客户端的开发第一版，已成功上线，[版本链接](
-http://cn.nec.com/zh_CN/class/ruiklasse.html)。
-为20所国内初高中学生的家长提供信息服务 
-
-**自学 APP**
-
-- 简介：学习练手软件仿微信朋友圈
-- 主要技术：Gson, okhttp, Picasso
-- 独立完成：
- - 封装基础框架，业务开发，性能检测、优化
+You can find the source code for Jekyll at GitHub:
+[jekyll][jekyll-organization] /
+[jekyll](https://github.com/jekyll/jekyll)
 
 
-#专业技能
-
-- 良好的 Java 基础
-- 熟悉常用的设计模式
-- 掌握数据库，网络通信，常用的数据结构及算法
-- 熟悉常见的 Android 开发框架，研究过Android 的源码
-- 熟悉常见的 Android 测试及调优工具
-
-#其他
-
-- 针对工作中遇到的问题开发小工具提升工作效率
-- 活跃于技术社区，关注技术动态，有清晰的职业规划
+[jekyll-organization]: https://github.com/jekyll

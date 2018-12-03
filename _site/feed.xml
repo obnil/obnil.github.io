@@ -1,26 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-20T12:16:45+08:00</updated><id>http://localhost:4000/</id><title type="html">IT人 | 林波</title><subtitle>A blog about technology and stuff related</subtitle><entry><title type="html">密码管家项目</title><link href="http://localhost:4000/easy-password-project/" rel="alternate" type="text/html" title="密码管家项目" /><published>2018-03-20T11:48:00+08:00</published><updated>2018-03-20T11:48:00+08:00</updated><id>http://localhost:4000/easy-password-project</id><content type="html" xml:base="http://localhost:4000/easy-password-project/">&lt;h2 id=&quot;app设计图&quot;&gt;APP设计图&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-12-03T22:14:25+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Feeds</title><subtitle>Write an awesome description for your new site here.</subtitle><entry><title type="html">西墨M360门口机接口说明</title><link href="http://localhost:4000/m360/2018/12/03/thinmoo-360-api.html" rel="alternate" type="text/html" title="西墨M360门口机接口说明" /><published>2018-12-03T18:00:42+08:00</published><updated>2018-12-03T18:00:42+08:00</updated><id>http://localhost:4000/m360/2018/12/03/thinmoo-360-api</id><content type="html" xml:base="http://localhost:4000/m360/2018/12/03/thinmoo-360-api.html">&lt;h3 id=&quot;是否在线get请求&quot;&gt;是否在线（get请求）&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;url: http://47.97.173.58:8059/dmserver/dev_monitor?monitor_device=4113572025&lt;/code&gt;
+判断返回值&lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;online&quot;: &quot;online&quot;&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;online&lt;/code&gt; 就是在线，否则离线&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;预览图&lt;/strong&gt; 在下面 并且 &lt;strong&gt;提意见&lt;/strong&gt; 给我 821967831@qq.com:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/WechatIMG106.jpg&quot; alt=&quot;EasyPassword&quot; /&gt;&lt;/p&gt;</content><author><name>林波</name></author><category term="blog" /><category term="markdown" /><category term="app" /><category term="Material Design" /><summary type="html">APP设计图</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/images/WechatIMG106.jpg" /></entry><entry><title type="html">:ramen: Indigo, minimalist jekyll theme</title><link href="http://localhost:4000/indigo-jekyll-theme/" rel="alternate" type="text/html" title=":ramen: Indigo, minimalist jekyll theme" /><published>2016-01-23T22:10:00+08:00</published><updated>2016-01-23T22:10:00+08:00</updated><id>http://localhost:4000/indigo-jekyll-theme</id><content type="html" xml:base="http://localhost:4000/indigo-jekyll-theme/">&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/sergiokopplin/indigo/gh-pages/assets/screen-shot.png&quot; alt=&quot;Screenshot&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Example of project - Indigo Minimalist Jekyll Template - &lt;a href=&quot;http://sergiokopplin.github.io/indigo/&quot;&gt;Demo&lt;/a&gt;. This is a simple and minimalist template for Jekyll for those who likes to eat noodles.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;What has inside?&lt;/p&gt;
-
+&lt;h3 id=&quot;一键开门post请求&quot;&gt;一键开门（post请求）&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;Gulp&lt;/li&gt;
-  &lt;li&gt;BrowserSync&lt;/li&gt;
-  &lt;li&gt;Stylus&lt;/li&gt;
-  &lt;li&gt;SVG&lt;/li&gt;
-  &lt;li&gt;Travis&lt;/li&gt;
-  &lt;li&gt;No JS&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://developers.google.com/speed/pagespeed/insights/?url=http%3A%2F%2Fsergiokopplin.github.io%2Findigo%2F&quot;&gt;98/100&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;url: http://47.97.173.58:8059/dmserver/controlDevice&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;参数&lt;code class=&quot;highlighter-rouge&quot;&gt;{&quot;access_token&quot;:&quot;&quot;,&quot;operate&quot;:1,&quot;data&quot;:{&quot;devSn&quot;:&quot;4113572025&quot;}}&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;hr /&gt;
+&lt;h3 id=&quot;蓝牙开门&quot;&gt;蓝牙开门&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Sn: 411352025&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mac: 3F:49:F5:30:20:B9&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;eKey: 1729128a2ce5441b22d4b1c9961cbdfc908032977010000000000036445450831000&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://sergiokopplin.github.io/indigo/&quot;&gt;Check it out&lt;/a&gt; here.
-If you need some help, just &lt;a href=&quot;http://github.com/sergiokopplin/indigo/issues&quot;&gt;tell me&lt;/a&gt;.&lt;/p&gt;</content><author><name>johndoe</name></author><category term="project" /><category term="jekyll" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://koppl.in/indigo/assets/images/jekyll-logo-light-solid.png" /></entry></feed>
+&lt;h3 id=&quot;密码开门post请求&quot;&gt;密码开门（post请求）&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;url: http://120.79.243.165:9092/hmfsocialmanage/device/vetifyDevice&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;参数&lt;code class=&quot;highlighter-rouge&quot;&gt;{&quot;validData&quot;:&quot;258369&quot;,&quot;devSn&quot;:&quot;4113572025&quot;}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;磁卡开门无&quot;&gt;磁卡开门（无）&lt;/h3&gt;</content><author><name></name></author><summary type="html">是否在线（get请求） url: http://47.97.173.58:8059/dmserver/dev_monitor?monitor_device=4113572025 判断返回值&quot;online&quot;: &quot;online&quot;,online 就是在线，否则离线</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2018/12/03/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2018-12-03T15:40:42+08:00</published><updated>2018-12-03T15:40:42+08:00</updated><id>http://localhost:4000/jekyll/update/2018/12/03/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/12/03/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
