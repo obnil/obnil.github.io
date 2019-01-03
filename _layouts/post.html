@@ -1,28 +1,32 @@
 ---
 layout: default
 ---
+<div class="post">
+  <div class="post-title">{{ page.title }}</div>
+  <span class="post-date">
+    <time>{{ page.date | date_to_string }}</time>
+  </span>
+  <div class="post-tag">
+    <ul>
+      {% for tag in page.tags %}
+      <li>
+        <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">
+          <span>{{ tag }}</span>
+        </a>
+      </li>
+      {% unless forloop.last %}{% endunless %}
+      {% endfor %}
+    </ul>
+  </div>
 
-<article>
+  {{ content }}
 
-	<div class="center">
-		<h1 class="title">{{ page.title }}</h1>
-		<time class="code">{{ page.date | date: '%B %-d, %Y' }}</time>
-	</div>
-
-	<div class="divider"></div>
-
-	{{ content }}
-
-</article>
-
-<div class="page-navigation code">
-	{% if page.next.url %}
-    <a class="next" href="{{ page.next.url | prepend: site.baseurl | prepend: site.url }}" title="NEXT: {{page.next.title}}">&lt;&lt;</a>
-		<span> &middot; </span>
+  <!-- Disqus -->
+  {% if page.comments != false and site.disqus.id %}
+  <div class="post-disqus">
+      <section id="disqus_thread"></section>
+      {% include disqus.html %}
+  </div>
   {% endif %}
-		<a class="home" href="{{ "/" | prepend: site.baseurl | prepend: site.url }}" title="Back to Index">Index</a>
-  {% if page.previous.url %}
-		<span> &middot; </span>
-    <a class="prev" href="{{ page.previous.url | prepend: site.baseurl | prepend: site.url }}" title="PREV: {{page.previous.title}}">&gt;&gt;</a>
-  {% endif %}
+
 </div>

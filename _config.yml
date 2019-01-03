@@ -1,13 +1,93 @@
-title: Feeds
-email: namilin@icloud.com
-logo_url: https://img.yzcdn.cn/upload_files/2017/05/03/149378919182472097.jpg
-description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+# # # # # # # # # # # # #
+#   K i k o - p l u s   #
+# # # # # # # # # # # # #
 
-theme: the-plain
+# Basic
+name:               "Obnil"
+
+author:
+  facebook:         your-id
+#  youtubeUser:      your-id
+#  youtubeChannel:   your-id
+#  twitter:          your-id
+  github:           https://github.com/obnil
+#  stackoverflow:    your-id
+#  quora:            your-id
+#  linkedin:         your-id
+#  pinterest:        your-id
+#  googlePlus:       your-id
+#  instagram:        your-id
+#  reddit:           your-id
+#  medium:           your-id
+#  tumblr:           your-id
+  email:            namilin@icloud.com
+
+copyright:
+  year:             2018
+  name:             obnil
+
+# Google-analytics
+google-analytics:
+  id:               ""
+
+# Disqus
+#disqus:
+#  id:               "kiko-plus"
+
+# URL
+url:                "https://obnil.github.io" # the base hostname & protocol for your site
+# url:                "http://localhost:4000" # use this url when you develop
+baseurl:            "" # the subpath of your site, e.g. /blog
+
+
+# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone:           Asia/China
+permalink:          /:year-:month-:day/:title/
+
+# Pagination
+paginate:           10
+paginate_path:      /page:num/
+
+# Markdown
+markdown:           kramdown
+kramdown:
+  input:            GFM
+
+# Navigation
+nav:
+  - name:           "关于"
+    url:            "/about"
+  - name:           "项目"
+    url:            "/project"
+  - name:           "归档"
+    url:            "/archive"
+  - name:           "标签"
+    url:            "/tags"
+
+# Sass
+sass:
+  sass_dir:         _sass
+  style:            :compressed
+
+# Scopes
+defaults:
+  -
+    scope:
+      path:         ""
+      type:         "pages"
+    values:
+      layout:       "page"
+  -
+    scope:
+      path:         ""
+      type:         "posts"
+    values:
+      layout:       "post"
+
+# jekyll-seo-tag, see: http://www.rubydoc.info/gems/jekyll-seo-tag/1.2.0
 plugins:
-  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-admin
+
+exclude:            [vendor]
