@@ -3,129 +3,57 @@ title: 关于
 permalink: /about/
 ---
 
-You can see live demo [here](https://aweekj.github.io/Kiko-plus). This theme is inspired by [Kiko](http://github.com/gfjaru/Kiko) theme.
+## 林波
 
-## Features
+- 4年 Android 开发经验
+- 基本信息:男 29岁 现居武汉
+- 英语: CET6
+- 电话:18963965124 邮箱:821967831@qq.com GitHub:https://github.com/obnil 博客:http://blog.csdn.net/lb891014 
 
-- Disqus comment system
-- Google analytics
-- Pagination support
-- Custom tags
-- SEO support
+## 教育经历 
 
+- 2011 — 2014 北北京航空航天⼤大学 软件⼯工程 研究⽣生
 
-## Installation
+- 2007 — 2011 ⻩黄冈师范学院 计算机科学与技术 本科 
 
-#### Method 1: new master's repository (The Best)
+## ⼯作经历 
 
-1. First [fork](https://github.com/AWEEKJ/Kiko-plus/fork) it.
-2. Change your forked repository name _Kiko-plus_ to __USERNAME.github.io__ where __USERNAME__ is your github username.
-3. Access your new blog via [https://username.github.io](https://username.github.io).
-4. [See configuration](#configuration).
+- 2014 — ⾄今 武汉诚迈科技有限公司(华为 ⼿手机) Android 开发
+- 2013 — 2014 NEC(中国)有限公司(睿课堂 教育) 实习Android 开发 
 
-#### Method 2: gh-pages in existing repository
+## 项⽬经历
 
-1. Create a new branch called _gh-pages_ in the repository where you want to add a template [managing branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/).
-2. From command line run `git clone https://github.com/AWEEKJ/Kiko-plus.git` - this will clone _Kiko-plus_ template to your computer.
-3. Create new branch `git checkout -b gh-pages` where _gh-pages_ will be your branch name.
-4. Add remote, which is your repo from the first step, to your new branch `git remote add gh-pages https://github.com/<yourName>/<yourMaster>/gh-pages`. _yourName_ is your account name and _yourMaster_ is your repository.
-5. Push new branch to remote `git push gh-pages`.
-6. Update `_config.yml` file by changing `baseurl: "<branchName>"` _branchName_ is your branch name where _gh-pages_ resides. See [configuration](#configuration).
+#### 华为⼿手机项⽬ 
 
-#### Method 3: Run it locally
+简介:通话，联系⼈人，短信，⼩小区⼴广播功能定制 主要技术:framework
+承担任务:project leader 
 
-1. Download [zip](https://github.com/AWEEKJ/Kiko-plus/archive/master.zip) or clone it `git clone https://github.com/AWEEKJ/Kiko-plus`.
-2. Go inside folder and run `jekyll serve` or `rake preview`. This will build a website which you can access [https://localhost:4000](https://localhost:4000). You need to have [Jekyll](https://jekyllrb.com/docs/installation/) installed to do this.
+针对运营商的需求进⾏行行定制 定位并修复海海外⼀一线提出的BUG，包括应⽤用层和framework层的BUG 分配下属员⼯工每⽇日任务(问题单，需求AR) 组织新员⼯工培训，确保新员⼯工掌握⼯工具的使⽤用并且能够独⽴立承担⼀一个模块 
 
+取得成就:
+2015年年度优秀⾯面试官 代码运⾏行行在上亿台华为⼿手机中为170个国家运营商提供定制服务 
 
-## Configuration
+#### 睿课堂 APP 简介:NEC推出的智慧教育解决⽅方案⼿手机客户端 
 
-All configuration is done via `_config.yml` file which you will find in your main repo folder. Change this `<something>` to yours.
+主要技术:View, HttpClient, Handler, File, ViewPager 独⽴立完成: 
 
-### Basic
-
-- Config your blog name.
-
-```yml
-name: <blog-name>
+```
+    封装基础框架，业务开发，性能检测、优化
 ```
 
-- These configuration in `author:` is for links to icons in footer. If you want to add more link icons, modify `_includes/footer.html` file.
+承担任务:developer
+ ⾃自动采集学⽣生的学习记录，并进⾏行行分析后以清晰的图表⽅方式呈现 根据采集到的数据分析学⽣生知识点掌握情况，并进⾏行行有针对性的学习⽅方案推荐及强化资源推荐，实 现⼀一对⼀一个性化教育 家⻓长可以通过智能⼿手机专⽤用应⽤用获取⾃自⼰己孩⼦子的最新在校学习情况及综合表现数据 
 
-```yml
-author:
-  facebook:         your-id
-  twitter:          your-id
-  github:           your-id
-  linkedin:         your-id
-  medium:           your-id
-  tumblr:           your-id
-  email:            your-id@your-email.com
+项⽬目成就:完成了了⼿手机客户端的开发第⼀一版，已成功上线 http://cn.nec.com/zh_CN/class/ruiklasse.html 为20所国内初⾼高中学⽣生的家⻓长提供信息服务 
+
+专业技能 
+
+良好的 Java 基础
+ 熟悉常⽤用的设计模式 掌握数据库，⽹网络通信，常⽤用的数据结构及算法 熟悉常⻅见的 Android 开发框架，研究过Android 的源码 熟悉常⻅见的 Android 测试及调优⼯工具 
+
+其他 
+
 ```
-
-- Change copyright year and name in footer.
-
-```yml
-copyright:
-  year:             2017
-  name:             Kiko
+  针对⼯工作中遇到的问题开发⼩小⼯工具提升⼯工作效率
+  活跃于技术社区，关注技术动态，有清晰的职业规划
 ```
-
-### Google analytics
-
-- Change this to your Google Analytic ID.
-
-```yml
-google-analytics:
-  id:               "your-id"
-```
-
-### Disqus
-
-- Change this to your Disqus short name.
-
-```yml
-disqus:
-  id:               "your-id"
-```
-
-### URL
-
-- Config your domain.
-
-```yml
-url: "https://<your-name>.github.io"
-```
-
-- **NOTE** When if running locally, change url to 
-
-```yml
-url: "https://localhost:4000"
-```
-
-- Change this to your branch name where _gh-pages_ resides. 
-- **NOTE** apply only if you used __Method 2__ for installation.
-
-```yml
-baseurl: "/<branch-name>"
-```
-
-## Rakefile Usage
-
-```bash
-# Create new post
-$ rake post title="A Title" [date="2015-08-16"] [tags="[tag1, tag2]"] 
-
-# Create new draft post
-$ rake draft title="A Title" [date="2015-08-16"] [tags="[tag1, tag2]"]
-
-# Install Jekyll Plugins. Do before running in local.
-$ rake geminstall
-
-# Run in Local
-$ rake preview
-```
-
-## License
-
-This theme is released under MIT License.
