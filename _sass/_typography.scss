@@ -70,7 +70,6 @@ font-size: 1.375rem;
 font-weight: 300;
 }
 .site-header {
-border-bottom: 1px solid #d9d9d9;
 margin-bottom: .75em;
 min-height: 80px;
 }
@@ -79,16 +78,16 @@ float: left;
 margin: 0 0 1em 0;
 cursor: pointer;
 letter-spacing: 0.8px;
-font-size: 1em;
+font-size: 25px;
 line-height: 28px;
-font-weight: 300;
+font-weight: 600;
 }
 
 .header-nav {
 float: right;
 margin: 0;
 position: relative;
-padding-top: 1em;
+padding-top: 0.3em;
 pointer-events: all;
 cursor: pointer;
 }
