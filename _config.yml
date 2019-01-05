@@ -57,8 +57,8 @@ kramdown:
 nav:
   - name:           "关于"
     url:            "/about"
-  - name:           "项目"
-    url:            "/project"
+  - name:           "音乐"
+    url:            "/music"
   - name:           "归档"
     url:            "/archive"
   - name:           "标签"
