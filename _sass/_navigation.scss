@@ -1,0 +1,57 @@
+// ==== NAVIGATION ==== //
+
+// Style the navigation here.
+
+// 1. General
+// 2. Turbolinks
+// 3. Metabar
+
+// 1. General //
+$sans: "Overpass", Arial, sans-serif;
+$sans-semibold: 600;
+$short: .15s cubic-bezier(0, 0, 0.2, 1);
+$long: .3s cubic-bezier(0, 0, 0.2, 1);
+$primary: red;
+$sans-bold: 800;
+.nav {
+  display: block;
+  list-style: none;
+}
+
+.intro,
+.page,
+.post {
+  padding-top: 4rem;
+}
+
+.nav-link {
+  color: palette(gray);
+  font-family: $sans;
+  font-size: ms(-1);
+  font-weight: $sans-semibold;
+  letter-spacing: 0.25px;
+
+  a {
+    transition: color $short;
+    color: palette(gray);
+
+    &:hover,
+    &:focus {
+      color: palette($primary);
+    }
+  }
+
+  .nav-active {
+    color: palette(gray, dark);
+    font-weight: $sans-bold;
+  }
+}
+
+// 2. Turbolinks //
+
+.turbolinks-progress-bar {
+  height: 4px;
+  background-color: palette($primary);
+}
+
+// 3. Metabar //
