@@ -6,6 +6,458 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Markdown基本语法</title>
+        <description>&lt;p&gt;Markdown是一种纯文本格式的标记语言。通过简单的标记语法，它可以使普通文本内容具有一定的格式。&lt;/p&gt;
+
+&lt;p&gt;相比WYSIWYG编辑器&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;
+ 1、因为是纯文本，所以只要支持Markdown的地方都能获得一样的编辑效果，可以让作者摆脱排版的困扰，专心写作。
+ 2、操作简单。比如:WYSIWYG编辑时标记个标题，先选中内容，再点击导航栏的标题按钮，选择几级标题。要三个步骤。而Markdown只需要在标题内容前加#即可&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;缺点：&lt;/strong&gt;
+ 1、需要记一些语法（当然，是很简单。五分钟学会）。
+ 2、有些平台不支持Markdown编辑模式。&lt;/p&gt;
+
+&lt;p&gt;还好，简书是支持Markdown编辑模式的。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;开启方式：设置-&amp;gt;默认编辑器-&amp;gt;Markdown编辑器
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;一标题&quot;&gt;一、标题&lt;/h1&gt;
+
+&lt;p&gt;在想要设置为标题的文字前面加#来表示
+ 一个#是一级标题，二个#是二级标题，以此类推。支持六级标题。&lt;/p&gt;
+
+&lt;p&gt;注：标准语法一般在#后跟个空格再写文字，貌似简书不加空格也行。&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# 这是一级标题
+## 这是二级标题
+### 这是三级标题
+#### 这是四级标题
+##### 这是五级标题
+###### 这是六级标题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;h1 id=&quot;这是一级标题&quot;&gt;这是一级标题&lt;/h1&gt;
+
+&lt;h2 id=&quot;这是二级标题&quot;&gt;这是二级标题&lt;/h2&gt;
+
+&lt;h3 id=&quot;这是三级标题&quot;&gt;这是三级标题&lt;/h3&gt;
+
+&lt;h4 id=&quot;这是四级标题&quot;&gt;这是四级标题&lt;/h4&gt;
+
+&lt;h5 id=&quot;这是五级标题&quot;&gt;这是五级标题&lt;/h5&gt;
+
+&lt;h6 id=&quot;这是六级标题&quot;&gt;这是六级标题&lt;/h6&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;二字体&quot;&gt;二、字体&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h5 id=&quot;加粗&quot;&gt;加粗&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;要加粗的文字左右分别用两个*号包起来&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h5 id=&quot;斜体&quot;&gt;斜体&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;要倾斜的文字左右分别用一个*号包起来&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h5 id=&quot;斜体加粗&quot;&gt;斜体加粗&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;要倾斜和加粗的文字左右分别用三个*号包起来&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h5 id=&quot;删除线&quot;&gt;删除线&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;要加删除线的文字左右分别用两个~~号包起来&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;**这是加粗的文字**
+*这是倾斜的文字*`
+***这是斜体加粗的文字***
+~~这是加删除线的文字~~
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这是加粗的文字&lt;/strong&gt;
+ &lt;em&gt;这是倾斜的文字&lt;/em&gt;
+ &lt;strong&gt;这是斜体加粗的文字&lt;/strong&gt;
+ &lt;del&gt;这是加删除线的文字&lt;/del&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;三引用&quot;&gt;三、引用&lt;/h1&gt;
+
+&lt;p&gt;在引用的文字前加&amp;gt;即可。引用也可以嵌套，如加两个»三个»&amp;gt;
+ n个…
+ 貌似可以一直加下去，但没神马卵用&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;这是引用的内容
+&amp;gt;&amp;gt;这是引用的内容
+&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;这是引用的内容
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;这是引用的内容&lt;/p&gt;
+
+  &lt;blockquote&gt;
+    &lt;p&gt;这是引用的内容&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;blockquote&gt;
+        &lt;blockquote&gt;
+          &lt;blockquote&gt;
+            &lt;blockquote&gt;
+              &lt;blockquote&gt;
+                &lt;blockquote&gt;
+                  &lt;blockquote&gt;
+                    &lt;p&gt;这是引用的内容&lt;/p&gt;
+                  &lt;/blockquote&gt;
+                &lt;/blockquote&gt;
+              &lt;/blockquote&gt;
+            &lt;/blockquote&gt;
+          &lt;/blockquote&gt;
+        &lt;/blockquote&gt;
+      &lt;/blockquote&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;四分割线&quot;&gt;四、分割线&lt;/h1&gt;
+
+&lt;p&gt;三个或者三个以上的 - 或者 * 都可以。&lt;/p&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;---
+&lt;span class=&quot;gd&quot;&gt;----
+&lt;/span&gt;***
+*****
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：
+ 可以看到，显示效果是一样的。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;五图片&quot;&gt;五、图片&lt;/h1&gt;
+
+&lt;p&gt;语法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;![图片alt](图片地址 ''图片title'')
+
+图片alt就是显示在图片下面的文字，相当于对图片内容的解释。
+图片title是图片的标题，当鼠标移到图片上时显示的内容。title可加可不加
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;![img](http://themicronaut.github.io/images/dancing-man.gif)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://themicronaut.github.io/images/dancing-man.gif&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;blockchain&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;上传本地图片直接点击导航栏的图片标志，选择图片即可&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;六超链接&quot;&gt;六、超链接&lt;/h1&gt;
+
+&lt;p&gt;语法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[超链接名](超链接地址 &quot;超链接title&quot;)
+title可加可不加
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[简书](http://jianshu.com)
+[百度](http://baidu.com)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/u/1f5ac0cf6a8b&quot;&gt;简书&lt;/a&gt;
+&lt;a href=&quot;http://baidu.com&quot;&gt;百度&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;注：Markdown本身语法不支持链接在新页面中打开，貌似简书做了处理，是可以的。别的平台可能就不行了，如果想要在新页面中打开的话可以用html语言的a标签代替。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;a href=&quot;超链接地址&quot; target=&quot;_blank&quot;&amp;gt;超链接名&amp;lt;/a&amp;gt;
+
+示例
+&amp;lt;a href=&quot;https://www.jianshu.com/u/1f5ac0cf6a8b&quot; target=&quot;_blank&quot;&amp;gt;简书&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;七列表&quot;&gt;七、列表&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h5 id=&quot;无序列表&quot;&gt;无序列表&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;语法：
+ 无序列表用 - + * 任何一种都可以&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 列表内容
++ 列表内容
+* 列表内容
+
+注意：- + * 跟内容之间都要有一个空格
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;列表内容&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;列表内容&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;列表内容&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;有序列表&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;语法：
+ 数字加点&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.列表内容
+2.列表内容
+3.列表内容
+
+注意：序号跟内容之间要有空格
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;p&gt;1.列表内容
+ 2.列表内容
+ 3.列表内容&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h5 id=&quot;列表嵌套&quot;&gt;列表嵌套&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;上一级和下一级之间敲三个空格即可&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一级无序列表内容
+    &lt;ul&gt;
+      &lt;li&gt;二级无序列表内容&lt;/li&gt;
+      &lt;li&gt;二级无序列表内容&lt;/li&gt;
+      &lt;li&gt;二级无序列表内容&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;一级无序列表内容
+    &lt;ol&gt;
+      &lt;li&gt;二级有序列表内容&lt;/li&gt;
+      &lt;li&gt;二级有序列表内容&lt;/li&gt;
+      &lt;li&gt;二级有序列表内容&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;一级有序列表内容
+    &lt;ul&gt;
+      &lt;li&gt;二级无序列表内容&lt;/li&gt;
+      &lt;li&gt;二级无序列表内容&lt;/li&gt;
+      &lt;li&gt;二级无序列表内容&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;一级有序列表内容
+    &lt;ol&gt;
+      &lt;li&gt;二级有序列表内容&lt;/li&gt;
+      &lt;li&gt;二级有序列表内容&lt;/li&gt;
+      &lt;li&gt;二级有序列表内容&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;八表格&quot;&gt;八、表格&lt;/h1&gt;
+
+&lt;p&gt;语法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;表头|表头|表头
+---|:--:|---:
+内容|内容|内容
+内容|内容|内容
+
+第二行分割表头和内容。
+- 有一个就行，为了对齐，多加了几个
+文字默认居左
+-两边加：表示文字居中
+-右边加：表示文字居右
+注：原生的语法两边都要用 | 包起来。此处省略
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;姓名|技能|排行
+--|:--:|--:
+刘备|哭|大哥
+关羽|打|二哥
+张飞|骂|三弟
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;姓名&lt;/th&gt;
+      &lt;th&gt;技能&lt;/th&gt;
+      &lt;th&gt;排行&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;刘备&lt;/td&gt;
+      &lt;td&gt;哭&lt;/td&gt;
+      &lt;td&gt;大哥&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;关羽&lt;/td&gt;
+      &lt;td&gt;打&lt;/td&gt;
+      &lt;td&gt;二哥&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;张飞&lt;/td&gt;
+      &lt;td&gt;骂&lt;/td&gt;
+      &lt;td&gt;三弟&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&quot;九代码&quot;&gt;九、代码&lt;/h1&gt;
+
+&lt;p&gt;语法：
+ 单行代码：代码之间分别用一个反引号包起来&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    `代码内容`
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;代码块：代码之间分别用三个反引号包起来，且两边的反引号单独占一行&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(```)
+  代码...
+  代码...
+  代码...
+(```)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;注：为了防止转译，前后三个反引号处加了小括号，实际是没有的。这里只是用来演示，实际中去掉两边小括号即可。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;示例：&lt;/p&gt;
+
+&lt;p&gt;单行代码&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;`create database hero;`
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;代码块&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(```)
+    function fun(){
+         echo &quot;这是一句非常牛逼的代码&quot;;
+    }
+    fun();
+(```)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;p&gt;单行代码&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;create database hero;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;代码块&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function fun(){
+  echo &quot;这是一句非常牛逼的代码&quot;;
+}
+fun();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;十流程图&quot;&gt;十、流程图&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;​```flow
+st=&amp;gt;start: 开始
+op=&amp;gt;operation: My Operation
+cond=&amp;gt;condition: Yes or No?
+e=&amp;gt;end
+st-&amp;gt;op-&amp;gt;cond
+cond(yes)-&amp;gt;e
+cond(no)-&amp;gt;op
+&amp;amp;```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;效果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-flow&quot;&gt;st=&amp;gt;start: 开始
+op=&amp;gt;operation: My Operation
+cond=&amp;gt;condition: Yes or No?
+e=&amp;gt;end
+st-&amp;gt;op-&amp;gt;cond
+cond(yes)-&amp;gt;e
+cond(no)-&amp;gt;op
+&amp;amp;```
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Sun, 06 Jan 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-01-06/markdown/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-01-06/markdown/</guid>
+      </item>
+    
+      <item>
         <title>2018年总结</title>
         <description>&lt;p&gt;今天是2018年最后的一天，年初立下的Flag，不知道大家年末的时候完成得如何了呢。今天不谈太多技术，只谈一下这一年，我眼中的世界。&lt;/p&gt;
 
