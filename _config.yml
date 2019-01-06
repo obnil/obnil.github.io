@@ -55,12 +55,14 @@ kramdown:
 
 # Navigation
 nav:
-  - name:           "关于"
-    url:            "/about"
+  - name:           "Android"
+    url:            "/android"
+  - name:           "Python"
+    url:            "/python"
   - name:           "音乐"
     url:            "/music"
-  - name:           "归档"
-    url:            "/archive"
+  - name:           "博客"
+    url:            "/blog"
   - name:           "标签"
     url:            "/tags"
 

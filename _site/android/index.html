@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android高级进阶</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Programmer" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Android高级进阶 | Programmer</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Android高级进阶" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/android/" />
+<meta property="og:url" content="http://localhost:4000/android/" />
+<meta property="og:site_name" content="Programmer" />
+<script type="application/ld+json">
+{"@type":"WebPage","url":"http://localhost:4000/android/","headline":"Android高级进阶","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Programmer</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a href="/android">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a href="/python">Python</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a href="/music">音乐</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a href="/blog">博客</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a href="/tags">标签</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="page">
+  <h1>Android高级进阶</h1>
+  <h2 id="自定义view">自定义View</h2>
+
+<ul>
+  <li>
+    <p>屏幕适配</p>
+  </li>
+  <li>
+    <p>UI绘制流程及其原理</p>
+
+    <ul>
+      <li>View源码分析</li>
+      <li>View布局</li>
+      <li>xml布局到屏幕绘制流程原理</li>
+    </ul>
+  </li>
+  <li>
+    <p>事件传递机制</p>
+  </li>
+  <li>
+    <p>绘图及其高级特效</p>
+
+    <ul>
+      <li>Paint方法使用技巧</li>
+      <li>高级渲染</li>
+      <li>Xfermode</li>
+      <li>滤镜效果</li>
+      <li>颜色通道过滤</li>
+      <li>Canvas画板高级技能</li>
+      <li>Canvas图层与状态方法使用技巧</li>
+      <li>超强辅助英雄-Path工具类的使用</li>
+    </ul>
+  </li>
+  <li>
+    <p>自定义控件开发</p>
+
+    <ul>
+      <li>Scroller详解及源码分析</li>
+      <li>ViewDragHelper详解及源码分析</li>
+      <li>自定义View触摸工具类解析</li>
+      <li>大量自定义控件实践</li>
+    </ul>
+  </li>
+  <li>
+    <p>高级动画特效</p>
+
+    <ul>
+      <li>属性动画源码分析</li>
+      <li>MaterialDesign动画</li>
+      <li>Reveal effect（揭露效果）</li>
+      <li>Activity转换效果</li>
+      <li>Curved motion（曲线运动）</li>
+      <li>Animate Vector Drawables（矢量动画）</li>
+      <li>GIF动画引擎框架分析</li>
+    </ul>
+  </li>
+  <li>
+    <p>Meterial Design设计思想与原理分析</p>
+
+    <ul>
+      <li>NavigationView+DrawerLayout主流侧滑实现</li>
+      <li>Meterial Design控件详解及源码分析</li>
+      <li>手写Meterial Design最核心控件CoordinatorLayout</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="linux和git">Linux和Git</h2>
+
+<ul>
+  <li>Linux常用命令ls，grep，find，vim，time，netstat，ssh</li>
+  <li>Git常用命令diff，log，clean，reset，cherry-pick，blame</li>
+</ul>
+
+<h2 id="android系统源码">Android系统源码</h2>
+
+<ul>
+  <li>Handler源码分析</li>
+  <li>Message链表原理与重用机制</li>
+  <li>Binder核心原理与架构设计</li>
+  <li>PackageManagerService架构设计与Activity跨进程跳转</li>
+  <li>App启动流程</li>
+</ul>
+
+<h2 id="事件总线框架eventbus">事件总线框架EventBus</h2>
+
+<h2 id="网易云换肤核心技术">网易云换肤核心技术</h2>
+
+<h2 id="组件化框架">组件化框架</h2>
+
+<ul>
+  <li>阿里巴巴ARouter原理</li>
+  <li>组件化配置</li>
+  <li>手写组件化路由(重定向，跳转预处理，多类型参数从拿地，多Moudle跳转)</li>
+</ul>
+
+<h2 id="插件化框架">插件化框架</h2>
+
+<h2 id="数据库框架greendao">数据库框架GreenDao</h2>
+
+<h2 id="网络访问框架okhttp">网络访问框架OKHttp</h2>
+
+<ul>
+  <li>网络七层模型及其原理(TCP IP握手)</li>
+  <li>OkHttp源码分析</li>
+  <li>HTTP协议结构，重用， 缓存，安全传输（HTTPS握手机制）</li>
+  <li>序列化协议 （Protocol Buffer</li>
+  <li>Socket连接池复用机制</li>
+  <li>拦截器责任链模式</li>
+  <li>使用泛型完成可扩展OkHttp框架支持高并发，请求队列</li>
+</ul>
+
+<h2 id="图片加载框架glide">图片加载框架Glide</h2>
+
+<ul>
+  <li>Glide源码分析</li>
+  <li>手写Glide图片加载框架</li>
+  <li>LruCache和DiskLruCache解析</li>
+</ul>
+
+<h2 id="rxjava响应式编程框架">RxJava响应式编程框架</h2>
+
+<ul>
+  <li>RxJava源码分析</li>
+  <li>手写RxJava响应式架构(链式调度，事件变换，线程切换)</li>
+  <li>深入递归式实现RxJava订阅链(观察者变种)</li>
+</ul>
+
+<h2 id="ioc框架">IOC框架</h2>
+
+<ul>
+  <li>运行时框架XUtils3.0源码分析</li>
+  <li>编译时框架ButterKnife源码分析</li>
+  <li>注入式框架Dagger2源码分析</li>
+</ul>
+
+<h2 id="android中的设计模式">Android中的设计模式</h2>
+
+<ul>
+  <li>观察者模式</li>
+  <li>单例模式</li>
+  <li>适配器模式</li>
+  <li>工厂模式</li>
+  <li>代理模式</li>
+</ul>
+
+<h2 id="性能优化">性能优化</h2>
+
+<ul>
+  <li>发生OOM条件分析</li>
+  <li>分析和定位卡顿问题</li>
+  <li>优化复杂布局的卡顿问题</li>
+  <li>避免内存泄漏</li>
+  <li>优化工具的使用Lint，MAT，LeakCanary，Memory Monitor，TraceView，HierarchyViewer布局检测工具</li>
+  <li>安装包性能优化</li>
+  <li>后台服务双进程守护</li>
+  <li>多线程及线程间通讯</li>
+  <li>线程同步和锁</li>
+</ul>
+
+<h2 id="数据结构">数据结构</h2>
+
+<ul>
+  <li>
+    <p>数据结构</p>
+
+    <ul>
+      <li>逻辑结构（集合，线性，树形，图形）</li>
+      <li>存储结构（顺序，链式）</li>
+    </ul>
+  </li>
+  <li>
+    <p>线性表详解</p>
+
+    <ul>
+      <li>链表</li>
+      <li>队列</li>
+    </ul>
+  </li>
+  <li>
+    <p>HashMap实现原理与手写实现</p>
+
+    <ul>
+      <li>hash算法为什么能解决高并发 高数据量下实现精确查找</li>
+      <li>扩容机制为什么能使HashMap无限容量</li>
+      <li>索引机制如何增加查找性能</li>
+      <li>手写实现高性能HashMap</li>
+    </ul>
+  </li>
+  <li>
+    <p>二叉树的详解</p>
+
+    <ul>
+      <li>
+        <p>二叉树的存储</p>
+      </li>
+      <li>
+        <p>二叉树的遍历</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="算法">算法</h2>
+
+<ul>
+  <li>常见算法及复杂度
+    <ul>
+      <li>排序</li>
+      <li>二分</li>
+      <li>递归</li>
+      <li>哈希</li>
+    </ul>
+  </li>
+  <li>分治法</li>
+  <li>动态规划法</li>
+</ul>
+
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+</body>
+</html>
