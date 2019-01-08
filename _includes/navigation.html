@@ -2,11 +2,11 @@
     {% for nav in site.nav %}
     {% if nav.url contains 'http://' or nav.url contains 'https://' %}
     <li class="nav-link">
-        <a href="{{ nav.url }}">{{ nav.name }}</a>
+        <a class="{% if page.url == nav.url %} nav-active{% endif %}" href="{{ nav.url }}">{{ nav.name }}</a>
     </li>
     {% else %}
     <li class="nav-link">
-        <a href="{{ nav.url | prepend: site.baseurl }}">{{ nav.name }}</a>
+        <a class="{% if page.url == nav.url %} nav-active{% endif %}" href="{{ nav.url | prepend: site.baseurl }}">{{ nav.name }}</a>
     </li>
     {% endif %}
     {% endfor %}

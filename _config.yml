@@ -56,15 +56,15 @@ kramdown:
 # Navigation
 nav:
   - name:           "Android"
-    url:            "/android"
+    url:            "/android/"
   - name:           "Python"
-    url:            "/python"
+    url:            "/python/"
   - name:           "音乐"
-    url:            "/music"
+    url:            "/music/"
   - name:           "博客"
-    url:            "/blog"
+    url:            "/blog/"
   - name:           "标签"
-    url:            "/tags"
+    url:            "/tags/"
 
 # Sass
 sass:
