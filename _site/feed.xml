@@ -6,6 +6,44 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</title>
+        <description>&lt;p&gt;Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。&lt;/p&gt;
+&lt;h1 id=&quot;查看普通文件ls&quot;&gt;查看普通文件ls&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws1.sinaimg.cn/large/006tNc79gy1fz6he7vv8zj31h405smzj.jpg&quot; alt=&quot;WX20190114-214206@2x&quot; /&gt;&lt;/p&gt;
+&lt;h1 id=&quot;查看所有文件ls--alh&quot;&gt;查看所有文件ls -Alh&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6he6y85pj30uk0s2dqx.jpg&quot; alt=&quot;WX20190114-221241@2x&quot; /&gt;&lt;/p&gt;
+&lt;h1 id=&quot;自定义命令alias-llls--alh&quot;&gt;自定义命令alias ll=’ls -Alh’&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6he4ypfyj31as0doq8u.jpg&quot; alt=&quot;WX20190114-221420@2x&quot; /&gt;
+添加到文件vi ~/.bash_profile并保存，使用source ~/.bash_profile&lt;/p&gt;
+&lt;h1 id=&quot;搜索代码grep&quot;&gt;搜索代码grep&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws3.sinaimg.cn/large/006tNc79gy1fz6he5zsfgj317q0iuqdv.jpg&quot; alt=&quot;WX20190114-214507@2x&quot; /&gt;&lt;/p&gt;
+&lt;h1 id=&quot;查找文件find&quot;&gt;查找文件find&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMacBook-Pro:SecuritySchoolPro namilin$ find . -name &quot;build.gradle&quot;
+./app/build.gradle
+./IMLib/build.gradle
+./pay/build.gradle
+./IMKit/build.gradle
+./common/build.gradle
+./lib-zxing/build.gradle
+./build.gradle
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;编辑文件vim&quot;&gt;编辑文件vim&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6hgfe7xjg30ng0eg77e.gif&quot; alt=&quot;vim&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;量测特定指令执行时间time&quot;&gt;量测特定指令执行时间time&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6hiks7cdj30t206st9w.jpg&quot; alt=&quot;image-20190114223148280&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;远程连接工具ssh&quot;&gt;远程连接工具ssh&lt;/h1&gt;
+
+</description>
+        <pubDate>Mon, 14 Jan 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-01-14/linux/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-01-14/linux/</guid>
+      </item>
+    
+      <item>
         <title>Markdown基本语法</title>
         <description>&lt;p&gt;Markdown是一种纯文本格式的标记语言。通过简单的标记语法，它可以使普通文本内容具有一定的格式。&lt;/p&gt;
 

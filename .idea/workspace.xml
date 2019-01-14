@@ -3,47 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5c05ddbc-0f2c-42b2-9229-17f3cf28ca0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.sass-cache/4161c74432210b0297d761d06f1e82d867550522/_navigation.scssc" beforeDir="false" afterPath="$PROJECT_DIR$/.sass-cache/4161c74432210b0297d761d06f1e82d867550522/_navigation.scssc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/navigation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-06-markdown.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-06-markdown.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_sass/_navigation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/_sass/_navigation.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2017-11-17/earphone-jack/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2017-11-17/earphone-jack/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-16/chengdu-pollution/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-16/chengdu-pollution/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-16/new-year/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-16/new-year/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-20/experience-china/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-20/experience-china/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-22/automatic-programming/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-22/automatic-programming/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-22/smart-contract/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-22/smart-contract/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-24/chinese-fame/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-24/chinese-fame/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-26/fired/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-26/fired/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-01/truth/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-01/truth/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-05/book/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-05/book/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-08/ciia1/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-08/ciia1/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-21/csbook-preface/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-21/csbook-preface/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-27/door-etiquette/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-27/door-etiquette/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-29/appreciation/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-29/appreciation/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-04-13/computer-science/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-04-13/computer-science/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-04-13/csbook-chapter1/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-04-13/csbook-chapter1/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-05-28/change/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-05-28/change/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-10-14/update/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-10-14/update/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-11-23/grammar/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-11-23/grammar/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-11-24/grammar-chapter1/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-11-24/grammar-chapter1/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-12-03/summary/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-12-03/summary/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-12-03/welcome-to-jekyll/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-12-03/welcome-to-jekyll/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2019-01-06/markdown/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2019-01-06/markdown/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/404.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/404.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/about/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/about/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/android/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/android/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/blog/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/blog/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/music/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/music/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/page2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/page2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/page3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/page3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/python/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/python/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/tags/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/tags/index.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -55,11 +14,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_sass/_navigation.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
+            <state relative-caret-position="836">
               <caret line="44" column="19" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
             </state>
           </provider>
@@ -68,7 +27,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_sass/_color.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="3249">
               <caret line="171" column="29" selection-start-line="171" selection-start-column="29" selection-end-line="171" selection-end-column="29" />
             </state>
           </provider>
@@ -86,7 +45,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_sass/_typography.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1102">
+            <state relative-caret-position="6327">
               <caret line="333" column="13" selection-start-line="333" selection-start-column="13" selection-end-line="333" selection-end-column="13" />
             </state>
           </provider>
@@ -95,7 +54,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_sass/_site.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
+            <state relative-caret-position="266">
               <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
             </state>
           </provider>
@@ -105,8 +64,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2017-11-17-earphone-jack.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="289">
-                <caret line="16" column="15" lean-forward="true" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
+              <first_editor relative-caret-position="304">
+                <caret line="16" column="15" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
               </first_editor>
               <second_editor />
             </state>
@@ -117,8 +76,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2019-01-06-markdown.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SECOND">
-              <first_editor relative-caret-position="-3077">
-                <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+              <first_editor relative-caret-position="551">
+                <caret line="29" selection-start-line="29" selection-end-line="29" />
               </first_editor>
               <second_editor />
             </state>
@@ -129,8 +88,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-summary.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="285">
-                <caret line="15" column="10" lean-forward="true" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+              <first_editor relative-caret-position="418">
+                <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
               </first_editor>
               <second_editor />
             </state>
@@ -201,9 +160,8 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="4" />
-    <option name="y" value="25" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="817" />
   </component>
@@ -269,16 +227,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1546762609011</updated>
-      <workItem from="1546762610425" duration="14521000" />
+      <workItem from="1546762610425" duration="14778000" />
+      <workItem from="1547105724193" duration="28000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14521000" />
+    <option name="totallyTimeSpent" value="14806000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="25" width="1440" height="817" extended-state="1" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1440" height="817" extended-state="0" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21423538" />
@@ -354,16 +312,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+    <entry file="file://$PROJECT_DIR$/_sass/_navigation.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="33" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
+        <state relative-caret-position="836">
+          <caret line="44" column="19" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/_sass/_color.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="3249">
           <caret line="171" column="29" selection-start-line="171" selection-start-column="29" selection-end-line="171" selection-end-column="29" />
         </state>
       </provider>
@@ -375,30 +333,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_sass/_variables.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_sass/_typography.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1102">
+        <state relative-caret-position="6327">
           <caret line="333" column="13" selection-start-line="333" selection-start-column="13" selection-end-line="333" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_sass/_navigation.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="44" column="19" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/_sass/_site.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
+        <state relative-caret-position="266">
           <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
         </state>
       </provider>
@@ -406,8 +350,8 @@
     <entry file="file://$PROJECT_DIR$/_posts/2017-11-17-earphone-jack.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="289">
-            <caret line="16" column="15" lean-forward="true" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
+          <first_editor relative-caret-position="304">
+            <caret line="16" column="15" selection-start-line="16" selection-start-column="15" selection-end-line="16" selection-end-column="15" />
           </first_editor>
           <second_editor />
         </state>
@@ -416,18 +360,32 @@
     <entry file="file://$PROJECT_DIR$/_posts/2019-01-06-markdown.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SECOND">
-          <first_editor relative-caret-position="-3077">
-            <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+          <first_editor relative-caret-position="551">
+            <caret line="29" selection-start-line="29" selection-end-line="29" />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_sass/_variables.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="33" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-summary.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="285">
-            <caret line="15" column="10" lean-forward="true" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+          <first_editor relative-caret-position="418">
+            <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
           </first_editor>
           <second_editor />
         </state>

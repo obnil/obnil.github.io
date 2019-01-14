@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to Jekyll!</title>
+  <title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</title>
   <!--Leancloud 操作库:-->
   <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
   <!--Valine 的核心代码库:-->
@@ -36,19 +36,19 @@
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Welcome to Jekyll! | Programmer</title>
+<title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh | Programmer</title>
 <meta name="generator" content="Jekyll v3.8.5" />
-<meta property="og:title" content="Welcome to Jekyll!" />
+<meta property="og:title" content="Linux常用命令ls，grep，find，vim，自定义命令，time，ssh" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A ton of text to test readability." />
-<meta property="og:description" content="A ton of text to test readability." />
-<link rel="canonical" href="http://localhost:4000/2018-12-03/welcome-to-jekyll/" />
-<meta property="og:url" content="http://localhost:4000/2018-12-03/welcome-to-jekyll/" />
+<meta name="description" content="Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码" />
+<meta property="og:description" content="Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码" />
+<link rel="canonical" href="http://localhost:4000/2019-01-14/linux/" />
+<meta property="og:url" content="http://localhost:4000/2019-01-14/linux/" />
 <meta property="og:site_name" content="Programmer" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2018-12-03T07:40:42+00:00" />
+<meta property="article:published_time" content="2019-01-14T07:40:42+00:00" />
 <script type="application/ld+json">
-{"description":"A ton of text to test readability.","@type":"BlogPosting","url":"http://localhost:4000/2018-12-03/welcome-to-jekyll/","headline":"Welcome to Jekyll!","dateModified":"2018-12-03T07:40:42+00:00","datePublished":"2018-12-03T07:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018-12-03/welcome-to-jekyll/"},"@context":"http://schema.org"}</script>
+{"description":"Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码","@type":"BlogPosting","url":"http://localhost:4000/2019-01-14/linux/","headline":"Linux常用命令ls，grep，find，vim，自定义命令，time，ssh","dateModified":"2019-01-14T07:40:42+00:00","datePublished":"2019-01-14T07:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-01-14/linux/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -121,37 +121,16 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-  <h1>Welcome to Jekyll!</h1>
+  <h1>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</h1>
   <span class="post-date">
-    <time>03 December 2018</time>
+    <time>14 January 2019</time>
   </span>
   <div class="post-tag">
     <ul>
       
       <li>
-        <a href="http://localhost:4000/tags#sample post">
-          <span>sample post</span>
-        </a>
-      </li>
-      
-      
-      <li>
-        <a href="http://localhost:4000/tags#readability">
-          <span>readability</span>
-        </a>
-      </li>
-      
-      
-      <li>
-        <a href="http://localhost:4000/tags#test">
-          <span>test</span>
-        </a>
-      </li>
-      
-      
-      <li>
-        <a href="http://localhost:4000/tags#intro">
-          <span>intro</span>
+        <a href="http://localhost:4000/tags#linux">
+          <span>linux</span>
         </a>
       </li>
       
@@ -159,18 +138,35 @@ ga('send', 'pageview');
     </ul>
   </div>
 
-  <p>You’ll find this post in your <code class="highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+  <p>Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。</p>
+<h1 id="查看普通文件ls">查看普通文件ls</h1>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fz6he7vv8zj31h405smzj.jpg" alt="WX20190114-214206@2x" /></p>
+<h1 id="查看所有文件ls--alh">查看所有文件ls -Alh</h1>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz6he6y85pj30uk0s2dqx.jpg" alt="WX20190114-221241@2x" /></p>
+<h1 id="自定义命令alias-llls--alh">自定义命令alias ll=’ls -Alh’</h1>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz6he4ypfyj31as0doq8u.jpg" alt="WX20190114-221420@2x" />
+添加到文件vi ~/.bash_profile并保存，使用source ~/.bash_profile</p>
+<h1 id="搜索代码grep">搜索代码grep</h1>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fz6he5zsfgj317q0iuqdv.jpg" alt="WX20190114-214507@2x" /></p>
+<h1 id="查找文件find">查找文件find</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NamiLindeMacBook-Pro:SecuritySchoolPro namilin$ find . -name "build.gradle"
+./app/build.gradle
+./IMLib/build.gradle
+./pay/build.gradle
+./IMKit/build.gradle
+./common/build.gradle
+./lib-zxing/build.gradle
+./build.gradle
+</code></pre></div></div>
 
-<p>To add new posts, simply add a file in the <code class="highlighter-rouge">_posts</code> directory that follows the convention <code class="highlighter-rouge">YYYY-MM-DD-name-of-post.ext</code> and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<h1 id="编辑文件vim">编辑文件vim</h1>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz6hgfe7xjg30ng0eg77e.gif" alt="vim" /></p>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<h1 id="量测特定指令执行时间time">量测特定指令执行时间time</h1>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span><span class="o">=&gt;</span> <span class="n">prints</span> <span class="s1">'Hi, Tom'</span> <span class="n">to</span> <span class="no">STDOUT</span><span class="o">.</span></code></pre></figure>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz6hiks7cdj30t206st9w.jpg" alt="image-20190114223148280" /></p>
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+<h1 id="远程连接工具ssh">远程连接工具ssh</h1>
 
 
 
