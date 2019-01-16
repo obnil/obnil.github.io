@@ -150,7 +150,6 @@ p.lead {
     height: 40px;
     margin-left: 2rem;
     padding: 0;
-    vertical-align: bottom;
   }
 }
 
@@ -347,20 +346,6 @@ ul {
       box-sizing: border-box;
       text-align: right;
     }
-  }
-}
-
-// Restyle <ol>
-ol {
-  counter-reset: section;
-
-  > li:before {
-    counter-increment: section;
-    content: counter(section) ".";
-    padding-right: $ol-bullets-right-space;
-    font-family: $ol-bullets-font;
-    font-size: $ol-bullets-font-size;
-    line-height: $ol-bullets-font-line-height;
   }
 }
 
