@@ -14,7 +14,6 @@
 
   <!-- Font -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for Programmer" href="/feed.xml" />
@@ -573,68 +572,48 @@ class GreetGFM {
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">liuwangshu</span><span class="o">.</span><span class="na">mooncoordinatorlayout</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.design.widget.Snackbar</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.design.widget.TabLayout</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.v4.app.Fragment</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.v4.view.ViewPager</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.v7.app.ActionBar</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.v7.app.AppCompatActivity</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.support.v7.widget.Toolbar</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CoordinatorLayoutActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">ViewPager</span> <span class="n">mViewPager</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="n">TabLayout</span> <span class="n">mTabLayout</span><span class="o">;</span>
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_tab_layout</span><span class="o">);</span>
-        <span class="n">Toolbar</span> <span class="n">toolbar</span> <span class="o">=</span> <span class="o">(</span><span class="n">Toolbar</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">toolbar</span><span class="o">);</span>
-        <span class="n">setSupportActionBar</span><span class="o">(</span><span class="n">toolbar</span><span class="o">);</span>
-        <span class="kd">final</span> <span class="n">ActionBar</span> <span class="n">ab</span> <span class="o">=</span> <span class="n">getSupportActionBar</span><span class="o">();</span>
-        <span class="n">ab</span><span class="o">.</span><span class="na">setDisplayHomeAsUpEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-        <span class="n">mViewPager</span> <span class="o">=</span> <span class="o">(</span><span class="n">ViewPager</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">viewpager</span><span class="o">);</span>
-        <span class="n">initViewPager</span><span class="o">();</span>
-    <span class="o">}</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">initViewPager</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">mTabLayout</span> <span class="o">=</span> <span class="o">(</span><span class="n">TabLayout</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">tabs</span><span class="o">);</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">titles</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"精选"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"体育"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"巴萨"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"购物"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"明星"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"视频"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"健康"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"励志"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"图文"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"本地"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"动漫"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"搞笑"</span><span class="o">);</span>
-        <span class="n">titles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"精选"</span><span class="o">);</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">titles</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">mTabLayout</span><span class="o">.</span><span class="na">addTab</span><span class="o">(</span><span class="n">mTabLayout</span><span class="o">.</span><span class="na">newTab</span><span class="o">().</span><span class="na">setText</span><span class="o">(</span><span class="n">titles</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)));</span>
-        <span class="o">}</span>
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">Fragment</span><span class="o">&gt;</span> <span class="n">fragments</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">titles</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">fragments</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">ListFragment</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="n">FragmentAdapter</span> <span class="n">mFragmentAdapteradapter</span> <span class="o">=</span>
-                <span class="k">new</span> <span class="nf">FragmentAdapter</span><span class="o">(</span><span class="n">getSupportFragmentManager</span><span class="o">(),</span> <span class="n">fragments</span><span class="o">,</span> <span class="n">titles</span><span class="o">);</span>
-        <span class="c1">//给ViewPager设置适配器</span>
-        <span class="n">mViewPager</span><span class="o">.</span><span class="na">setAdapter</span><span class="o">(</span><span class="n">mFragmentAdapteradapter</span><span class="o">);</span>
-        <span class="c1">//将TabLayout和ViewPager关联起来。</span>
-        <span class="n">mTabLayout</span><span class="o">.</span><span class="na">setupWithViewPager</span><span class="o">(</span><span class="n">mViewPager</span><span class="o">);</span>
-        <span class="c1">//给TabLayout设置适配器</span>
-        <span class="n">mTabLayout</span><span class="o">.</span><span class="na">setTabsFromPagerAdapter</span><span class="o">(</span><span class="n">mFragmentAdapteradapter</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">checkin</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">Snackbar</span><span class="o">.</span><span class="na">make</span><span class="o">(</span><span class="n">view</span><span class="o">,</span> <span class="s">"点击成功"</span><span class="o">,</span> <span class="n">Snackbar</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>​```xml
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"&gt;
+    &lt;android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"                                         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"&gt;
+        &lt;android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" /&gt;
+        &lt;android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="#ADBE107E"
+            app:tabMode="scrollable" /&gt;
+    &lt;/android.support.design.widget.AppBarLayout&gt;
+    &lt;android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" /&gt;
+    &lt;android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:onClick="checkin"
+        android:src="@drawable/ic_discuss"
+        app:layout_anchor="@id/main_content"
+        app:layout_anchorGravity="bottom|right|end" /&gt;
+&lt;/android.support.design.widget.CoordinatorLayout&gt;
+​```
 </code></pre></div></div>
 <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
 <span class="nt">&lt;android.support.design.widget.CoordinatorLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
@@ -737,7 +716,6 @@ cond(no)-&gt;op
   <hr />
   <div class="footer-navigation">
       <div class="footer-links">
-          <h4 class="footer-title">友情链接</h4>
           <nav class="metabar-nav">
               <ul class="nav">
                   <li class="nav-link">
