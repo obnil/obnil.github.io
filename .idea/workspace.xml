@@ -2,57 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5c05ddbc-0f2c-42b2-9229-17f3cf28ca0b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/_posts/2019-01-20-jekyll-music-player.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.sass-cache/4161c74432210b0297d761d06f1e82d867550522/_site.scssc" beforeDir="false" afterPath="$PROJECT_DIR$/.sass-cache/4161c74432210b0297d761d06f1e82d867550522/_site.scssc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/intro.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/intro.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/default.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/default.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-14-linux.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-14-linux.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_sass/_site.scss" beforeDir="false" afterPath="$PROJECT_DIR$/_sass/_site.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2017-11-17/earphone-jack/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2017-11-17/earphone-jack/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-16/chengdu-pollution/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-16/chengdu-pollution/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-16/new-year/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-16/new-year/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-20/experience-china/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-20/experience-china/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-22/automatic-programming/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-22/automatic-programming/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-22/smart-contract/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-22/smart-contract/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-24/chinese-fame/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-24/chinese-fame/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-02-26/fired/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-02-26/fired/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-01/truth/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-01/truth/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-05/book/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-05/book/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-08/ciia1/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-08/ciia1/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-21/csbook-preface/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-21/csbook-preface/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-27/door-etiquette/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-27/door-etiquette/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-03-29/appreciation/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-03-29/appreciation/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-04-13/computer-science/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-04-13/computer-science/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-04-13/csbook-chapter1/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-04-13/csbook-chapter1/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-05-28/change/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-05-28/change/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-10-14/update/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-10-14/update/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-11-23/grammar/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-11-23/grammar/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-11-24/grammar-chapter1/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-11-24/grammar-chapter1/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-12-03/summary/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-12-03/summary/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2018-12-03/welcome-to-jekyll/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2018-12-03/welcome-to-jekyll/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2019-01-06/markdown/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2019-01-06/markdown/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2019-01-14/linux/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2019-01-14/linux/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2019-01-16/anr/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2019-01-16/anr/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/2019-01-19/android-source-code/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/2019-01-19/android-source-code/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/404.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/404.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/about/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/android/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/android/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/assets/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/blog/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/blog/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/music/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/music/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/page2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/page2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/page3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/page3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/python/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/python/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/tags/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/tags/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android.md" beforeDir="false" afterPath="$PROJECT_DIR$/android.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python.md" beforeDir="false" afterPath="$PROJECT_DIR$/python.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resume.md" beforeDir="false" afterPath="$PROJECT_DIR$/resume.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -156,8 +106,8 @@
         <entry file="file://$PROJECT_DIR$/python.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="114">
-                <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+              <first_editor relative-caret-position="427">
+                <caret line="119" lean-forward="true" selection-start-line="119" selection-end-line="119" />
               </first_editor>
               <second_editor />
             </state>
@@ -317,12 +267,12 @@
       <updated>1546762609011</updated>
       <workItem from="1546762610425" duration="14778000" />
       <workItem from="1547105724193" duration="28000" />
-      <workItem from="1547966736248" duration="4873000" />
+      <workItem from="1547966736248" duration="5293000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19679000" />
+    <option name="totallyTimeSpent" value="20099000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="817" extended-state="0" />
@@ -585,8 +535,8 @@
     <entry file="file://$PROJECT_DIR$/python.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="114">
-            <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <first_editor relative-caret-position="427">
+            <caret line="119" lean-forward="true" selection-start-line="119" selection-end-line="119" />
           </first_editor>
           <second_editor />
         </state>
