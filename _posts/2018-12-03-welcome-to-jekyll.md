@@ -29,7 +29,7 @@ Could This Be Love
 Going home
 <p>http://m10.music.126.net/20190120154609/9a112689bfbbde9452942b0b0362f8ce/ymusic/ca55/0128/71f5/8fdccec55ff60c0593286cf2f561200e.mp3</p>
 River Flows in You
-<p>http://m10.music.126.net/20190120154339/f911bb6d92a0c8478c35f7679a1e6820/ymusic/be03/fb2c/58fe/cf448698e6e4a13f026c9d9ae22b8857.mp3</p>
+<p>http://fs.open.kugou.com/631bee22d49b53bbea39e98ecf96680e/5c446020/G077/M07/13/13/jQ0DAFhHKKGAJ0ulAC1b4pWL-1M877.mp3</p>
 Altynai-nurbek feat dia
 <p>http://m10.music.126.net/20190120154208/2cf997cb8eb712a83c042546b3009e3a/ymusic/2fef/5388/d3ca/5b4a0a4a1be4f8b1340fc40ef35d313f.mp3</p>
 Spring Love

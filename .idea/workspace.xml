@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5c05ddbc-0f2c-42b2-9229-17f3cf28ca0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/python.md" beforeDir="false" afterPath="$PROJECT_DIR$/python.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -90,24 +91,12 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="194">
-                <caret line="11" column="134" selection-start-line="11" selection-start-column="134" selection-end-line="11" selection-end-column="134" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/python.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="427">
-                <caret line="119" lean-forward="true" selection-start-line="119" selection-end-line="119" />
+              <first_editor relative-caret-position="334">
+                <caret line="31" column="119" selection-start-line="31" selection-start-column="119" selection-end-line="31" selection-end-column="119" />
               </first_editor>
               <second_editor />
             </state>
@@ -173,8 +162,8 @@
         <option value="$PROJECT_DIR$/_sass/_site.scss" />
         <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/_posts/2019-01-20-jekyll-music-player.md" />
-        <option value="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" />
         <option value="$PROJECT_DIR$/python.md" />
+        <option value="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" />
       </list>
     </option>
   </component>
@@ -267,12 +256,12 @@
       <updated>1546762609011</updated>
       <workItem from="1546762610425" duration="14778000" />
       <workItem from="1547105724193" duration="28000" />
-      <workItem from="1547966736248" duration="5293000" />
+      <workItem from="1547966736248" duration="5739000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20099000" />
+    <option name="totallyTimeSpent" value="20545000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="817" extended-state="0" />
@@ -522,21 +511,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md">
+    <entry file="file://$PROJECT_DIR$/python.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="194">
-            <caret line="11" column="134" selection-start-line="11" selection-start-column="134" selection-end-line="11" selection-end-column="134" />
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="522">
+            <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python.md">
+    <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="427">
-            <caret line="119" lean-forward="true" selection-start-line="119" selection-end-line="119" />
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="334">
+            <caret line="31" column="119" selection-start-line="31" selection-start-column="119" selection-end-line="31" selection-end-column="119" />
           </first_editor>
           <second_editor />
         </state>
