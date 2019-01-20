@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>为Jekyll博客添加音乐播放器</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Programmer" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>为Jekyll博客添加音乐播放器 | Programmer</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="为Jekyll博客添加音乐播放器" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="突然想在博客的文章里放一点音乐" />
+<meta property="og:description" content="突然想在博客的文章里放一点音乐" />
+<link rel="canonical" href="http://localhost:4000/2019-01-20/jekyll-music-player/" />
+<meta property="og:url" content="http://localhost:4000/2019-01-20/jekyll-music-player/" />
+<meta property="og:site_name" content="Programmer" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-20T08:30:42+00:00" />
+<script type="application/ld+json">
+{"description":"突然想在博客的文章里放一点音乐","@type":"BlogPosting","url":"http://localhost:4000/2019-01-20/jekyll-music-player/","headline":"为Jekyll博客添加音乐播放器","dateModified":"2019-01-20T08:30:42+00:00","datePublished":"2019-01-20T08:30:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-01-20/jekyll-music-player/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Programmer</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/python/">Python</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/blog/">博客</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">分类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>为Jekyll博客添加音乐播放器</h1>
+    <div class="post-date">
+        2019年01月20日
+    </div>
+
+    <p>突然想在博客的文章里放一点音乐。</p>
+
+<p>这应该不是什么大问题吧，然而看到的大多数攻略都是使用网易云的iFrame外部链接，缺点是延迟很严重，还有配合Hexo的插件，比如<a href="https://github.com/MoePlayer/APlayer">Aplayer</a>——为Github Page + Jekyll提供的解决方案似乎很少，并且也不想折腾太大的插件。</p>
+
+<p>经过一番搜索，终于在<a href="https://jekyllcodex.org/without-plugin/open-embed/">这篇文章</a>里看到了一种可行方案。</p>
+
+<h3 id="配置">配置</h3>
+
+<p>主要分为以下三步</p>
+
+<p>第一步：下载<a href="https://raw.githubusercontent.com/jhvanderschee/jekyllcodex/gh-pages/_includes/open-embed.html">open-embed.html</a>（点进链接-右键-存储为）源码如下</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;style&gt;</span>
+<span class="nc">.videoWrapper</span> <span class="p">{</span>
+	<span class="nl">position</span><span class="p">:</span> <span class="nb">relative</span><span class="p">;</span>
+	<span class="nl">padding-bottom</span><span class="p">:</span> <span class="m">56.333%</span><span class="p">;</span>
+	<span class="nl">height</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="no">black</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.videoWrapper</span> <span class="nt">iframe</span> <span class="p">{</span>
+	<span class="nl">position</span><span class="p">:</span> <span class="nb">absolute</span><span class="p">;</span>
+	<span class="nl">top</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+	<span class="nl">left</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+	<span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+	<span class="nl">height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="nl">border</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>    
+<span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;script&gt;</span>
+<span class="kd">function</span> <span class="nx">get_youtube_id</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="sr">/^</span><span class="se">(?:</span><span class="sr">https</span><span class="se">?</span><span class="sr">:</span><span class="se">\/\/)?(?:</span><span class="sr">www</span><span class="se">\.)?(?:</span><span class="sr">youtu</span><span class="se">\.</span><span class="sr">be</span><span class="se">\/</span><span class="sr">|youtube</span><span class="se">\.</span><span class="sr">com</span><span class="se">\/(?:</span><span class="sr">embed</span><span class="se">\/</span><span class="sr">|v</span><span class="se">\/</span><span class="sr">|watch</span><span class="se">\?</span><span class="sr">v=|watch</span><span class="se">\?</span><span class="sr">.+&amp;v=</span><span class="se">))((\w</span><span class="sr">|-</span><span class="se">){11})(?:\S</span><span class="sr">+</span><span class="se">)?</span><span class="sr">$/</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">url</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">p</span><span class="p">))</span> <span class="p">?</span> <span class="nb">RegExp</span><span class="p">.</span><span class="nx">$1</span> <span class="p">:</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">vimeo_embed</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+      <span class="na">url</span><span class="p">:</span> <span class="s1">'https://vimeo.com/api/oembed.json?url='</span><span class="o">+</span><span class="nx">url</span><span class="p">,</span>
+      <span class="na">async</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="na">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">video_id</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">id</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">video_id</span><span class="p">;</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'autoplay=1'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">autoplay</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">autoplay</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'loop=1'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">loop</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">loop</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">theInnerHTML</span> <span class="o">=</span> <span class="s1">'&lt;div class="videoWrapper"&gt;&lt;iframe src="https://player.vimeo.com/video/'</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s1">'/?byline=0&amp;title=0&amp;portrait=0'</span><span class="p">;</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">autoplay</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">theInnerHTML</span> <span class="o">+=</span> <span class="s1">'&amp;autoplay=1'</span><span class="p">;</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">loop</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">theInnerHTML</span> <span class="o">+=</span> <span class="s1">'&amp;loop=1'</span><span class="p">;</span>
+          <span class="nx">theInnerHTML</span> <span class="o">+=</span> <span class="s1">'" webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;'</span><span class="p">;</span> 
+          <span class="nx">el</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">theInnerHTML</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">video_embed</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'p'</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//check if this is an external url (that starts with https:// or http://</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"http://"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span>
+            <span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"https://"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">youtube_id</span> <span class="o">=</span> <span class="nx">get_youtube_id</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">youtube_id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'autoplay=1'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">autoplay</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">autoplay</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'loop=1'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">loop</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">loop</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                <span class="kd">var</span> <span class="nx">theInnerHTML</span> <span class="o">=</span> <span class="s1">'&lt;div class="videoWrapper"&gt;&lt;iframe width="720" height="420" src="https://www.youtube.com/embed/'</span> <span class="o">+</span> <span class="nx">youtube_id</span> <span class="o">+</span> <span class="s1">'?rel=0&amp;showinfo=0'</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">autoplay</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">theInnerHTML</span> <span class="o">+=</span> <span class="s1">'&amp;autoplay=1'</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">loop</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">theInnerHTML</span> <span class="o">+=</span> <span class="s1">'&amp;loop=1&amp;playlist='</span><span class="o">+</span><span class="nx">youtube_id</span><span class="o">+</span><span class="s1">'&amp;version=3'</span><span class="p">;</span>
+                <span class="nx">theInnerHTML</span> <span class="o">+=</span> <span class="s1">'" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;'</span><span class="p">;</span>
+                <span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">theInnerHTML</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'vimeo.com'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//ask vimeo for the id and place the embed</span>
+                <span class="nx">vimeo_embed</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">,</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">video_embed</span><span class="p">();</span>
+
+<span class="kd">function</span> <span class="nx">mp3_embed</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'p'</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">p</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'.mp3'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'?'</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">str1</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="nx">str1</span> <span class="o">=</span> <span class="nx">str1</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">,</span><span class="s1">''</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+            <span class="nx">str1</span> <span class="o">=</span> <span class="nx">str1</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'autoplay=1'</span><span class="p">,</span><span class="s1">''</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'autoplay=0'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+            <span class="nx">str1</span> <span class="o">=</span> <span class="nx">str1</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'loop=1'</span><span class="p">,</span><span class="s1">''</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'loop=0'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+            <span class="nx">str1</span> <span class="o">=</span> <span class="nx">str1</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'controls=0'</span><span class="p">,</span><span class="s1">''</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">'controls=1'</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">str</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">'.mp3'</span><span class="p">,</span> <span class="nx">str</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">===</span> <span class="nx">str</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">str1</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'autoplay=1'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">autoplay</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">autoplay</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'loop=1'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">loop</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">loop</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'controls=0'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">controls</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="k">else</span> <span class="kd">var</span> <span class="nx">controls</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="kd">var</span> <span class="nx">newInnerHTML</span> <span class="o">=</span> <span class="s1">'&lt;audio'</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">autoplay</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">newInnerHTML</span> <span class="o">+=</span> <span class="s1">' autoplay'</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">loop</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">newInnerHTML</span> <span class="o">+=</span> <span class="s1">' loop'</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">controls</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="nx">newInnerHTML</span> <span class="o">+=</span> <span class="s1">' controls'</span><span class="p">;</span>
+                <span class="nx">newInnerHTML</span> <span class="o">+=</span> <span class="s1">'&gt;&lt;source src="'</span><span class="o">+</span><span class="nx">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">'" type="audio/mpeg"&gt;Your browser does not support the audio element.&lt;/audio&gt;'</span><span class="p">;</span>
+                <span class="nx">p</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">newInnerHTML</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">mp3_embed</span><span class="p">();</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>第二步：将上述文件放入Jekyll项目的”_include”文件夹内。</p>
+
+<p><a href="https://github.com/HusterHope/blogimage/raw/master/music-player.jpg"><img src="https://github.com/HusterHope/blogimage/raw/master/music-player.jpg" alt="img" /></a></p>
+
+<p>第三步：找到上述文件夹内的_layout.html文件，修改底部内容为：</p>
+
+<p><a href="https://github.com/HusterHope/blogimage/raw/master/music-player-2.png"><img src="https://github.com/HusterHope/blogimage/raw/master/music-player-2.png" alt="img" /></a></p>
+
+<h3 id="调用">调用</h3>
+
+<p>1、借助<a href="https://www.qiniu.com/">七牛云</a>之类的图床或云端存储，将需要的音乐文件上传至图床，并获得外链。</p>
+
+<p>2、使用<a href="https://music.liuzhijin.cn/">音乐直链搜索</a>工具，获得外链</p>
+
+<p>然后，在Markdown中直接使用<code class="highlighter-rouge">&lt;p&gt;音乐外链url&lt;/p&gt;</code>这样的格式，即可获得如下效果的播放器（以下音乐为「阿保剛-Der Mond Das Meer」）</p>
+
+<p>Over.</p>
+
+
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://www.jcodecraeer.com/plus/list.php?tid=16" target="_blank">泡在网上的日子</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

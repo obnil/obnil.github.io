@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我从写技术博客中收获到了什么？</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Programmer" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>我从写技术博客中收获到了什么？ | Programmer</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="我从写技术博客中收获到了什么？" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="我是 J_Knight_，熟悉我的人都应该知道我是一名刚工作满3年的非科班 iOS 开发者，而且一直坚持写技术博客快有2年半的时间了。" />
+<meta property="og:description" content="我是 J_Knight_，熟悉我的人都应该知道我是一名刚工作满3年的非科班 iOS 开发者，而且一直坚持写技术博客快有2年半的时间了。" />
+<link rel="canonical" href="http://localhost:4000/2018-12-03/write-blog/" />
+<meta property="og:url" content="http://localhost:4000/2018-12-03/write-blog/" />
+<meta property="og:site_name" content="Programmer" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-12-03T10:00:42+00:00" />
+<script type="application/ld+json">
+{"description":"我是 J_Knight_，熟悉我的人都应该知道我是一名刚工作满3年的非科班 iOS 开发者，而且一直坚持写技术博客快有2年半的时间了。","@type":"BlogPosting","url":"http://localhost:4000/2018-12-03/write-blog/","headline":"我从写技术博客中收获到了什么？","dateModified":"2018-12-03T10:00:42+00:00","datePublished":"2018-12-03T10:00:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018-12-03/write-blog/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Programmer</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/python/">Python</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/blog/">博客</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">分类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>我从写技术博客中收获到了什么？</h1>
+    <div class="post-date">
+        2018年12月03日
+    </div>
+
+    <p>我是 J_Knight_，熟悉我的人都应该知道我是一名刚工作满3年的非科班 iOS 开发者，而且一直坚持写技术博客快有2年半的时间了。</p>
+
+<p>其实从去年开始就一直想分享我写博客的心得，但是一直也没有找到合适的契机，刚好在今年年底前达成了<code class="highlighter-rouge">掘金粉丝量过万</code>的小目标，索性就借着这个机会分享一下我自己关于写博客的一些收获，同时也算顺便做一个阶段性的总结。</p>
+
+<p>这篇文章分为三个部分：</p>
+
+<ol>
+  <li>写技术博客的历程</li>
+  <li>写技术博客的收获</li>
+  <li>回答一些朋友（粉丝）的一些关于写博客的几个问题</li>
+</ol>
+
+<p>第一部分先简单介绍关于我的博客的一些数据：写博客的起始时间，使用的博客平台，博客内容等等。</p>
+
+<p>第二部分是本篇的重点，讲解的从博客中我的收获有哪些。</p>
+
+<p>第三部分罗列了几个经常从一些朋友（粉丝）中听到的关于写博客的问题以及我的回答。</p>
+
+<h1 id="写技术博客的历程">写技术博客的历程</h1>
+
+<p>在第一部分首先看一下我写博客的几个阶段，然后在该部分结尾统计一下我的博客的一些数据。</p>
+
+<h2 id="写博客的几个阶段">写博客的几个阶段</h2>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/12/2/1676f114fbbefdac?w=1019&amp;h=643&amp;f=jpeg&amp;s=102709" alt="img" /></p>
+
+<p>我在就业之前，自学 iOS 的时候开始写博客（当时只是写一点学习笔记，质量很低），拿到第一份工作之后的半年多以后开始在简书写博客，再经过大概一年多以后因为一个“众所周知”的原因从简书转到了掘金平台，再到后面也开始维护自己的个人博客和公众号。</p>
+
+<blockquote>
+  <p>从简书转战到掘金的原因可以看我简书的最后一篇博客，简书个人主页地址以及其他主页地址在本篇结尾提供。</p>
+</blockquote>
+
+<p>写博客的内容按照时间顺序大致分为六个阶段：</p>
+
+<ul>
+  <li>第一阶段：学习笔记</li>
+  <li>第二阶段：源码解析</li>
+  <li>第三阶段：React Native</li>
+  <li>第四阶段：代码规范</li>
+  <li>第五阶段：数据结构和算法</li>
+  <li>第六阶段：面向对象设计</li>
+</ul>
+
+<h3 id="第一阶段">第一阶段</h3>
+
+<p>第一个阶段的写作内容集中在视频教程的学习笔记以及读书笔记以及一些关于iOS开发的比较小的知识点。在这段学习过程中带给我的提升比较大的是《Effective Objective-C 2.0》和 《Objective-C 高级编程》这本书，以及一些关于程序员素质方面的书籍。有以下几篇博客：</p>
+
+<p>《Effective Objective-C 2.0》总结:</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/2847910365">《Effective Objective-C》干货三部曲（一）：概念篇</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/8249016735">《Effective Objective-C》干货三部曲（二）：规范篇</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/9387062145">《Effective Objective-C》干货三部曲（三）：技巧篇</a></li>
+</ul>
+
+<p>《Objective-C 高级编程》总结:</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/7083154629">《Objective-C 高级编程》干货三部曲（一）：引用计数篇</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/9746310528">《Objective-C 高级编程》干货三部曲（二）：Blocks篇</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/4805163927">《Objective-C 高级编程》干货三部曲（三）：GCD篇</a></li>
+</ul>
+
+<p>读书笔记：</p>
+
+<ul>
+  <li><a href="https://knightsj.github.io/2017/03/20/%E9%AB%98%E6%95%88%E8%83%BD%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E4%BF%AE%E7%82%BC+-+%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">高效能程序员的修炼 - 读书笔记</a></li>
+  <li><a href="https://knightsj.github.io/2017/03/20/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E4%BF%AE%E7%82%BC%EF%BC%9A%E4%BB%8E%E4%BC%98%E7%A7%80%E5%88%B0%E5%8D%93%E8%B6%8A+-+%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">程序员的修炼：从优秀到卓越 - 读书笔记</a></li>
+  <li><a href="https://knightsj.github.io/2017/03/20/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0+-+%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">如何高效学习 - 读书笔记</a></li>
+  <li><a href="https://knightsj.github.io/2017/03/20/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%81%8C%E4%B8%9A%E7%B4%A0%E5%85%BB+-+%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">程序员的职业素养 - 读书笔记</a></li>
+</ul>
+
+<blockquote>
+  <p>上面这些博客在掘金上发布的时间比在简书上面发布的时间晚，因为大概是在简书写作一年多之后才开始在掘金发布文章。</p>
+</blockquote>
+
+<h3 id="第二阶段">第二阶段</h3>
+
+<p>第二阶段的写作内容集中在 iOS 各大主流框架的源码解析，原因是当时想通过看源码来提升业务水平。这阶段的源码解析一共有以下几篇博客：</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/7289316405">MJRefresh 源码解析</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/5784029631">VVeboTableView 源码解析</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/4081369257">PNChart 源码解析</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/9530476182">SDWebImage 源码解析</a></li>
+  <li><a href="https://knightsj.github.io/2018/02/03/MBProgressHUD%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">MBProgressHUD源码解析</a>(未同步到掘金)</li>
+  <li><a href="https://knightsj.github.io/2018/02/03/JSONModel%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">JSONModel源码解析</a>(未同步到掘金)</li>
+</ul>
+
+<p>后来还发布了两篇源码解析的文章，原因是当时业务上要求封装一个网络框架和缓存库，所以就找了<code class="highlighter-rouge">YTKNetwork</code>和<code class="highlighter-rouge">YYCache</code>的源码来学习，博客地址：</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/4129756038">YTKNetwork源码解析</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/4927301586">YYCache 源码解析</a></li>
+</ul>
+
+<p>通过学习<code class="highlighter-rouge">YTKNetwork</code>，自己后来也封装了一个网络框架，开源在了我的GitHub仓库中：</p>
+
+<ul>
+  <li><a href="https://github.com/knightsj/SJNetwork">SJNetwork</a></li>
+</ul>
+
+<blockquote>
+  <p>很惭愧由于今年事情比较多，所以这个库从去年末发布之后就一直没有更新。但是优化的思路已经有了，明年可以逐步更新和维护。</p>
+</blockquote>
+
+<h3 id="第三阶段">第三阶段</h3>
+
+<p>第三阶段的写作内容集中在 React Native，原因是当时公司任务上有 React Native 的开发任务，所以当时花了一些时间来学习。学习主要是通过一个慕课网上的实战项目<a href="https://coding.imooc.com/class/89.html">React Native技术精讲与高质量上线APP开发</a>来学习的，在学习过程中参考课程的讲解，我自己将APP实现了一遍，放到了我个人的GitHub仓库中：<a href="https://github.com/knightsj/GitHubPopular-SJ">GitHubPopular-SJ</a>（已经获得该课程的慕课网老师的同意）</p>
+
+<p>而且后面自己也封装了一个纯 React Natice 的 UI 组件，一份代码同时支持 iOS 和 安卓，现在在我的 Github 上有开源：<a href="https://github.com/knightsj/react-naive-highly-customizable-action-sheet">react-naive-highly-customizable-action-sheet</a></p>
+
+<p>两篇博客的地址：</p>
+
+<ul>
+  <li><a href="https://juejin.im/post/59a65113f265da247b4e98c1">从一个实战项目来看一下React Native开发的几个关键技术点</a></li>
+  <li><a href="https://juejin.im/post/59dc5a86f265da431875b3ce">结合一个开源的底部弹出菜单组件来讲一下如何封装一个React Native组件</a></li>
+</ul>
+
+<h3 id="第四阶段">第四阶段</h3>
+
+<p>第四个阶段的写作内容集中在代码规范上面，原因是当时有小团队了，感觉需要有一些规范需要实践，所以就搜集了一些关于代码规范的书籍和博客，整理了一套自己的 iOS 开发代码规范。有以下两篇博客：</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/9153028746">iOS 代码规范</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/4615390827">如何提高代码的可读性? - 读《编写可读代码的艺术》</a></li>
+</ul>
+
+<h3 id="第五阶段">第五阶段</h3>
+
+<p>第五阶段的写作内容集中在数据结构和算法，原因是想提升自己的基本素质。因为毕竟是非科班，所以这方面不能落下。经过一段时间的学习和总结之后，开启了<code class="highlighter-rouge">数据结构&amp;算法 in Swift</code>的系列：</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/1504268793">数据结构 &amp; 算法 in Swift （一）：Swift基础和数据结构</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/6142759308">数据结构 &amp; 算法 in Swift （二）：算法概述和排序算法</a></li>
+</ul>
+
+<blockquote>
+  <p>本来打算把这个系列坚持写下去的，但是由于面试和新工作的关系，这个系列的第二篇的后面就没有更新了。</p>
+
+  <p>等现在连载的面向对象设计系列结束以后会继续更新这个系列。因为目前来看，面向对象设计方面的学习任务的优先级比较高，原因会在下面说一下。</p>
+</blockquote>
+
+<h3 id="第六阶段">第六阶段</h3>
+
+<p>第六阶段的写作内容集中在面向对象设计方面。因为新公司的任务有很大一部分在SDK的维护和开发上面，所以这部分我想快速学习一下，这样对后面的工作会比较有帮助。有以下几篇博客：</p>
+
+<ul>
+  <li><a href="https://xiaozhuanlan.com/topic/8379520146">面向对象设计的六大设计原则（附 Demo &amp; UML类图）</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/1597326804">面向对象设计的设计模式（一）：创建型模式（附 Demo &amp; UML类图）</a></li>
+  <li><a href="https://xiaozhuanlan.com/topic/2890743156">面向对象设计的设计模式（二）：结构型模式（附 Demo &amp; UML类图）</a></li>
+</ul>
+
+<p>这个系列的所有Demo和UML类图我也有在GitHub上维护：<a href="https://github.com/knightsj/object-oriented-design">object-oriented-design</a></p>
+
+<h2 id="博客数据">博客数据</h2>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fzbv6pu8psj30zc0on79z.jpg" alt="img" /></p>
+
+<p>以上就是关于我博客的一些信息，下面统计一下我在各平台博客的一些数据：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>平台</th>
+      <th>粉丝数</th>
+      <th>文章数</th>
+      <th>阅读数</th>
+      <th>喜欢数</th>
+      <th>阅读数/喜欢数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>掘金</td>
+      <td>10043</td>
+      <td>27</td>
+      <td>131393</td>
+      <td>4534</td>
+      <td>28.97</td>
+    </tr>
+    <tr>
+      <td>简书</td>
+      <td>4785</td>
+      <td>58</td>
+      <td>183642</td>
+      <td>3806</td>
+      <td>48.25</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>根据<code class="highlighter-rouge">阅读数/喜欢数</code>这项数据可以大致看出在掘金上的博客质量是高于简书的。主要是因为在从简书迁移到掘金的时候是挑选了在简书上质量相对高的那部分文章；而且后面在掘金写的博客也逐步更加注重了质量。</p>
+
+<h1 id="写技术博客的收获">写技术博客的收获</h1>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fzbv6qa1n0j30sd0idn1z.jpg" alt="img" /></p>
+
+<p>关于写博客给我带来的收获，我觉得由浅入深可以分为以下几点：</p>
+
+<ol>
+  <li>粉丝和影响力</li>
+  <li>对知识的掌握</li>
+  <li>面试机会</li>
+  <li>语言的组织能力</li>
+  <li>做事力求做到最好的品质</li>
+</ol>
+
+<p>前三点是比较直观的，也是大多数人都比较容易看到的：</p>
+
+<ol>
+  <li>一个好的博客往往有大量的粉丝，也增加了博主的影响力。</li>
+  <li>写博客也会加深对知识的理解，因为毕竟是自己组织语言然后给其他人讲一次。</li>
+  <li>现在不少面试要求的加分项里面都有“有技术博客或GitHub“这一项。因此有博客的话可能会给面试者多带来一些面试机会。</li>
+</ol>
+
+<p>相对于前三点，第四第五点是相对来说比较隐性的，但对我来说却是收获最大的两点。尤其是第五点，给我带来的”收益“远大于上面四点的总和。</p>
+
+<p>关于第四点：因为我希望自己写出来的东西可以很容易被其他人理解（包括我自己），所以写出来的东西我会不断推敲和修改。就是在这样长期反复的过程中，我发现自己语言组织能力，描述事情的能力提升了很多，这些其实也是沟通能力的一部分，所以也对我平时在工作和生活中和他人的沟通有了比较大的帮助。</p>
+
+<p>对于第五点我在这里着重说一下：在写博客的过程中我养成了做事力求做到最好的品质。</p>
+
+<p>一篇博客写出来，会花费博主的一些时间；看博客的人同样也是会花费一些时间。那么既然双方都在花时间，为什么不让这些时间变得有意义呢？因为一篇博客可以写的很精彩，也可以写的很一般：写的精彩，其实是双赢；而写的一般，其实大家都没啥太好的收获。</p>
+
+<p>而且随着我的粉丝量的增多，我对自己的文章的要求就越来越高：无论是文章质量还是给读者的阅读体验上我都会花费心思去琢磨：如何可以给读者高质量的知识，如何可以让读者很容易吸收我所写的东西？因为可能后面能看到我的博客的人会越来越多，而且我身上的一些标签也不容许我对博客质量的疏忽。</p>
+
+<p>就拿我最近分享的设计原则的这篇文章来说：<a href="https://xiaozhuanlan.com/topic/8379520146">面向对象设计的六大设计原则（附 Demo &amp; UML类图）</a>：</p>
+
+<p>面向对象设计的设计原则其实网上和很多书籍都有提及，如果我自己来写的话我完全可以随便摘录一些文字再自己改一改放上去就可以了。</p>
+
+<ul>
+  <li>但就算是用自己的话讲的很明白，那为何不在每个设计原则里面加一个实际的Demo更直观地验证一下呢？</li>
+  <li>而且就算是有了理论和Demo，那为何不在每个Demo旁边再加一个 UML 类图让人更清晰得看一下Demo中类和类之间的关系呢？</li>
+  <li>最后，每个原则的使用都是有原因的，不遵循这条原则和遵循这条原则的结果可能是截然不同的，那么为何不在每个原则的讲解后面加上两套 Demo 和 UML，一个是遵循该条原则的，另一个是不遵循该条原则的，好让读者可以更好地对比一下用和不用这个原则所带来的不同影响是什么呢？</li>
+</ul>
+
+<p>所以，最开始我是想把这篇博客写成这样：<strong>只有6个原则的理论性知识</strong>。但是后来随着对自己的要求的不断提高，最后把博客写成了这样：<strong>6个原则的理论知识 + 12个Demo + 12个 UML 类图 + GitHub开源</strong>（<a href="https://github.com/knightsj/object-oriented-design">object-oriented-design</a>）。</p>
+
+<p>原本这篇博客的排期只有&lt;2个星期，但是实际上从开始学习到发布博客经过了4个星期。因为当时我还不会画 UML 类图，于是就花了一点时间学了一下。而且大多数Demo的场景是根据看过的示例举一反三出来的，也花了一点时间，因为我觉得只有自己想出来的才是自己的，自己理解好了，其他人看的也明白。</p>
+
+<p>我相信我今后的博客也会按照这个方式去写：可能有一个最初的规划，但是因为不断迫使自己做到最好，会不断地把博客写到更高的水平。</p>
+
+<p>其实我也不知道养成这个品质的原因究竟是哪一个，可以说是为了粉丝量，提高影响力，也可以说是为了分享知识，也可以说是为了想自己学好，我觉得可能每个都有吧，但是这些可以归纳总结出一个点来：那就是<strong>对我和对粉丝（读者）的负责</strong>。所以也可以说是这种<strong>对所有人的责任心养成了这个品质</strong>吧。</p>
+
+<p>那么为什么说这个品质是我最大的收获呢？<strong>因为这个品质不仅仅影响了我写博客这单单一个方面，它还在影响这我工作、生活的方方面面，包括现在，也包括未来</strong>。</p>
+
+<p>举一个生活中的例子：
+有我微信的朋友都应该都知道我在减肥，因为我在9月中旬的时候立了一个Flag：每瘦5斤就会发一张当时显示当时体重的照片。现在是12月初，到现在经过了2个多月，这种照片我一共有4张了（包括第一张），也就是说我已经瘦了15斤了，而且还在变瘦，昨天称了一下，体重是73公斤，比最初的体重82公斤少了9公斤，也就是18斤。所以说再过一周我应该可以再发一张照片了，纪念我瘦的第四个5斤。</p>
+
+<p>看到我发了这几张照片之后，陆续有很多朋友问我是怎么减的。我在这里简单说一下：训练以无氧训练（举铁）结合 HIIT 运动的方式，时间比例大致为5：1（我几乎从来不跑步，因为跑步的减脂能力很低效）。工作日的午餐晚餐基本都是吃沙拉，但都是高蛋白高碳水的沙拉，沙拉酱只用油醋汁，因为普通的沙拉酱热量太高了。沙拉都是用的外卖订的。从9月中旬到现在一共吃了100+顿了，偶尔周末会吃一点油腻的东西。但是每天的早餐一定是吃牛奶和全麦面包，不会吃煎饼或者肉包那些带油的东西。</p>
+
+<p>如果按照计划下个星期结束的时候我可以瘦到72公斤的话，那么从减肥开始到目前为止就是用了11个星期（不到3个月）瘦了20斤，平均每个星期瘦了将近2斤，这个成绩应该算不错了。</p>
+
+<p>因为我觉得既然是花时间做这件事情，就要做到最好：从运动的强度以及饮食的搭配都要做到最好。</p>
+
+<ul>
+  <li>虽然是在运动，但是一日三餐还是老样子，没有规划，这不算做到最好；</li>
+  <li>虽然吃得很少，但是运动强度也很低，每天花费大量时间去低速跑步，这也不算做到最好。</li>
+</ul>
+
+<p>毕竟工作比较忙，也需要时间和精力；运动也需要尽全力去做，以最短的时间达到最好的成果，早日练出更好的体质，对后面的工作也有帮助。</p>
+
+<p>其他的一些例子就不举了，总之我很高兴写博客带给我的这一个品质，这个收获也是我最想分享给大家的，而不是其他表面上的收获粉丝，影响力之类的，因为某个品质会影响做的有关的所有的事情。</p>
+
+<h1 id="回答一些朋友或粉丝的一些关于写博客的几个问题">回答一些朋友（或粉丝）的一些关于写博客的几个问题</h1>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fzbv6pcih2j30zk0jkwfj.jpg" alt="img" /></p>
+
+<p>在本篇最后，我来分享一下一些经常被朋友（或粉丝）经常问我的关于写博客的几个问题，以及我的回答是什么。</p>
+
+<h2 id="写博客应该很花时间吧你如何平衡工作和学习的">写博客应该很花时间吧，你如何平衡工作和学习的？</h2>
+
+<p>这个问题还有一个类似的问题就是“你是如何做到这么高产的？”</p>
+
+<p>其实高产倒谈不上了，我只是一直在坚持写而已，而且今年的博客数量较前两年来讲还是比较少的。</p>
+
+<p>关于这类问题我的回答有两点：</p>
+
+<ol>
+  <li>写博客确实很花时间，但也不是很花时间。</li>
+  <li>因为我的博客多数其实来源于工作内容相关的学习笔记。因此并不需要花费太多心思来去平衡工作和学习。</li>
+</ol>
+
+<p>关于第一点：</p>
+
+<ul>
+  <li>为什么说写博客花时间呢？</li>
+</ul>
+
+<p>这里说的花时间，是指时间的总量：因为写一篇高质量的博客所花费的总时间确实很长：为了可以让读者有所收获，你需要从内容，措辞，配图，排版等多个方面下功夫，而这些地方都是需要花时间的。</p>
+
+<ul>
+  <li>为什么又说不是很花时间呢？</li>
+</ul>
+
+<p>因为如果你可以善于利用碎片时间，就可以把大量的大块时间分散掉，因此实际上是节省了时间。而且我的博客基本都是来源于平时的学习，而平时的学习又是和工作相关的，所以边工作边学，其实博客也就完成三分之一了。</p>
+
+<p>下面举一个我自己的例子：</p>
+
+<p>其实我的大部分的博客的原型就是我的学习笔记。既然是学习笔记，那么就肯定不是一气呵成的，它需要不断地通过学习来积累，可能跨度上需要几个星期。比如看一本书的时候，看过的章节可以记一下笔记，但是不会每天花费大块时间来做这件事，坚持小步快跑，几个星期就可以搞定一本书（或者第三方框架的源码）的笔记。</p>
+
+<p>笔记做好了之后，就可以添加一些内容，将它转化为博客。添加的内容可能是配图，递进的语句，总结性的语句（这些也可以平时复习笔记的时候添加）。而这些操作可以不需要花费太多的精力来做，因为有关的内容已经通过笔记提炼一次了，你需要做的只是<strong>让笔记变得更加容易被其他人理解</strong>。</p>
+
+<p>那么既然不需要花费太多精力来做，你就完全可以利用碎片时间来做这些：比如排队，等电梯的时间，等地铁的时间，工作日的晚上休息时间，周末看完一场电影后的休息时间等等。 我为了可以随时复习和修改笔记，将笔记放在了有道笔记和evernote里面，所以即使在外面也可以不断修改和提炼笔记和博客。而且在平时走路的时候（确保周围环境安全的前提下）也会反复推敲自己写的东西，看是否可以写得更好等等。</p>
+
+<p>我觉得善于利用碎片时间是时间管理上很重要的一环，这一点在大学时读<a href="https://book.douban.com/subject/6709809/">《暗时间》</a>的时候对我就很有启发，直到现在我对作者刘未鹏将人的大脑比作CPU的那段文字的印象仍然非常深刻。</p>
+
+<blockquote>
+  <p>刘未鹏先生是一位优秀的软件工程师，这本书对我个人的影响非常大，也推荐大家来阅读。</p>
+</blockquote>
+
+<p>说了这么多，其实上面的文字可以总结为两点：</p>
+
+<ol>
+  <li>博客来源于学习，而你的学习如果来源于工作上的学习和总结的话，那么等你学完，总结完之后，博客其实也就已经完成了三分之一了。</li>
+  <li>博客并不是一气呵成的，它需要反复提炼，而且也不需要每次都花费大量的大块时间来做，毕竟对于已经上班的人来说不会有太多大块时间来学习。如果你善于利用碎片时间，就可以将时间总量打散，利用那些原本你要浪费掉的时间，从而起到节省时间的作用。</li>
+</ol>
+
+<h2 id="我觉得你的学习能力很强学得很快你的学习方法是什么">我觉得你的学习能力很强，学得很快；你的学习方法是什么？</h2>
+
+<p>这里首先需要澄清一个事实：</p>
+
+<p>说实话我觉得我的资质还是很一般的，而且学习方法也不见得很高明。之所以会给其他人诸如这个问题的这种错觉是因为我在背后其实是利用了大量的时间来学习，写博客的；也就是说在同样的时间内，我相信那些资质更好的人会比我学得更好。</p>
+
+<p>为什么说我有大量的时间来学习呢？</p>
+
+<p>因为这3年来在休息的时间基本没有去远一些的地方玩过，也没有玩儿过什么游戏（吃鸡只玩儿过3局，LOL和农药没玩儿过），社交活动也不是很多，只是和特别熟的朋友以及家人聚过。因此虽然资质不及别人，但是学习的时间我相信还是比一部分人多的。</p>
+
+<p>上面说的是时间，至于学习方法，我可以简单介绍一下，因为其实本来我也没有太高深的技巧。</p>
+
+<p>我个人使用的一个学习模型可以参考下图：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fzbv6qohasj30qb0hgjrb.jpg" alt="img" /></p>
+
+<p>根据上图的流程指向大家应该知道各个节点之间的关系了，下面我分别介绍一下每个节点都做什么：</p>
+
+<p><strong>选取学习主题</strong></p>
+
+<p>其实我个人觉得选取学习主题对于每个阶段学习的重要程度是非常大的，因为它会决定你在短期之内的学习质量以及学习成果。</p>
+
+<p>为什么这么说呢？</p>
+
+<ul>
+  <li>因为如果学习主题选择得过于难，那么会很容易打击学习积极性，会很难坚持下去；</li>
+  <li>而如果选择的学习主题过于简单，虽然学起来很快，但是可能实际对技术上的提升没有太大帮助（当然会有一些需要紧急学习，但是内容简单的东西，这类事情优先级比较高，即使是过于简单也可以先学会）</li>
+</ul>
+
+<p>因此，我认为在选取学习主题时：<strong>在优先级差不多的几个学习主题中选择的话，你需要选择一个相对于你现在的水平来说“比较难学会”的主题来学习</strong>。比较难就是说不简单但是你还是可以搞定的。这样一来，如果你完成了学习，不但可以在技术上有一小步的提升，还可以增强自信，带着这份自信进入下一轮学习。及时短时间内完不成，你也可以慢慢来，因为毕竟对你来说并不是不可能，你不会轻易放弃。</p>
+
+<p><strong>收集多种高质量的资料</strong></p>
+
+<blockquote>
+  <p>横看成岭侧成峰, 远近高低各不同</p>
+</blockquote>
+
+<p>在学习主题定下来之后，你就需要选取相关的学习资料了。我个人的习惯是选取多种，高质量的资料。比如在学习设计模式的时候，我会找到很多讲解的比较好的博客，教程以及经典书籍同时一起看：</p>
+
+<ul>
+  <li><a href="https://book.douban.com/subject/1052241/">《设计模式 可复用面向对象软件的基础》</a></li>
+  <li><a href="https://book.douban.com/subject/6920082/">《Objective-C 编程之道：iOS设计模式解析》</a></li>
+  <li><a href="https://book.douban.com/subject/2243615/">《Head First 设计模式》</a></li>
+  <li><a href="https://book.douban.com/subject/2334288/">《大话设计模式》</a></li>
+  <li><a href="https://coding.imooc.com/learn/list/270.html">慕课网实战课程：java设计模式精讲 Debug 方式+内存分析</a></li>
+  <li>网站：<a href="https://design-patterns.readthedocs.io/zh_CN/latest/read_uml.html">design-patterns.readthedocs.io</a></li>
+  <li>网站：<a href="https://howtodoinjava.com/">howtodoinjava</a></li>
+</ul>
+
+<p>因为不同的人可能对同一个事物有不同的看法，所以通过阅读，整理多个人对同一事件的描述可以让自己更深刻，更多角度地理解这个问题，然后再结合自己的理解，就会理解的很快，也比较透彻。</p>
+
+<p>高质量这一块就不用多说了，选资料的时候肯定是选那些权威，口碑佳的内容。</p>
+
+<p><strong>做笔记</strong></p>
+
+<blockquote>
+  <p>好记性不如烂笔头</p>
+</blockquote>
+
+<p>做笔记不仅仅是为了记录知识，更重要的是知识信息的质量。因为已经记录下来了，后面可以反复查阅和琢磨，不断提高对知识的理解程度。</p>
+
+<p>关于笔记的内容：</p>
+
+<p>记笔记的时候不能一味地摘录和复制粘贴：虽然可以在开始的时候这样做，但是后面一定要加上自己的理解，而且这些自己的理解所占的比重应该在笔记里面越来越多才是，因为只有自己说的才是你自己的。</p>
+
+<p>关于做笔记的方式：</p>
+
+<p>做笔记的方式有很多种，我个人比较喜欢有云功能的笔记软件，比如有道笔记和evernote，这两个都支持多端。平时在外面也可以在手机上面修改和阅读。</p>
+
+<p><strong>复习，总结</strong></p>
+
+<blockquote>
+  <p>温故而知新，可以为师矣</p>
+</blockquote>
+
+<p>很多时候可以通过复习来体悟出更多的内容，而且复习也可以避免忘记知识，一举两得。复习的时候无论是否有新的想法，都要尝试自己是否还可以再总结出什么新的东西来，这也可以帮助自己对知识理解的更好。</p>
+
+<p>就比如之前学设计模式的时候，当时觉得自己对适配器模式比较了解了，但是当自己假想一个场景并实现的时候就觉得自己对这些角色之间的关系理解的并不是很透彻。所以只能不断去思考，动手去画图，才真正可以将一个假象的场景准确实践出来。</p>
+
+<p><strong>实践</strong></p>
+
+<blockquote>
+  <p>实践是检验真理的唯一标准</p>
+</blockquote>
+
+<p>“不知道自己不知道”是比较危险的一件事情，有的时候我们可能会觉得这个知识点完全理解了，但是当到实际操作中可能会出现各种各样的问题。
+因此，在理论学习之后，需要去用实践来验证我们的理解是否正确。如果有这个条件最好，但是如果没有这个条件，我们就需要创建条件去做。</p>
+
+<p><strong>反馈</strong></p>
+
+<p>不能只是实践就结束了，实践的结果要知道是对是错。而且无论对还是错都要总结一下原因是什么，还有什么可以改进的地方，总结之后放在笔记里面，形成一个循环。</p>
+
+<h2 id="如何写出一篇好受欢迎的技术文章">如何写出一篇好（受欢迎）的技术文章？</h2>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fzbv6p1q5yj30zk0m9dhj.jpg" alt="img" /></p>
+
+<p>这个问题多数来自于一些准备打算写博客或者是一些已经写博客但是感觉写出来的博客受欢迎程度不如预期的朋友们。</p>
+
+<p>如果将这个问题完全展开来说，我应该可以写出非常多的内容，但是因为这一部分不是本文章要分享的重点，所以就不完全展开说了。</p>
+
+<blockquote>
+  <p>如果给我反馈表示感兴趣的朋友比较多的话，我后面就会专门写一篇文章分享一下，有这个意愿的朋友可以在下方留个言。</p>
+</blockquote>
+
+<p>那么在本文中，关于这个问题我想说的是：文章的受欢迎程度<strong>很大程度上取决于你是否真的致力于把你的知识分享给别人</strong>。</p>
+
+<p>有些人写博客是写给自己的，当做一种笔记来保存；有些人写博客的目的除了写给自己，还包括让别人去看自己的文章。而无论是写给自己还是写给别人，一旦你的博客放在了公开的平台上面，其实就是在分享你的博客，你的知识。</p>
+
+<p>因此，如果你写博客只是写给你自己的，你需要经常问自己：<strong>我真的理解自己写的东西么？</strong></p>
+
+<p>如果写博客还为了分享这第二个目的，你还需要经常问自己：<strong>读者看自己写的东西，会很容易理解么，真的会有收获么?</strong></p>
+
+<p>其实我上文中也已经说过，我把博客写好的的动力来源是对读者，对我自己负责。写出一篇对自己，对读者负责人的博客，是对双方都是有好处的。</p>
+
+<p>有了这个中心思想以后，在行动上就会不断鞭策自己写出更好的文章，自然而然你博客的质量以及受欢迎程度就会越来越高。</p>
+
+<p>除了内容的质量之外，其实博客的深度以及主题也影响着博客的受欢迎程度。“阳春白雪，下里巴人”大家应该都听过。即使是内容特别好，但是文章深度非常深，很少人能理解的话，可能受欢迎程度会很不如预期。但是这一点不与上面讨论的点冲突。</p>
+
+<p>最后还有一点就是所谓的标题党：虽然内容比较差但是标题引人入胜的文章可能阅读量会很高，但是这并不代表它真的受欢迎。我个人并不是很推崇这种方式，我还是比较喜欢和文章内容非常契合，中规中矩的文章标题的，大家观察我的博客应该可以发现我博客标题的特点，一般是没有多余的字的。</p>
+
+<p>OK，到这里我的所有心得就分享完了，希望无论您看完这篇文章之后是打算写还是不写博客都能会对您有所帮助。</p>
+
+<p>我觉得在文章结尾还是要多啰嗦两句：我这里没有说只要做技术的人就一定要有技术博客，也不是呼吁所有做技术的人都去写技术博客。</p>
+
+<p>因为每个人的自身情况不同，选择什么样的方式也是自己的自由。但是无论怎么样，我们都希望自己所在的（技术）环境能更好不是么？这也是我写这篇文章的核心目的。</p>
+
+
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://www.jcodecraeer.com/plus/list.php?tid=16" target="_blank">泡在网上的日子</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

@@ -96,19 +96,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/music/">音乐</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
         <a class="" href="/blog/">博客</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/tags/">标签</a>
+        <a class="" href="/categories/">分类</a>
     </li>
     
     
@@ -120,14 +114,12 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-  <h1>自动编程和自动形式验证</h1>
-<!--不显示时间
-   <div class="post-date">
-    <h5>22 February 2018</h5>
-  </div>
--->
+    <h1>自动编程和自动形式验证</h1>
+    <div class="post-date">
+        2018年02月22日
+    </div>
 
-  <p>（这是之前关于人工智能的文章里面的一节。由于它关系到我最近发现的一些现象，所以把它提取出来，扩展之后单独成文。）</p>
+    <p>（这是之前关于人工智能的文章里面的一节。由于它关系到我最近发现的一些现象，所以把它提取出来，扩展之后单独成文。）</p>
 
 <p>有人听说我想创业，给我提出了一些“忽悠”的办法。他们说，既然你是程序语言专家，而现在人工智能（AI）又非常热，那你其实可以搞一个“自动编程系统”，号称可以自动生成程序，取代程序员的工作，节省许许多多的人力支出，这样就可以趁着“AI 热”拉到投资。</p>
 
@@ -170,26 +162,26 @@ ga('send', 'pageview');
 <p>如何保证智能合约的正确呢？你只有懂得如何写出正确的代码，非常小心。另外，静态分析和测试也可以有一些帮助，但要记住它们其实没法证明程序的正确。对于这个问题，你可以参考我的<a href="http://www.yinwang.org/blog-cn/2015/07/02/program-correctness">这篇文章</a>。</p>
 
 
-  <div class="post-tag">
-      <ul>
-          
-      </ul>
-  </div>
-  
-  <!-- Disqus -->
-  
-  <hr>
-  <div class="comment"></div>
-  <script>
-      new Valine({
-                 // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
-                 av: AV,
-                 el: '.comment', //
-                 app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
-                 app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
-                 placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
-                 });
-      </script>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
 </div>
 
     <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
@@ -259,5 +251,99 @@ ga('send', 'pageview');
 </div>
 
   </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
 </body>
 </html>

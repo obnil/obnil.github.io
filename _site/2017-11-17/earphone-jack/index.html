@@ -96,19 +96,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/music/">音乐</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
         <a class="" href="/blog/">博客</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/tags/">标签</a>
+        <a class="" href="/categories/">分类</a>
     </li>
     
     
@@ -120,14 +114,12 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-  <h1>请让耳机孔回到手机上</h1>
-<!--不显示时间
-   <div class="post-date">
-    <h5>17 November 2017</h5>
-  </div>
--->
+    <h1>请让耳机孔回到手机上</h1>
+    <div class="post-date">
+        2017年11月17日
+    </div>
 
-  <p>（施工中，请等横幅去掉后再看。）</p>
+    <p>（施工中，请等横幅去掉后再看。）</p>
 
 <p>苹果公司在 iPhone 7 的时候，决定去掉古老的，默默无闻的 3.5mm 耳机孔。现在各大国内手机厂商竞相效仿，纷纷去掉耳机孔，只留下一个 Type C 接口。我对这种跟风的做法表示不解。在我看来，去掉耳机孔本来就是苹果公司的一个重大设计错误，根本不值得模仿。</p>
 
@@ -197,26 +189,26 @@ ga('send', 'pageview');
 <p>而且转接线显然不如手机上的接口可靠。线是会断的，而手机内部接口几乎不可能断。很多转接头因为体型太小，材质不够好，接触也有问题，插上去发现接触不好。我第一次把最近买的新耳机插进几乎全新的 iPhone 7 原装转接线，就发现没有声音。还以为耳机是坏的，折腾了一会儿才发现是转接线那里接触不好。</p>
 
 
-  <div class="post-tag">
-      <ul>
-          
-      </ul>
-  </div>
-  
-  <!-- Disqus -->
-  
-  <hr>
-  <div class="comment"></div>
-  <script>
-      new Valine({
-                 // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
-                 av: AV,
-                 el: '.comment', //
-                 app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
-                 app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
-                 placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
-                 });
-      </script>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
 </div>
 
     <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
@@ -286,5 +278,99 @@ ga('send', 'pageview');
 </div>
 
   </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
 </body>
 </html>

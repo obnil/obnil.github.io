@@ -96,19 +96,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/music/">音乐</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
         <a class="" href="/blog/">博客</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/tags/">标签</a>
+        <a class="" href="/categories/">分类</a>
     </li>
     
     
@@ -120,14 +114,12 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-  <h1>中国人的鉴赏力</h1>
-<!--不显示时间
-   <div class="post-date">
-    <h5>29 March 2018</h5>
-  </div>
--->
+    <h1>中国人的鉴赏力</h1>
+    <div class="post-date">
+        2018年03月29日
+    </div>
 
-  <p>大部分的中国人都不会鉴别物品的好坏和价值，所以他们只能以“价格”的高低来做判断。你经常听中国人说“穿着一万块一件的衣服”，“开着一百万一辆的车”，“住着二十万一平米的房子”，就是这个原因。他们不懂得这个东西好在哪，只知道它是多少钱买的。他们仿佛认为一万块钱的东西和一万块钱的东西，都是一样的。销售人员最喜欢这种人。</p>
+    <p>大部分的中国人都不会鉴别物品的好坏和价值，所以他们只能以“价格”的高低来做判断。你经常听中国人说“穿着一万块一件的衣服”，“开着一百万一辆的车”，“住着二十万一平米的房子”，就是这个原因。他们不懂得这个东西好在哪，只知道它是多少钱买的。他们仿佛认为一万块钱的东西和一万块钱的东西，都是一样的。销售人员最喜欢这种人。</p>
 
 <p>这种现象跟中国人从小上学就只认数字有关系，他们从小就被当成一个数字。考试成绩是一个数字，期末排名是一个数字。还有竞赛名次啊，金牌总数啊…… 大部分中国人知道数字，但却不知道数字背后的意义。他们不明白，有些东西是不能转化为数字进行比较的。比如我跟有些人说我今天跑步了，他们会问我跑了多少公里，多少圈。我回答：不知道！我只知道沿途的风景很美，我跑了很开心。</p>
 
@@ -156,26 +148,26 @@ ga('send', 'pageview');
 <p>大部分的国人要什么时候才能意识到，并不是贵的就好。能忽略价格看到物品的品质，实现不带有虚荣心的鉴赏，是很重要的能力。</p>
 
 
-  <div class="post-tag">
-      <ul>
-          
-      </ul>
-  </div>
-  
-  <!-- Disqus -->
-  
-  <hr>
-  <div class="comment"></div>
-  <script>
-      new Valine({
-                 // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
-                 av: AV,
-                 el: '.comment', //
-                 app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
-                 app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
-                 placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
-                 });
-      </script>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
 </div>
 
     <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
@@ -245,5 +237,99 @@ ga('send', 'pageview');
 </div>
 
   </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
 </body>
 </html>

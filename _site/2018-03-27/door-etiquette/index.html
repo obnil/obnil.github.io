@@ -96,19 +96,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/music/">音乐</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
         <a class="" href="/blog/">博客</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/tags/">标签</a>
+        <a class="" href="/categories/">分类</a>
     </li>
     
     
@@ -120,14 +114,12 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-  <h1>扶门的礼仪</h1>
-<!--不显示时间
-   <div class="post-date">
-    <h5>27 March 2018</h5>
-  </div>
--->
+    <h1>扶门的礼仪</h1>
+    <div class="post-date">
+        2018年03月27日
+    </div>
 
-  <p>世界上的很多事情，不是你自己有好意就一定有好的效果，你还必须知道对方的感受，不然你也许会让对方感觉很累。今天我就来讲讲一个看似简单的礼仪：扶门。很多中国人到了国外，特别是美国，看到美国人进了公共场所的大门之后，为了防止门回弹关上，都会礼貌地为后面的人扶住门，等他们接住门才放手。甚至有些先把门拉开，站在门口扶住门，让后面的人都进去了，自己才进去。</p>
+    <p>世界上的很多事情，不是你自己有好意就一定有好的效果，你还必须知道对方的感受，不然你也许会让对方感觉很累。今天我就来讲讲一个看似简单的礼仪：扶门。很多中国人到了国外，特别是美国，看到美国人进了公共场所的大门之后，为了防止门回弹关上，都会礼貌地为后面的人扶住门，等他们接住门才放手。甚至有些先把门拉开，站在门口扶住门，让后面的人都进去了，自己才进去。</p>
 
 <p>中国人看到美国人这么做，觉得扶门是文明的象征，所以也开始模仿。哪知道，这里面的学问其实比他们想象的要复杂一些。所以你就发现，某些人经常为“谁先进门”这个事情让来让去的，又尴尬又累，那程度胜似吃了饭抢着买单 :p 其中的一些道理，其实很多美国人都不懂。这些道理可能很难在其它地方看到，所以我把它们总结一下。</p>
 
@@ -156,26 +148,26 @@ ga('send', 'pageview');
 <p>这可能是世界上最全面的关于扶门礼仪的总结，是一个计算机科学家不经常谈论的事情 =) 这些原则看似复杂，其实不需要你死记硬背，只要你看了有印象，就会从实际经验中体会到，不断改进。可惜的是很多人都不知道这里面的道理，也没注意到。这就是我为什么把它们写出来。</p>
 
 
-  <div class="post-tag">
-      <ul>
-          
-      </ul>
-  </div>
-  
-  <!-- Disqus -->
-  
-  <hr>
-  <div class="comment"></div>
-  <script>
-      new Valine({
-                 // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
-                 av: AV,
-                 el: '.comment', //
-                 app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
-                 app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
-                 placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
-                 });
-      </script>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
 </div>
 
     <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
@@ -245,5 +237,99 @@ ga('send', 'pageview');
 </div>
 
   </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
 </body>
 </html>

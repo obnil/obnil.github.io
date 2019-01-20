@@ -1,7 +1,7 @@
 * {
   -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
@@ -19,7 +19,7 @@ body {
 .content-container {
   max-width: 40rem;
   padding: 1rem;
-  margin-left:  auto;
+  margin-left: auto;
   margin-right: auto;
 }
 
@@ -39,6 +39,7 @@ body {
 
     a {
       color: $base-color;
+
       &:hover,
       &:focus {
         text-decoration: none;
@@ -56,8 +57,8 @@ body {
       color: $oc-gray-7;
       text-transform: lowercase;
       -webkit-transition: all .2s ease;
-         -moz-transition: all .2s ease;
-              transition: all .2s ease;
+      -moz-transition: all .2s ease;
+      transition: all .2s ease;
       margin-right: .3rem;
 
       &:hover,
@@ -114,12 +115,12 @@ body {
   }
 
   &-date {
-    margin-bottom: .5rem;
-    color: $oc-gray-8;
+    margin-bottom: 1rem;
+    color: $oc-gray-6;
     font-size: .75rem;
   }
 
-   &-tag {
+  &-tag {
     margin-bottom: 1.5rem;
 
     ul {
@@ -139,27 +140,28 @@ body {
           display: inline-block;
           margin: 4px;
           margin-left: 0px;
-          color: $oc-white;
-          background-color: $oc-gray-6;
+          color: #2D2D2F;
+          background-color: #F5F5F5;
+          border: 1px solid #EDEDED;
           text-decoration: none;
-          border-radius: 3px;
+          border-radius: 2px;
 
           span {
             float: left;
-            padding: .5px 5px;
+            padding: 6px 10px;
           }
         }
 
         a:hover {
-          background-color: $oc-gray-7;
+          background-color: #F5F5F5;
         }
 
         a:visited {
-          background-color: $oc-gray-5;
+          background-color: #F5F5F5;
         }
 
         a:visited:hover {
-          background-color: $oc-gray-7;
+          background-color: #F5F5F5;
         }
       }
     }
@@ -178,7 +180,7 @@ body {
 .list {
   &-post {
     padding: 4% 2%;
-    
+
     &:hover {
       background-color: $background-over-color;
       border-color: transparent;
@@ -196,7 +198,7 @@ body {
 
     &-title {
       margin-bottom: .3rem;
-      font-size : 1.8rem;
+      font-size: 1.8rem;
       font-weight: 600;
     }
 
@@ -208,12 +210,12 @@ body {
     &-desc {
       color: $base-color;
       margin-bottom: .25rem;
-      font-size :1rem;
+      font-size: 1rem;
     }
   }
 
   &-pagination {
-  #  margin-top: 4rem;
+  # margin-top:4 rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
     // text-transform: lowercase;
@@ -221,6 +223,7 @@ body {
     &-previous {
       float: left;
       padding-left: 2%;
+
       a {
         color: $oc-gray-6;
 
@@ -235,6 +238,7 @@ body {
     &-next {
       float: right;
       padding-right: 2%;
+
       a {
         color: $oc-gray-6;
 
@@ -249,8 +253,9 @@ body {
 
 
 /*--------------
-  Tags
+  Tags and Category
   -------------- */
+.category,
 .tag {
   &-index {
     ul {
@@ -314,7 +319,7 @@ body {
       text-decoration: none;
       background-color: $background-over-color;
       border-color: transparent;
-      }
+    }
   }
 }
 
@@ -327,8 +332,8 @@ body {
       padding: 0.1rem;
 
       &:hover {
-          background-color: $background-over-color;
-          border-color: transparent;
+        background-color: $background-over-color;
+        border-color: transparent;
       }
 
       a {
@@ -341,7 +346,7 @@ body {
       }
 
       &-title {
-        font-size : 1.2rem;
+        font-size: 1.2rem;
         font-weight: 400;
       }
 

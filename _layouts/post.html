@@ -2,45 +2,43 @@
 layout: default
 ---
 <div class="post">
-  <h1>{{ page.title }}</h1>
-<!--不显示时间
-   <div class="post-date">
-    <h5>{{ page.date | date_to_long_string }}</h5>
-  </div>
--->
+    <h1>{{ page.title }}</h1>
+    <div class="post-date">
+        {{ page.date | date: '%Y年%m月%d日' }}
+    </div>
 
-  {{ content }}
+    {{ content }}
 
-  <div class="post-tag">
-      <ul>
-          {% for tag in page.tags %}
-          <li>
-              <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">
-                  <span>{{ tag }}</span>
-              </a>
-          </li>
-          {% unless forloop.last %}{% endunless %}
-          {% endfor %}
-      </ul>
-  </div>
-  
-  <!-- Disqus -->
-  {% if page.comments != false and site.disqus.id %}
-  <div class="post-disqus">
-      <section id="disqus_thread"></section>
-      {% include disqus.html %}
-  </div>
-  {% endif %}
-  <hr>
-  <div class="comment"></div>
-  <script>
-      new Valine({
-                 // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
-                 av: AV,
-                 el: '.comment', //
-                 app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
-                 app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
-                 placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
-                 });
-      </script>
+    <div class="post-tag">
+        <ul>
+            {% for tag in page.tags %}
+            <li>
+                <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">
+                    <span>{{ tag }}</span>
+                </a>
+            </li>
+            {% unless forloop.last %}{% endunless %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    {% if page.comments != false and site.disqus.id %}
+    <div class="post-disqus">
+        <section id="disqus_thread"></section>
+        {% include disqus.html %}
+    </div>
+    {% endif %}
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
 </div>

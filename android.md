@@ -50,7 +50,7 @@ permalink: /android/
 
 ## Linux和Git
 
- * Linux常用命令ls，grep，find，vim，time，netstat，ssh
+ * [Linux常用命令ls，grep，find，vim，time，netstat，ssh](/2019-01-14/linux/)
  * Git常用命令diff，log，clean，reset，cherry-pick，blame
 
 ## Android系统源码 

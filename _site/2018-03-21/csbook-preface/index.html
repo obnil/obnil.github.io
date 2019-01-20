@@ -96,19 +96,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/music/">音乐</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
         <a class="" href="/blog/">博客</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/tags/">标签</a>
+        <a class="" href="/categories/">分类</a>
     </li>
     
     
@@ -120,14 +114,12 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-  <h1>解谜计算机科学（前言）</h1>
-<!--不显示时间
-   <div class="post-date">
-    <h5>21 March 2018</h5>
-  </div>
--->
+    <h1>解谜计算机科学（前言）</h1>
+    <div class="post-date">
+        2018年03月21日
+    </div>
 
-  <p>计算机科学直到今天仍然是一个谜。它简单而美丽的精华，被压在沉重的历史包袱和功利诱惑之下。纷繁复杂的 IT 技术充斥着各种浮夸和忽悠，变成一本本大部头“圣经”，让人不知所措，头脑发涨，让外行尤其是女性望而却步。她们说，学计算机能赚钱，可是计算机知识淘汰速度太快，需要不断学习才能跟上，计算机工作枯燥，伤眼睛，伤皮肤，老得快！去看看各位计算机界前辈的照片，你会发现她们说的好像是对的 :)</p>
+    <p>计算机科学直到今天仍然是一个谜。它简单而美丽的精华，被压在沉重的历史包袱和功利诱惑之下。纷繁复杂的 IT 技术充斥着各种浮夸和忽悠，变成一本本大部头“圣经”，让人不知所措，头脑发涨，让外行尤其是女性望而却步。她们说，学计算机能赚钱，可是计算机知识淘汰速度太快，需要不断学习才能跟上，计算机工作枯燥，伤眼睛，伤皮肤，老得快！去看看各位计算机界前辈的照片，你会发现她们说的好像是对的 :)</p>
 
 <p>“IT 男”和“极客”的苦逼名声，来源于这个领域创造者们的自大和虚伪。他们认为自己是天才，能够理解复杂的理论，所以他们喜欢把简单的问题搞复杂，然后告诉你“只有天才才能理解这种简单”。最后这种自大蔓延到整个领域。计算机科学虽然名字叫“科学”，但它的从业人员在很大程度上是宗教化的。不同信仰的教徒们盲目轻信，跟风拍马，互相鄙视，甚至掀起圣战。进入这个领域面临的，不仅是高度近视，不修边幅的同事，而且很多还很自大，喜欢显示自己聪明，觉得自己了不起。他们所谓的“聪明”，也就是能折腾那些纷繁复杂的理论和代码。发表论文来显示自己解决了一个问题，但别人看了仍然摸不着头脑。这种不健康的心理，进入了计算机科学的基因，完全违背了科学的精神。</p>
 
@@ -156,26 +148,26 @@ ga('send', 'pageview');
 <p>计算机的世界，就将被你一个人重新发明出来。它的内容没有很多，真的没有很多……</p>
 
 
-  <div class="post-tag">
-      <ul>
-          
-      </ul>
-  </div>
-  
-  <!-- Disqus -->
-  
-  <hr>
-  <div class="comment"></div>
-  <script>
-      new Valine({
-                 // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
-                 av: AV,
-                 el: '.comment', //
-                 app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
-                 app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
-                 placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
-                 });
-      </script>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <!-- Disqus -->
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
 </div>
 
     <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
@@ -245,5 +237,99 @@ ga('send', 'pageview');
 </div>
 
   </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
 </body>
 </html>

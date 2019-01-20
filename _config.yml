@@ -59,12 +59,10 @@ nav:
     url:            "/android/"
   - name:           "Python"
     url:            "/python/"
-  - name:           "音乐"
-    url:            "/music/"
   - name:           "博客"
     url:            "/blog/"
-  - name:           "标签"
-    url:            "/tags/"
+  - name:           "分类"
+    url:            "/categories/"
 
 # Sass
 sass:
