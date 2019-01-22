@@ -8,8 +8,8 @@ date:   2018-12-03 15:40:42 +0800
 
 ## [获取音乐外链](https://music.liuzhijin.cn/?name=Altynai&type=netease)
 
-Sundial Dreams
-<p>http://m10.music.126.net/20190120171707/abe3d8be984a7b3efedcec2a29dc4c9f/ymusic/21a7/831c/e72c/f818fe0fc7a63389e9fcb04c5bb4bee2.mp3</p>
+Kevin Kern-Sundial Dreams
+<p>http://plpm31pgm.bkt.clouddn.com/Kevin%20Kern-Sundial%20Dreams.mp3</p>
 Through the Arbor
 <p>http://m10.music.126.net/20190120171538/4848db2e3dd7da1c60834caf9a40eba6/ymusic/d47b/757b/70e3/fb0a8fa8f2c738846643da962176ec60.mp3</p>
 Ngu Hng - Hoaprox
