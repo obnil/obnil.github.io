@@ -35,7 +35,7 @@ Spring Love
 Lovely day
 <p>http://plpm31pgm.bkt.clouddn.com/Lovely%20day.mp3</p>
 Pedalo
-<p>hhttp://plpm31pgm.bkt.clouddn.com/Pedalo.mp3</p>
+<p>http://plpm31pgm.bkt.clouddn.com/Pedalo.mp3</p>
 下午三点四十分
 <p>http://plpm31pgm.bkt.clouddn.com/%E4%B8%8B%E5%8D%88%E4%B8%89%E7%82%B9%E5%9B%9B%E5%8D%81%E5%88%86.mp3</p>
 
