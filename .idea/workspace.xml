@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5c05ddbc-0f2c-42b2-9229-17f3cf28ca0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -257,16 +257,16 @@
       <workItem from="1547105724193" duration="28000" />
       <workItem from="1547966736248" duration="6302000" />
       <workItem from="1548391906743" duration="2098000" />
-      <workItem from="1548729301266" duration="32000" />
+      <workItem from="1548729301266" duration="250000" />
+      <workItem from="1549807980989" duration="34000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23238000" />
+    <option name="totallyTimeSpent" value="23490000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="817" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21423538" />
