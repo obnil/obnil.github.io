@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5c05ddbc-0f2c-42b2-9229-17f3cf28ca0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_js/custom.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/assets/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/scripts.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -15,18 +17,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-summary.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="FIRST">
-              <first_editor relative-caret-position="76">
-                <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="17" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_config.yml">
           <provider selected="true" editor-type-id="text-editor">
@@ -90,7 +80,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
@@ -98,6 +88,15 @@
                 <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
               </first_editor>
               <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/assets/scripts.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret lean-forward="true" selection-end-line="921" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -136,6 +135,7 @@
       <find>.post-tag</find>
       <find>this_tag</find>
       <find>tag</find>
+      <find>js-navOpen</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -145,7 +145,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/_includes/head.html" />
-        <option value="$PROJECT_DIR$/assets/scripts.js" />
         <option value="$PROJECT_DIR$/_site/assets/css/main.css" />
         <option value="$PROJECT_DIR$/_includes/navigation.html" />
         <option value="$PROJECT_DIR$/index.html" />
@@ -163,6 +162,7 @@
         <option value="$PROJECT_DIR$/_posts/2019-01-20-jekyll-music-player.md" />
         <option value="$PROJECT_DIR$/python.md" />
         <option value="$PROJECT_DIR$/_posts/2018-12-03-welcome-to-jekyll.md" />
+        <option value="$PROJECT_DIR$/assets/scripts.js" />
       </list>
     </option>
   </component>
@@ -176,7 +176,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -187,22 +186,7 @@
             <path>
               <item name="obnil.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="obnil.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="_includes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="obnil.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="obnil.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="_layouts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="obnil.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="obnil.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="_posts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="obnil.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="obnil.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="_sass" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="obnil.github.io" type="b2602c69:ProjectViewProjectNode" />
@@ -218,6 +202,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -259,14 +244,16 @@
       <workItem from="1548391906743" duration="2098000" />
       <workItem from="1548729301266" duration="250000" />
       <workItem from="1549807980989" duration="34000" />
+      <workItem from="1551930616117" duration="430000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23490000" />
+    <option name="totallyTimeSpent" value="23920000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="817" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21423538" />
@@ -308,13 +295,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
           <caret line="2" column="80" selection-start-line="2" selection-start-column="71" selection-end-line="2" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/scripts.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="524">
-          <caret line="930" column="266" selection-start-line="930" selection-start-column="250" selection-end-line="930" selection-end-column="266" />
         </state>
       </provider>
     </entry>
@@ -529,6 +509,16 @@
             <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_js/custom.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/scripts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="921" selection-end-column="14" />
         </state>
       </provider>
     </entry>
