@@ -1,0 +1,15 @@
+<aside id="metabar" class="metabar{% if include.color %} {{ include.color }}{% endif %}">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="{{ site.url }}{{ site.baseurl }}{% if page.url == '/' %}#" data-scroll{% else
+               %}"{% endif %} aria-label="Visit the homepage." title="Visit the homepage.">{{ site.name }}</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                {% include navigation.html %}
+            </nav>
+        </div>
+    </div>
+</aside>
