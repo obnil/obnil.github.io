@@ -202,6 +202,25 @@
       </item>
     
       <item>
+        <title>一键搭建ss</title>
+        <description>&lt;p&gt;Centos系统执行这个： yum -y install git&lt;/p&gt;
+
+&lt;p&gt;Ubuntu/Debian系统执行这个： apt-get -y install git&lt;/p&gt;
+
+&lt;p&gt;git &lt;strong&gt;clone&lt;/strong&gt; https:&lt;em&gt;//github.com/flyzy2005/ss-fly&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;ss-fly/ss-fly.sh -i t66y.com 1024&lt;/p&gt;
+
+&lt;h2 id=&quot;一键开启bbr加速&quot;&gt;&lt;strong&gt;一键开启BBR加速&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;ss-fly/ss-fly.sh -bbr&lt;/p&gt;
+</description>
+        <pubDate>Wed, 16 Jan 2019 01:51:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-01-16/ss/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-01-16/ss/</guid>
+      </item>
+    
+      <item>
         <title>Android App 优化之 ANR 详解</title>
         <description>&lt;h2 id=&quot;1-你碰到anr了吗&quot;&gt;1, 你碰到ANR了吗&lt;/h2&gt;
 
