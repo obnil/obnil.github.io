@@ -1,6 +1,6 @@
 ---
-title: Python
-permalink: /python/
+title: 项目
+permalink: /project/
 ---
 
 ## 如何掌握所有的程序语言

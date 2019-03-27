@@ -3,7 +3,7 @@
 # # # # # # # # # # # # #
 
 # Basic
-name:               "Programmer"
+name:               "GitClub"
 
 author:
   facebook:         100032298188362
@@ -57,8 +57,8 @@ kramdown:
 nav:
   - name:           "Android"
     url:            "/android/"
-  - name:           "Python"
-    url:            "/python/"
+  - name:           "项目"
+    url:            "/project/"
   - name:           "博客"
     url:            "/blog/"
   - name:           "分类"

@@ -10,6 +10,7 @@ permalink: /resume/
 - 英语：CET6
 - 电话：18963965124
 - 邮箱：lb891014@126.com
+- 博客：http://gitclub.xyz
 - GitHub：https://github.com/obnil
 
 ## 教育经历 
@@ -20,14 +21,14 @@ permalink: /resume/
 
 ## ⼯作经历 
 
-- 2018.3 — 至今 武汉第三女神科技有限公司 Android负责人（2018年度优秀员工）
-- 2014.7 — 2018.3 武汉诚迈科技有限公司 Android 项目经理（2015年度优秀面试官）
+- 2018.3 — 2019.3 福州慧美丰科技有限公司 高级Android开发工程师
+- 2014.7 — 2018.3 武汉诚迈科技有限公司 高级Android开发工程师
 
 ## 项⽬经历
 
 ### 慧美丰 APP和慧美丰物业 APP（已上架各应用市场）
 
-- 简介：智慧社区实现手机开门，访客通行，投诉，手机缴纳物业费和停车费，物业报修，社区论坛和公告，乘坐电梯，房屋认证，小区切换，业主和物业聊天，视频通话
+- 简介：智慧社区实现手机人脸开门，密码开门，二维码开门，访客通行，投诉，手机缴纳物业费和停车费，物业报修，社区论坛和公告，乘坐电梯，房屋认证，小区切换，业主和物业聊天，视频通话等
 - 主要技术：MVP，Glide，自定义View，Retrofit，JPush，Bugly，GreenDao，ButterKnife，IM，Git，Zxing，EventBus
 - 独⽴完成：
   - 封装基础框架，业务开发，性能优化、布局优化、内存优化、Jenkins CI搭建
@@ -41,13 +42,13 @@ permalink: /resume/
 
 ### 华为⼿机项⽬ 
 
-* 简介：系统APP 通话，联系人，短信，⼩区⼴播功能定制
+* 简介：系统APP 通话，联系人，数据业务，短信，彩信，STK，RIL，⼩区⼴播
 
-* 主要技术：ContentProvider，SQLite，BroadReceiver，通信相关framework源码修改
+* 主要技术：Git, ContentProvider，SQLite，BroadReceiver，通信相关framework源码修改
 
-* 担任角色：Android项目经理
+* 担任角色：高级Android开发工程师
 
-  - 针对运营商的需求进行定制
+  - 开发运营商的需求
 
   - 定位并修复海外一线提出的应用层和framework层的BUG
 

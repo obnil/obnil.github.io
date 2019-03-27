@@ -9,37 +9,33 @@ date:   2018-12-03 15:40:42 +0800
 ## [获取音乐外链](https://music.liuzhijin.cn/?name=Altynai&type=netease)
 
 Kevin Kern-Sundial Dreams
-<p>http://plpm31pgm.bkt.clouddn.com/Kevin%20Kern-Sundial%20Dreams.mp3</p>
+<p>/music/M500004KDJlk2N7Yni.mp3</p>
 Through the Arbor
-<p>http://plpm31pgm.bkt.clouddn.com/Kevin%20Kern-Through%20the%20Arbor.mp3</p>
-Ngu Hng - Hoaprox
-<p>http://plpm31pgm.bkt.clouddn.com/Ngu%20Hng%20-%20Hoaprox.mp3</p>
-Gymnopedie No.1
-<p>http://plpm31pgm.bkt.clouddn.com/Gymnopedie%20No.%201.mp3</p>
+<p>/music/M500003q5nUZ1jrWIu.mp3</p>
 ビルスのティータイム (比鲁斯的下午茶)
-<p>http://plpm31pgm.bkt.clouddn.com/%E3%83%92%E3%82%99%E3%83%AB%E3%82%B9%E3%81%AE%E3%83%86%E3%82%A3%E3%83%BC%E3%82%BF%E3%82%A4%E3%83%A0%20.mp3</p>
+<p>/music/060b_0609_5252_1ae17af1e41cb18c0d8ae8db9d6b7513.mp3</p>
 Pretend
-<p>http://plpm31pgm.bkt.clouddn.com/Pretend.mp3</p>
+<p>/music/M500000OOxLI0aWaDE.mp3</p>
 Stay Here Forever
-<p>http://plpm31pgm.bkt.clouddn.com/Stay%20Here%20Forever.mp3</p>
+<p>/music/0001_deb9_1efb_f81f7ce0d6a22038ebe0d3c878b6bdcb.mp3</p>
 Always With Me
-<p>http://plpm31pgm.bkt.clouddn.com/Always%20With%20Me.mp3</p>
+<p>/music/49a4624a6e62e5276ae0b26bb087022b.mp3</p>
 Could This Be Love
-<p>http://plpm31pgm.bkt.clouddn.com/Could%20This%20Be%20Love.mp3</p>
+<p>/music/2d4d983bf77a400ac1550546b597fec0.mp3</p>
 River Flows in You
-<p>http://plpm31pgm.bkt.clouddn.com/River%20Flows%20in%20You.mp3</p>
+<p>/music/cf448698e6e4a13f026c9d9ae22b8857.mp3</p>
 Altynai-nurbek feat dia
-<p>http://plpm31pgm.bkt.clouddn.com/Altynai.mp3</p>
+<p>/music/5b4a0a4a1be4f8b1340fc40ef35d313f.mp3</p>
 Spring Love
-<p>http://plpm31pgm.bkt.clouddn.com/Spring%20Love.mp3</p>
+<p>/music/e856374392be3b02cdee8f8f73dac9fc.mp3</p>
 Lovely day
-<p>http://plpm31pgm.bkt.clouddn.com/Lovely%20day.mp3</p>
+<p>/music/094d534bf69d8ede9b910b55a67a09d3.mp3</p>
 Pedalo
-<p>http://plpm31pgm.bkt.clouddn.com/Pedalo.mp3</p>
+<p>/music/1163a664392761bbdee32d45cb058084.mp3</p>
 下午三点四十分
-<p>http://plpm31pgm.bkt.clouddn.com/%E4%B8%8B%E5%8D%88%E4%B8%89%E7%82%B9%E5%9B%9B%E5%8D%81%E5%88%86.mp3</p>
+<p>/music/80b4316c08cd8bbdc180df0f774dad76.mp3</p>
 Never Grow Old
-<p>http://plpm31pgm.bkt.clouddn.com/Never%20Grow%20Old.mp3</p>
+<p>/music/Never%20Grow%20Old.mp3</p>
 
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
