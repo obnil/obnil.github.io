@@ -593,18 +593,62 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
       </item>
     
       <item>
-        <title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</title>
-        <description>&lt;p&gt;Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。&lt;/p&gt;
-&lt;h2 id=&quot;查看普通文件ls&quot;&gt;查看普通文件ls&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fzc860abkoj311s07sdhb.jpg&quot; alt=&quot;image-20190119214155009&quot; /&gt;&lt;/p&gt;
-&lt;h2 id=&quot;查看所有文件ls--alh&quot;&gt;查看所有文件ls -Alh&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://ws3.sinaimg.cn/large/006tNc79gy1fzc87yzqhzj311q0hq0xv.jpg&quot; alt=&quot;image-20190119214347702&quot; /&gt;&lt;/p&gt;
+        <title>Git常用命令diff，log，clean，reset，cherry-pick，blame</title>
+        <description>&lt;p&gt;Git 是用于 Linux&lt;a href=&quot;https://baike.baidu.com/item/%E5%86%85%E6%A0%B8&quot;&gt;内核&lt;/a&gt;开发的&lt;a href=&quot;https://baike.baidu.com/item/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6&quot;&gt;版本控制&lt;/a&gt;工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使&lt;a href=&quot;https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81&quot;&gt;源代码&lt;/a&gt;的发布和交流极其方便。。&lt;/p&gt;
+&lt;h2 id=&quot;查看本地修改diff&quot;&gt;查看本地修改diff&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git diff
+&lt;span class=&quot;gh&quot;&gt;diff --git a/_posts/2019-01-14-linux.md b/_posts/2019-01-14-linux.md
+index d62e9b7..f461f61 100644
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/_posts/2019-01-14-linux.md
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/_posts/2019-01-14-linux.md
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -7,15 +7,79 @@ date:   2019-01-14 15:40:42 +0800
+&lt;/span&gt; ---
+ Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码
+。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。
+ ## 查看普通文件ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看本地历史记录log&quot;&gt;查看本地历史记录log&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git log
+commit b4488a9b43f454027ffdc9d364c9328036ce2dc6 (HEAD -&amp;gt; master, origin/master, origin/HEAD)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Wed Mar 27 16:04:28 2019 +0800
+
+    修复音乐外链
+
+commit 8174cee39fe58f812a92f2432b5f1ccb06de5dbd
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Sun Mar 17 19:07:15 2019 +0800
+
+    修复首页base url问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;h2 id=&quot;自定义命令alias-llls--alh&quot;&gt;自定义命令alias ll=’ls -Alh’&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://ws4.sinaimg.cn/large/006tNc79gy1fzc8970tk7j311s0h4ae5.jpg&quot; alt=&quot;image-20190119214458646&quot; /&gt;
-添加到文件vi ~/.bash_profile并保存，使用source ~/.bash_profile&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/emulator
+alias ll='ls -Alh'
+alias shot='adb shell screencap -p /sdcard/screen.png &amp;amp;&amp;amp; adb pull /sdcard/screen.png  /Users/namilin/Pictures/Screenshots &amp;amp;&amp;amp; open /Users/namilin/Pictures/Screenshots/screen.png'
+[[ -s &quot;$HOME/.profile&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.profile&quot; # Load the default .profile
+
+[[ -s &quot;$HOME/.rvm/scripts/rvm&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.rvm/scripts/rvm&quot; # Load RVM into a shell session *as a function*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;添加到文件vi ~/.bash_profile并保存，使用source ~/.bash_profile&lt;/p&gt;
 
 &lt;h2 id=&quot;搜索代码grep&quot;&gt;搜索代码grep&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fzc8aqp0w4j311s06stay.jpg&quot; alt=&quot;image-20190119214627713&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ grep &quot;2018年总结&quot; . -rns
+./_posts/2018-12-03-summary.md:3:title:  &quot;2018年总结&quot;
+./_site/music/index.html:112:          2018年总结
+./_site/feed.xml:1694:        &amp;lt;title&amp;gt;2018年总结&amp;lt;/title&amp;gt;
+./_site/index.html:184:            &amp;lt;div class=&quot;article-title&quot;&amp;gt;&amp;lt;a class=&quot;post-link&quot; href=&quot;/2018-12-03/summary/&quot;&amp;gt;2018年总结&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;h2 id=&quot;查找文件find&quot;&gt;查找文件find&lt;/h2&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMacBook-Pro:SecuritySchoolPro namilin$ find . -name &quot;build.gradle&quot;
 ./app/build.gradle
@@ -621,7 +665,114 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
 
 &lt;h2 id=&quot;量测特定指令执行时间time&quot;&gt;量测特定指令执行时间time&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6hiks7cdj30t206st9w.jpg&quot; alt=&quot;image-20190114223148280&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ time date
+2019年 3月27日 星期三 17时13分09秒 CST
+
+real	0m0.015s
+user	0m0.002s
+sys	0m0.007s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;远程连接工具ssh&quot;&gt;远程连接工具ssh&lt;/h2&gt;
+
+</description>
+        <pubDate>Mon, 14 Jan 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-01-14/git/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-01-14/git/</guid>
+      </item>
+    
+      <item>
+        <title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</title>
+        <description>&lt;p&gt;Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。&lt;/p&gt;
+&lt;h2 id=&quot;查看普通文件ls&quot;&gt;查看普通文件ls&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ ls
+404.html	_config.yml	_site		feed.xml	resume.md
+CNAME		_includes	android.md	images		tags
+LICENSE.md	_layouts	assets		index.html
+README.md	_posts		blog		music
+Rakefile	_sass		categories	python.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看所有文件ls--alh&quot;&gt;查看所有文件ls -Alh&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ ls -Alh
+total 144
+-rw-r--r--@  1 namilin  staff    14K  3 27 15:43 .DS_Store
+drwxr-xr-x  16 namilin  staff   512B  3 27 16:04 .git
+drwxr-xr-x   8 namilin  staff   256B  3 27 09:34 .idea
+drwxr-xr-x  13 namilin  staff   416B  1 16 09:43 .sass-cache
+-rwxr-xr-x@  1 namilin  staff   265B  1  4 00:56 404.html
+-rw-r--r--   1 namilin  staff    11B  3 17 18:41 CNAME
+-rwxr-xr-x@  1 namilin  staff   1.1K 10  8  2017 LICENSE.md
+-rwxr-xr-x@  1 namilin  staff   3.8K 10  8  2017 README.md
+-rwxr-xr-x@  1 namilin  staff   2.8K 10  8  2017 Rakefile
+-rwxr-xr-x   1 namilin  staff   2.0K  3 27 12:23 _config.yml
+drwxr-xr-x@ 15 namilin  staff   480B  3  7 11:58 _includes
+drwxr-xr-x@  5 namilin  staff   160B  1 30 12:01 _layouts
+drwxr-xr-x@ 32 namilin  staff   1.0K  3 27 16:01 _posts
+drwxr-xr-x@  8 namilin  staff   256B  3  2 15:07 _sass
+drwxr-xr-x  43 namilin  staff   1.3K  3 27 17:03 _site
+-rwxr-xr-x@  1 namilin  staff   3.5K  1 19 21:29 android.md
+drwxr-xr-x@  8 namilin  staff   256B  3  7 14:40 assets
+drwxr-xr-x@  3 namilin  staff    96B  1  7 01:21 blog
+drwxr-xr-x@  3 namilin  staff    96B  1 20 16:07 categories
+-rwxr-xr-x@  1 namilin  staff   812B 10  8  2017 feed.xml
+drwxr-xr-x@  3 namilin  staff    96B 10  8  2017 images
+-rwxr-xr-x   1 namilin  staff   876B  3 17 19:06 index.html
+drwxr-xr-x@ 18 namilin  staff   576B  3 27 15:58 music
+-rwxr-xr-x@  1 namilin  staff    15K  3 27 12:24 python.md
+-rwxr-xr-x   1 namilin  staff   2.9K  3 27 09:46 resume.md
+drwxr-xr-x@  3 namilin  staff    96B 12 31 23:05 tags
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;自定义命令alias-llls--alh&quot;&gt;自定义命令alias ll=’ls -Alh’&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/emulator
+alias ll='ls -Alh'
+alias shot='adb shell screencap -p /sdcard/screen.png &amp;amp;&amp;amp; adb pull /sdcard/screen.png  /Users/namilin/Pictures/Screenshots &amp;amp;&amp;amp; open /Users/namilin/Pictures/Screenshots/screen.png'
+[[ -s &quot;$HOME/.profile&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.profile&quot; # Load the default .profile
+
+[[ -s &quot;$HOME/.rvm/scripts/rvm&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.rvm/scripts/rvm&quot; # Load RVM into a shell session *as a function*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;添加到文件vi ~/.bash_profile并保存，使用source ~/.bash_profile&lt;/p&gt;
+
+&lt;h2 id=&quot;搜索代码grep&quot;&gt;搜索代码grep&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ grep &quot;2018年总结&quot; . -rns
+./_posts/2018-12-03-summary.md:3:title:  &quot;2018年总结&quot;
+./_site/music/index.html:112:          2018年总结
+./_site/feed.xml:1694:        &amp;lt;title&amp;gt;2018年总结&amp;lt;/title&amp;gt;
+./_site/index.html:184:            &amp;lt;div class=&quot;article-title&quot;&amp;gt;&amp;lt;a class=&quot;post-link&quot; href=&quot;/2018-12-03/summary/&quot;&amp;gt;2018年总结&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查找文件find&quot;&gt;查找文件find&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMacBook-Pro:SecuritySchoolPro namilin$ find . -name &quot;build.gradle&quot;
+./app/build.gradle
+./IMLib/build.gradle
+./pay/build.gradle
+./IMKit/build.gradle
+./common/build.gradle
+./lib-zxing/build.gradle
+./build.gradle
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;编辑文件vim&quot;&gt;编辑文件vim&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6hgfe7xjg30ng0eg77e.gif&quot; alt=&quot;vim&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;量测特定指令执行时间time&quot;&gt;量测特定指令执行时间time&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ time date
+2019年 3月27日 星期三 17时13分09秒 CST
+
+real	0m0.015s
+user	0m0.002s
+sys	0m0.007s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;远程连接工具ssh&quot;&gt;远程连接工具ssh&lt;/h2&gt;
 
