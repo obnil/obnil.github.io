@@ -59,7 +59,7 @@ nav:
     url:            "/android/"
   - name:           "项目"
     url:            "/project/"
-  - name:           "博客"
+  - name:           "读书"
     url:            "/blog/"
   - name:           "分类"
     url:            "/categories/"
