@@ -6,6 +6,1003 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>917. Reverse Only Letters</title>
+        <description>&lt;p&gt;Given a string &lt;code class=&quot;highlighter-rouge&quot;&gt;S&lt;/code&gt;, return the “reversed” string where all characters that are not a letter stay in the same place, and all letters reverse their positions.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 1:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: &quot;ab-cd&quot;
+Output: &quot;dc-ba&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 2:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: &quot;a-bC-dEf-ghIj&quot;
+Output: &quot;j-Ih-gfE-dCba&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 3:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: &quot;Test1ng-Leet=code-Q!&quot;
+Output: &quot;Qedo1ct-eeLg=ntse-T!&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;S.length &amp;lt;= 100&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;33 &amp;lt;= S[i].ASCIIcode &amp;lt;= 122&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;S&lt;/code&gt; doesn’t contain &lt;code class=&quot;highlighter-rouge&quot;&gt;\&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;解答&quot;&gt;解答&lt;/h3&gt;
+
+&lt;p&gt;将一个字符串里的字母逆序输出&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reverseOnlyLetters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;StringBuffer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StringBuffer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isLetters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))){&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isLetters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))){&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isLetters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'z'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'a'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)||(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'Z'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;letter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'A'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;运行结果&quot;&gt;运行结果&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Time Submitted&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Status&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Runtime&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Memory&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Language&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;a few seconds ago&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://leetcode.com/submissions/detail/231492578/&quot;&gt;Accepted&lt;/a&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1 ms&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;33.7 MB&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;java&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        <pubDate>Sun, 26 May 2019 01:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-05-26/reverse-only-letters/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-05-26/reverse-only-letters/</guid>
+      </item>
+    
+      <item>
+        <title>206. Reverse Linked List</title>
+        <description>&lt;p&gt;Reverse a singly linked list.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: 1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;NULL
+Output: 5-&amp;gt;4-&amp;gt;3-&amp;gt;2-&amp;gt;1-&amp;gt;NULL
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Follow up:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A linked list can be reversed either iteratively or recursively. Could you implement both?&lt;/p&gt;
+
+&lt;h3 id=&quot;解答&quot;&gt;解答&lt;/h3&gt;
+
+&lt;p&gt;链表反转&lt;/p&gt;
+
+&lt;p&gt;每次p为第一个节点，q为第二个节点，r为第三个节点也就是缓存节点，将p和q节点互换，一直循环到q为空最后p节点就是头结点&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reverseList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;运行结果&quot;&gt;运行结果&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Time Submitted&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Status&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Runtime&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Memory&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Language&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;2 months ago&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://leetcode.com/submissions/detail/214457501/&quot;&gt;Accepted&lt;/a&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0 ms&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;37.9 MB&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;java&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        <pubDate>Thu, 23 May 2019 01:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-05-23/reverse-linked-list/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-05-23/reverse-linked-list/</guid>
+      </item>
+    
+      <item>
+        <title>832. Flipping an Image</title>
+        <description>&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Given a binary matrix &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;, we want to flip the image horizontally, then invert it, and return the resulting image.&lt;/p&gt;
+
+    &lt;p&gt;To flip an image horizontally means that each row of the image is reversed.  For example, flipping &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 1, 0]&lt;/code&gt; horizontally results in &lt;code class=&quot;highlighter-rouge&quot;&gt;[0, 1, 1]&lt;/code&gt;.&lt;/p&gt;
+
+    &lt;p&gt;To invert an image means that each &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; is replaced by &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;, and each &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt; is replaced by &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;. For example, inverting &lt;code class=&quot;highlighter-rouge&quot;&gt;[0, 1, 1]&lt;/code&gt; results in &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 0, 0]&lt;/code&gt;.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Example 1:&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: [[1,1,0],[1,0,1],[0,0,0]]
+Output: [[1,0,0],[0,1,0],[1,1,1]]
+Explanation: First reverse each row: [[0,1,1],[1,0,1],[0,0,0]].
+Then, invert the image: [[1,0,0],[0,1,0],[1,1,1]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;&lt;strong&gt;Example 2:&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: [[1,1,0,0],[1,0,0,1],[0,1,1,1],[1,0,1,0]]
+Output: [[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+Explanation: First reverse each row: [[0,0,1,1],[1,0,0,1],[1,1,1,0],[0,1,0,1]].
+Then invert the image: [[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1 &amp;lt;= A.length = A[0].length &amp;lt;= 20&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;0 &amp;lt;= A[i][j] &amp;lt;= 1&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;解答&quot;&gt;解答&lt;/h3&gt;
+
+&lt;p&gt;将一个二维数组水平翻转，并对每一位数字取反&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[][]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;flipAndInvertImage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[][]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//如果每一行的个数为奇数，对中间的数字进行取反&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;运行结果&quot;&gt;运行结果&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Time Submitted&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Status&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Runtime&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Memory&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Language&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;7 hours ago&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://leetcode.com/submissions/detail/230732583/&quot;&gt;Accepted&lt;/a&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1 ms&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;40.3 MB&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;java&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        <pubDate>Thu, 23 May 2019 01:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-05-23/flipping-an-image/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-05-23/flipping-an-image/</guid>
+      </item>
+    
+      <item>
+        <title>844. Backspace String Compare</title>
+        <description>&lt;p&gt;Given two strings &lt;code class=&quot;highlighter-rouge&quot;&gt;S&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;T&lt;/code&gt;, return if they are equal when both are typed into empty text editors. &lt;code class=&quot;highlighter-rouge&quot;&gt;#&lt;/code&gt; means a backspace character.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 1:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: S = &quot;ab#c&quot;, T = &quot;ad#c&quot;
+Output: true
+Explanation: Both S and T become &quot;ac&quot;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 2:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: S = &quot;ab##&quot;, T = &quot;c#d#&quot;
+Output: true
+Explanation: Both S and T become &quot;&quot;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 3:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: S = &quot;a##c&quot;, T = &quot;#a#c&quot;
+Output: true
+Explanation: Both S and T become &quot;c&quot;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Example 4:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Input: S = &quot;a#c&quot;, T = &quot;b&quot;
+Output: false
+Explanation: S becomes &quot;c&quot; while T becomes &quot;b&quot;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1 &amp;lt;= S.length &amp;lt;= 200&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1 &amp;lt;= T.length &amp;lt;= 200&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;S&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;T&lt;/code&gt; only contain lowercase letters and &lt;code class=&quot;highlighter-rouge&quot;&gt;'#'&lt;/code&gt; characters.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Follow up:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Can you solve it in &lt;code class=&quot;highlighter-rouge&quot;&gt;O(N)&lt;/code&gt; time and &lt;code class=&quot;highlighter-rouge&quot;&gt;O(1)&lt;/code&gt; space?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;解答&quot;&gt;解答&lt;/h3&gt;
+
+&lt;p&gt;给两个字符串S和T，如果点击回退键（出现&lt;code class=&quot;highlighter-rouge&quot;&gt;#&lt;/code&gt;）后得到最后的字符串完全相同则返回true&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;backspaceCompare&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;backspace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backspace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;backspace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;StringBuffer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StringBuffer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--){&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'#'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;charAt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Time Submitted&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Status&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Runtime&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Memory&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Language&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;a few seconds ago&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://leetcode.com/submissions/detail/230739705/&quot;&gt;Accepted&lt;/a&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;0 ms&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;33.4 MB&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;java&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        <pubDate>Thu, 23 May 2019 01:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-05-23/backspace-string-compare/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-05-23/backspace-string-compare/</guid>
+      </item>
+    
+      <item>
+        <title>梁知</title>
+        <description>&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1g1wmby14bxj31350u0u0x.jpg&quot; alt=&quot;image-20190409194330971&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;人活于世，免不了人情&lt;/p&gt;
+
+&lt;p&gt;人情复杂了，就成了世故&lt;/p&gt;
+
+&lt;p&gt;被挫败，丧失目标&lt;/p&gt;
+
+&lt;p&gt;被诱惑，麻木不仁&lt;/p&gt;
+
+&lt;p&gt;被摆布，失去棱角&lt;/p&gt;
+
+&lt;p&gt;被打击，遍体鳞伤&lt;/p&gt;
+
+&lt;p&gt;人生这条路，人心隔肚皮&lt;/p&gt;
+
+&lt;p&gt;打交道，不容易&lt;/p&gt;
+
+&lt;p&gt;不做别人的木偶，练达自己的人情&lt;/p&gt;
+</description>
+        <pubDate>Tue, 09 Apr 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-04-09/lao-liang/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-04-09/lao-liang/</guid>
+      </item>
+    
+      <item>
+        <title>富爸爸 穷爸爸</title>
+        <description>&lt;p&gt;&lt;img src=&quot;https://img13.360buyimg.com/n1/jfs/t27118/3/39088269/369515/ad315868/5b8204ccNc4f714d2.jpg&quot; alt=&quot;Image result for å¯ç¸ç¸ç©·ç¸ç¸ å­¦ä¹ éå­å¡&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;笔者花了一个星期看完《富爸爸穷爸爸》，感觉三观被颠覆了，一生都是接受穷爸爸的教育&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;考一个好成绩，取得高学历，找一个好工作，领一份不错的薪水&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;结果就如同作者指出的现象，笔者领着一份死工资，每天加班就为了那一份额外的收入，过了三十岁仍然没有什么积蓄，每个月需要还房贷，停止工作就会陷入债务危机。&lt;/p&gt;
+
+&lt;p&gt;下面介绍一下作者的背景&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;罗伯特·清琦是畅销理财书《富爸爸穷爸爸》的作者，被誉为”百万富翁的教父”和”金钱教练”。他出生在夏威夷一个教师家庭，大学毕业后加入美国海军陆战队，作为军官和舰载武装直升机飞行员，被派往越南战场。&lt;/p&gt;
+
+  &lt;p&gt;1977年，罗伯特·清琦创建了一家生产尼龙钱包的公司，开始自己的商业生涯，大获成功。他经历了三次商海沉浮。1985年，第三次成为百万富翁后，他离开商界，与人创建了一家生意投资公司，在全世界范围内教授生意和投资课程。他常年主持理财和投资教育的课程，还开发了一种教育玩具——《富爸爸现金流》游戏，帮助人们学会原来只有富人才懂得的金钱游戏。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;富人不为钱工作&quot;&gt;富人不为钱工作&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;穷人和中产阶级为钱而工作。富人让钱为他工作&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;罗伯特（穷爸爸的儿子）和迈克（富爸爸的儿子）为了成为富人于是向穷爸爸请教，穷爸爸有高学历好工作但是不知道怎么赚大钱，于是穷爸爸让罗伯特和迈克去请教富爸爸。富爸爸一开始让罗伯特和迈克为他打工，结果他们每小时只能挣10美分，然后开始抱怨要涨工资，像极了有些员工以辞职为威胁要求加薪一样。当富爸爸把他们和富爸爸的员工类比后，他们发现了这就是以后当前很多人的一个困境——&lt;strong&gt;起床，上班，付账，再起床，再上班，再付账。。。他们的生活永远被这两种感觉所控制：恐惧和贪婪。给他们更多的钱，他们就会以更高的开支重复这种循环。这就是富爸爸所说的&lt;/strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;老鼠赛跑&lt;/code&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;真正的学习需要经历，激情和热切的愿望。愤怒是其中一个重要的组成部分，因为激情正式愤怒和热爱的结合体。说到钱，大多数人都希望稳稳妥妥地挣钱，这样他们才感到安全。关于钱，他们没有激情，有的只是恐惧和贪婪。&lt;/p&gt;
+
+  &lt;p&gt;因为恐惧和贪婪，大多数人一生都在追求工资、加薪和职业保障，从来不问这种感情支配思想的生活之路将通向哪里。就像一幅画表现的：驴子拉车，因为主人在它面前挂了个胡萝卜。主人清楚自己想要去哪里，而驴子却只是在追逐一个幻影。但第二天驴子依旧会去拉车，因为又有胡萝卜放在它的面前。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tKfTcgy1g1nco9a0vkj30hs0eqt9h.jpg&quot; alt=&quot;Image result for å­¦ä¹ éå­å¡&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图可以看到实践或体验才能学的最好，又称为体验式学习。阅读和讲座是学习效果最差的方式。然而，我们都知道大多数学校的教学都是采用阅读和讲座的形式。&lt;/p&gt;
+
+&lt;p&gt;最后罗伯特和迈克将富爸爸的理论用于实践，把迈克的地下车库整理出来作为连环画的阅览室，雇迈克的妹妹当图书管理员，图书馆每周可以替他们产生9.5美元的收入。&lt;/p&gt;
+
+&lt;h2 id=&quot;为什么要教授财务知识&quot;&gt;为什么要教授财务知识&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;你挣了多少钱并不重要，重要的是你留下了多少钱&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;罗伯特·清琦讲了一个故事：一个年轻的篮球运动员，一年以前还拥有几百万美元，可现在，仅仅29岁，却只能在一个洗车房干报酬最低的活儿。他说他的朋友、律师和会计师拿走了他的钱，他因为在擦车时拒绝摘下总冠军戒指，被洗车房解雇了，这样他的事才成为全国性的新闻。篮球运动员抱怨洗车房，说自己在艰难地工作并受到歧视，他还说那枚戒指是他唯一剩下的东西，如果把它拿走，他就会崩溃。&lt;/p&gt;
+
+&lt;p&gt;第二个故事：穷人买彩票中奖后一下子暴富起来，但不久就又变穷了。他们虽然得到了上百万美元但很快又回到他们最初时的样子。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;富人获得资产，而穷人和中产阶级获得负债，只不过他们以为那些负债就是资产。&lt;/p&gt;
+
+  &lt;p&gt;资产是能把钱放进我口袋的东西。负债是把钱从我口袋里取走的东西。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws4.sinaimg.cn/large/006tKfTcgy1g1mg1l2t7pj30fe0cxglv.jpg&quot; alt=&quot;Image result for å¯ç¸ç¸ èµäº§è´åºè¡¨&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图是损益表和资产负债表，对于大多数人而言，第一项支出的是社会保险和税，雇主拿他本该支付给你的钱去支付了7.5%的社会保险，然后自己缴纳7.5%，然后扣除个人所得税，剩下的钱才是拿到手的钱。&lt;/p&gt;
+
+&lt;p&gt;有一对年轻夫妇，随着收入的增加，他们决定去买一套自己的房子，在通过抵押贷款有了房子后，他们就得缴纳一项新的税——房地产税，然后他们买了新车、新家具等，以与新房子相配。最后，他们突然发觉他们的负债项充斥着抵押债务和信用卡债务。他们的债务开始增加于是落入了&lt;code class=&quot;highlighter-rouge&quot;&gt;老鼠赛跑&lt;/code&gt;的陷阱。不久孩子出生了，他们必须更加努力地工作。之前的经历再次发生，钱挣得越多，缴税也越多，这也被称为”所得等级攀升”，当邻居打来电话说商店正在打折，虽然他们对自己说：”我们什么也不买，只是去看看。”但一旦发现了想要的东西，还是会忍不住刷了那张刚还清的信用卡，于是每个月的薪水需要交纳住房按揭贷款还需要还信用卡。&lt;/p&gt;
+
+&lt;p&gt;罗伯特·清琦身边有很多这种年轻夫妇，他们名字不同，但遇到的财务窘境却如此相似。他们找到罗伯特·清琦问道：”你能告诉我们怎样才能挣更多的钱吗？”。。。&lt;/p&gt;
+
+&lt;p&gt;他们不知道的是他们真正的问题在于他们选择的消费方式。而这是由他们在财务上的无知以及不理解资产和负债的区别造成的。&lt;/p&gt;
+
+&lt;p&gt;罗伯特·清琦和迈克经常和富爸爸还有他们雇员(银行经理、律师、会计师、经纪人、投资商、经理和员工)开会。富爸爸13岁就离开了学校，现在却命令着一群受过良好教育的人，他们对他唯命是从。他虽然没有受过高等教育，却有很丰富的财务知识并且最终获得了成功，他曾反复说：”聪明人总是雇佣比他更聪明的人。”&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;学校是生产好雇员而不是好雇主的地方&lt;/p&gt;
+
+  &lt;p&gt;学校会教导我们钱并不重要，我们越了解钱的力量，与老师和同学们的距离就越远&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;于是罗伯特·清琦在16岁时已经掌握了比父母更多的财务基础知识，因为罗伯特·清琦经常看书，经常听审计师、企业律师、银行家、房地产经纪人、投资人的谈话，而穷爸爸每天只和老师们谈话。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;房子不是资产&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;对于许多人来说，房子是他们的梦想和最大的投资，然而房子不是资产而是负债，因为它把钱从我们的口袋里逃走了。&lt;/p&gt;
+
+&lt;p&gt;除了每个月要还房屋贷款外，最大的损失是致富机会的损失，如果你所有的钱都投在房子上，你就不得不努力工作，因为你的现金正不断地从支出项流出，而不是流入资产项，这是典型的中产阶级现金流模式。&lt;/p&gt;
+
+&lt;p&gt;买入房子将对一个人的生活产生3个方面的冲击：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;失去了用其他资产增值的时机&lt;/li&gt;
+  &lt;li&gt;本可以用来投资的资本将用于支付房子高额的维修和保养费用&lt;/li&gt;
+  &lt;li&gt;失去受教育的机会。人们经常把他们的房子、储蓄和退休金计划作为他们资产项的全部内容。因为没钱投资，也就不去投资，这就使得他们无法获得投资经验，并永远不会成为被投资界成为”成熟投资者”的人。而最好的投资机会往往先给那些”成熟投资者”的，再由他们转手给那些谨小慎微的投资者，当然，在转手时他们已经拿走了绝大部分的利益&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;为什么富人越来越富&quot;&gt;为什么富人越来越富&lt;/h3&gt;
+
+&lt;p&gt;关于富爸爸的财务状况的分析说明了为什么富人会越来越富。资产项产生的收入足以弥补支出，还可以用剩余的收入对资产项进行再投资。资产项不断增长，相应的收入也会越来越多。其结果是：富人越来越富！&lt;/p&gt;
+
+&lt;h3 id=&quot;为什么中产阶级无法摆脱财务问题&quot;&gt;为什么中产阶级无法摆脱财务问题&lt;/h3&gt;
+
+&lt;p&gt;把房子当资产的想法和那种认为钱越多就能买更大的房子或更多东西的理财哲学就是今天这个债台高筑的社会基础。过多的支出把家庭拖入债务和财务不稳定的漩涡之中，即使人们工作业绩优秀，收入固定增长，也会出现这情况，而这种高风险的生活正式由于缺乏财商教育造成的。&lt;/p&gt;
+
+&lt;p&gt;最近一段时间经济不景气，出现大量裁员失业的现象。一般来说工资是他们收入的全部来源，他们的生活完全依赖于他们的雇主。所以当名副其实的”关系一生的机会”来临时，这些人无法抓住，因为他们工作非常辛苦，并负担着高额的税和债务。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;财富就是支撑一个人生成多长时间的能力，或者说，如果我今天停止工作，我还能活多久？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;想走上致富之路。罗伯特·清琦给出了三句话&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;富人买入资产&lt;/li&gt;
+  &lt;li&gt;穷人只有支出&lt;/li&gt;
+  &lt;li&gt;中产阶级购买自以为是资产的负债&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;关注自己的事业&quot;&gt;关注自己的事业&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;富人关心的焦点是资产而其他人关心的是收入&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;1974年麦当劳创始人雷·克罗克被邀请去MBA班做演讲，他透露了说他真正的生意不是做汉堡包的而是做房地产。在雷的商业计划中，麦当劳的基本业务是出售麦当劳各个分点。他一向很重视每个分店的地理位置，因为他知道房产和位置将是每个分店获得成功的最重要的因素。实际上，是哪些买下分店的人在为麦当劳买下的土地支付费用。&lt;/p&gt;
+
+&lt;p&gt;麦当劳今天已经是世界上最大的独立房地产开发商了，他拥有的房地产甚至比天主教会还多。今天，麦当劳在美国以及世界其他地方都拥有一些位于街角和十字路口的环境地段。&lt;/p&gt;
+
+&lt;p&gt;大多数人工作其实是为他人，而非自己。首先他们要为公司的老板工作，其次是通过纳税为政府工作，最后为他们提供住房按揭贷款的银行工作。他们经常耗费一生为别人工作，而在不能工作时就变得一无所有。&lt;/p&gt;
+
+&lt;p&gt;当经济衰退不可避免来临时，数以万计的工人将发现他们所谓的最大资产——房子&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 31 Mar 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-03-31/rich-dad/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-03-31/rich-dad/</guid>
+      </item>
+    
+      <item>
+        <title>Handler源码分析</title>
+        <description>&lt;p&gt;Git 是用于 Linux&lt;a href=&quot;https://baike.baidu.com/item/%E5%86%85%E6%A0%B8&quot;&gt;内核&lt;/a&gt;开发的&lt;a href=&quot;https://baike.baidu.com/item/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6&quot;&gt;版本控制&lt;/a&gt;工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使&lt;a href=&quot;https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81&quot;&gt;源代码&lt;/a&gt;的发布和交流极其方便。。&lt;/p&gt;
+&lt;h2 id=&quot;查看本地修改diff&quot;&gt;查看本地修改diff&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git diff
+&lt;span class=&quot;gh&quot;&gt;diff --git a/_posts/2019-01-14-linux.md b/_posts/2019-01-14-linux.md
+index d62e9b7..f461f61 100644
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/_posts/2019-01-14-linux.md
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/_posts/2019-01-14-linux.md
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -7,15 +7,79 @@ date:   2019-01-14 15:40:42 +0800
+&lt;/span&gt; ---
+ Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码
+。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。
+ ## 查看普通文件ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看本地历史记录log&quot;&gt;查看本地历史记录log&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git log
+commit b4488a9b43f454027ffdc9d364c9328036ce2dc6 (HEAD -&amp;gt; master, origin/master, origin/HEAD)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Wed Mar 27 16:04:28 2019 +0800
+
+    修复音乐外链
+
+commit 8174cee39fe58f812a92f2432b5f1ccb06de5dbd
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Sun Mar 17 19:07:15 2019 +0800
+
+    修复首页base url问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;删除没有被tracked的文件&quot;&gt;删除没有被tracked的文件&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+Untracked files:
+  (use &quot;git add &amp;lt;file&amp;gt;...&quot; to include in what will be committed)
+
+	places_you've_created.html
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;从上面可以看到没有被tracked的文件即使使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard&lt;/code&gt;也无效，这时候需要使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git clean -f&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git clean -n
+Would remove places_you've_created.html
+NamiLindeMBP:SecuritySchoolPro namilin$ git clean -f
+Removing places_you've_created.html
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这时候可以看到文件&lt;code class=&quot;highlighter-rouge&quot;&gt;places_you've_created.html&lt;/code&gt;已经被删除了&lt;/p&gt;
+
+&lt;h2 id=&quot;回退代码reset&quot;&gt;回退代码reset&lt;/h2&gt;
+
+&lt;p&gt;回退本地修改的文件&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+Changes not staged for commit:
+  (use &quot;git add &amp;lt;file&amp;gt;...&quot; to update what will be committed)
+  (use &quot;git checkout -- &amp;lt;file&amp;gt;...&quot; to discard changes in working directory)
+
+	modified:   app/build.gradle
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard
+HEAD is now at a63b37e HMFBridge组件及demo演示
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;先查看历史记录&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit 38ce7f57d2c782c5750bd83e17e7ab47038d2d2e (HEAD -&amp;gt; master, origin/master)
+Merge: 189fbea 9174f4d
+Author: fengbo &amp;lt;fengbo&amp;gt;
+Date:   Mon Mar 18 18:09:05 2019 +0800
+
+    Merge branch 'feature/1.0.0/dev_smc_map_unReadNews_imgCrop_toastStyle' into 'master'
+    
+    Feature/1.0.0/dev smc map un read news img crop toast style
+    
+    新版本功能，修复若干bug
+    
+    See merge request !26
+
+commit 9174f4d16783741d94c5c00dfbeb7671c25d6121
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Sat Mar 16 16:28:52 2019 +0800
+
+    修复学生管理界面跳转首页，定位学生位置不正确的问题；修复切换学校报警时间不正确的问
+题；支付宝、微信未安装时提示用户；我的帖子可以刷新下拉，优化UI界面。
+
+commit e686dd0b8fb0eda48c172688d73586c2b1412ff6
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Thu Mar 14 16:50:14 2019 +0800
+
+    添加空网络数据图，增加强制更新功能，修复若干bug
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;回退本地的历史记录到指定提交记录&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard commit-id&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard e686dd0b8fb0eda48c172688d73586c2b1412ff6
+HEAD is now at e686dd0 添加空网络数据图，增加强制更新功能，修复若干bug
+
+NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit e686dd0b8fb0eda48c172688d73586c2b1412ff6 (HEAD -&amp;gt; master)
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Thu Mar 14 16:50:14 2019 +0800
+
+    添加空网络数据图，增加强制更新功能，修复若干bug
+commit ef0cfd3680d0f864ea90d1ce1c1aa42c286490ad
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Tue Mar 12 15:08:51 2019 +0800
+
+    对首页地图显示距离较远两个学校的情况进去优化，融云未读消息首页显示角标，家长用户上传头像进行裁剪，统一toast提示的样式，修复了请假拉取更多数据页码不正确的问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;回退本地的一次历史记录&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard HEAD^&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard HEAD^
+HEAD is now at ef0cfd3 对首页地图显示距离较远两个学校的情况进去优化，融云未读消息首页显示角标，家长用户上传头像进行裁剪，统一toast提示的样式，修复了请假拉取更多数据页码不正确的问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;将其它分支的提交记录同步到自己分支cherry-pick&quot;&gt;将其它分支的提交记录同步到自己分支cherry-pick&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit 050d3f1ba806b076a425126ab5d6957f533de067 (HEAD -&amp;gt; newDev)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Fri Mar 29 18:00:29 2019 +0800
+
+    测试cherry-pick功能
+
+NamiLindeMBP:SecuritySchoolPro namilin$ git checkout master
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+NamiLindeMBP:SecuritySchoolPro namilin$ git cherry-pick 050d3f1ba806b076a425126ab5d6957f533de067
+[master fa7b037] 测试cherry-pick功能
+ Date: Fri Mar 29 18:00:29 2019 +0800
+ 1 file changed, 8 deletions(-)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看文件的修改记录blame&quot;&gt;查看文件的修改记录blame&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git blame -L 9,20 app/build.gradle
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800  9)     compileSdkVersion 26
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 10)     buildToolsVersion '26.0.2'
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 11) 
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 12)     defaultConfig {
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 13)         applicationId &quot;com.hmf.securityschool&quot;
+57e163e8 (lb891014 2019-01-15 17:11:03 +0800 14)         minSdkVersion 19
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 15)         targetSdkVersion 26
+9174f4d1 (Sam      2019-03-16 16:28:52 +0800 16)         versionCode 4
+9174f4d1 (Sam      2019-03-16 16:28:52 +0800 17)         versionName &quot;1.1.0&quot;
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 18)         testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 19)         vectorDrawables.useSupportLibrary = true
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 20)         multiDexEnabled true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看历史修改的文件记录show后面可带参数commit-id&quot;&gt;查看历史修改的文件记录show后面可带参数commit-id&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git show
+commit fa7b037b57c18fe4267baa0a30c2066218afcdb5 (HEAD -&amp;gt; master)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Fri Mar 29 18:00:29 2019 +0800
+
+    测试cherry-pick功能
+
+&lt;span class=&quot;gh&quot;&gt;diff --git a/app/build.gradle b/app/build.gradle
+index b52e86e..856cf19 100644
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/app/build.gradle
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/app/build.gradle
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -6,14 +6,6 @@ android {
+&lt;/span&gt;             jniLibs.srcDirs = ['libs']
+         }
+     }
+&lt;span class=&quot;gd&quot;&gt;-    signingConfigs {
+-        config {
+-            keyAlias 'linbo'
+-            keyPassword '654321'
+-            storeFile file('shellever.jks')
+-            storePassword '123456'
+-        }
+-    }
+&lt;/span&gt;     compileSdkVersion 26
+     buildToolsVersion '26.0.2'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;更新远程服务器代码到本地pull&quot;&gt;更新远程服务器代码到本地pull&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git pull
+Updating 189fbea..38ce7f5
+Fast-forward
+ IMLib/build.gradle                                                  |   1 +
+ app/app.iml                                                         |  79 +++-----
+ app/build.gradle                                                    |  19 +-
+ app/release/output.json                                             |   2 +-
+ app/src/main/AndroidManifest.xml                                    |  19 ++
+ .../java/com/hmf/securityschool/activity/AlarmDetailActivity.java   |   3 +-
+ .../java/com/hmf/securityschool/activity/DeviceAddActivity.java     |   7 +
+ .../com/hmf/securityschool/activity/DevicePhotoAddActivity.java     |  37 ++--
+ .../main/java/com/hmf/securityschool/activity/ForumAddActivity.java |   6 +
+ .../java/com/hmf/securityschool/activity/ForumDetailActivity.java   |  67 ++++--
+ 151 files changed, 2714 insertions(+), 572 deletions(-)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看当前状态status&quot;&gt;查看当前状态status&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看当前所有分支branch加参数是创建分支&quot;&gt;查看当前所有分支branch加参数是创建分支&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git branch mydev
+NamiLindeMBP:SecuritySchoolPro namilin$ git branch
+  bug/1.0.0/smc_fix_CacheBySchool_Amap_UI_RongIm
+  feature/1.0.0/dev_linbo_bindCard
+  feature/1.0.0/dev_linbo_hmfbridge
+  feature/1.0.0/dev_smc_pro
+* master
+  newDev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;切换当前分支到指定分支checkout&quot;&gt;切换当前分支到指定分支checkout&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git checkout newDev
+Switched to branch 'newDev'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Fri, 29 Mar 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-03-29/handler/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-03-29/handler/</guid>
+      </item>
+    
+      <item>
+        <title>Git常用命令diff，log，clean，reset，cherry-pick，blame，show，pull，status，branch，checkout</title>
+        <description>&lt;p&gt;Git 是用于 Linux&lt;a href=&quot;https://baike.baidu.com/item/%E5%86%85%E6%A0%B8&quot;&gt;内核&lt;/a&gt;开发的&lt;a href=&quot;https://baike.baidu.com/item/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6&quot;&gt;版本控制&lt;/a&gt;工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使&lt;a href=&quot;https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81&quot;&gt;源代码&lt;/a&gt;的发布和交流极其方便。。&lt;/p&gt;
+&lt;h2 id=&quot;查看本地修改diff&quot;&gt;查看本地修改diff&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git diff
+&lt;span class=&quot;gh&quot;&gt;diff --git a/_posts/2019-01-14-linux.md b/_posts/2019-01-14-linux.md
+index d62e9b7..f461f61 100644
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/_posts/2019-01-14-linux.md
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/_posts/2019-01-14-linux.md
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -7,15 +7,79 @@ date:   2019-01-14 15:40:42 +0800
+&lt;/span&gt; ---
+ Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码
+。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。
+ ## 查看普通文件ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看本地历史记录log&quot;&gt;查看本地历史记录log&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git log
+commit b4488a9b43f454027ffdc9d364c9328036ce2dc6 (HEAD -&amp;gt; master, origin/master, origin/HEAD)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Wed Mar 27 16:04:28 2019 +0800
+
+    修复音乐外链
+
+commit 8174cee39fe58f812a92f2432b5f1ccb06de5dbd
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Sun Mar 17 19:07:15 2019 +0800
+
+    修复首页base url问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;删除没有被tracked的文件&quot;&gt;删除没有被tracked的文件&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+Untracked files:
+  (use &quot;git add &amp;lt;file&amp;gt;...&quot; to include in what will be committed)
+
+	places_you've_created.html
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;从上面可以看到没有被tracked的文件即使使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard&lt;/code&gt;也无效，这时候需要使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git clean -f&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git clean -n
+Would remove places_you've_created.html
+NamiLindeMBP:SecuritySchoolPro namilin$ git clean -f
+Removing places_you've_created.html
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这时候可以看到文件&lt;code class=&quot;highlighter-rouge&quot;&gt;places_you've_created.html&lt;/code&gt;已经被删除了&lt;/p&gt;
+
+&lt;h2 id=&quot;回退代码reset&quot;&gt;回退代码reset&lt;/h2&gt;
+
+&lt;p&gt;回退本地修改的文件&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+Changes not staged for commit:
+  (use &quot;git add &amp;lt;file&amp;gt;...&quot; to update what will be committed)
+  (use &quot;git checkout -- &amp;lt;file&amp;gt;...&quot; to discard changes in working directory)
+
+	modified:   app/build.gradle
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard
+HEAD is now at a63b37e HMFBridge组件及demo演示
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;先查看历史记录&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit 38ce7f57d2c782c5750bd83e17e7ab47038d2d2e (HEAD -&amp;gt; master, origin/master)
+Merge: 189fbea 9174f4d
+Author: fengbo &amp;lt;fengbo&amp;gt;
+Date:   Mon Mar 18 18:09:05 2019 +0800
+
+    Merge branch 'feature/1.0.0/dev_smc_map_unReadNews_imgCrop_toastStyle' into 'master'
+    
+    Feature/1.0.0/dev smc map un read news img crop toast style
+    
+    新版本功能，修复若干bug
+    
+    See merge request !26
+
+commit 9174f4d16783741d94c5c00dfbeb7671c25d6121
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Sat Mar 16 16:28:52 2019 +0800
+
+    修复学生管理界面跳转首页，定位学生位置不正确的问题；修复切换学校报警时间不正确的问
+题；支付宝、微信未安装时提示用户；我的帖子可以刷新下拉，优化UI界面。
+
+commit e686dd0b8fb0eda48c172688d73586c2b1412ff6
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Thu Mar 14 16:50:14 2019 +0800
+
+    添加空网络数据图，增加强制更新功能，修复若干bug
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;回退本地的历史记录到指定提交记录&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard commit-id&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard e686dd0b8fb0eda48c172688d73586c2b1412ff6
+HEAD is now at e686dd0 添加空网络数据图，增加强制更新功能，修复若干bug
+
+NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit e686dd0b8fb0eda48c172688d73586c2b1412ff6 (HEAD -&amp;gt; master)
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Thu Mar 14 16:50:14 2019 +0800
+
+    添加空网络数据图，增加强制更新功能，修复若干bug
+commit ef0cfd3680d0f864ea90d1ce1c1aa42c286490ad
+Author: Sam &amp;lt;chuchuyajun@foxmail.com&amp;gt;
+Date:   Tue Mar 12 15:08:51 2019 +0800
+
+    对首页地图显示距离较远两个学校的情况进去优化，融云未读消息首页显示角标，家长用户上传头像进行裁剪，统一toast提示的样式，修复了请假拉取更多数据页码不正确的问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;回退本地的一次历史记录&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset —hard HEAD^&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard HEAD^
+HEAD is now at ef0cfd3 对首页地图显示距离较远两个学校的情况进去优化，融云未读消息首页显示角标，家长用户上传头像进行裁剪，统一toast提示的样式，修复了请假拉取更多数据页码不正确的问题
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;将其它分支的提交记录同步到自己分支cherry-pick&quot;&gt;将其它分支的提交记录同步到自己分支cherry-pick&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit 050d3f1ba806b076a425126ab5d6957f533de067 (HEAD -&amp;gt; newDev)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Fri Mar 29 18:00:29 2019 +0800
+
+    测试cherry-pick功能
+
+NamiLindeMBP:SecuritySchoolPro namilin$ git checkout master
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+NamiLindeMBP:SecuritySchoolPro namilin$ git cherry-pick 050d3f1ba806b076a425126ab5d6957f533de067
+[master fa7b037] 测试cherry-pick功能
+ Date: Fri Mar 29 18:00:29 2019 +0800
+ 1 file changed, 8 deletions(-)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看文件的修改记录blame&quot;&gt;查看文件的修改记录blame&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git blame -L 9,20 app/build.gradle
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800  9)     compileSdkVersion 26
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 10)     buildToolsVersion '26.0.2'
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 11) 
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 12)     defaultConfig {
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 13)         applicationId &quot;com.hmf.securityschool&quot;
+57e163e8 (lb891014 2019-01-15 17:11:03 +0800 14)         minSdkVersion 19
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 15)         targetSdkVersion 26
+9174f4d1 (Sam      2019-03-16 16:28:52 +0800 16)         versionCode 4
+9174f4d1 (Sam      2019-03-16 16:28:52 +0800 17)         versionName &quot;1.1.0&quot;
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 18)         testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 19)         vectorDrawables.useSupportLibrary = true
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 20)         multiDexEnabled true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看历史修改的文件记录show后面可带参数commit-id&quot;&gt;查看历史修改的文件记录show后面可带参数commit-id&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git show
+commit fa7b037b57c18fe4267baa0a30c2066218afcdb5 (HEAD -&amp;gt; master)
+Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
+Date:   Fri Mar 29 18:00:29 2019 +0800
+
+    测试cherry-pick功能
+
+&lt;span class=&quot;gh&quot;&gt;diff --git a/app/build.gradle b/app/build.gradle
+index b52e86e..856cf19 100644
+&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/app/build.gradle
+&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/app/build.gradle
+&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -6,14 +6,6 @@ android {
+&lt;/span&gt;             jniLibs.srcDirs = ['libs']
+         }
+     }
+&lt;span class=&quot;gd&quot;&gt;-    signingConfigs {
+-        config {
+-            keyAlias 'linbo'
+-            keyPassword '654321'
+-            storeFile file('shellever.jks')
+-            storePassword '123456'
+-        }
+-    }
+&lt;/span&gt;     compileSdkVersion 26
+     buildToolsVersion '26.0.2'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;更新远程服务器代码到本地pull&quot;&gt;更新远程服务器代码到本地pull&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git pull
+Updating 189fbea..38ce7f5
+Fast-forward
+ IMLib/build.gradle                                                  |   1 +
+ app/app.iml                                                         |  79 +++-----
+ app/build.gradle                                                    |  19 +-
+ app/release/output.json                                             |   2 +-
+ app/src/main/AndroidManifest.xml                                    |  19 ++
+ .../java/com/hmf/securityschool/activity/AlarmDetailActivity.java   |   3 +-
+ .../java/com/hmf/securityschool/activity/DeviceAddActivity.java     |   7 +
+ .../com/hmf/securityschool/activity/DevicePhotoAddActivity.java     |  37 ++--
+ .../main/java/com/hmf/securityschool/activity/ForumAddActivity.java |   6 +
+ .../java/com/hmf/securityschool/activity/ForumDetailActivity.java   |  67 ++++--
+ 151 files changed, 2714 insertions(+), 572 deletions(-)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看当前状态status&quot;&gt;查看当前状态status&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;查看当前所有分支branch加参数是创建分支&quot;&gt;查看当前所有分支branch加参数是创建分支&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git branch mydev
+NamiLindeMBP:SecuritySchoolPro namilin$ git branch
+  bug/1.0.0/smc_fix_CacheBySchool_Amap_UI_RongIm
+  feature/1.0.0/dev_linbo_bindCard
+  feature/1.0.0/dev_linbo_hmfbridge
+  feature/1.0.0/dev_smc_pro
+* master
+  newDev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;切换当前分支到指定分支checkout&quot;&gt;切换当前分支到指定分支checkout&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:SecuritySchoolPro namilin$ git checkout newDev
+Switched to branch 'newDev'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 27 Mar 2019 07:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-03-27/git/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-03-27/git/</guid>
+      </item>
+    
+      <item>
         <title>为Jekyll博客添加音乐播放器</title>
         <description>&lt;p&gt;突然想在博客的文章里放一点音乐。&lt;/p&gt;
 
@@ -590,95 +1587,6 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
         <pubDate>Wed, 16 Jan 2019 01:51:42 +0000</pubDate>
         <link>http://localhost:4000/2019-01-16/anr/</link>
         <guid isPermaLink="true">http://localhost:4000/2019-01-16/anr/</guid>
-      </item>
-    
-      <item>
-        <title>Git常用命令diff，log，clean，reset，cherry-pick，blame</title>
-        <description>&lt;p&gt;Git 是用于 Linux&lt;a href=&quot;https://baike.baidu.com/item/%E5%86%85%E6%A0%B8&quot;&gt;内核&lt;/a&gt;开发的&lt;a href=&quot;https://baike.baidu.com/item/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6&quot;&gt;版本控制&lt;/a&gt;工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使&lt;a href=&quot;https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81&quot;&gt;源代码&lt;/a&gt;的发布和交流极其方便。。&lt;/p&gt;
-&lt;h2 id=&quot;查看本地修改diff&quot;&gt;查看本地修改diff&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git diff
-&lt;span class=&quot;gh&quot;&gt;diff --git a/_posts/2019-01-14-linux.md b/_posts/2019-01-14-linux.md
-index d62e9b7..f461f61 100644
-&lt;/span&gt;&lt;span class=&quot;gd&quot;&gt;--- a/_posts/2019-01-14-linux.md
-&lt;/span&gt;&lt;span class=&quot;gi&quot;&gt;+++ b/_posts/2019-01-14-linux.md
-&lt;/span&gt;&lt;span class=&quot;gu&quot;&gt;@@ -7,15 +7,79 @@ date:   2019-01-14 15:40:42 +0800
-&lt;/span&gt; ---
- Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码
-。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。
- ## 查看普通文件ls
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;查看本地历史记录log&quot;&gt;查看本地历史记录log&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ git log
-commit b4488a9b43f454027ffdc9d364c9328036ce2dc6 (HEAD -&amp;gt; master, origin/master, origin/HEAD)
-Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
-Date:   Wed Mar 27 16:04:28 2019 +0800
-
-    修复音乐外链
-
-commit 8174cee39fe58f812a92f2432b5f1ccb06de5dbd
-Author: lb891014 &amp;lt;lb891014@126.com&amp;gt;
-Date:   Sun Mar 17 19:07:15 2019 +0800
-
-    修复首页base url问题
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;自定义命令alias-llls--alh&quot;&gt;自定义命令alias ll=’ls -Alh’&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/emulator
-alias ll='ls -Alh'
-alias shot='adb shell screencap -p /sdcard/screen.png &amp;amp;&amp;amp; adb pull /sdcard/screen.png  /Users/namilin/Pictures/Screenshots &amp;amp;&amp;amp; open /Users/namilin/Pictures/Screenshots/screen.png'
-[[ -s &quot;$HOME/.profile&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.profile&quot; # Load the default .profile
-
-[[ -s &quot;$HOME/.rvm/scripts/rvm&quot; ]] &amp;amp;&amp;amp; source &quot;$HOME/.rvm/scripts/rvm&quot; # Load RVM into a shell session *as a function*
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;添加到文件vi ~/.bash_profile并保存，使用source ~/.bash_profile&lt;/p&gt;
-
-&lt;h2 id=&quot;搜索代码grep&quot;&gt;搜索代码grep&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ grep &quot;2018年总结&quot; . -rns
-./_posts/2018-12-03-summary.md:3:title:  &quot;2018年总结&quot;
-./_site/music/index.html:112:          2018年总结
-./_site/feed.xml:1694:        &amp;lt;title&amp;gt;2018年总结&amp;lt;/title&amp;gt;
-./_site/index.html:184:            &amp;lt;div class=&quot;article-title&quot;&amp;gt;&amp;lt;a class=&quot;post-link&quot; href=&quot;/2018-12-03/summary/&quot;&amp;gt;2018年总结&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;查找文件find&quot;&gt;查找文件find&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMacBook-Pro:SecuritySchoolPro namilin$ find . -name &quot;build.gradle&quot;
-./app/build.gradle
-./IMLib/build.gradle
-./pay/build.gradle
-./IMKit/build.gradle
-./common/build.gradle
-./lib-zxing/build.gradle
-./build.gradle
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;编辑文件vim&quot;&gt;编辑文件vim&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1fz6hgfe7xjg30ng0eg77e.gif&quot; alt=&quot;vim&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;量测特定指令执行时间time&quot;&gt;量测特定指令执行时间time&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NamiLindeMBP:obnil.github.io namilin$ time date
-2019年 3月27日 星期三 17时13分09秒 CST
-
-real	0m0.015s
-user	0m0.002s
-sys	0m0.007s
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;远程连接工具ssh&quot;&gt;远程连接工具ssh&lt;/h2&gt;
-
-</description>
-        <pubDate>Mon, 14 Jan 2019 07:40:42 +0000</pubDate>
-        <link>http://localhost:4000/2019-01-14/git/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019-01-14/git/</guid>
       </item>
     
       <item>
@@ -1792,101 +2700,6 @@ cond(no)-&amp;gt;op
         <pubDate>Mon, 03 Dec 2018 10:00:42 +0000</pubDate>
         <link>http://localhost:4000/2018-12-03/write-blog/</link>
         <guid isPermaLink="true">http://localhost:4000/2018-12-03/write-blog/</guid>
-      </item>
-    
-      <item>
-        <title>2018年总结</title>
-        <description>&lt;p&gt;今天是2018年最后的一天，年初立下的Flag，不知道大家年末的时候完成得如何了呢。今天不谈太多技术，只谈一下这一年，我眼中的世界。&lt;/p&gt;
-
-&lt;h2 id=&quot;1寒潮&quot;&gt;1、寒潮&lt;/h2&gt;
-
-&lt;p&gt;这个年末，让无数人人明白什么才是「寒冬」。互联网企业裁员的消息一波接着一波，初创公司也是一批接一批的倒下了。甚至很多公司关闭了低级别的招聘，只招P7职级以上的开发大佬。在24个月前，我在知乎专栏的文章（&lt;a href=&quot;https://zhuanlan.zhihu.com/p/24787356&quot;&gt;微信小程序带来的失业恐慌&lt;/a&gt;）末尾，我写过一句话：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;对移动端开发者们而言，“普通”，几乎是条死路了。&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;现在看来，倍感唏嘘。&lt;/p&gt;
-
-&lt;p&gt;身边的朋友们多多少少有被裁员的，有微博同事拿着N+3开开心心回家过年，有百度同事被公司狠狠坑了一把，既没有钱又被扣了个帽子。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://diycode.b0.upaiyun.com/photo/2018/f8dce0dea5831e7357172bd192125eda.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;要你加班的时候，公司就是你的家；要你滚的时候，你先迈左脚都是错的。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;欲加之罪，何患无辞呢？靠这样的手段实现裁员，只能说百度某些老大的价值观真的算下三滥——不要真以为公司是为了整顿风气，之前实名举报FSG部门胡函以权谋利30w，事后也查清了确有此事，但胡某一行人如今还是屁事没有，相比之下，加班打车发票这才几个钱呢？&lt;/p&gt;
-
-&lt;p&gt;又何况，加班是在给谁干活呢？&lt;strong&gt;刑不上大夫&lt;/strong&gt;罢了。&lt;/p&gt;
-
-&lt;p&gt;同样是裁员，一边是给够了钱，然后回家过年，江湖再见；一边是罗织罪名，降低裁员成本又泼你一身脏水。&lt;/p&gt;
-
-&lt;p&gt;技术人员最常犯的错误之一，就是选择一个公司的时候，仅仅看它的技术氛围。但实际上，技术只在公司占有一席之地，甚至常常只是微不足道的一席而已。整个公司的氛围如何，是否有过不正当手段裁员，是否有申诉途径，很多东西都应该加入到权衡之中。他们可能不是决定性因素，但如果完全不考虑，吃瘪的时候完全没有心理准备就很惨了。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;2选择与努力&quot;&gt;2、选择与努力&lt;/h2&gt;
-
-&lt;p&gt;说道选择，我确实赞成选择大于努力这件事，但这不意味着努力不重要。努力决定了你有多少「可选项」，而你的知识和眼界决定了你怎样选择这些「可选项」。回顾我自己做出的几个重大抉择，有些是成功的，有些是失败的。&lt;/p&gt;
-
-&lt;h4 id=&quot;选择1&quot;&gt;选择1：&lt;/h4&gt;
-
-&lt;p&gt;2008年，不喜欢地理专业了，开始尝试寻找自己的兴趣。什么书都读一些，各行业都接触一些。从文学到经济学的书都接触，从销售到市场都去了解与尝试，最后发现编程这个兴趣点。&lt;/p&gt;
-
-&lt;h4 id=&quot;结果可能是对的&quot;&gt;结果：可能是对的&lt;/h4&gt;
-
-&lt;p&gt;至少，没有进入到一种「我不知道我喜欢啥，但我就是不喜欢现在的工作」这种茫然却无用的状态里。后面的几年中。&lt;/p&gt;
-
-&lt;h4 id=&quot;选择2-从后端到移动端&quot;&gt;选择2： 从后端到移动端&lt;/h4&gt;
-
-&lt;p&gt;一开始做java后端相关，后面由于是Google粉丝，开始接触Android开发。&lt;/p&gt;
-
-&lt;h4 id=&quot;结果喜忧参半&quot;&gt;结果：喜忧参半&lt;/h4&gt;
-
-&lt;p&gt;尽管赶上了一波移动端的红利期，但人生的道路极其漫长，在自学阶段没有能够深入到后端开发中精妙的地方，比如高并发，比如负载均衡，比如海量数据处理……只是在门口向内窥见，做了几个简陋网页和后端服务，就过早放弃，加入到「看起来更有趣」的移动端的开发中了，也未见得是好事。&lt;/p&gt;
-
-&lt;h4 id=&quot;选择3离开北京&quot;&gt;选择3：离开北京&lt;/h4&gt;
-
-&lt;p&gt;毕业后在外包公司工作了3年，最后选择离开北京，降薪去广州入职UC。
-在帝都有很多做外包的公司，薪酬福利不错，工作强度也一般——毕竟同一个模板拿来用用就是另一个项目。上班时间也真的弹性，反正最后交付的东西给了就行。
-这种环境，真的会让一个人「废掉」。因为太过安逸了，甚至不需要学习。我沉浸在其中过，但终究还是觉得这种安逸来得太轻易。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;而简单的路，通常都走不长。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;结果人生最正确的决定之一&quot;&gt;结果：人生最正确的决定之一&lt;/h4&gt;
-
-&lt;p&gt;尽管是降薪加入的UC，在离职的时候刚刚恢复到加入UC之前的工资水平；
-尽管是白白北漂三年，没拿到户口就走了；
-尽管冒着巨大的风险，要知道当时UC试用期不通过是常有的事，十个人里留4个算是高通过率了；
-尽管被阿里收购以后，有这样那样让我无法接受的「文化」；
-我还是觉得这是我做过的最正确的决定之一。
-加入到这家公司让我打开了新世界的大门，原来移动端还有那么多好玩又艰深的东西啊！不得不说UC的技术积累是很深厚的，甚至很多现在来看十分精巧的技术，UC早在几年前就已经沉淀并大规模使用了。比如最近几年微信开源的XLog日志库，早在五年前UC内部就已经在利用Linux的MMAP机制实现高效、高可用的日志系统了。类似的东西还有很多，在这个集团里的时候浑然不觉，只是「不明觉厉」，但离开这里的时候再看外面炒得火热的概念，竟然都是过去我们内部玩剩下的东西，才方知这内中，真是藏龙卧虎。
-我自己的技术水平也是有不少的提升。&lt;/p&gt;
-
-&lt;h4 id=&quot;选择4创业&quot;&gt;选择4：创业&lt;/h4&gt;
-
-&lt;p&gt;离开UC，选择跟人一起创业。&lt;/p&gt;
-
-&lt;h4 id=&quot;结果人生最失败的决定之一&quot;&gt;结果：人生最失败的决定之一&lt;/h4&gt;
-
-&lt;p&gt;这段经历是我最近几年都不愿意提起的经历，一开始多多少少受了「全民创业」的感染，幻想着财富自由。但最后，几乎一年多的时间都尽数荒废，既没有技术成长，又造成了职业规划的脱节。&lt;/p&gt;
-
-&lt;p&gt;总结起来就是——所托非人。&lt;/p&gt;
-
-&lt;p&gt;给我最深的教训就是，几乎每个人都会说自己是「结果主义者」，只要最终产出可以高质量，中间过程都ok。但实际上并不是这样。所以才有哪怕「结果相同」，还是有人必须看着自己下属加班到半夜，即使是在公司看动画也可以。&lt;/p&gt;
-
-&lt;p&gt;「结果主义」只是很多人给自己美化的标签，在内里，他们完全不在乎结果，他们在意的只有两样，一个是「你要听我的」，另一个是「替我背锅」。&lt;/p&gt;
-
-&lt;p&gt;当然，这段不成功的经历中，唯一成功的地方就是，让我学会了「怀疑」。永远不能100%相信一个人说的话，对一个人的判断，只能从他做的事情上来判断，所有外部因素比如“口碑”，比如“身世”都只是附加条件。去评判一个人如何，跟评判一件事是一样的——需要完整的证据链和逻辑链。话语什么都不能证明，但逻辑和证据可以。&lt;/p&gt;
-
-&lt;h4 id=&quot;选择5管理还是技术&quot;&gt;选择5：管理还是技术？&lt;/h4&gt;
-
-&lt;p&gt;三十岁之前的这个选择，是加入到美团点评做底层基础架构，还是去一些中型公司（C轮以上）去做Manager？&lt;/p&gt;
-
-&lt;h4 id=&quot;结果还是割舍不下技术&quot;&gt;结果：还是割舍不下技术&lt;/h4&gt;
-</description>
-        <pubDate>Mon, 03 Dec 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-12-03/summary/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-12-03/summary/</guid>
       </item>
     
       <item>

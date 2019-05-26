@@ -57,11 +57,11 @@ kramdown:
 nav:
   - name:           "Android"
     url:            "/android/"
-  - name:           "项目"
-    url:            "/project/"
-  - name:           "读书"
-    url:            "/blog/"
-  - name:           "分类"
+  - name:           "LeetCode"
+    url:            "/leetcode/"
+  - name:           "Reading"
+    url:            "/reading/"
+  - name:           "Categories"
     url:            "/categories/"
 
 # Sass

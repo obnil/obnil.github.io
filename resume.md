@@ -10,8 +10,6 @@ permalink: /resume/
 - 英语：CET6
 - 电话：18963965124
 - 邮箱：lb891014@126.com
-- 博客：http://gitclub.xyz
-- GitHub：https://github.com/obnil
 
 ## 教育经历 
 

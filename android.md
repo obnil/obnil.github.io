@@ -51,11 +51,11 @@ permalink: /android/
 ## Linux和Git
 
  * [Linux常用命令ls，grep，find，vim，time，netstat，ssh](/2019-01-14/linux/)
- * Git常用命令diff，log，clean，reset，cherry-pick，blame
+ * [Git常用命令diff，log，clean，reset，cherry-pick，blame，show，pull，status，branch，checkout](/2019-03-27/git/)
 
 ## Android系统源码 
 
-- Handler源码分析
+- [Handler源码分析](/2019-03-29/handler/)
 - Message链表原理与重用机制
 - Binder核心原理与架构设计
 - PackageManagerService架构设计与Activity跨进程跳转
