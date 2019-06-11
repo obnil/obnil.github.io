@@ -10,6 +10,7 @@ permalink: /resume/
 - 英语：CET6
 - 电话：18963965124
 - 邮箱：lb891014@126.com
+- Github：http://gitclub.xyz
 
 ## 教育经历 
 
@@ -19,12 +20,12 @@ permalink: /resume/
 
 ## ⼯作经历 
 
-- 2018.3 — 2019.3 福州慧美丰科技有限公司 高级Android开发工程师
+- 2018.3 — 2019.3 武汉第三女神科技有限公司 高级Android开发工程师
 - 2014.7 — 2018.3 武汉诚迈科技有限公司 高级Android开发工程师
 
 ## 项⽬经历
 
-### 慧美丰 APP和慧美丰物业 APP（已上架各应用市场）
+### 慧美丰 APP和慧美丰物业 APP
 
 - 简介：智慧社区实现手机人脸开门，密码开门，二维码开门，访客通行，投诉，手机缴纳物业费和停车费，物业报修，社区论坛和公告，乘坐电梯，房屋认证，小区切换，业主和物业聊天，视频通话等
 - 主要技术：MVP，Glide，自定义View，Retrofit，JPush，Bugly，GreenDao，ButterKnife，IM，Git，Zxing，EventBus
