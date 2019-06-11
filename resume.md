@@ -6,11 +6,11 @@ permalink: /resume/
 ## 林波
 
 - 5年 Android 开发经验
-- 基本信息：男 30岁 湖北武汉
+- 基本信息：男 29岁 湖北武汉
 - 英语：CET6
 - 电话：18963965124
 - 邮箱：lb891014@126.com
-- Github：http://gitclub.xyz
+- Github：[https://gitclub.xyz](https://gitclub.xyz/)
 
 ## 教育经历 
 
