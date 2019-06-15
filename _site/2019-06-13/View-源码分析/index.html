@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>View 源码分析</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>View 源码分析 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="View 源码分析" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="分析从XML中生成View对象过程，measure()，layout()方法分析，invalidate()重绘，onTouchEvent()分析" />
+<meta property="og:description" content="分析从XML中生成View对象过程，measure()，layout()方法分析，invalidate()重绘，onTouchEvent()分析" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/View-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/View-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T01:40:42+00:00" />
+<script type="application/ld+json">
+{"description":"分析从XML中生成View对象过程，measure()，layout()方法分析，invalidate()重绘，onTouchEvent()分析","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/View-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/","headline":"View 源码分析","dateModified":"2019-06-13T01:40:42+00:00","datePublished":"2019-06-13T01:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/View-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>View 源码分析</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <h2 id="简述">简述</h2>
+
+<ul>
+  <li>主要分析从XML资源文件中生成View对象过程;</li>
+  <li>以及View的构造函数,measure(),layout()方法分析;</li>
+  <li>invalidate()请求刷新重绘视图过程分析;</li>
+  <li>View自身touch事件处理onTouchEvent()方法分析</li>
+</ul>
+
+<h2 id="view对象的生成">View对象的生成</h2>
+
+<p>一般View对象的生成有两种,从XML文件中通过LayoutInflater(子类PhoneLayoutInflater)的inflate()经反射生成对象,一种是直接new View(Context)直接通过构造函数生成;</p>
+
+<p>在Activity.onCreate()中的setContentView(@LayoutRes int layoutResID),最终调用的是其window(PhoneWindow)的setContentView(int layoutResID):</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setContentView</span><span class="o">(</span><span class="kt">int</span> <span class="n">layoutResID</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span>
+    <span class="c1">// decor, when theme attributes and the like are crystalized. Do not check the feature</span>
+    <span class="c1">// before this happens.</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mContentParent</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">installDecor</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">hasFeature</span><span class="o">(</span><span class="n">FEATURE_CONTENT_TRANSITIONS</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">mContentParent</span><span class="o">.</span><span class="na">removeAllViews</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">hasFeature</span><span class="o">(</span><span class="n">FEATURE_CONTENT_TRANSITIONS</span><span class="o">))</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">Scene</span> <span class="n">newScene</span> <span class="o">=</span> <span class="n">Scene</span><span class="o">.</span><span class="na">getSceneForLayout</span><span class="o">(</span><span class="n">mContentParent</span><span class="o">,</span> <span class="n">layoutResID</span><span class="o">,</span>
+                <span class="n">getContext</span><span class="o">());</span>
+        <span class="n">transitionTo</span><span class="o">(</span><span class="n">newScene</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="c1">// 填充资源文件中视图到activity的window的顶层视图内容部分</span>
+        <span class="n">mLayoutInflater</span><span class="o">.</span><span class="na">inflate</span><span class="o">(</span><span class="n">layoutResID</span><span class="o">,</span> <span class="n">mContentParent</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">mContentParent</span><span class="o">.</span><span class="na">requestApplyInsets</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="n">Callback</span> <span class="n">cb</span> <span class="o">=</span> <span class="n">getCallback</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">cb</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isDestroyed</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">cb</span><span class="o">.</span><span class="na">onContentChanged</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>PhoneWindow是在Activity.attach()中生成的,且传入的Context是当前Activity对象本身,并由window的final Context mContext成员变量引用;</p>
+
+<p>在为window初始化顶层视图DecorView后,会调用LayoutInflater的inflate(@LayoutRes int resource, @Nullable ViewGroup root)方法,下面具体看下该过程:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// root参数为由资源文件生成的view的父view</span>
+<span class="kd">public</span> <span class="n">View</span> <span class="nf">inflate</span><span class="o">(</span><span class="nd">@LayoutRes</span> <span class="kt">int</span> <span class="n">resource</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">ViewGroup</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">inflate</span><span class="o">(</span><span class="n">resource</span><span class="o">,</span> <span class="n">root</span><span class="o">,</span> <span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// attachToRoot参数表示是否将生成的view 添加add到root父view中</span>
+<span class="kd">public</span> <span class="n">View</span> <span class="nf">inflate</span><span class="o">(</span><span class="nd">@LayoutRes</span> <span class="kt">int</span> <span class="n">resource</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">ViewGroup</span> <span class="n">root</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">attachToRoot</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">Resources</span> <span class="n">res</span> <span class="o">=</span> <span class="n">getContext</span><span class="o">().</span><span class="na">getResources</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">"INFLATING from resource: \""</span> <span class="o">+</span> <span class="n">res</span><span class="o">.</span><span class="na">getResourceName</span><span class="o">(</span><span class="n">resource</span><span class="o">)</span> <span class="o">+</span> <span class="s">"\" ("</span>
+                <span class="o">+</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">resource</span><span class="o">)</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// 从资源文件中解析出"layout"即与布局相关的Parser对象</span>
+    <span class="kd">final</span> <span class="n">XmlResourceParser</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="na">getLayout</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">inflate</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">root</span><span class="o">,</span> <span class="n">attachToRoot</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+        <span class="n">parser</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// 主要方法</span>
+<span class="kd">public</span> <span class="n">View</span> <span class="nf">inflate</span><span class="o">(</span><span class="n">XmlPullParser</span> <span class="n">parser</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">ViewGroup</span> <span class="n">root</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">attachToRoot</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">mConstructorArgs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Trace</span><span class="o">.</span><span class="na">traceBegin</span><span class="o">(</span><span class="n">Trace</span><span class="o">.</span><span class="na">TRACE_TAG_VIEW</span><span class="o">,</span> <span class="s">"inflate"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="n">Context</span> <span class="n">inflaterContext</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">;</span>
+        <span class="c1">// 转换为AttributeSet属性集合</span>
+        <span class="kd">final</span> <span class="n">AttributeSet</span> <span class="n">attrs</span> <span class="o">=</span> <span class="n">Xml</span><span class="o">.</span><span class="na">asAttributeSet</span><span class="o">(</span><span class="n">parser</span><span class="o">);</span>
+        <span class="n">Context</span> <span class="n">lastContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">Context</span><span class="o">)</span> <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">inflaterContext</span><span class="o">;</span>
+        <span class="n">View</span> <span class="n">result</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// Look for the root node.</span>
+            <span class="kt">int</span> <span class="n">type</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">((</span><span class="n">type</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">!=</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">START_TAG</span> <span class="o">&amp;&amp;</span>
+                    <span class="n">type</span> <span class="o">!=</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">END_DOCUMENT</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// Empty</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">!=</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">START_TAG</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">InflateException</span><span class="o">(</span><span class="n">parser</span><span class="o">.</span><span class="na">getPositionDescription</span><span class="o">()</span>
+                        <span class="o">+</span> <span class="s">": No start tag found!"</span><span class="o">);</span>
+            <span class="o">}</span>
+            
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+            
+            <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"**************************"</span><span class="o">);</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Creating root view: "</span>
+                        <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"**************************"</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="c1">// 首先看首节点是否属于"merge"标签,如果inflate时候没有给予父view,则会抛出异常</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">TAG_MERGE</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">!</span><span class="n">attachToRoot</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nf">InflateException</span><span class="o">(</span><span class="s">"&lt;merge /&gt; can be used only with a valid "</span>
+                            <span class="o">+</span> <span class="s">"ViewGroup root and attachToRoot=true"</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="n">rInflate</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">root</span><span class="o">,</span> <span class="n">inflaterContext</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// Temp is the root view that was found in the xml</span>
+                <span class="c1">// 真正生成view的地方</span>
+                <span class="kd">final</span> <span class="n">View</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">createViewFromTag</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">inflaterContext</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+
+                <span class="n">ViewGroup</span><span class="o">.</span><span class="na">LayoutParams</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Creating params from root: "</span> <span class="o">+</span>
+                                <span class="n">root</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="c1">// Create layout params that match root, if supplied</span>
+                    <span class="c1">// 传入给予的父view不为空,则根据属性集合在父view中为当前生成的view生成一个LayoutParams布局参数对象</span>
+                    <span class="n">params</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">generateLayoutParams</span><span class="o">(</span><span class="n">attrs</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">attachToRoot</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c1">// Set the layout params for temp if we are not</span>
+                        <span class="c1">// attaching. (If we are, we use addView, below)</span>
+                        <span class="c1">// 如果传入父view不为空,一般attachToRoot==true,就不会在这里直接为生成的view赋值LayoutParams</span>
+                        <span class="n">temp</span><span class="o">.</span><span class="na">setLayoutParams</span><span class="o">(</span><span class="n">params</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"-----&gt; start inflating children"</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="c1">// Inflate all children under temp against its context.</span>
+                <span class="c1">// 这里去为当前生成的view填充其节点下面的子view</span>
+                <span class="n">rInflateChildren</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">temp</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+                <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"-----&gt; done inflating children"</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="c1">// We are supposed to attach all the views we found (int temp)</span>
+                <span class="c1">// to root. Do that now.</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">attachToRoot</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// 这里将由xml生成的view树addview到传入的父view中</span>
+                    <span class="n">root</span><span class="o">.</span><span class="na">addView</span><span class="o">(</span><span class="n">temp</span><span class="o">,</span> <span class="n">params</span><span class="o">);</span>
+                <span class="o">}</span>
+
+                <span class="c1">// Decide whether to return the root that was passed in or the</span>
+                <span class="c1">// top view found in xml.</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">!</span><span class="n">attachToRoot</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// 如果调用inflate()没有传入root父view,或者attachToRoot==false,则当前方法返回的对象是反射生成的view本身,否则返回的其实是父view即传入的root参数</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">XmlPullParserException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">InflateException</span> <span class="n">ex</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InflateException</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+            <span class="n">ex</span><span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="n">ex</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">InflateException</span> <span class="n">ex</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InflateException</span><span class="o">(</span>
+                    <span class="n">parser</span><span class="o">.</span><span class="na">getPositionDescription</span><span class="o">()</span>
+                            <span class="o">+</span> <span class="s">": "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+            <span class="n">ex</span><span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="n">ex</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="c1">// Don't retain static reference on context.</span>
+            <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">lastContext</span><span class="o">;</span>
+            <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">Trace</span><span class="o">.</span><span class="na">traceEnd</span><span class="o">(</span><span class="n">Trace</span><span class="o">.</span><span class="na">TRACE_TAG_VIEW</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>看下createViewFromTag()的实现</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="n">View</span> <span class="nf">createViewFromTag</span><span class="o">(</span><span class="n">View</span> <span class="n">parent</span><span class="o">,</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nf">createViewFromTag</span><span class="o">(</span><span class="n">parent</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="n">View</span> <span class="nf">createViewFromTag</span><span class="o">(</span><span class="n">View</span> <span class="n">parent</span><span class="o">,</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">,</span>
+        <span class="kt">boolean</span> <span class="n">ignoreThemeAttr</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">name</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"view"</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="na">getAttributeValue</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"class"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Apply a theme wrapper, if allowed and one is specified.</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">ignoreThemeAttr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">TypedArray</span> <span class="n">ta</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">obtainStyledAttributes</span><span class="o">(</span><span class="n">attrs</span><span class="o">,</span> <span class="n">ATTRS_THEME</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">themeResId</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="na">getResourceId</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">themeResId</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ContextThemeWrapper</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">themeResId</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">ta</span><span class="o">.</span><span class="na">recycle</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">name</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">TAG_1995</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c1">// Let's party like it's 1995!</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">BlinkLayout</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">View</span> <span class="n">view</span><span class="o">;</span>
+        <span class="c1">// 一般情况这里的mFactory2==null,mFactory==null</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mFactory2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="n">mFactory2</span><span class="o">.</span><span class="na">onCreateView</span><span class="o">(</span><span class="n">parent</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">mFactory</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="n">mFactory</span><span class="o">.</span><span class="na">onCreateView</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 在acitivity.attach()中为其window的LayoutInflater mLayoutInflater设置了mPrivateFactory = acitivity本身.</span>
+        <span class="c1">// 这里主要用于在xml中直接使用Fragment标签,会去acitivity中生成该Fragment对象并返回其Fragment.onCreatView()中返回的该fragment封装的view</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">mPrivateFactory</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="n">mPrivateFactory</span><span class="o">.</span><span class="na">onCreateView</span><span class="o">(</span><span class="n">parent</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="n">Object</span> <span class="n">lastContext</span> <span class="o">=</span> <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(-</span><span class="mi">1</span> <span class="o">==</span> <span class="n">name</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="sc">'.'</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="c1">// 通过反射生成Android系统view</span>
+                    <span class="n">view</span> <span class="o">=</span> <span class="n">onCreateView</span><span class="o">(</span><span class="n">parent</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="c1">// 通过反射生成我们自定义的view</span>
+                    <span class="n">view</span> <span class="o">=</span> <span class="n">createView</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+                <span class="n">mConstructorArgs</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">lastContext</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">view</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InflateException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">InflateException</span> <span class="n">ie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InflateException</span><span class="o">(</span><span class="n">attrs</span><span class="o">.</span><span class="na">getPositionDescription</span><span class="o">()</span>
+                <span class="o">+</span> <span class="s">": Error inflating class "</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+        <span class="n">ie</span><span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="k">throw</span> <span class="n">ie</span><span class="o">;</span>
+
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">InflateException</span> <span class="n">ie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InflateException</span><span class="o">(</span><span class="n">attrs</span><span class="o">.</span><span class="na">getPositionDescription</span><span class="o">()</span>
+                <span class="o">+</span> <span class="s">": Error inflating class "</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+        <span class="n">ie</span><span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="k">throw</span> <span class="n">ie</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>看下为当前节点view填充子节点view所调用的rInflateChildren()方法过程:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">void</span> <span class="nf">rInflateChildren</span><span class="o">(</span><span class="n">XmlPullParser</span> <span class="n">parser</span><span class="o">,</span> <span class="n">View</span> <span class="n">parent</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">,</span>
+        <span class="kt">boolean</span> <span class="n">finishInflate</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">XmlPullParserException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="n">rInflate</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="n">parent</span><span class="o">.</span><span class="na">getContext</span><span class="o">(),</span> <span class="n">attrs</span><span class="o">,</span> <span class="n">finishInflate</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">rInflate</span><span class="o">(</span><span class="n">XmlPullParser</span> <span class="n">parser</span><span class="o">,</span> <span class="n">View</span> <span class="n">parent</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">,</span>
+        <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">finishInflate</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">XmlPullParserException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">getDepth</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="o">;</span>
+
+    <span class="k">while</span> <span class="o">(((</span><span class="n">type</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">!=</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">END_TAG</span> <span class="o">||</span>
+            <span class="n">parser</span><span class="o">.</span><span class="na">getDepth</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">depth</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">type</span> <span class="o">!=</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">END_DOCUMENT</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">!=</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">START_TAG</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">continue</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="n">TAG_REQUEST_FOCUS</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">parseRequestFocus</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">parent</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">TAG_TAG</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">// 解析"tag"标签节点</span>
+            <span class="n">parseViewTag</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">TAG_INCLUDE</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">// 解析"include"标签节点</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">parser</span><span class="o">.</span><span class="na">getDepth</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">InflateException</span><span class="o">(</span><span class="s">"&lt;include /&gt; cannot be the root element"</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">parseInclude</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">TAG_MERGE</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">// 由此可见"merge"节点只能是首节点</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InflateException</span><span class="o">(</span><span class="s">"&lt;merge /&gt; must be the root element"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="c1">// 这里同之前一样,先生成该节点view对象,然后循环填充该节点view的子view,最后会将该节点addview到该节点view的上一层级节点view即传入父节点view中.</span>
+            <span class="kd">final</span> <span class="n">View</span> <span class="n">view</span> <span class="o">=</span> <span class="n">createViewFromTag</span><span class="o">(</span><span class="n">parent</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+            <span class="kd">final</span> <span class="n">ViewGroup</span> <span class="n">viewGroup</span> <span class="o">=</span> <span class="o">(</span><span class="n">ViewGroup</span><span class="o">)</span> <span class="n">parent</span><span class="o">;</span>
+            <span class="kd">final</span> <span class="n">ViewGroup</span><span class="o">.</span><span class="na">LayoutParams</span> <span class="n">params</span> <span class="o">=</span> <span class="n">viewGroup</span><span class="o">.</span><span class="na">generateLayoutParams</span><span class="o">(</span><span class="n">attrs</span><span class="o">);</span>
+            <span class="n">rInflateChildren</span><span class="o">(</span><span class="n">parser</span><span class="o">,</span> <span class="n">view</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="n">viewGroup</span><span class="o">.</span><span class="na">addView</span><span class="o">(</span><span class="n">view</span><span class="o">,</span> <span class="n">params</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 通知该父节点View其内部所有子view已经由xml打入填充完毕</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">finishInflate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">parent</span><span class="o">.</span><span class="na">onFinishInflate</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>可以看出,在调用Acitivity.setContentView()方法完成后,已经将视图树建立完毕,即将资源文件各个view节点分别通过反射生成对象然后addview到父view中,且将xml资源文件的根view填充依附到window的顶层视图容器DecorView的内容部分mContentParent中.这一过程中,所有view都在构造函数中做了初始化,且都设置了由父view容器调用generateLayoutParams()生成对应的LayoutParams对象.</li>
+  <li>手动调用LayoutInflater.inflate()资源文件的时候,最大的区别就在inflate(@LayoutRes int resource, @Nullable ViewGroup root, boolean attachToRoot) 中的root参数和attachToRoot参数设置,如果root为null则返回无设置LayoutParams()的xml根节点view对象,若root!=null,但是attachToRoot==false则返回是设置LayoutParams()的xml根节点view对象,若root!=null同时attachToRoot==true则将xml根view生成LayoutParams()且通过父view即root依附addview到root上</li>
+</ul>
+
+<h2 id="view的构造函数">View的构造函数</h2>
+
+<p>view的构造函数有5个,除了无参数的构造函数一般最后都调用如下2个:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">View</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mContext</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+    <span class="n">mResources</span> <span class="o">=</span> <span class="n">context</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">()</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">mViewFlags</span> <span class="o">=</span> <span class="n">SOUND_EFFECTS_ENABLED</span> <span class="o">|</span> <span class="n">HAPTIC_FEEDBACK_ENABLED</span><span class="o">;</span>
+    <span class="c1">// Set some flags defaults</span>
+    <span class="n">mPrivateFlags2</span> <span class="o">=</span>
+            <span class="o">(</span><span class="n">LAYOUT_DIRECTION_DEFAULT</span> <span class="o">&lt;&lt;</span> <span class="n">PFLAG2_LAYOUT_DIRECTION_MASK_SHIFT</span><span class="o">)</span> <span class="o">|</span>
+            <span class="o">(</span><span class="n">TEXT_DIRECTION_DEFAULT</span> <span class="o">&lt;&lt;</span> <span class="n">PFLAG2_TEXT_DIRECTION_MASK_SHIFT</span><span class="o">)</span> <span class="o">|</span>
+            <span class="o">(</span><span class="n">PFLAG2_TEXT_DIRECTION_RESOLVED_DEFAULT</span><span class="o">)</span> <span class="o">|</span>
+            <span class="o">(</span><span class="n">TEXT_ALIGNMENT_DEFAULT</span> <span class="o">&lt;&lt;</span> <span class="n">PFLAG2_TEXT_ALIGNMENT_MASK_SHIFT</span><span class="o">)</span> <span class="o">|</span>
+            <span class="o">(</span><span class="n">PFLAG2_TEXT_ALIGNMENT_RESOLVED_DEFAULT</span><span class="o">)</span> <span class="o">|</span>
+            <span class="o">(</span><span class="n">IMPORTANT_FOR_ACCESSIBILITY_DEFAULT</span> <span class="o">&lt;&lt;</span> <span class="n">PFLAG2_IMPORTANT_FOR_ACCESSIBILITY_SHIFT</span><span class="o">);</span>
+    <span class="n">mTouchSlop</span> <span class="o">=</span> <span class="n">ViewConfiguration</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">context</span><span class="o">).</span><span class="na">getScaledTouchSlop</span><span class="o">();</span>
+    <span class="n">setOverScrollMode</span><span class="o">(</span><span class="n">OVER_SCROLL_IF_CONTENT_SCROLLS</span><span class="o">);</span>
+    <span class="n">mUserPaddingStart</span> <span class="o">=</span> <span class="n">UNDEFINED_PADDING</span><span class="o">;</span>
+    <span class="n">mUserPaddingEnd</span> <span class="o">=</span> <span class="n">UNDEFINED_PADDING</span><span class="o">;</span>
+    <span class="n">mRenderNode</span> <span class="o">=</span> <span class="n">RenderNode</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">(),</span> <span class="k">this</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(!</span><span class="n">sCompatibilityDone</span> <span class="o">&amp;&amp;</span> <span class="n">context</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">targetSdkVersion</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getApplicationInfo</span><span class="o">().</span><span class="na">targetSdkVersion</span><span class="o">;</span>
+
+        <span class="c1">// Older apps may need this compatibility hack for measurement.</span>
+        <span class="n">sUseBrokenMakeMeasureSpec</span> <span class="o">=</span> <span class="n">targetSdkVersion</span> <span class="o">&lt;=</span> <span class="n">JELLY_BEAN_MR1</span><span class="o">;</span>
+
+        <span class="c1">// Older apps expect onMeasure() to always be called on a layout pass, regardless</span>
+        <span class="c1">// of whether a layout was requested on that View.</span>
+        <span class="n">sIgnoreMeasureCache</span> <span class="o">=</span> <span class="n">targetSdkVersion</span> <span class="o">&lt;</span> <span class="n">KITKAT</span><span class="o">;</span>
+
+        <span class="n">Canvas</span><span class="o">.</span><span class="na">sCompatibilityRestore</span> <span class="o">=</span> <span class="n">targetSdkVersion</span> <span class="o">&lt;</span> <span class="n">M</span><span class="o">;</span>
+
+        <span class="c1">// In M and newer, our widgets can pass a "hint" value in the size</span>
+        <span class="c1">// for UNSPECIFIED MeasureSpecs. This lets child views of scrolling containers</span>
+        <span class="c1">// know what the expected parent size is going to be, so e.g. list items can size</span>
+        <span class="c1">// themselves at 1/3 the size of their container. It breaks older apps though,</span>
+        <span class="c1">// specifically apps that use some popular open source libraries.</span>
+        <span class="n">sUseZeroUnspecifiedMeasureSpec</span> <span class="o">=</span> <span class="n">targetSdkVersion</span> <span class="o">&lt;</span> <span class="n">M</span><span class="o">;</span>
+
+        <span class="n">sCompatibilityDone</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+
+<span class="kd">public</span> <span class="nf">View</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">defStyleAttr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">defStyleRes</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="n">TypedArray</span> <span class="n">a</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">obtainStyledAttributes</span><span class="o">(</span>
+            <span class="n">attrs</span><span class="o">,</span> <span class="n">com</span><span class="o">.</span><span class="na">android</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">styleable</span><span class="o">.</span><span class="na">View</span><span class="o">,</span> <span class="n">defStyleAttr</span><span class="o">,</span> <span class="n">defStyleRes</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">mDebugViewAttributes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">saveAttributeData</span><span class="o">(</span><span class="n">attrs</span><span class="o">,</span> <span class="n">a</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">Drawable</span> <span class="n">background</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">leftPadding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">topPadding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">rightPadding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">bottomPadding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">startPadding</span> <span class="o">=</span> <span class="n">UNDEFINED_PADDING</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">endPadding</span> <span class="o">=</span> <span class="n">UNDEFINED_PADDING</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">padding</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">viewFlagValues</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">viewFlagMasks</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="n">setScrollContainer</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="kt">float</span> <span class="n">tx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">ty</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">tz</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">elevation</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">rotation</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">rotationX</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">rotationY</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">sx</span> <span class="o">=</span> <span class="mi">1</span><span class="n">f</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">sy</span> <span class="o">=</span> <span class="mi">1</span><span class="n">f</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">transformSet</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">scrollbarStyle</span> <span class="o">=</span> <span class="n">SCROLLBARS_INSIDE_OVERLAY</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">overScrollMode</span> <span class="o">=</span> <span class="n">mOverScrollMode</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">initializeScrollbars</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">initializeScrollIndicators</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="n">startPaddingDefined</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">endPaddingDefined</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">leftPaddingDefined</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">rightPaddingDefined</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">targetSdkVersion</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getApplicationInfo</span><span class="o">().</span><span class="na">targetSdkVersion</span><span class="o">;</span>
+
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">getIndexCount</span><span class="o">();</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">attr</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">getIndex</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">attr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">....</span>
+
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+    <span class="o">....</span>
+    <span class="n">setOverScrollMode</span><span class="o">(</span><span class="n">overScrollMode</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">background</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">setBackground</span><span class="o">(</span><span class="n">background</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">internalSetPadding</span><span class="o">(</span>
+            <span class="n">mUserPaddingLeftInitial</span><span class="o">,</span>
+            <span class="n">topPadding</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">topPadding</span> <span class="o">:</span> <span class="n">mPaddingTop</span><span class="o">,</span>
+            <span class="n">mUserPaddingRightInitial</span><span class="o">,</span>
+            <span class="n">bottomPadding</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">bottomPadding</span> <span class="o">:</span> <span class="n">mPaddingBottom</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">y</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">scrollTo</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">transformSet</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">setTranslationX</span><span class="o">(</span><span class="n">tx</span><span class="o">);</span>
+        <span class="n">setTranslationY</span><span class="o">(</span><span class="n">ty</span><span class="o">);</span>
+        <span class="n">setTranslationZ</span><span class="o">(</span><span class="n">tz</span><span class="o">);</span>
+        <span class="n">setElevation</span><span class="o">(</span><span class="n">elevation</span><span class="o">);</span>
+        <span class="n">setRotation</span><span class="o">(</span><span class="n">rotation</span><span class="o">);</span>
+        <span class="n">setRotationX</span><span class="o">(</span><span class="n">rotationX</span><span class="o">);</span>
+        <span class="n">setRotationY</span><span class="o">(</span><span class="n">rotationY</span><span class="o">);</span>
+        <span class="n">setScaleX</span><span class="o">(</span><span class="n">sx</span><span class="o">);</span>
+        <span class="n">setScaleY</span><span class="o">(</span><span class="n">sy</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="o">....</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>可以看出,view的构造函数设置了初始化了一些基本属性,比如Context,mRenderNode等,主要还是解析并获取了对应属性集合中一些参数并赋值给成员变量,比如mBackground,mPaddingTop,mPaddingLeft,mPaddingRight,mPaddingBottom等等,为mRenderNode赋值设置translationX,translationY,rotationX等相关显示参数等;</p>
+
+<h2 id="measure测量方法">measure()测量方法</h2>
+
+<p>view的measure()是由父view分发调用(最开始是从ViewRootImpl的performMeasure()测量DecroView开始的)的,传入的参数widthMeasureSpec和heightMeasureSpec,是由32位int值来表示,高2位代表该view的测量模式,剩余30位代表了实际了父view根据自身尺寸情况和子view布局参数生成的一个期望值.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">measure</span><span class="o">(</span><span class="kt">int</span> <span class="n">widthMeasureSpec</span><span class="o">,</span> <span class="kt">int</span> <span class="n">heightMeasureSpec</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 通常没有设置layoutMode,这里为false</span>
+    <span class="kt">boolean</span> <span class="n">optical</span> <span class="o">=</span> <span class="n">isLayoutModeOptical</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">optical</span> <span class="o">!=</span> <span class="n">isLayoutModeOptical</span><span class="o">(</span><span class="n">mParent</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">Insets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">getOpticalInsets</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">oWidth</span>  <span class="o">=</span> <span class="n">insets</span><span class="o">.</span><span class="na">left</span> <span class="o">+</span> <span class="n">insets</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oHeight</span> <span class="o">=</span> <span class="n">insets</span><span class="o">.</span><span class="na">top</span>  <span class="o">+</span> <span class="n">insets</span><span class="o">.</span><span class="na">bottom</span><span class="o">;</span>
+        <span class="n">widthMeasureSpec</span>  <span class="o">=</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">adjust</span><span class="o">(</span><span class="n">widthMeasureSpec</span><span class="o">,</span>  <span class="n">optical</span> <span class="o">?</span> <span class="o">-</span><span class="n">oWidth</span>  <span class="o">:</span> <span class="n">oWidth</span><span class="o">);</span>
+        <span class="n">heightMeasureSpec</span> <span class="o">=</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">adjust</span><span class="o">(</span><span class="n">heightMeasureSpec</span><span class="o">,</span> <span class="n">optical</span> <span class="o">?</span> <span class="o">-</span><span class="n">oHeight</span> <span class="o">:</span> <span class="n">oHeight</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Suppress sign extension for the low bytes</span>
+    <span class="c1">// 生成mMeasureCache Long-long稀疏数组中保存测量值的key</span>
+    <span class="kt">long</span> <span class="n">key</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="n">widthMeasureSpec</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span> <span class="o">|</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="n">heightMeasureSpec</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="n">L</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mMeasureCache</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="n">mMeasureCache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LongSparseLongArray</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+    <span class="c1">// 这里看flag的PFLAG_FORCE_LAYOUT位是否被强制置位,或者测量参数与上次是否有不一样</span>
+    <span class="k">if</span> <span class="o">((</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_FORCE_LAYOUT</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_FORCE_LAYOUT</span> <span class="o">||</span>
+            <span class="n">widthMeasureSpec</span> <span class="o">!=</span> <span class="n">mOldWidthMeasureSpec</span> <span class="o">||</span>
+            <span class="n">heightMeasureSpec</span> <span class="o">!=</span> <span class="n">mOldHeightMeasureSpec</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c1">// first clears the measured dimension flag</span>
+        <span class="c1">// 清除flag的PFLAG_MEASURED_DIMENSION_SET位,表明view当前没有设置尺寸</span>
+        <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_MEASURED_DIMENSION_SET</span><span class="o">;</span>
+
+        <span class="n">resolveRtlPropertiesIfNeeded</span><span class="o">();</span>
+        <span class="c1">// 查询保存在缓存中是否有当前测量值的key,有的话同时flag的PFLAG_FORCE_LAYOUT位没有强制设置的话则不需要重新onMeasure()测量</span>
+        <span class="kt">int</span> <span class="n">cacheIndex</span> <span class="o">=</span> <span class="o">(</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_FORCE_LAYOUT</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_FORCE_LAYOUT</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span>
+                <span class="n">mMeasureCache</span><span class="o">.</span><span class="na">indexOfKey</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">cacheIndex</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">sIgnoreMeasureCache</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// measure ourselves, this should set the measured dimension flag back</span>
+            <span class="c1">// 这里去具体设置该view的测量宽mMeasuredWidth和高mMeasuredHeight</span>
+            <span class="n">onMeasure</span><span class="o">(</span><span class="n">widthMeasureSpec</span><span class="o">,</span> <span class="n">heightMeasureSpec</span><span class="o">);</span>
+            <span class="c1">// 清除flag3的PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT位</span>
+            <span class="n">mPrivateFlags3</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">value</span> <span class="o">=</span> <span class="n">mMeasureCache</span><span class="o">.</span><span class="na">valueAt</span><span class="o">(</span><span class="n">cacheIndex</span><span class="o">);</span>
+            <span class="c1">// Casting a long to int drops the high 32 bits, no mask needed</span>
+            <span class="n">setMeasuredDimensionRaw</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="o">),</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">value</span><span class="o">);</span>
+            <span class="c1">// 如果是直接拿缓存没有走onMeasure()则在这里置该位,在layout()中再去onMeasure()</span>
+            <span class="n">mPrivateFlags3</span> <span class="o">|=</span> <span class="n">PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// flag not set, setMeasuredDimension() was not invoked, we raise</span>
+        <span class="c1">// an exception to warn the developer</span>
+        <span class="c1">// 这里检查一下,防止子类重新没有真正为该view赋值设置测量宽高</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_MEASURED_DIMENSION_SET</span><span class="o">)</span> <span class="o">!=</span> <span class="n">PFLAG_MEASURED_DIMENSION_SET</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">"View with id "</span> <span class="o">+</span> <span class="n">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s">": "</span>
+                    <span class="o">+</span> <span class="n">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"#onMeasure() did not set the"</span>
+                    <span class="o">+</span> <span class="s">" measured dimension by calling"</span>
+                    <span class="o">+</span> <span class="s">" setMeasuredDimension()"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// 置flag的PFLAG_LAYOUT_REQUIRED位表明需要走layout()</span>
+        <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// 保存当前由父view下发的测量值</span>
+    <span class="n">mOldWidthMeasureSpec</span> <span class="o">=</span> <span class="n">widthMeasureSpec</span><span class="o">;</span>
+    <span class="n">mOldHeightMeasureSpec</span> <span class="o">=</span> <span class="n">heightMeasureSpec</span><span class="o">;</span>
+
+    <span class="n">mMeasureCache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="n">mMeasuredWidth</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span> <span class="o">|</span>
+            <span class="o">(</span><span class="kt">long</span><span class="o">)</span> <span class="n">mMeasuredHeight</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="n">L</span><span class="o">);</span> <span class="c1">// suppress sign extension</span>
+<span class="o">}</span>
+
+<span class="c1">// View默认的onMeasure()</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onMeasure</span><span class="o">(</span><span class="kt">int</span> <span class="n">widthMeasureSpec</span><span class="o">,</span> <span class="kt">int</span> <span class="n">heightMeasureSpec</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">setMeasuredDimension</span><span class="o">(</span><span class="n">getDefaultSize</span><span class="o">(</span><span class="n">getSuggestedMinimumWidth</span><span class="o">(),</span> <span class="n">widthMeasureSpec</span><span class="o">),</span>
+            <span class="n">getDefaultSize</span><span class="o">(</span><span class="n">getSuggestedMinimumHeight</span><span class="o">(),</span> <span class="n">heightMeasureSpec</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="c1">// 这里可以看出,view默认的测量中layoutParams宽高设置为match_parent和wrap_content效果一样,均为父view计算给出的size</span>
+<span class="c1">// 所以自定义view一般要重写onMeasure()区分设置layoutParams为wrap_content情况</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getDefaultSize</span><span class="o">(</span><span class="kt">int</span> <span class="n">size</span><span class="o">,</span> <span class="kt">int</span> <span class="n">measureSpec</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">size</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">specMode</span> <span class="o">=</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">getMode</span><span class="o">(</span><span class="n">measureSpec</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">specSize</span> <span class="o">=</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">getSize</span><span class="o">(</span><span class="n">measureSpec</span><span class="o">);</span>
+
+    <span class="k">switch</span> <span class="o">(</span><span class="n">specMode</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">UNSPECIFIED</span><span class="o">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">size</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="k">case</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">AT_MOST</span><span class="o">:</span>
+    <span class="k">case</span> <span class="n">MeasureSpec</span><span class="o">.</span><span class="na">EXACTLY</span><span class="o">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">specSize</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+<span class="o">}</span>
+
+
+<span class="kd">protected</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">setMeasuredDimension</span><span class="o">(</span><span class="kt">int</span> <span class="n">measuredWidth</span><span class="o">,</span> <span class="kt">int</span> <span class="n">measuredHeight</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 一般情况没有设置layoutmode时候,为false</span>
+    <span class="kt">boolean</span> <span class="n">optical</span> <span class="o">=</span> <span class="n">isLayoutModeOptical</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">optical</span> <span class="o">!=</span> <span class="n">isLayoutModeOptical</span><span class="o">(</span><span class="n">mParent</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">Insets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">getOpticalInsets</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">opticalWidth</span>  <span class="o">=</span> <span class="n">insets</span><span class="o">.</span><span class="na">left</span> <span class="o">+</span> <span class="n">insets</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">opticalHeight</span> <span class="o">=</span> <span class="n">insets</span><span class="o">.</span><span class="na">top</span>  <span class="o">+</span> <span class="n">insets</span><span class="o">.</span><span class="na">bottom</span><span class="o">;</span>
+
+        <span class="n">measuredWidth</span>  <span class="o">+=</span> <span class="n">optical</span> <span class="o">?</span> <span class="n">opticalWidth</span>  <span class="o">:</span> <span class="o">-</span><span class="n">opticalWidth</span><span class="o">;</span>
+        <span class="n">measuredHeight</span> <span class="o">+=</span> <span class="n">optical</span> <span class="o">?</span> <span class="n">opticalHeight</span> <span class="o">:</span> <span class="o">-</span><span class="n">opticalHeight</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">setMeasuredDimensionRaw</span><span class="o">(</span><span class="n">measuredWidth</span><span class="o">,</span> <span class="n">measuredHeight</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// 这里真正为该view赋值mMeasuredWidth和mMeasuredHeight,同时标记flag的PFLAG_MEASURED_DIMENSION_SET位,表明已经设置好测量宽高</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">setMeasuredDimensionRaw</span><span class="o">(</span><span class="kt">int</span> <span class="n">measuredWidth</span><span class="o">,</span> <span class="kt">int</span> <span class="n">measuredHeight</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mMeasuredWidth</span> <span class="o">=</span> <span class="n">measuredWidth</span><span class="o">;</span>
+    <span class="n">mMeasuredHeight</span> <span class="o">=</span> <span class="n">measuredHeight</span><span class="o">;</span>
+    <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_MEASURED_DIMENSION_SET</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>view的measure方法是final修饰的,通常在派生类中重新onMeasure()方法可以根据layoutParams的情况(match_parent或是wrap_content)重新设置赋值测量的宽和高.对于自定义ViewGroup,还要在onMeasure()中去遍历测量其子view.</p>
+
+<h2 id="layout布局方法">layout()布局方法</h2>
+
+<p>View的layout()方法也是由父view分发调用的,最开始是从ViewRootImpl的performLayout()开始的</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * @param l Left position, relative to parent 该view左边界距离父容器view左边界距离
+ * @param t Top position, relative to parent 该view上边界距离父容器view上边界距离
+ * @param r Right position, relative to parent 该view右边界距离父容器view左边界距离
+ * @param b Bottom position, relative to parent 该view下边界距离父容器view上边界距离
+ */</span>
+<span class="c1">// 很明显,传入的参数分别是当前view相对父view的左边界,上边界,由边界,下边界的距离</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">layout</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 这里如果在上面的measeure()中是直接从缓存中拿的没有走onMeasure()的话要去走一次onMeasure()</span>
+    <span class="k">if</span> <span class="o">((</span><span class="n">mPrivateFlags3</span> <span class="o">&amp;</span> <span class="n">PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">onMeasure</span><span class="o">(</span><span class="n">mOldWidthMeasureSpec</span><span class="o">,</span> <span class="n">mOldHeightMeasureSpec</span><span class="o">);</span>
+        <span class="n">mPrivateFlags3</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// 首先记录上次该view四边与其父view左边界,上边界相应的距离,仅仅用于通知位置改变回调</span>
+    <span class="kt">int</span> <span class="n">oldL</span> <span class="o">=</span> <span class="n">mLeft</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">oldT</span> <span class="o">=</span> <span class="n">mTop</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">oldB</span> <span class="o">=</span> <span class="n">mBottom</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">oldR</span> <span class="o">=</span> <span class="n">mRight</span><span class="o">;</span>
+
+    <span class="c1">// ture 表示该view在父view中位置发生变化,即该view有一边与其父view左or上边界相应的距离发生改变</span>
+    <span class="c1">// 真正改变位置的一般是在setFrame()中</span>
+    <span class="kt">boolean</span> <span class="n">changed</span> <span class="o">=</span> <span class="n">isLayoutModeOptical</span><span class="o">(</span><span class="n">mParent</span><span class="o">)</span> <span class="o">?</span>
+            <span class="n">setOpticalFrame</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">:</span> <span class="n">setFrame</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">);</span>
+    <span class="c1">// 如果该view位置改变,或者flag的PFLAG_LAYOUT_REQUIRED被强制置位,则去重新onLayout()布局子view</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">changed</span> <span class="o">||</span> <span class="o">(</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 当前该view位置在其父view中位置变化了,则要重新去布局其子view,当然如果有子view的话</span>
+        <span class="c1">// 一般想系统的LinearLayout,FrameLayout,RelativeLayout以及自定义viewGroup进要重新该方法</span>
+        <span class="c1">// 去分配设置子view的相对该view的位置,View.java默认为空实现,ViewGroup一般要去重写该方法</span>
+        <span class="n">onLayout</span><span class="o">(</span><span class="n">changed</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">);</span>
+        <span class="c1">// 自己和子view都已经分配好位置后,清除flag的PFLAG_LAYOUT_REQUIRED位</span>
+        <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">;</span>
+        <span class="c1">// 通知位置变化的监听回调</span>
+        <span class="n">ListenerInfo</span> <span class="n">li</span> <span class="o">=</span> <span class="n">mListenerInfo</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">li</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">li</span><span class="o">.</span><span class="na">mOnLayoutChangeListeners</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">OnLayoutChangeListener</span><span class="o">&gt;</span> <span class="n">listenersCopy</span> <span class="o">=</span>
+                    <span class="o">(</span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">OnLayoutChangeListener</span><span class="o">&gt;)</span><span class="n">li</span><span class="o">.</span><span class="na">mOnLayoutChangeListeners</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">numListeners</span> <span class="o">=</span> <span class="n">listenersCopy</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numListeners</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">listenersCopy</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">onLayoutChange</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">oldL</span><span class="o">,</span> <span class="n">oldT</span><span class="o">,</span> <span class="n">oldR</span><span class="o">,</span> <span class="n">oldB</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 清除flag的PFLAG_FORCE_LAYOUT位</span>
+    <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_FORCE_LAYOUT</span><span class="o">;</span>
+    <span class="n">mPrivateFlags3</span> <span class="o">|=</span> <span class="n">PFLAG3_IS_LAID_OUT</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 为当前view指定其在父容器view中具体位置的是在该方法中</span>
+<span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">setFrame</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">top</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bottom</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="n">changed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">DBG</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">"View"</span><span class="o">,</span> <span class="k">this</span> <span class="o">+</span> <span class="s">" View.setFrame("</span> <span class="o">+</span> <span class="n">left</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">top</span> <span class="o">+</span> <span class="s">","</span>
+                <span class="o">+</span> <span class="n">right</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">bottom</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">mLeft</span> <span class="o">!=</span> <span class="n">left</span> <span class="o">||</span> <span class="n">mRight</span> <span class="o">!=</span> <span class="n">right</span> <span class="o">||</span> <span class="n">mTop</span> <span class="o">!=</span> <span class="n">top</span> <span class="o">||</span> <span class="n">mBottom</span> <span class="o">!=</span> <span class="n">bottom</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">changed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="c1">// Remember our drawn bit</span>
+        <span class="c1">// 首先记录当前的flag的PFLAG_DRAWN位</span>
+        <span class="kt">int</span> <span class="n">drawn</span> <span class="o">=</span> <span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_DRAWN</span><span class="o">;</span>
+
+        <span class="c1">// 每个view都是一个矩形,实际宽度为对应边界</span>
+        <span class="kt">int</span> <span class="n">oldWidth</span> <span class="o">=</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">mLeft</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oldHeight</span> <span class="o">=</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">mTop</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">newWidth</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">newHeight</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">top</span><span class="o">;</span>
+        <span class="kt">boolean</span> <span class="n">sizeChanged</span> <span class="o">=</span> <span class="o">(</span><span class="n">newWidth</span> <span class="o">!=</span> <span class="n">oldWidth</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">newHeight</span> <span class="o">!=</span> <span class="n">oldHeight</span><span class="o">);</span>
+
+        <span class="c1">// Invalidate our old position</span>
+        <span class="c1">// 该view的位置即将改变,先去刷新一遍该view的当前视图区域</span>
+        <span class="n">invalidate</span><span class="o">(</span><span class="n">sizeChanged</span><span class="o">);</span>
+        <span class="c1">// 分配赋值新位置,同时更新RenderNode mRenderNode的参数</span>
+        <span class="n">mLeft</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+        <span class="n">mTop</span> <span class="o">=</span> <span class="n">top</span><span class="o">;</span>
+        <span class="n">mRight</span> <span class="o">=</span> <span class="n">right</span><span class="o">;</span>
+        <span class="n">mBottom</span> <span class="o">=</span> <span class="n">bottom</span><span class="o">;</span>
+        <span class="n">mRenderNode</span><span class="o">.</span><span class="na">setLeftTopRightBottom</span><span class="o">(</span><span class="n">mLeft</span><span class="o">,</span> <span class="n">mTop</span><span class="o">,</span> <span class="n">mRight</span><span class="o">,</span> <span class="n">mBottom</span><span class="o">);</span>
+        <span class="c1">// 置位flag的PFLAG_HAS_BOUNDS位,表示该view有边界束缚范围了</span>
+        <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_HAS_BOUNDS</span><span class="o">;</span>
+
+
+        <span class="c1">// view宽度or高度变化的方法通知</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">sizeChanged</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sizeChange</span><span class="o">(</span><span class="n">newWidth</span><span class="o">,</span> <span class="n">newHeight</span><span class="o">,</span> <span class="n">oldWidth</span><span class="o">,</span> <span class="n">oldHeight</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">((</span><span class="n">mViewFlags</span> <span class="o">&amp;</span> <span class="n">VISIBILITY_MASK</span><span class="o">)</span> <span class="o">==</span> <span class="n">VISIBLE</span> <span class="o">||</span> <span class="n">mGhostView</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// If we are visible, force the DRAWN bit to on so that</span>
+            <span class="c1">// this invalidate will go through (at least to our parent).</span>
+            <span class="c1">// This is because someone may have invalidated this view</span>
+            <span class="c1">// before this call to setFrame came in, thereby clearing</span>
+            <span class="c1">// the DRAWN bit.</span>
+            <span class="c1">// 因为一个invalidate()过程开始进入后会清除flag的PFLAG_DRAWN位,直到当次UI绘制结束会重新置该位表示当次UI绘制完成</span>
+            <span class="c1">// 所以这里为了保证一定走该方法去刷新视图,故先强制设置</span>
+            <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_DRAWN</span><span class="o">;</span>
+            <span class="c1">// 这里是真正去刷新位置变化后该view的视图了</span>
+            <span class="n">invalidate</span><span class="o">(</span><span class="n">sizeChanged</span><span class="o">);</span>
+            <span class="c1">// parent display list may need to be recreated based on a change in the bounds</span>
+            <span class="c1">// of any child</span>
+            <span class="n">invalidateParentCaches</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Reset drawn bit to original value (invalidate turns it off)</span>
+        <span class="c1">// 在invalidate()方法调用之后,恢复之前 的flag的PFLAG_DRAWN位</span>
+        <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">drawn</span><span class="o">;</span>
+        <span class="c1">// 该view位置变化的同时告知其背景size改变了</span>
+        <span class="n">mBackgroundSizeChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mForegroundInfo</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mForegroundInfo</span><span class="o">.</span><span class="na">mBoundsChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">notifySubtreeAccessibilityStateChangedIfNeeded</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">changed</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>从上面看出,view的layout()主要为该view指定其在父容器view中位置,且会两次调用invalidate()方法去刷新UI,之后会走onLayout()方法,如果该view本身是一个容器ViewGroup子类的话,则需要在该方法中调用子view的layout()方法为其子view分配指定相对其左边界和上边界的相对位置</p>
+
+<h2 id="invalidate">invalidate()</h2>
+
+<p>这个方法通常用来刷新某个view的UI视图,主要是会调用onDraw()方法;</p>
+
+<p>该方法内部十分复杂,下面简要分析其大概过程</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Invalidate the whole view. If the view is visible,
+ * {@link #onDraw(android.graphics.Canvas)} will be called at some point in
+ * the future.
+ * &lt;p&gt;
+ * This must be called from a UI thread. To call from a non-UI thread, call
+ * {@link #postInvalidate()}.
+ */</span>
+<span class="c1">// 由注释可知,调用该方法必须在主线程且会在随后调用onDraw()方法</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">invalidate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">invalidate</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * This is where the invalidate() work actually happens. A full invalidate()
+ * causes the drawing cache to be invalidated, but this function can be
+ * called with invalidateCache set to false to skip that invalidation step
+ * for cases that do not need it (for example, a component that remains at
+ * the same dimensions with the same content).
+ *
+ * @param invalidateCache Whether the drawing cache for this view should be
+ *            invalidated as well. This is usually true for a full
+ *            invalidate, but may be set to false if the View's contents or
+ *            dimensions have not changed.
+ */</span>
+<span class="c1">// invalidateCache为ture会使view的flag的置位PFLAG_INVALIDATED,清除PFLAG_DRAWING_CACHE_VALID位</span>
+<span class="kt">void</span> <span class="nf">invalidate</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">invalidateCache</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">invalidateInternal</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">mLeft</span><span class="o">,</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">mTop</span><span class="o">,</span> <span class="n">invalidateCache</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">invalidateInternal</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">invalidateCache</span><span class="o">,</span>
+        <span class="kt">boolean</span> <span class="n">fullInvalidate</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mGhostView</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mGhostView</span><span class="o">.</span><span class="na">invalidate</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// 一般如果该view不是VISIBLE状态且不处于动画状态则中断刷新UI</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">skipInvalidate</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 首先判断PFLAG_DRAWN位上传UI绘制是否完成,PFLAG_HAS_BOUNDS位是否已经指定该view四边界位置,在layout()的setFrame()方法调用中置位了</span>
+    <span class="k">if</span> <span class="o">((</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">PFLAG_DRAWN</span> <span class="o">|</span> <span class="n">PFLAG_HAS_BOUNDS</span><span class="o">))</span> <span class="o">==</span> <span class="o">(</span><span class="n">PFLAG_DRAWN</span> <span class="o">|</span> <span class="n">PFLAG_HAS_BOUNDS</span><span class="o">)</span>
+            <span class="o">||</span> <span class="o">(</span><span class="n">invalidateCache</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">)</span>
+            <span class="o">||</span> <span class="o">(</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_INVALIDATED</span><span class="o">)</span> <span class="o">!=</span> <span class="n">PFLAG_INVALIDATED</span>
+            <span class="o">||</span> <span class="o">(</span><span class="n">fullInvalidate</span> <span class="o">&amp;&amp;</span> <span class="n">isOpaque</span><span class="o">()</span> <span class="o">!=</span> <span class="n">mLastIsOpaque</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">fullInvalidate</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mLastIsOpaque</span> <span class="o">=</span> <span class="n">isOpaque</span><span class="o">();</span>
+            <span class="c1">// 这里清楚该位表明当次UI绘制已经开始没有完成</span>
+            <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_DRAWN</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_DIRTY</span><span class="o">;</span>
+        <span class="c1">// PFLAG_INVALIDATED表示需要重新创建View的DisplayListCanvas</span>
+        <span class="c1">// PFLAG_DRAWING_CACHE_VALID表示view的Bitmap drawing cache缓存有效可用,清除该位表明需要</span>
+        <span class="c1">// 去创建该view的Bitmap drawing cache</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">invalidateCache</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_INVALIDATED</span><span class="o">;</span>
+            <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Propagate the damage rectangle to the parent view.</span>
+        <span class="c1">// mAttachInfo这个成员变量是在绘制显示窗口顶层视图时候创建ViewRootImpl这个顶级ViewParent对象的时候生成的</span>
+        <span class="c1">// 并在performTraversals()中调用host.dispatchAttachedToWindow(mAttachInfo, 0)方法沿着view树体系向下赋值引用</span>
+        <span class="kd">final</span> <span class="n">AttachInfo</span> <span class="n">ai</span> <span class="o">=</span> <span class="n">mAttachInfo</span><span class="o">;</span>
+        <span class="c1">// 每个view的容器父view都赋值引用到子View的mParent成员变量,最顶层的容器View即DecorView的mParent指向了顶级ViewParent即ViewRootImpl对象</span>
+        <span class="kd">final</span> <span class="n">ViewParent</span> <span class="n">p</span> <span class="o">=</span> <span class="n">mParent</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">ai</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="n">Rect</span> <span class="n">damage</span> <span class="o">=</span> <span class="n">ai</span><span class="o">.</span><span class="na">mTmpInvalRect</span><span class="o">;</span>
+            <span class="n">damage</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">);</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">invalidateChild</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">damage</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Damage the entire projection receiver, if necessary.</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mBackground</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">mBackground</span><span class="o">.</span><span class="na">isProjected</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="n">View</span> <span class="n">receiver</span> <span class="o">=</span> <span class="n">getProjectionReceiver</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">receiver</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">receiver</span><span class="o">.</span><span class="na">damageInParent</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Damage the entire IsolatedZVolume receiving this view's shadow.</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">isHardwareAccelerated</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">getZ</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">damageShadowReceiver</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>由上面可以看出,view.invalidate()最后是把其自身边界尺寸传递到上一层父view中,让父view调用invalidateChild()方法,一般父容器view是ViewGroup这个实现了ViewParent的抽象类的派生类,最顶层的容器View即DecorView的mParent指向了顶级ViewParent即ViewRootImpl,下面看下ViewGroup的invalidateChild()方法:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">invalidateChild</span><span class="o">(</span><span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="kd">final</span> <span class="n">Rect</span> <span class="n">dirty</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="n">ViewParent</span> <span class="n">parent</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="o">....</span>
+    <span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">location</span> <span class="o">=</span> <span class="n">attachInfo</span><span class="o">.</span><span class="na">mInvalidateChildLocation</span><span class="o">;</span>
+    <span class="n">location</span><span class="o">[</span><span class="n">CHILD_LEFT_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">mLeft</span><span class="o">;</span>
+    <span class="n">location</span><span class="o">[</span><span class="n">CHILD_TOP_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">mTop</span><span class="o">;</span>
+
+    <span class="o">....</span>
+
+    <span class="k">do</span> <span class="o">{</span>
+            <span class="n">View</span> <span class="n">view</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="k">instanceof</span> <span class="n">View</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">view</span> <span class="o">=</span> <span class="o">(</span><span class="n">View</span><span class="o">)</span> <span class="n">parent</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">drawAnimation</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">view</span><span class="o">.</span><span class="na">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_DRAW_ANIMATION</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="k">instanceof</span> <span class="n">ViewRootImpl</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="o">((</span><span class="n">ViewRootImpl</span><span class="o">)</span> <span class="n">parent</span><span class="o">).</span><span class="na">mIsAnimating</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="c1">// If the parent is dirty opaque or not dirty, mark it dirty with the opaque</span>
+            <span class="c1">// flag coming from the child that initiated the invalidate</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">view</span><span class="o">.</span><span class="na">mViewFlags</span> <span class="o">&amp;</span> <span class="n">FADING_EDGE_MASK</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+                        <span class="n">view</span><span class="o">.</span><span class="na">getSolidColor</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">opaqueFlag</span> <span class="o">=</span> <span class="n">PFLAG_DIRTY</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">view</span><span class="o">.</span><span class="na">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_DIRTY_MASK</span><span class="o">)</span> <span class="o">!=</span> <span class="n">PFLAG_DIRTY</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">view</span><span class="o">.</span><span class="na">mPrivateFlags</span> <span class="o">=</span> <span class="o">(</span><span class="n">view</span><span class="o">.</span><span class="na">mPrivateFlags</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">PFLAG_DIRTY_MASK</span><span class="o">)</span> <span class="o">|</span> <span class="n">opaqueFlag</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="c1">// 重点方法,这里parent先就是当前this对象</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">invalidateChildInParent</span><span class="o">(</span><span class="n">location</span><span class="o">,</span> <span class="n">dirty</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// Account for transform on current parent</span>
+                <span class="n">Matrix</span> <span class="n">m</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">getMatrix</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">m</span><span class="o">.</span><span class="na">isIdentity</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="n">RectF</span> <span class="n">boundingRect</span> <span class="o">=</span> <span class="n">attachInfo</span><span class="o">.</span><span class="na">mTmpTransformRect</span><span class="o">;</span>
+                    <span class="n">boundingRect</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">dirty</span><span class="o">);</span>
+                    <span class="n">m</span><span class="o">.</span><span class="na">mapRect</span><span class="o">(</span><span class="n">boundingRect</span><span class="o">);</span>
+                    <span class="n">dirty</span><span class="o">.</span><span class="na">set</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">boundingRect</span><span class="o">.</span><span class="na">left</span> <span class="o">-</span> <span class="mf">0.5f</span><span class="o">),</span>
+                            <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">boundingRect</span><span class="o">.</span><span class="na">top</span> <span class="o">-</span> <span class="mf">0.5f</span><span class="o">),</span>
+                            <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">boundingRect</span><span class="o">.</span><span class="na">right</span> <span class="o">+</span> <span class="mf">0.5f</span><span class="o">),</span>
+                            <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">boundingRect</span><span class="o">.</span><span class="na">bottom</span> <span class="o">+</span> <span class="mf">0.5f</span><span class="o">));</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+
+<span class="cm">/**
+ * Don't call or override this method. It is used for the implementation of
+ * the view hierarchy.
+ *
+ * This implementation returns null if this ViewGroup does not have a parent,
+ * if this ViewGroup is already fully invalidated or if the dirty rectangle
+ * does not intersect with this ViewGroup's bounds.
+ */</span>
+<span class="c1">// 联合设置统一当前需要重绘的UI视图矩形与该view本身的四边界</span>
+<span class="kd">public</span> <span class="n">ViewParent</span> <span class="nf">invalidateChildInParent</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">location</span><span class="o">,</span> <span class="kd">final</span> <span class="n">Rect</span> <span class="n">dirty</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">((</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_DRAWN</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_DRAWN</span> <span class="o">||</span>
+            <span class="o">(</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">mGroupFlags</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">FLAG_OPTIMIZE_INVALIDATE</span> <span class="o">|</span> <span class="n">FLAG_ANIMATION_DONE</span><span class="o">))</span> <span class="o">!=</span>
+                    <span class="n">FLAG_OPTIMIZE_INVALIDATE</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dirty</span><span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">location</span><span class="o">[</span><span class="n">CHILD_LEFT_INDEX</span><span class="o">]</span> <span class="o">-</span> <span class="n">mScrollX</span><span class="o">,</span>
+                    <span class="n">location</span><span class="o">[</span><span class="n">CHILD_TOP_INDEX</span><span class="o">]</span> <span class="o">-</span> <span class="n">mScrollY</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">mGroupFlags</span> <span class="o">&amp;</span> <span class="n">FLAG_CLIP_CHILDREN</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dirty</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">mLeft</span><span class="o">,</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">mTop</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="kd">final</span> <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">mLeft</span><span class="o">;</span>
+            <span class="kd">final</span> <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="n">mTop</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">((</span><span class="n">mGroupFlags</span> <span class="o">&amp;</span> <span class="n">FLAG_CLIP_CHILDREN</span><span class="o">)</span> <span class="o">==</span> <span class="n">FLAG_CLIP_CHILDREN</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">dirty</span><span class="o">.</span><span class="na">intersect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">left</span><span class="o">,</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">top</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="n">dirty</span><span class="o">.</span><span class="na">setEmpty</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">;</span>
+
+            <span class="n">location</span><span class="o">[</span><span class="n">CHILD_LEFT_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+            <span class="n">location</span><span class="o">[</span><span class="n">CHILD_TOP_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">top</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">mLayerType</span> <span class="o">!=</span> <span class="n">LAYER_TYPE_NONE</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_INVALIDATED</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="n">mParent</span><span class="o">;</span>
+
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_DRAWN</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">PFLAG_DRAWING_CACHE_VALID</span><span class="o">;</span>
+
+            <span class="n">location</span><span class="o">[</span><span class="n">CHILD_LEFT_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">mLeft</span><span class="o">;</span>
+            <span class="n">location</span><span class="o">[</span><span class="n">CHILD_TOP_INDEX</span><span class="o">]</span> <span class="o">=</span> <span class="n">mTop</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">mGroupFlags</span> <span class="o">&amp;</span> <span class="n">FLAG_CLIP_CHILDREN</span><span class="o">)</span> <span class="o">==</span> <span class="n">FLAG_CLIP_CHILDREN</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dirty</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">mLeft</span><span class="o">,</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">mTop</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// in case the dirty rect extends outside the bounds of this container</span>
+                <span class="n">dirty</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">mLeft</span><span class="o">,</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">mTop</span><span class="o">);</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">mLayerType</span> <span class="o">!=</span> <span class="n">LAYER_TYPE_NONE</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_INVALIDATED</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="n">mParent</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>invalidateChild()里面的do..while()循环一直不端的调用invalidateChildInParent(),invalidateChildInParent()返回父ViewParent并联合设置统一当前需要重绘的UI矩形与view本身四边界,直到view树向上到达ViewRootImpl的invalidateChildInParent()方法返回null中断循环,看下顶层ViewParent实现类的ViewRootImpl的invalidateChildInParent()方法;</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="n">ViewParent</span> <span class="nf">invalidateChildInParent</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">location</span><span class="o">,</span> <span class="n">Rect</span> <span class="n">dirty</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 检查方法调用的线程是否就是UI线程即APP主线程,不是则抛出异常,这也是为何invaldate()要在主线程调用的直接原因</span>
+    <span class="n">checkThread</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG_DRAW</span><span class="o">)</span> <span class="n">Log</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">"Invalidate child: "</span> <span class="o">+</span> <span class="n">dirty</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">dirty</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">invalidate</span><span class="o">();</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">dirty</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mIsAnimating</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">mCurScrollY</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">mTranslator</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mTempRect</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">dirty</span><span class="o">);</span>
+        <span class="n">dirty</span> <span class="o">=</span> <span class="n">mTempRect</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mCurScrollY</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dirty</span><span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="n">mCurScrollY</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mTranslator</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">mTranslator</span><span class="o">.</span><span class="na">translateRectInAppWindowToScreen</span><span class="o">(</span><span class="n">dirty</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mScalingRequired</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dirty</span><span class="o">.</span><span class="na">inset</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="n">invalidateRectOnScreen</span><span class="o">(</span><span class="n">dirty</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// mThread即当前APP进程主线程,在ViewRootImpl构造函数中赋值,因为ViewRootImpl必然是在主线程创建的</span>
+<span class="kt">void</span> <span class="nf">checkThread</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mThread</span> <span class="o">!=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">CalledFromWrongThreadException</span><span class="o">(</span>
+                <span class="s">"Only the original thread that created a view hierarchy can touch its views."</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// 合并由view树体系向上传来的需要重绘的区域与成员变量mDirty区域,并保存在成员变量mDirty中</span>
+<span class="c1">// 之后调用scheduleTraversals()向主线程Looper的MessageQueue消息队列发送一个Message去请求刷新视图了</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">invalidateRectOnScreen</span><span class="o">(</span><span class="n">Rect</span> <span class="n">dirty</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">Rect</span> <span class="n">localDirty</span> <span class="o">=</span> <span class="n">mDirty</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">localDirty</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">localDirty</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">dirty</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mSetIgnoreDirtyState</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mIgnoreDirtyState</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Add the new dirty rect to the current one</span>
+    <span class="n">localDirty</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">dirty</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">dirty</span><span class="o">.</span><span class="na">top</span><span class="o">,</span> <span class="n">dirty</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">dirty</span><span class="o">.</span><span class="na">bottom</span><span class="o">);</span>
+    <span class="c1">// Intersect with the bounds of the window to skip</span>
+    <span class="c1">// updates that lie outside of the visible region</span>
+    <span class="kd">final</span> <span class="kt">float</span> <span class="n">appScale</span> <span class="o">=</span> <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mApplicationScale</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">intersected</span> <span class="o">=</span> <span class="n">localDirty</span><span class="o">.</span><span class="na">intersect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+            <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">mWidth</span> <span class="o">*</span> <span class="n">appScale</span> <span class="o">+</span> <span class="mf">0.5f</span><span class="o">),</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">mHeight</span> <span class="o">*</span> <span class="n">appScale</span> <span class="o">+</span> <span class="mf">0.5f</span><span class="o">));</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">intersected</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">localDirty</span><span class="o">.</span><span class="na">setEmpty</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">mWillDrawSoon</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">intersected</span> <span class="o">||</span> <span class="n">mIsAnimating</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">scheduleTraversals</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>如果当前已经有一个UI刷新过程在进行中的时候,mWillDrawSoon为true,则不再去刷新视图了;</p>
+
+<h2 id="ontouchevent">onTouchEvent()</h2>
+
+<p>不管是ViewGroup容器还是View本身,首先都是一个View,作为View都有自身的基本的touch事件处理逻辑,即View类中的onTouchEvent()方法;
+ 如果是ViewGroup的话,一般是没有子view处理分发的事件或者自己拦截了事件强制分发到自身处理,然后调用其onTouchEvent()方法</p>
+
+<p>作者：Nvsleep</p>
+
+<p>链接：https://www.jianshu.com/p/27d9f0e6228d</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

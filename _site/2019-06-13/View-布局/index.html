@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>View 布局</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>View 布局 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="View 布局" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="View通过measure确定自身大小，通过layout确定自身在布局中的位置" />
+<meta property="og:description" content="View通过measure确定自身大小，通过layout确定自身在布局中的位置" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/View-%E5%B8%83%E5%B1%80/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/View-%E5%B8%83%E5%B1%80/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T02:40:42+00:00" />
+<script type="application/ld+json">
+{"description":"View通过measure确定自身大小，通过layout确定自身在布局中的位置","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/View-%E5%B8%83%E5%B1%80/","headline":"View 布局","dateModified":"2019-06-13T02:40:42+00:00","datePublished":"2019-06-13T02:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/View-%E5%B8%83%E5%B1%80/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>View 布局</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <h3 id="前言">前言</h3>
+
+<p>在<a href="https://www.jianshu.com/p/17166bf7cb31">Android View 测量流程（Measure）源码解析</a>中，我们分析了View的measure过程，确定了View的测量宽/高。当View确定了自身的大小后，View是怎么确定自身在布局中的位置的呢？本篇就来分析一下View的layout过程，文中源码基于 Android API 21。</p>
+
+<h3 id="view布局流程">View布局流程</h3>
+
+<p>在<a href="https://www.jianshu.com/p/adc00bbc7329">由setContentView探究Activity界面加载流程及Activity、Window和DecorView的关系</a>中，我们提到View三大工作流程是从ViewRootImpl#performTraversals开始的，其中<code class="highlighter-rouge">performMeasure</code>、<code class="highlighter-rouge">performLayout</code>、<code class="highlighter-rouge">performDraw</code>方法分别对应了View的测量、布局、绘制。因此我们从<code class="highlighter-rouge">performLayout</code>开始分析View布局流程。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">performLayout</span><span class="o">(</span><span class="n">WindowManager</span><span class="o">.</span><span class="na">LayoutParams</span> <span class="n">lp</span><span class="o">,</span> <span class="kt">int</span> <span class="n">desiredWindowWidth</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">desiredWindowHeight</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mLayoutRequested</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="n">mScrollMayChange</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="n">mInLayout</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="kd">final</span> <span class="n">View</span> <span class="n">host</span> <span class="o">=</span> <span class="n">mView</span><span class="o">;</span>
+
+        <span class="n">Trace</span><span class="o">.</span><span class="na">traceBegin</span><span class="o">(</span><span class="n">Trace</span><span class="o">.</span><span class="na">TRACE_TAG_VIEW</span><span class="o">,</span> <span class="s">"layout"</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">host</span><span class="o">.</span><span class="na">layout</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">host</span><span class="o">.</span><span class="na">getMeasuredWidth</span><span class="o">(),</span> <span class="n">host</span><span class="o">.</span><span class="na">getMeasuredHeight</span><span class="o">());</span>
+            <span class="c1">//省略...</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">Trace</span><span class="o">.</span><span class="na">traceEnd</span><span class="o">(</span><span class="n">Trace</span><span class="o">.</span><span class="na">TRACE_TAG_VIEW</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">mInLayout</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>方法中的<code class="highlighter-rouge">mView</code>其实就是DecorView，那么<code class="highlighter-rouge">host</code>也就代表了DecorView，DecorView其实是个FrameLayout，ViewGroup并没有重写<code class="highlighter-rouge">layout</code>方法，所以我们来看下<strong>View#layout</strong>方法。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">layout</span><span class="o">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+      
+        <span class="c1">//省略...</span>
+        <span class="kt">int</span> <span class="n">oldL</span> <span class="o">=</span> <span class="n">mLeft</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oldT</span> <span class="o">=</span> <span class="n">mTop</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oldB</span> <span class="o">=</span> <span class="n">mBottom</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oldR</span> <span class="o">=</span> <span class="n">mRight</span><span class="o">;</span>
+
+        <span class="kt">boolean</span> <span class="n">changed</span> <span class="o">=</span> <span class="n">isLayoutModeOptical</span><span class="o">(</span><span class="n">mParent</span><span class="o">)</span> <span class="o">?</span>
+                <span class="n">setOpticalFrame</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="o">:</span> <span class="n">setFrame</span><span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">changed</span> <span class="o">||</span> <span class="o">(</span><span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">)</span> <span class="o">==</span> <span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">onLayout</span><span class="o">(</span><span class="n">changed</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">);</span>
+            <span class="n">mPrivateFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">PFLAG_LAYOUT_REQUIRED</span><span class="o">;</span>
+
+            <span class="n">ListenerInfo</span> <span class="n">li</span> <span class="o">=</span> <span class="n">mListenerInfo</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">li</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">li</span><span class="o">.</span><span class="na">mOnLayoutChangeListeners</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">OnLayoutChangeListener</span><span class="o">&gt;</span> <span class="n">listenersCopy</span> <span class="o">=</span>
+                        <span class="o">(</span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">OnLayoutChangeListener</span><span class="o">&gt;)</span><span class="n">li</span><span class="o">.</span><span class="na">mOnLayoutChangeListeners</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">numListeners</span> <span class="o">=</span> <span class="n">listenersCopy</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numListeners</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">//如果注册了OnLayoutChangeListener，这里将执行回调。</span>
+                    <span class="n">listenersCopy</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">onLayoutChange</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">oldL</span><span class="o">,</span> <span class="n">oldT</span><span class="o">,</span> <span class="n">oldR</span><span class="o">,</span> <span class="n">oldB</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="c1">//省略...</span>
+        <span class="o">}</span>
+        <span class="c1">//省略...</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>layout方法是用来确定自身位置的，其内部调用了<code class="highlighter-rouge">setOpticalFrame</code>、<code class="highlighter-rouge">setFrame</code>和<code class="highlighter-rouge">onLayout</code>方法，<code class="highlighter-rouge">setOpticalFrame</code>内部又会调用<code class="highlighter-rouge">setFrame</code>。所以我们先来看<code class="highlighter-rouge">setFrame</code>方法，如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">setFrame</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">top</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bottom</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">boolean</span> <span class="n">changed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">mLeft</span> <span class="o">!=</span> <span class="n">left</span> <span class="o">||</span> <span class="n">mRight</span> <span class="o">!=</span> <span class="n">right</span> <span class="o">||</span> <span class="n">mTop</span> <span class="o">!=</span> <span class="n">top</span> <span class="o">||</span> <span class="n">mBottom</span> <span class="o">!=</span> <span class="n">bottom</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//判断View的位置是否发生改变</span>
+            <span class="n">changed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+            <span class="c1">// Remember our drawn bit</span>
+            <span class="kt">int</span> <span class="n">drawn</span> <span class="o">=</span> <span class="n">mPrivateFlags</span> <span class="o">&amp;</span> <span class="n">PFLAG_DRAWN</span><span class="o">;</span>
+            
+            <span class="kt">int</span> <span class="n">oldWidth</span> <span class="o">=</span> <span class="n">mRight</span> <span class="o">-</span> <span class="n">mLeft</span><span class="o">;</span><span class="c1">//获取原来的宽度</span>
+            <span class="kt">int</span> <span class="n">oldHeight</span> <span class="o">=</span> <span class="n">mBottom</span> <span class="o">-</span> <span class="n">mTop</span><span class="o">;</span><span class="c1">//获取原来的高度</span>
+            <span class="kt">int</span> <span class="n">newWidth</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="o">;</span><span class="c1">//获取新的宽度</span>
+            <span class="kt">int</span> <span class="n">newHeight</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">top</span><span class="o">;</span><span class="c1">//获取新的高度</span>
+            <span class="c1">//判断View的尺寸是否发生改变</span>
+            <span class="kt">boolean</span> <span class="n">sizeChanged</span> <span class="o">=</span> <span class="o">(</span><span class="n">newWidth</span> <span class="o">!=</span> <span class="n">oldWidth</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">newHeight</span> <span class="o">!=</span> <span class="n">oldHeight</span><span class="o">);</span>
+
+            <span class="c1">// Invalidate our old position</span>
+            <span class="n">invalidate</span><span class="o">(</span><span class="n">sizeChanged</span><span class="o">);</span>
+            
+            <span class="c1">//对mLeft、mTop、mRight 、mBottom初始化，View自身的位置也就确定了。</span>
+            <span class="n">mLeft</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+            <span class="n">mTop</span> <span class="o">=</span> <span class="n">top</span><span class="o">;</span>
+            <span class="n">mRight</span> <span class="o">=</span> <span class="n">right</span><span class="o">;</span>
+            <span class="n">mBottom</span> <span class="o">=</span> <span class="n">bottom</span><span class="o">;</span>
+            <span class="n">mRenderNode</span><span class="o">.</span><span class="na">setLeftTopRightBottom</span><span class="o">(</span><span class="n">mLeft</span><span class="o">,</span> <span class="n">mTop</span><span class="o">,</span> <span class="n">mRight</span><span class="o">,</span> <span class="n">mBottom</span><span class="o">);</span>
+
+            <span class="n">mPrivateFlags</span> <span class="o">|=</span> <span class="n">PFLAG_HAS_BOUNDS</span><span class="o">;</span>
+            
+            <span class="c1">//如果View尺寸发生改变，将执行View#sizeChange方法，在sizeChange方法内部会调用View#onSizeChanged方法。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">sizeChanged</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">sizeChange</span><span class="o">(</span><span class="n">newWidth</span><span class="o">,</span> <span class="n">newHeight</span><span class="o">,</span> <span class="n">oldWidth</span><span class="o">,</span> <span class="n">oldHeight</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="c1">//省略...</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">changed</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>在<code class="highlighter-rouge">setFrame</code>方法中对<code class="highlighter-rouge">mLeft</code>、<code class="highlighter-rouge">mTop</code>、<code class="highlighter-rouge">mRight</code> 、<code class="highlighter-rouge">mBottom</code>进行初始化，<code class="highlighter-rouge">mLeft</code>、<code class="highlighter-rouge">mTop</code>分别对应View左上角的横坐标和纵坐标，<code class="highlighter-rouge">mRight</code> 、<code class="highlighter-rouge">mBottom</code>分别对应了View右下角的横坐标和纵坐标，View的四个顶点的坐标确定了，View自身的位置也就确定了。</p>
+
+<p>再回到layout方法，在通过<code class="highlighter-rouge">setFrame</code>方法确定了自身位置后，接下来会调用<code class="highlighter-rouge">onLayout</code>方法，这个方法其实用来确定子View的位置的。不过View和ViewGroup都没有真正实现<code class="highlighter-rouge">onLayout</code>，因为onLayout和onMeasure类似，其过程都与具体的布局有关。</p>
+
+<p>下面我们以FrameLayout为例来分析onLayout过程，<strong>FrameLayout#onLayout</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onLayout</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">changed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">top</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bottom</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">layoutChildren</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">top</span><span class="o">,</span> <span class="n">right</span><span class="o">,</span> <span class="n">bottom</span><span class="o">,</span> <span class="kc">false</span> <span class="cm">/* no force left gravity */</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>其内部调用了<code class="highlighter-rouge">layoutChildren</code>方法</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">layoutChildren</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">top</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bottom</span><span class="o">,</span>
+                                  <span class="kt">boolean</span> <span class="n">forceLeftGravity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">getChildCount</span><span class="o">();</span><span class="c1">//获取子View的数量</span>
+        
+        <span class="c1">//parentLeft、parentTop分别代表子View所占区域左上角的横坐标和纵坐标</span>
+        <span class="c1">//parentRight、parentBottom分别代表子View所占区域右下角的横坐标和纵坐标</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">parentLeft</span> <span class="o">=</span> <span class="n">getPaddingLeftWithForeground</span><span class="o">();</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">parentRight</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="n">getPaddingRightWithForeground</span><span class="o">();</span>
+
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">parentTop</span> <span class="o">=</span> <span class="n">getPaddingTopWithForeground</span><span class="o">();</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">parentBottom</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">top</span> <span class="o">-</span> <span class="n">getPaddingBottomWithForeground</span><span class="o">();</span>
+
+        <span class="n">mForegroundBoundsChanged</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        
+        <span class="c1">//遍历子View</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="n">View</span> <span class="n">child</span> <span class="o">=</span> <span class="n">getChildAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">child</span><span class="o">.</span><span class="na">getVisibility</span><span class="o">()</span> <span class="o">!=</span> <span class="n">GONE</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kd">final</span> <span class="n">LayoutParams</span> <span class="n">lp</span> <span class="o">=</span> <span class="o">(</span><span class="n">LayoutParams</span><span class="o">)</span> <span class="n">child</span><span class="o">.</span><span class="na">getLayoutParams</span><span class="o">();</span>
+
+                <span class="c1">//获取子View的测量宽、高</span>
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">getMeasuredWidth</span><span class="o">();</span>
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">getMeasuredHeight</span><span class="o">();</span>
+
+                <span class="kt">int</span> <span class="n">childLeft</span><span class="o">;</span>
+                <span class="kt">int</span> <span class="n">childTop</span><span class="o">;</span>
+              
+                <span class="c1">//获取子View 设置的Gravity，如果子View没有设置Gravity，则用默认的Gravity:DEFAULT_CHILD_GRAVITY。</span>
+                <span class="kt">int</span> <span class="n">gravity</span> <span class="o">=</span> <span class="n">lp</span><span class="o">.</span><span class="na">gravity</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">gravity</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">gravity</span> <span class="o">=</span> <span class="n">DEFAULT_CHILD_GRAVITY</span><span class="o">;</span>
+                <span class="o">}</span>
+
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">layoutDirection</span> <span class="o">=</span> <span class="n">getLayoutDirection</span><span class="o">();</span>
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">absoluteGravity</span> <span class="o">=</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">getAbsoluteGravity</span><span class="o">(</span><span class="n">gravity</span><span class="o">,</span> <span class="n">layoutDirection</span><span class="o">);</span>
+                <span class="kd">final</span> <span class="kt">int</span> <span class="n">verticalGravity</span> <span class="o">=</span> <span class="n">gravity</span> <span class="o">&amp;</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">VERTICAL_GRAVITY_MASK</span><span class="o">;</span>
+
+                <span class="c1">//水平方向上，通过设置的Gravity，来确定childLeft，即每个子View左上角的横坐标</span>
+                <span class="k">switch</span> <span class="o">(</span><span class="n">absoluteGravity</span> <span class="o">&amp;</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">HORIZONTAL_GRAVITY_MASK</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">case</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">CENTER_HORIZONTAL</span><span class="o">:</span>
+                        <span class="n">childLeft</span> <span class="o">=</span> <span class="n">parentLeft</span> <span class="o">+</span> <span class="o">(</span><span class="n">parentRight</span> <span class="o">-</span> <span class="n">parentLeft</span> <span class="o">-</span> <span class="n">width</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span>
+                        <span class="n">lp</span><span class="o">.</span><span class="na">leftMargin</span> <span class="o">-</span> <span class="n">lp</span><span class="o">.</span><span class="na">rightMargin</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="k">case</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">RIGHT</span><span class="o">:</span>
+                        <span class="k">if</span> <span class="o">(!</span><span class="n">forceLeftGravity</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">childLeft</span> <span class="o">=</span> <span class="n">parentRight</span> <span class="o">-</span> <span class="n">width</span> <span class="o">-</span> <span class="n">lp</span><span class="o">.</span><span class="na">rightMargin</span><span class="o">;</span>
+                            <span class="k">break</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="k">case</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">LEFT</span><span class="o">:</span>
+                    <span class="k">default</span><span class="o">:</span>
+                        <span class="n">childLeft</span> <span class="o">=</span> <span class="n">parentLeft</span> <span class="o">+</span> <span class="n">lp</span><span class="o">.</span><span class="na">leftMargin</span><span class="o">;</span>
+                <span class="o">}</span>
+                
+                <span class="c1">//竖直方向上，通过设置的Gravity，来确定childTop，即每个子View左上角的纵坐标</span>
+                <span class="k">switch</span> <span class="o">(</span><span class="n">verticalGravity</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">case</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">TOP</span><span class="o">:</span>
+                        <span class="n">childTop</span> <span class="o">=</span> <span class="n">parentTop</span> <span class="o">+</span> <span class="n">lp</span><span class="o">.</span><span class="na">topMargin</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="k">case</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">CENTER_VERTICAL</span><span class="o">:</span>
+                        <span class="n">childTop</span> <span class="o">=</span> <span class="n">parentTop</span> <span class="o">+</span> <span class="o">(</span><span class="n">parentBottom</span> <span class="o">-</span> <span class="n">parentTop</span> <span class="o">-</span> <span class="n">height</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span>
+                        <span class="n">lp</span><span class="o">.</span><span class="na">topMargin</span> <span class="o">-</span> <span class="n">lp</span><span class="o">.</span><span class="na">bottomMargin</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="k">case</span> <span class="n">Gravity</span><span class="o">.</span><span class="na">BOTTOM</span><span class="o">:</span>
+                        <span class="n">childTop</span> <span class="o">=</span> <span class="n">parentBottom</span> <span class="o">-</span> <span class="n">height</span> <span class="o">-</span> <span class="n">lp</span><span class="o">.</span><span class="na">bottomMargin</span><span class="o">;</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="k">default</span><span class="o">:</span>
+                        <span class="n">childTop</span> <span class="o">=</span> <span class="n">parentTop</span> <span class="o">+</span> <span class="n">lp</span><span class="o">.</span><span class="na">topMargin</span><span class="o">;</span>
+                <span class="o">}</span>
+                
+                <span class="c1">//调用子View的layout 方法</span>
+                <span class="n">child</span><span class="o">.</span><span class="na">layout</span><span class="o">(</span><span class="n">childLeft</span><span class="o">,</span> <span class="n">childTop</span><span class="o">,</span> <span class="n">childLeft</span> <span class="o">+</span> <span class="n">width</span><span class="o">,</span> <span class="n">childTop</span> <span class="o">+</span> <span class="n">height</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>在该方法内部遍历所有子View过程中，通过子View设置的Gravity，获去其<code class="highlighter-rouge">childLeft</code>、<code class="highlighter-rouge">childTop</code>即子View的左上角的横坐标和纵坐标，最后执行子View的<code class="highlighter-rouge">layout</code>方法，来确定子View的位置。</p>
+
+<h3 id="总结">总结</h3>
+
+<p>View通过<code class="highlighter-rouge">layout</code>方法确定自身的位置后，通过在<code class="highlighter-rouge">onLayout</code>方法中调用子View的<code class="highlighter-rouge">layout</code>方法来确定子View的位置。如此反复，便完成了整个View树的layout过程。</p>
+
+<p>至此，View的布局流程就分析完了，希望能对您有所帮助，若文中有错误或表述不当的地方还望指出，互相交流，共同成长！</p>
+
+<p>相关阅读:
+ <a href="https://www.jianshu.com/p/adc00bbc7329">由setContentView探究Activity界面加载流程及Activity、Window和DecorView的关系</a>
+ <a href="https://www.jianshu.com/p/17166bf7cb31">Android View 测量流程（Measure）源码解析</a>
+ <a href="https://www.jianshu.com/p/92fb0089ce64">Android View 绘制流程（Draw）源码解析</a></p>
+
+<p>作者：linda_zhou</p>
+
+<p>链接：https://www.jianshu.com/p/81987851d531</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>xml布局到屏幕绘制流程原理</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>xml布局到屏幕绘制流程原理 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="xml布局到屏幕绘制流程原理" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Android 里面的绘制都是按顺序的，先绘制的内容会被后绘制的盖住。比如你在重叠的位置先画圆再画方，和先画方再画圆所呈现出来的结果肯定是不同的" />
+<meta property="og:description" content="Android 里面的绘制都是按顺序的，先绘制的内容会被后绘制的盖住。比如你在重叠的位置先画圆再画方，和先画方再画圆所呈现出来的结果肯定是不同的" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/xml%E5%B8%83%E5%B1%80%E5%88%B0%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%8E%9F%E7%90%86/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/xml%E5%B8%83%E5%B1%80%E5%88%B0%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%8E%9F%E7%90%86/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T03:40:42+00:00" />
+<script type="application/ld+json">
+{"description":"Android 里面的绘制都是按顺序的，先绘制的内容会被后绘制的盖住。比如你在重叠的位置先画圆再画方，和先画方再画圆所呈现出来的结果肯定是不同的","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/xml%E5%B8%83%E5%B1%80%E5%88%B0%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%8E%9F%E7%90%86/","headline":"xml布局到屏幕绘制流程原理","dateModified":"2019-06-13T03:40:42+00:00","datePublished":"2019-06-13T03:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/xml%E5%B8%83%E5%B1%80%E5%88%B0%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%8E%9F%E7%90%86/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>xml布局到屏幕绘制流程原理</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <h2 id="简介">简介</h2>
+
+<p>前面几期讲的是「术」，是「用哪些 API 可以绘制什么内容」。到上一期为止，「术」已经讲完了，接下来要讲的是「道」，是「怎么去安排这些绘制」。</p>
+
+<p>这期是「道」的第一期：绘制顺序。</p>
+
+<p>Android 里面的绘制都是按顺序的，先绘制的内容会被后绘制的盖住。比如你在重叠的位置先画圆再画方，和先画方再画圆所呈现出来的结果肯定是不同的：</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zeksrczfj30f207fab3.jpg" alt="image-20190613121243985" /></p>
+
+<p>而在实际的项目中，绘制内容相互遮盖的情况是很普遍的，那么怎么实现自己需要的遮盖关系，就是这期要讲的内容。</p>
+
+<h2 id="1-superondraw-前-or-后">1 super.onDraw() 前 or 后？</h2>
+
+<p>前几期我写的自定义绘制，全都是直接继承 View 类，然后重写它的 onDraw() 方法，把绘制代码写在里面，就像这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+        <span class="c1">//绘制代码</span>
+
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>这是自定义绘制最基本的形态：继承 View 类，在 onDraw() 中完全自定义它的绘制。</p>
+
+<p>之前的示例中，我把绘制代码全都写在了 super.onDraw() 的下面。其实，绘制代码写在  super.onDraw() 的上面还是下面都无所谓，甚至，你把 super.onDraw() 这行代码删掉都没关系，效果都是一样的——因为在 View 这个类里，onDraw() 本来就是空实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Implement this to do your drawing.
+     *
+     * @param canvas the canvas on which the background will be drawn
+     */</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>那肯定有小伙伴要问了，既然 写在super.onDraw()的上还是下面都无所谓，你还讲个甚。
+ 慢着慢着。。。
+ 实际开发中，除了继承View外，更常见的是继承某个控件，重写onDraw()方法，在里面绘制代码，做出【进化版】控件</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zekc7tymj30jw07576b.jpg" alt="image-20190613121217832" /></p>
+
+<blockquote>
+  <p>基于 EditText，在它的基础上增加了顶部的 Hint Text 和底部的字符计数。</p>
+</blockquote>
+
+<p>而这种基于已有控件的自定义绘制，就不能不考虑 super.onDraw() 了：你需要根据自己的需求，判断出你绘制的内容需要盖住控件原有的内容还是需要被控件原有的内容盖住，从而确定你的绘制代码是应该写在 super.onDraw() 的上面还是下面。</p>
+
+<h3 id="11-写在-superondraw-的下面">1.1 写在 super.onDraw() 的下面</h3>
+
+<p>把绘制代码写在 super.onDraw() 的下面，由于绘制代码会在原有内容绘制结束之后才执行，所以绘制内容就会盖住控件原来的内容。</p>
+
+<p>这是最为常见的情况：为控件增加点缀性内容。例如，在ImageView上方绘制尺寸</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="n">getWidth</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">getHeight</span><span class="o">();</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawText</span><span class="o">(</span><span class="s">"width:"</span> <span class="o">+</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">width</span><span class="o">),</span><span class="mi">100</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawText</span><span class="o">(</span><span class="s">"height:"</span> <span class="o">+</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">height</span><span class="o">),</span><span class="mi">100</span><span class="o">,</span><span class="mi">200</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zek0cn6lj30a20bsadt.jpg" alt="image-20190613121158978" /></p>
+
+<p>当然，除此之外还有其他的很多用法，具体怎么用就取决于你的需求、经验和想象力了。</p>
+
+<h3 id="12-写在-superondraw-的上面">1.2 写在 super.onDraw() 的上面</h3>
+
+<p>如果把绘制代码写在 <code class="highlighter-rouge">super.onDraw()</code> 的上面，由于绘制代码会执行在原有内容的绘制之前，所以绘制的内容会被控件的原内容盖住。</p>
+
+<p>相对来说，这种用法的场景就会少一些。不过只是少一些而不是没有，比如你可以通过在文字的下层绘制纯色矩形来作为「强调色」：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PracticeTextView</span> <span class="kd">extends</span> <span class="n">android</span><span class="o">.</span><span class="na">support</span><span class="o">.</span><span class="na">v7</span><span class="o">.</span><span class="na">widget</span><span class="o">.</span><span class="na">AppCompatTextView</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">YELLOW</span><span class="o">);</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zejji3uxj309q0aqq4o.jpg" alt="image-20190613121131743" /></p>
+
+<h2 id="2-dispatchdraw绘制子-view-的方法">2 dispatchDraw()：绘制子 View 的方法</h2>
+
+<p>讲了这几期，到目前为止我只提到了 onDraw() 这一个绘制方法。但其实绘制方法不是只有一个的，而是有好几个，其中 onDraw() 只是负责自身主体内容绘制的。而有的时候，你想要的遮盖关系无法通过  onDraw() 来实现，而是需要通过别的绘制方法。</p>
+
+<p>例如，你继承了一个 LinearLayout，重写了它的 onDraw() 方法，在 super.onDraw() 中插入了你自己的绘制代码，使它能够在内部绘制一些斑点作为点缀：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PracticeLinearLayout</span> <span class="kd">extends</span> <span class="n">LinearLayout</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+        <span class="c1">//添加斑点</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span><span class="mi">80</span><span class="o">,</span><span class="mi">30</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">280</span><span class="o">,</span><span class="mi">300</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zej93ql0j308207sdfx.jpg" alt="image-20190613121115353" /></p>
+
+<p>看起来一切都是perfect，但是。当添加子View的时候，斑点不见了：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">hard</span><span class="o">.</span><span class="na">uistudy</span><span class="o">.</span><span class="na">dai</span><span class="o">.</span><span class="na">uifinaltest</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">view</span><span class="o">.</span><span class="na">practiceView</span><span class="o">.</span><span class="na">PracticeLinearLayout</span>
+    <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"300dp"</span>
+    <span class="nl">android:</span><span class="n">background</span><span class="o">=</span><span class="s">"@color/album_White"</span>
+    <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"300dp"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">ImageView</span>
+        <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"match_parent"</span>
+        <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"match_parent"</span>
+        <span class="nl">android:</span><span class="n">background</span><span class="o">=</span><span class="s">"@drawable/snoopy"</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">hard</span><span class="o">.</span><span class="na">uistudy</span><span class="o">.</span><span class="na">dai</span><span class="o">.</span><span class="na">uifinaltest</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">view</span><span class="o">.</span><span class="na">practiceView</span><span class="o">.</span><span class="na">PracticeLinearLayout</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">android</span><span class="o">.</span><span class="na">support</span><span class="o">.</span><span class="na">constraint</span><span class="o">.</span><span class="na">ConstraintLayout</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zeiul67oj30920960v2.jpg" alt="image-20190613121052094" /></p>
+
+<p>造成这种情况的原因是 Android 的绘制顺序：在绘制过程中，每一个 ViewGroup 会先调用自己的  onDraw() 来绘制完自己的主体之后再去绘制它的子 View。对于上面这个例子来说，就是你的  LinearLayout 会在绘制完斑点后再去绘制它的子 View。那么在子 View 绘制完成之后，先前绘制的斑点就被子 View 盖住了。</p>
+
+<p>实际上，这里说的「绘制子 View」是通过另一个绘制方法的调用来发生的，这个绘制方法叫做：dispatchDraw()。也就是说，在绘制过程中，每个 View 和 ViewGroup 都会先调用 onDraw() 方法来绘制主体，再调用 dispatchDraw() 方法来绘制子 View。</p>
+
+<blockquote>
+  <p>注：虽然 View 和 ViewGroup 都有 dispatchDraw() 方法，不过由于 View 是没有子 View 的，所以一般来说 dispatchDraw() 这个方法只对 ViewGroup（以及它的子类）有意义。</p>
+</blockquote>
+
+<p>那么，了解了原因之后，再来实现之前的效果，让LinearLayout中绘制的内容覆盖子View，在dispatchDraw() 方法下面实现就行</p>
+
+<h3 id="21-写在-superdispatchdraw-的下面">2.1 写在 super.dispatchDraw() 的下面</h3>
+
+<p>只要重写 dispatchDraw()，并在 super.dispatchDraw() 的下面写上你的绘制代码，这段绘制代码就会发生在子 View 的绘制之后，从而让绘制内容盖住子 View 了。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">dispatchDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">dispatchDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+
+        <span class="c1">//添加斑点</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span><span class="mi">80</span><span class="o">,</span><span class="mi">30</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">280</span><span class="o">,</span><span class="mi">300</span><span class="o">,</span><span class="mi">100</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zeikc7sxj3095093mzk.jpg" alt="image-20190613121035626" /></p>
+
+<h3 id="22-写在-superdispatchdraw-的上面">2.2 写在 super.dispatchDraw() 的上面</h3>
+
+<p>同理，把绘制代码写在 super.dispatchDraw() 的上面，这段绘制就会在 onDraw() 之后、  super.dispatchDraw() 之前发生，也就是绘制内容会出现在主体内容和子 View 之间。而这个……当然是看不见斑点了</p>
+
+<p>其实和前面 1.1 讲的，重写 onDraw() 并把绘制代码写在 super.onDraw() 之后的做法，效果是一样的。</p>
+
+<p>能想明白为什么吧？图就不上了。</p>
+
+<h2 id="3-绘制过程简述">3 绘制过程简述</h2>
+
+<p>绘制过程中最典型的两个部分是上面讲到的主体和子 View，但它们并不是绘制过程的全部。除此之外，绘制过程还包含一些其他内容的绘制。具体来讲，一个完整的绘制过程会依次绘制以下几个内容：</p>
+
+<p>背景  （drawBackground）
+ 主体（onDraw()）
+ 子 View（dispatchDraw()）
+ 滑动边缘渐变和滑动条
+ 前景
+ 一般来说，一个 View（或 ViewGroup）的绘制不会这几项全都包含，但必然逃不出这几项，并且一定会严格遵守这个顺序。例如通常一个 LinearLayout 只有背景和子 View，那么它会先绘制背景再绘制子 View；一个 ImageView 有主体，有可能会再加上一层半透明的前景作为遮罩，那么它的前景也会在主体之后进行绘制。需要注意，前景的支持是在 Android 6.0（也就是 API 23）才加入的；之前其实也有，不过只支持 FrameLayout，而直到 6.0 才把这个支持放进了 View 类里。</p>
+
+<p>这其中的第 2、3 两步，前面已经讲过了；第 1 步——背景，它的绘制发生在一个叫 drawBackground() 的方法里，但这个方法是 private 的，不能重写，你如果要设置背景，只能用自带的 API 去设置（xml 布局文件的 android:background 属性以及 Java 代码的 View.setBackgroundXxx() 方法，这个每个人都用得很 6 了），而不能自定义绘制；而第 4、5 两步——滑动边缘渐变和滑动条以及前景，这两部分被合在一起放在了 onDrawForeground() 方法里，这个方法是可以重写的。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zei94oa1j30ga0bdq4m.jpg" alt="image-20190613121017408" /></p>
+
+<p>滑动边缘渐变和滑动条可以通过 xml 的 android:scrollbarXXX 系列属性或 Java 代码的  View.setXXXScrollbarXXX() 系列方法来设置；前景可以通过 xml 的 android:foreground 属性或 Java 代码的 View.setForeground() 方法来设置。而重写 onDrawForeground() 方法，并在它的  super.onDrawForeground() 方法的上面或下面插入绘制代码，则可以控制绘制内容和滑动边缘渐变、滑动条以及前景的遮盖关系。</p>
+
+<h2 id="4-ondrawforeground">4 onDrawForeground()</h2>
+
+<p>首先，再说一遍，这个方法是 API 23 才引入的，所以在重写这个方法的时候要确认你的 minSdk 达到了 23，不然低版本的手机装上你的软件会没有效果。</p>
+
+<p>在 onDrawForeground() 中，会依次绘制滑动边缘渐变、滑动条和前景。</p>
+
+<h3 id="41-写在-superondrawforeground-的下面">4.1 写在 super.onDrawForeground() 的下面</h3>
+
+<p>如果你把绘制代码写在了 super.onDrawForeground() 的下面，绘制代码会在滑动边缘渐变、滑动条和前景之后被执行，那么绘制内容将会盖住滑动边缘渐变、滑动条和前景。</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;android.support.constraint.ConstraintLayout</span>
+    <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span> <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;hard.uistudy.dai.uifinaltest.main.view.practiceView.PracticeLinearLayout</span>
+    <span class="na">android:layout_width=</span><span class="s">"300dp"</span>
+    <span class="na">android:background=</span><span class="s">"@color/album_White"</span>
+    <span class="na">android:layout_height=</span><span class="s">"300dp"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;hard.uistudy.dai.uifinaltest.main.view.practiceView.PracticeImageView</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"match_parent"</span>
+        <span class="na">android:foreground=</span><span class="s">"#99ff00ff"</span>
+        <span class="na">android:background=</span><span class="s">"@drawable/snoopy"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/hard.uistudy.dai.uifinaltest.main.view.practiceView.PracticeLinearLayout&gt;</span>
+<span class="nt">&lt;/android.support.constraint.ConstraintLayout&gt;</span>
+public class PracticeImageView extends android.support.v7.widget.AppCompatImageView {
+     ...
+    @Override
+    public void onDrawForeground(Canvas canvas) {
+        super.onDrawForeground(canvas);
+        canvas.drawRect(50,50,400,400,paint);
+    }
+
+}
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zeghx25uj30ba0b8q4t.jpg" alt="image-20190613120836276" /></p>
+
+<blockquote>
+  <p>左上角的标签并没有被红色遮罩盖住，而是保持了原有的颜色。</p>
+</blockquote>
+
+<h3 id="42-写在-superondrawforeground-的上面">4.2 写在 super.onDrawForeground() 的上面</h3>
+
+<p>如果你把绘制代码写在了 super.onDrawForeground() 的上面，绘制内容就会在 dispatchDraw() 和  super.onDrawForeground() 之间执行，那么绘制内容会盖住子 View，但被滑动边缘渐变、滑动条以及前景盖住：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PracticeImageView</span> <span class="kd">extends</span> <span class="n">android</span><span class="o">.</span><span class="na">support</span><span class="o">.</span><span class="na">v7</span><span class="o">.</span><span class="na">widget</span><span class="o">.</span><span class="na">AppCompatImageView</span> <span class="o">{</span>
+     <span class="o">...</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDrawForeground</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawRect</span><span class="o">(</span><span class="mi">50</span><span class="o">,</span><span class="mi">50</span><span class="o">,</span><span class="mi">400</span><span class="o">,</span><span class="mi">400</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDrawForeground</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zeg7nwalj30b20bgmz3.jpg" alt="image-20190613120819682" /></p>
+
+<blockquote>
+  <p>由于被红色遮罩盖住，左上角的黄色块明显变暗了。</p>
+</blockquote>
+
+<h3 id="43-想在滑动边缘渐变滑动条和前景之间插入绘制代码">4.3 想在滑动边缘渐变、滑动条和前景之间插入绘制代码？</h3>
+
+<p>很简单：不行。</p>
+
+<p>虽然这三部分是依次绘制的，但它们被一起写进了 onDrawForeground() 方法里，所以你要么把绘制内容插在它们之前，要么把绘制内容插在它们之后。而想往它们之间插入绘制，是做不到的。</p>
+
+<h2 id="5-draw-总调度方法">5 draw() 总调度方法</h2>
+
+<p>除了 onDraw() dispatchDraw() 和 onDrawForeground() 之外，还有一个可以用来实现自定义绘制的方法： draw()。</p>
+
+<p>draw() 是绘制过程的总调度方法。一个 View 的整个绘制过程都发生在 draw() 方法里。前面讲到的背景、主体、子 View 、滑动相关以及前景的绘制，它们其实都是在 draw() 方法里的。</p>
+
+<p>// View.java 的 draw() 方法的简化版大致结构（是大致结构，不是源码哦）：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// View.java 的 draw() 方法的简化版大致结构（是大致结构，不是源码哦）：</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">draw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>  
+    <span class="o">...</span>
+
+    <span class="n">drawBackground</span><span class="o">(</span><span class="n">Canvas</span><span class="o">);</span> <span class="c1">// 绘制背景（不能重写）</span>
+    <span class="n">onDraw</span><span class="o">(</span><span class="n">Canvas</span><span class="o">);</span> <span class="c1">// 绘制主体</span>
+    <span class="n">dispatchDraw</span><span class="o">(</span><span class="n">Canvas</span><span class="o">);</span> <span class="c1">// 绘制子 View</span>
+    <span class="n">onDrawForeground</span><span class="o">(</span><span class="n">Canvas</span><span class="o">);</span> <span class="c1">// 绘制滑动相关和前景</span>
+
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>从上面的代码可以看出，<code class="highlighter-rouge">onDraw()</code> <code class="highlighter-rouge">dispatchDraw()</code> <code class="highlighter-rouge">onDrawForeground()</code> 这三个方法在 <code class="highlighter-rouge">draw()</code> 中被依次调用，因此它们的遮盖关系也就像前面所说的——<code class="highlighter-rouge">dispatchDraw()</code> 绘制的内容盖住 <code class="highlighter-rouge">onDraw()</code> 绘制的内容；<code class="highlighter-rouge">onDrawForeground()</code> 绘制的内容盖住 <code class="highlighter-rouge">dispatchDraw()</code> 绘制的内容。而在它们的外部，则是由 <code class="highlighter-rouge">draw()</code> 这个方法作为总的调度。所以，你也可以重写 <code class="highlighter-rouge">draw()</code> 方法来做自定义的绘制。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zefuhawmj30rs0c7gob.jpg" alt="image-20190613120758976" /></p>
+
+<h3 id="51-写在-superdraw-的下面">5.1 写在 super.draw() 的下面</h3>
+
+<p>由于 <code class="highlighter-rouge">draw()</code> 是总调度方法，所以如果把绘制代码写在 <code class="highlighter-rouge">super.draw()</code> 的下面，那么这段代码会在其他所有绘制完成之后再执行，也就是说，它的绘制内容会盖住其他的所有绘制内容。</p>
+
+<p>它的效果和重写 <code class="highlighter-rouge">onDrawForeground()</code>，并把绘制代码写在 <code class="highlighter-rouge">super.onDrawForeground()</code> 下面时的效果是一样的：都会盖住其他的所有内容。</p>
+
+<blockquote>
+  <p>当然了，虽说它们效果一样，但如果你既重写 <code class="highlighter-rouge">draw()</code> 又重写 <code class="highlighter-rouge">onDrawForeground()</code> ，那么 <code class="highlighter-rouge">draw()</code>里的内容还是会盖住 <code class="highlighter-rouge">onDrawForeground()</code> 里的内容的。所以严格来讲，它们的效果还是有一点点不一样的。</p>
+
+  <p>但这属于抬杠……</p>
+</blockquote>
+
+<h3 id="52-写在-superdraw-的上面">5.2 写在 super.draw() 的上面</h3>
+
+<p>同理，由于 <code class="highlighter-rouge">draw()</code> 是总调度方法，所以如果把绘制代码写在 <code class="highlighter-rouge">super.draw()</code> 的上面，那么这段代码会在其他所有绘制之前被执行，所以这部分绘制内容会被其他所有的内容盖住，包括背景。是的，背景也会盖住它。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zefip1k4j306606bmyt.jpg" alt="image-20190613120739628" /></p>
+
+<p>是不是觉得没用？觉得怎么可能会有谁想要在背景的下面绘制内容？别这么想，有的时候它还真的有用。</p>
+
+<p>例如我有一个 <code class="highlighter-rouge">EditText</code>：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zef7y8a8j30dz03a0t3.jpg" alt="image-20190613120722511" /></p>
+
+<p>它下面的那条横线，是 <code class="highlighter-rouge">EditText</code> 的背景。所以如果我想给这个 <code class="highlighter-rouge">EditText</code> 加一个绿色的底，我不能使用给它设置绿色背景色的方式，因为这就相当于是把它的背景替换掉，从而会导致下面的那条横线消失：</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;EditText</span>  
+    <span class="err">...</span>
+    <span class="na">android:background=</span><span class="s">"#66BB6A"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zeepscg3j30a602kjry.jpg" alt="image-20190613120653844" /></p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">EditText</code>：我到底是个 <code class="highlighter-rouge">EditText</code> 还是个 <code class="highlighter-rouge">TextView</code>？傻傻分不清楚。</p>
+</blockquote>
+
+<p>在这种时候，你就可以重写它的 <code class="highlighter-rouge">draw()</code> 方法，然后在 <code class="highlighter-rouge">super.draw()</code> 的上方插入代码，以此来在所有内容的底部涂上一片绿色：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">AppEditText</span> <span class="kd">extends</span> <span class="n">EditText</span> <span class="o">{</span>  
+    <span class="o">...</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">draw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#66BB6A"</span><span class="o">));</span> <span class="c1">// 涂上绿色</span>
+
+        <span class="kd">super</span><span class="o">.</span><span class="na">draw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zee9dc9nj30ag02l3z7.jpg" alt="image-20190613120627405" /></p>
+
+<p>当然，这种用法并不常见，事实上我也并没有在项目中写过这样的代码。但我想说的是，我们作为工程师，是无法预知将来会遇到怎样的需求的。我们能做的只能是尽量地去多学习一些、多掌握一些，尽量地了解我们能够做什么、怎么做，然后在需求到来的时候，就可以多一些自如，少一些束手无策。</p>
+
+<h2 id="注意">注意</h2>
+
+<p>关于绘制方法，有两点需要注意一下：</p>
+
+<ol>
+  <li>出于效率的考虑，<code class="highlighter-rouge">ViewGroup</code> 默认会绕过 <code class="highlighter-rouge">draw()</code> 方法，换而直接执行 <code class="highlighter-rouge">dispatchDraw()</code>，以此来简化绘制流程。所以如果你自定义了某个 <code class="highlighter-rouge">ViewGroup</code> 的子类（比如 <code class="highlighter-rouge">LinearLayout</code>）并且需要在它的除 <code class="highlighter-rouge">dispatchDraw()</code> 以外的任何一个绘制方法内绘制内容，你<strong>可能</strong>会需要调用 <code class="highlighter-rouge">View.setWillNotDraw(false)</code> 这行代码来切换到完整的绘制流程（是「可能」而不是「必须」的原因是，有些 ViewGroup 是已经调用过 <code class="highlighter-rouge">setWillNotDraw(false)</code> 了的，例如 <code class="highlighter-rouge">ScrollView</code>）。</li>
+  <li>有的时候，一段绘制代码写在不同的绘制方法中效果是一样的，这时你可以选一个自己喜欢或者习惯的绘制方法来重写。但有一个例外：如果绘制代码既可以写在 <code class="highlighter-rouge">onDraw()</code> 里，也可以写在其他绘制方法里，那么优先写在 <code class="highlighter-rouge">onDraw()</code> ，因为 Android 有相关的优化，可以在不需要重绘的时候自动跳过 <code class="highlighter-rouge">onDraw()</code> 的重复执行，以提升开发效率。享受这种优化的只有 <code class="highlighter-rouge">onDraw()</code> 一个方法。</li>
+</ol>
+
+<h2 id="总结">总结</h2>
+
+<p>今天的内容就是这些：使用不同的绘制方法，以及在重写的时候把绘制代码放在 <code class="highlighter-rouge">super.绘制方法()</code> 的上面或下面不同的位置，以此来实现需要的遮盖关系。下面用一张图和一个表格总结一下：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zedth7udj30rs0c7gob.jpg" alt="image-20190613120602077" /></p>
+
+<blockquote>
+  <p>嗯，上面这张图在前面已经贴过了，不用比较了完全一样的。</p>
+</blockquote>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zedipqkjj30q70e0gpj.jpg" alt="image-20190613120544239" /></p>
+
+<p>image</p>
+
+<p>另外别忘了上面提到的那两个注意事项：</p>
+
+<ol>
+  <li>在 <code class="highlighter-rouge">ViewGroup</code> 的子类中重写除 <code class="highlighter-rouge">dispatchDraw()</code> 以外的绘制方法时，可能需要调用 <code class="highlighter-rouge">setWillNotDraw(false)</code>；</li>
+  <li>在重写的方法有多个选择时，优先选择 <code class="highlighter-rouge">onDraw()</code>。</li>
+</ol>
+
+<p>作者：T9的第三个三角</p>
+
+<p>链接：https://www.jianshu.com/p/c186df6140b5</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

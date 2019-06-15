@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Message链表原理与重用机制</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Message链表原理与重用机制 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Message链表原理与重用机制" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Message中的链表结构和回收重用机制" />
+<meta property="og:description" content="Message中的链表结构和回收重用机制" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/Message%E9%93%BE%E8%A1%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E9%87%8D%E7%94%A8%E6%9C%BA%E5%88%B6/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/Message%E9%93%BE%E8%A1%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E9%87%8D%E7%94%A8%E6%9C%BA%E5%88%B6/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T08:40:42+00:00" />
+<script type="application/ld+json">
+{"description":"Message中的链表结构和回收重用机制","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/Message%E9%93%BE%E8%A1%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E9%87%8D%E7%94%A8%E6%9C%BA%E5%88%B6/","headline":"Message链表原理与重用机制","dateModified":"2019-06-13T08:40:42+00:00","datePublished":"2019-06-13T08:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/Message%E9%93%BE%E8%A1%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E9%87%8D%E7%94%A8%E6%9C%BA%E5%88%B6/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>Message链表原理与重用机制</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <p>在使用 Handler 发送消息之前，我们一般都会使用如下代码调用 <code class="highlighter-rouge">mHandler.obtainMessage()</code> 方法获取一个 Message 对象。这其中究竟是怎么实现的呢？</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Handler</span> <span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Handler</span><span class="o">();</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">do</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">//do sth</span>
+            <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="n">mHandler</span><span class="o">.</span><span class="na">obtainMessage</span><span class="o">();</span>
+            <span class="n">message</span><span class="o">.</span><span class="na">what</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">message</span><span class="o">.</span><span class="na">obj</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
+            <span class="n">mHandler</span><span class="o">.</span><span class="na">sendMessage</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+<span class="c1">//Handler.otainMessage()方法</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="n">Message</span> <span class="nf">obtainMessage</span><span class="o">(){</span>
+    <span class="k">return</span> <span class="n">Message</span><span class="o">.</span><span class="na">obtain</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>可以看到 Handler.obtainMessage() 实际上调用的是 Message 的 obtain 方法，我们顺着源码看下去。</p>
+
+<p>先看看 Message 类部分源码</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// sometimes we store linked lists of these things</span>
+<span class="n">Message</span> <span class="n">next</span><span class="o">;</span>
+
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">sPoolSync</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">();</span><span class="c1">//作为锁对象</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="n">Message</span> <span class="n">sPool</span><span class="o">;</span><span class="c1">//虽然名称为 sPool 但是实际上是一个指向消息队列队首的指针</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">sPoolSize</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="c1">//</span>
+
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">MAX_POOL_SIZE</span> <span class="o">=</span> <span class="mi">50</span><span class="o">;</span><span class="c1">//「对象池」中的最大数量</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">Message</span> <span class="nf">obtain</span><span class="o">(</span><span class="n">Handler</span> <span class="n">h</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Message</span> <span class="n">m</span> <span class="o">=</span> <span class="n">obtain</span><span class="o">();</span><span class="c1">//调用 obtain 方法获取 message 对象</span>
+    <span class="n">m</span><span class="o">.</span><span class="na">target</span> <span class="o">=</span> <span class="n">h</span><span class="o">;</span><span class="c1">//指定 message 的目标对象</span>
+    <span class="k">return</span> <span class="n">m</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">//从消息对象池中取出一个 Message 对象，如果没有就创建一个</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">Message</span> <span class="nf">obtain</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">sPoolSync</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">sPool</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Message</span> <span class="n">m</span> <span class="o">=</span> <span class="n">sPool</span><span class="o">;</span>
+            <span class="n">sPool</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">m</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="n">m</span><span class="o">.</span><span class="na">flags</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="c1">// 清空 in-use flag</span>
+            <span class="n">sPoolSize</span><span class="o">--;</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">Message</span><span class="o">();</span><span class="c1">//消息池中没有可复用的 Message 就创建一个新的 Message</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>至此，从对象池中获取对象的大致流程。无论是 Handler.obtainMessage(参数列表) 方法，还是 Message 的 obtain(参数列表) 方法，最终都会调用 Message.obtain() 方法。在 Message.obtain() 方法的实现中，会先从对象池中获取 Message 对象，如果获取不到，则创建一个新的 Message 对象，然后返回。该对象在后续的执行过程中会被回收到对象池，以便复用。</p>
+
+<p>但是 Message 对象是如何被回收到「对象池」中的呢？ 从 Message 类的部分代码中我们看到 sPool 的实际类型是一个 Message 对象，而不是一个容器。另外从 obtain 方法中我们不难看到链表的踪影。难道消息池是使用链表实现的吗？</p>
+
+<p>在 AS 中打开 Message 类的结构图，可以看到其中有一个 recycle 方法，我们看看里面是怎么实现的。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">recycle</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isInUse</span><span class="o">())</span> <span class="o">{</span><span class="c1">//判断消息是否还在使用</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">gCheckRecycle</span><span class="o">)</span> <span class="o">{</span><span class="c1">//如果消息处在使用状态时被 gc 回收，就抛出异常</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">"This message cannot be recycled because it "</span> <span class="o">+</span> <span class="s">"is still in use."</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span><span class="o">;</span><span class="c1">//直接返回，取消回收操作</span>
+    <span class="o">}</span>
+    <span class="n">recycleUnchecked</span><span class="o">();</span><span class="c1">//调用回收方法</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * 回收一个可能还在使用的对象
+ */</span>
+<span class="kt">void</span> <span class="nf">recycleUnchecked</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// 只要该对象还在回收对象池中，就标记该对象为正在使用状态。</span>
+    <span class="c1">// 清空其他状态</span>
+    <span class="n">flags</span> <span class="o">=</span> <span class="n">FLAG_IN_USE</span><span class="o">;</span>
+    <span class="n">what</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">arg1</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">arg2</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">replyTo</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">sendingUid</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="n">when</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">callback</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+	<span class="c1">//回收消息到消息池中</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">sPoolSync</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">sPoolSize</span> <span class="o">&lt;</span> <span class="n">MAX_POOL_SIZE</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">sPool</span><span class="o">;</span>
+            <span class="n">sPool</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+            <span class="n">sPoolSize</span><span class="o">++;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>recycle 方法首先会判断 Message 对象是否处在使用状态。如果处在使用状态会直接返回（如果此时 GC 回收该对象会抛出异常），否则调用 recycleUnchecked 方法，具体的回收逻辑是在 recycleUnchecked 方法中实现的。首先会标记 Message 处于使用状态，然后清空对象中的其他状态。将消息存入回收池，主要是链表的操作。大致如下图所示。</p>
+
+<p><a href="https://user-images.githubusercontent.com/16668676/29739978-6c03d780-8a7e-11e7-8aad-3da3590c2ea1.png"><img src="https://user-images.githubusercontent.com/16668676/29739978-6c03d780-8a7e-11e7-8aad-3da3590c2ea1.png" alt="msg" /></a></p>
+
+<h2 id="obtain">obtain()</h2>
+
+<p>假设该链表初始状态如下
+<img src="https://www.2cto.com/uploadfile/Collfiles/20160714/201607140917351081.png" alt="初始状态" />
+执行<code class="highlighter-rouge">Message m = sPool;</code>就变成下图
+<img src="https://www.2cto.com/uploadfile/Collfiles/20160714/201607140917351083.png" alt="Message m = sPool" />
+继续<code class="highlighter-rouge">sPool = m.next;</code>
+<img src="https://www.2cto.com/uploadfile/Collfiles/20160714/201607140917351084.png" alt="sPool = m.next" />
+然后<code class="highlighter-rouge">m.next = null;</code>
+<img src="https://www.2cto.com/uploadfile/Collfiles/20160714/201607140917351086.png" alt="m.next = null" />
+接下来<code class="highlighter-rouge">m.flags=0;sPoolSize--;return m;</code>便是表示m指向的对象已经从链表中取出并返回了。</p>
+
+<h2 id="recycle">recycle()</h2>
+
+<p>然后再看看<code class="highlighter-rouge">sPoolSize</code>是什么时候自增的。按图索骥便可找到<code class="highlighter-rouge">recycle()</code>方法和<code class="highlighter-rouge">recycleUnchecked()</code>方法。前者供开发者调用进行回收，后者执行回收操作。来看看回收操作都干了啥：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">`</span><span class="o">&lt;</span><span class="n">code</span> <span class="err">``</span><span class="kd">class</span><span class="err">``=``"</span><span class="nc">hljs</span> <span class="n">coffeescript</span><span class="err">"``</span><span class="o">&gt;</span><span class="err">``</span><span class="kt">void</span><span class="err">`</span> <span class="err">`</span><span class="n">recycleUnchecked</span><span class="o">()</span> <span class="o">{</span><span class="err">``</span>    <span class="err">``</span><span class="c1">// Mark the message as in use while it remains in the recycled object pool.``    ``// Clear out all other details.``    ``flags = FLAG_IN_USE;``    ``what = ``0``;``    ``arg1 = ``0``;``    ``arg2 = ``0``;``    ``obj = ``null``;``    ``replyTo = ``null``;``    ``sendingUid = -``1``;``    ``when = ``0``;``    ``target = ``null``;``    ``callback = ``null``;``    ``data = ``null``;` `    ``synchronized` `(sPoolSync) {``        ``if` `(sPoolSize &lt; MAX_POOL_SIZE) {``            ``next = sPool;``            ``sPool = ``this``;``            ``sPoolSize++;``        ``}``    ``}``}&lt;/code&gt;`</span>
+</code></pre></div></div>
+
+<p>前半段不必多说，显然是“重置”改对象的个个字段。后半段又是一个同步代码段，同样用图来解释一下（假设当前代码为<code class="highlighter-rouge">message.recycle()</code>，则需要被回收的则是<code class="highlighter-rouge">message</code>对象）。
+假设当前链表如下：
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zvh3im82j30os032t8m.jpg" alt="初始状态" />
+执行<code class="highlighter-rouge">next=sPool;</code>
+<img src="https://www.2cto.com/uploadfile/Collfiles/20160714/201607140917351088.png" alt="next=sPool" />
+执行<code class="highlighter-rouge">sPool=this</code>;
+<img src="https://www.2cto.com/uploadfile/Collfiles/20160714/201607140917351089.png" alt="sPool=this" />
+现在可以很清楚的看到，Message类本身就组织了一个栈结构的缓冲池。并使用<code class="highlighter-rouge">obtain()</code>方法和<code class="highlighter-rouge">recycler()</code>方法来取出和放入。</p>
+
+<h3 id="小结">小结</h3>
+
+<p>Message 通过在内部构建一个链表来维护一个被会收到 Message 对象的对象池，当用户调用 obtain 方法时，会优先从池中获取。如果池中没有可以复用的对象就创建一个新的对象，该对象使用完之后，会被缓存到对象池中，当下次调用 obtain 方法时，他们就会被复用。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

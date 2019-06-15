@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android修图技术之滤镜效果实现及原理分析——ColorMatrix</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Android修图技术之滤镜效果实现及原理分析——ColorMatrix | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Android修图技术之滤镜效果实现及原理分析——ColorMatrix" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Android对于图片的处理，最常使用到的数据结构是位图——Bitmap，它包含了一张图片所有的数据" />
+<meta property="og:description" content="Android对于图片的处理，最常使用到的数据结构是位图——Bitmap，它包含了一张图片所有的数据" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/%E6%BB%A4%E9%95%9C%E6%95%88%E6%9E%9C/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/%E6%BB%A4%E9%95%9C%E6%95%88%E6%9E%9C/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T04:34:42+00:00" />
+<script type="application/ld+json">
+{"description":"Android对于图片的处理，最常使用到的数据结构是位图——Bitmap，它包含了一张图片所有的数据","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/%E6%BB%A4%E9%95%9C%E6%95%88%E6%9E%9C/","headline":"Android修图技术之滤镜效果实现及原理分析——ColorMatrix","dateModified":"2019-06-13T04:34:42+00:00","datePublished":"2019-06-13T04:34:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/%E6%BB%A4%E9%95%9C%E6%95%88%E6%9E%9C/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>Android修图技术之滤镜效果实现及原理分析——ColorMatrix</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zg0iah6jj308c07m0ug.jpg" alt="image-20190613130225989" /></p>
+
+<p>色光三原色</p>
+
+<p>Android对于图片的处理，最常使用到的数据结构是位图——Bitmap，它包含了一张图片所有的数据。整个图片都是由点阵和颜色值组成的，所谓点阵就是一个包含像素的矩阵，每一个元素对应着图片的一个像素。而颜色值——ARGB，分别对应着透明度、红、绿、蓝这四个通道分量，他们共同决定了每个像素点显示的颜色。上图显示的就是色光三原色。</p>
+
+<h3 id="色彩矩阵分析">色彩矩阵分析</h3>
+
+<p><strong>在Android中，系统使用一个颜色矩阵——ColorMatrix，来处理图像的色彩效果。对于图像的每个像素点，都有一个颜色分量矩阵用来保存颜色的RGBA值（下图矩阵C），Android中的颜色矩阵是一个 4x5 的数字矩阵，它用来对图片的色彩进行处理（下图矩阵A）。</strong> 如下：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg1350saj3071033weg.jpg" alt="image-20190613130259216" /></p>
+
+<p>如果我们想要改变一张图像的色彩显示效果，在Android系统中，我们会用矩阵的乘法运算来修改颜色分量矩阵的值。上面矩阵A就是一个 4x5 的颜色矩阵。在Android中，它会以一维数组的形式来存储[a,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t]，而C则是一个颜色矩阵分量。在处理图像时，使用矩阵乘法运算AC来处理颜色分量矩阵，如下：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zg1km2tbj30fi0330t0.jpg" alt="image-20190613130327614" /></p>
+
+<p>利用线性代数知识可知：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R1 = aR + bG + cB + dA + e;
+G1 = fR + gG + hB + iA + j;
+B1 = kR + lG + mB + nA + o;
+A1 = pR + qG + rB + sA + t;
+</code></pre></div></div>
+
+<p>从这个公式可以发现，矩阵A中：</p>
+
+<ul>
+  <li>第一行的 abcde 用来决定新的颜色值中的R——红色</li>
+  <li>第二行的 fghij 用来决定新的颜色值中的G——绿色</li>
+  <li>第三行的 klmno 用来决定新的颜色值中的B——蓝色</li>
+  <li>第四行的 pqrst 用来决定新的颜色值中的A——透明度</li>
+  <li>矩阵A中第五列——ejot 值分别用来决定每个分量中的 offset ，即偏移量</li>
+</ul>
+
+<p>这样划分好后，这些值的作用就比较明确了。</p>
+
+<h4 id="初始颜色矩阵">初始颜色矩阵</h4>
+
+<p>接下来，我们重新看一下矩阵变换的计算公式，以R分量为例，</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R1 = aR + bG + cB + dA + e;
+</code></pre></div></div>
+
+<p>如果令 a=1，b、c、d、e都等于0，则有 R1=R 。同理对第二、三、四、行进行操作，可以构造出一个矩阵，如下：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg1voc0jj304i02ha9z.jpg" alt="image-20190613130345036" /></p>
+
+<p><strong>把这个矩阵代入公式 R=AC，根据矩阵乘法运算法则，可得R1=R，G1=G，B1=B，A1=A。即不会对原有颜色进行任何修改，所以这个矩阵通常被用来作为初始颜色矩阵。</strong></p>
+
+<h5 id="改变颜色值">改变颜色值</h5>
+
+<p>那么，当我们想要改变颜色值的时候，通常有两种方法。</p>
+
+<ul>
+  <li>改变颜色的 offset（偏移量）的值；</li>
+  <li>改变对应 RGBA 值的系数。</li>
+</ul>
+
+<h6 id="1改变偏移量">1.改变偏移量</h6>
+
+<p>从前面的分析中可知，改变颜色的偏移量就是改变颜色矩阵的第五列的值，其他保持初始矩阵的值即可。如下示例：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zg28d00uj305002h0so.jpg" alt="image-20190613130405712" /></p>
+
+<p>上面的操作中改变了 R、G 对应的颜色偏移量，那么结果就是图像的红色和绿色分量增加了100，即整体色调偏黄显示。
+ 看看下面的对比图就一目了然了：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg2oiwxfj30pm0ckgxz.jpg" alt="image-20190613130431375" /></p>
+
+<p>左原图——右图增加了红绿分量</p>
+
+<h6 id="2改变颜色系数">2.改变颜色系数</h6>
+
+<p>如下操作：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zg2zyghuj304i02hjrb.jpg" alt="image-20190613130449475" /></p>
+
+<p>改变 G 分量对应的系数 g 的值，增加到2倍，这样在矩阵运算后，图像会整体色调偏绿显示。
+ 请看下面的对比图：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg3d77x6j30pn0ckgzf.jpg" alt="image-20190613130510764" /></p>
+
+<p>左原图——右图绿色分量系数为2</p>
+
+<p>通过前面的分析，我们知道调整颜色矩阵可以改变图像的色彩效果，图像的色彩处理很大程度上就是在寻找处理图像的颜色矩阵。
+ 下面，我们着手写一个demo，模拟一个 4x5 的颜色矩阵来体验一下上面对颜色矩阵的分析。
+ 先来看看效果图：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zg3rp5cwj30an0irdj8.jpg" alt="image-20190613130534220" /></p>
+
+<p>ColorMatrix</p>
+
+<p><strong>关键代码是将 4x5 矩阵转换成一维数组，然后再将这一维数组设置到ColorMatrix类里去，</strong>请看代码：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//将矩阵设置到图像</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">setImageMatrix</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Bitmap</span> <span class="n">bmp</span> <span class="o">=</span> <span class="n">Bitmap</span><span class="o">.</span><span class="na">createBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(),</span> <span class="n">bitmap</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(),</span> <span class="n">Bitmap</span><span class="o">.</span><span class="na">Config</span><span class="o">.</span><span class="na">ARGB_8888</span><span class="o">);</span>
+        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+        <span class="n">colorMatrix</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">mColorMatrix</span><span class="o">);</span><span class="c1">//将一维数组设置到ColorMatrix</span>
+
+        <span class="n">Canvas</span> <span class="n">canvas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Canvas</span><span class="o">(</span><span class="n">bmp</span><span class="o">);</span>
+        <span class="n">Paint</span> <span class="n">paint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">();</span>
+        <span class="n">paint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">ColorMatrixColorFilter</span><span class="o">(</span><span class="n">colorMatrix</span><span class="o">));</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>
+        <span class="n">iv_photo</span><span class="o">.</span><span class="na">setImageBitmap</span><span class="o">(</span><span class="n">bmp</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>这个demo里面的代码比较简单，我在这里就全部贴出来了，先上xml布局：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">"1.0"</span> <span class="n">encoding</span><span class="o">=</span><span class="s">"utf-8"</span><span class="o">?&gt;</span>
+<span class="o">&lt;</span><span class="n">LinearLayout</span>
+    <span class="nl">xmlns:</span><span class="n">android</span><span class="o">=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="nl">xmlns:</span><span class="n">tools</span><span class="o">=</span><span class="s">"http://schemas.android.com/tools"</span>
+    <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"match_parent"</span>
+    <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"match_parent"</span>
+    <span class="nl">tools:</span><span class="n">context</span><span class="o">=</span><span class="s">"com.example.deeson.mycolormatrix.MainActivity"</span>
+    <span class="nl">android:</span><span class="n">orientation</span><span class="o">=</span><span class="s">"vertical"</span><span class="o">&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">ImageView</span>
+        <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">"@+id/iv_photo"</span>
+        <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"300dp"</span>
+        <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"0dp"</span>
+        <span class="nl">android:</span><span class="n">layout_weight</span><span class="o">=</span><span class="s">"3"</span>
+        <span class="nl">android:</span><span class="n">layout_gravity</span><span class="o">=</span><span class="s">"center_horizontal"</span><span class="o">/&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">GridLayout</span>
+        <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">"@+id/matrix_layout"</span>
+        <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"match_parent"</span>
+        <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"0dp"</span>
+        <span class="nl">android:</span><span class="n">layout_weight</span><span class="o">=</span><span class="s">"4"</span>
+        <span class="nl">android:</span><span class="n">columnCount</span><span class="o">=</span><span class="s">"5"</span>
+        <span class="nl">android:</span><span class="n">rowCount</span><span class="o">=</span><span class="s">"4"</span><span class="o">&gt;</span>
+
+    <span class="o">&lt;/</span><span class="n">GridLayout</span><span class="o">&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">LinearLayout</span>
+        <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"match_parent"</span>
+        <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"wrap_content"</span>
+        <span class="nl">android:</span><span class="n">orientation</span><span class="o">=</span><span class="s">"horizontal"</span><span class="o">&gt;</span>
+
+        <span class="o">&lt;</span><span class="n">Button</span>
+            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">"@+id/btn_change"</span>
+            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"0dp"</span>
+            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"wrap_content"</span>
+            <span class="nl">android:</span><span class="n">layout_weight</span><span class="o">=</span><span class="s">"1"</span>
+            <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">"change"</span><span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="n">Button</span>
+            <span class="nl">android:</span><span class="n">id</span><span class="o">=</span><span class="s">"@+id/btn_reset"</span>
+            <span class="nl">android:</span><span class="n">layout_width</span><span class="o">=</span><span class="s">"0dp"</span>
+            <span class="nl">android:</span><span class="n">layout_height</span><span class="o">=</span><span class="s">"wrap_content"</span>
+            <span class="nl">android:</span><span class="n">layout_weight</span><span class="o">=</span><span class="s">"1"</span>
+            <span class="nl">android:</span><span class="n">text</span><span class="o">=</span><span class="s">"reset"</span><span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="n">LinearLayout</span><span class="o">&gt;</span>
+
+<span class="o">&lt;/</span><span class="n">LinearLayout</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>在 MainActivity 类这里有一个地方要注意的就是，我们无法在 onCreate() 方法中获得 4x5 矩阵视图的宽高值，所以通过 View 的 post() 方法，在视图创建完毕后获得其宽高值。如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">matrixLayout</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">mEtWidth</span> <span class="o">=</span> <span class="n">matrixLayout</span><span class="o">.</span><span class="na">getWidth</span><span class="o">()</span> <span class="o">/</span> <span class="mi">5</span><span class="o">;</span>
+        <span class="n">mEtHeight</span> <span class="o">=</span> <span class="n">matrixLayout</span><span class="o">.</span><span class="na">getHeight</span><span class="o">()</span> <span class="o">/</span> <span class="mi">4</span><span class="o">;</span>
+        <span class="n">addEts</span><span class="o">();</span>
+        <span class="n">initMatrix</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</code></pre></div></div>
+
+<p>接下来是 MainActivity 类的全部代码，也没有几行，相信大家都能看得明白，如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">deeson</span><span class="o">.</span><span class="na">mycolormatrix</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">android.graphics.Bitmap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.graphics.BitmapFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.graphics.Canvas</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.graphics.ColorMatrix</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.graphics.ColorMatrixColorFilter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.graphics.Paint</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.support.v7.app.AppCompatActivity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.text.InputType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.view.View</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.Button</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.EditText</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.GridLayout</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.ImageView</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Deeson
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span> <span class="o">{</span>
+
+    <span class="n">Bitmap</span> <span class="n">bitmap</span><span class="o">;</span>
+    <span class="n">ImageView</span> <span class="n">iv_photo</span><span class="o">;</span>
+    <span class="n">GridLayout</span> <span class="n">matrixLayout</span><span class="o">;</span>
+    <span class="c1">//每个edittext的宽高</span>
+    <span class="kt">int</span> <span class="n">mEtWidth</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">mEtHeight</span><span class="o">;</span>
+    <span class="c1">//保存20个edittext</span>
+    <span class="n">EditText</span><span class="o">[]</span> <span class="n">mEts</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EditText</span><span class="o">[</span><span class="mi">20</span><span class="o">];</span>
+
+    <span class="c1">//一维数组保存20个矩阵值</span>
+    <span class="kt">float</span><span class="o">[]</span> <span class="n">mColorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">float</span><span class="o">[</span><span class="mi">20</span><span class="o">];</span>
+
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+        <span class="n">bitmap</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeResource</span><span class="o">(</span><span class="n">getResources</span><span class="o">(),</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">iv_model</span><span class="o">);</span>
+        <span class="n">iv_photo</span> <span class="o">=</span> <span class="o">(</span><span class="n">ImageView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">iv_photo</span><span class="o">);</span>
+        <span class="n">matrixLayout</span> <span class="o">=</span> <span class="o">(</span><span class="n">GridLayout</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">matrix_layout</span><span class="o">);</span>
+        <span class="n">Button</span> <span class="n">btn_change</span> <span class="o">=</span> <span class="o">(</span><span class="n">Button</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btn_change</span><span class="o">);</span>
+        <span class="n">Button</span> <span class="n">btn_reset</span> <span class="o">=</span> <span class="o">(</span><span class="n">Button</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btn_reset</span><span class="o">);</span>
+        <span class="n">btn_change</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">btn_reset</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">iv_photo</span><span class="o">.</span><span class="na">setImageBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">);</span>
+
+        <span class="c1">//我们无法在onCreate()方法中获得视图的宽高值，所以通过View的post()方法，在视图创建完毕后获得其宽高值</span>
+        <span class="n">matrixLayout</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                <span class="n">mEtWidth</span> <span class="o">=</span> <span class="n">matrixLayout</span><span class="o">.</span><span class="na">getWidth</span><span class="o">()</span> <span class="o">/</span> <span class="mi">5</span><span class="o">;</span>
+                <span class="n">mEtHeight</span> <span class="o">=</span> <span class="n">matrixLayout</span><span class="o">.</span><span class="na">getHeight</span><span class="o">()</span> <span class="o">/</span> <span class="mi">4</span><span class="o">;</span>
+                <span class="n">addEts</span><span class="o">();</span>
+                <span class="n">initMatrix</span><span class="o">();</span>
+            <span class="o">}</span>
+
+        <span class="o">});</span>
+    <span class="o">}</span>
+
+    <span class="c1">//动态添加edittext</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">addEts</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">EditText</span> <span class="n">et</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EditText</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+            <span class="n">et</span><span class="o">.</span><span class="na">setInputType</span><span class="o">(</span><span class="n">InputType</span><span class="o">.</span><span class="na">TYPE_CLASS_NUMBER</span> <span class="o">|</span> <span class="n">InputType</span><span class="o">.</span><span class="na">TYPE_NUMBER_FLAG_DECIMAL</span><span class="o">);</span>
+            <span class="n">mEts</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">et</span><span class="o">;</span>
+            <span class="n">matrixLayout</span><span class="o">.</span><span class="na">addView</span><span class="o">(</span><span class="n">et</span><span class="o">,</span> <span class="n">mEtWidth</span><span class="o">,</span> <span class="n">mEtHeight</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">//初始化颜色矩阵</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">initMatrix</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mEts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">setText</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">mEts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">setText</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+
+    <span class="c1">//获取矩阵值</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">getMatrix</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">mEts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">getText</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+            <span class="kt">boolean</span> <span class="n">isNone</span> <span class="o">=</span> <span class="kc">null</span> <span class="o">==</span> <span class="n">matrix</span> <span class="o">||</span> <span class="s">""</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">matrix</span><span class="o">);</span>
+            <span class="n">mColorMatrix</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">isNone</span> <span class="o">?</span> <span class="mf">0.0f</span> <span class="o">:</span> <span class="n">Float</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">matrix</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">isNone</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mEts</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">setText</span><span class="o">(</span><span class="s">"0"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">//将矩阵设置到图像</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">setImageMatrix</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Bitmap</span> <span class="n">bmp</span> <span class="o">=</span> <span class="n">Bitmap</span><span class="o">.</span><span class="na">createBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(),</span> <span class="n">bitmap</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(),</span> <span class="n">Bitmap</span><span class="o">.</span><span class="na">Config</span><span class="o">.</span><span class="na">ARGB_8888</span><span class="o">);</span>
+        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+        <span class="n">colorMatrix</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">mColorMatrix</span><span class="o">);</span><span class="c1">//将一维数组设置到ColorMatrix</span>
+
+        <span class="n">Canvas</span> <span class="n">canvas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Canvas</span><span class="o">(</span><span class="n">bmp</span><span class="o">);</span>
+        <span class="n">Paint</span> <span class="n">paint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">();</span>
+        <span class="n">paint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">ColorMatrixColorFilter</span><span class="o">(</span><span class="n">colorMatrix</span><span class="o">));</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>
+        <span class="n">iv_photo</span><span class="o">.</span><span class="na">setImageBitmap</span><span class="o">(</span><span class="n">bmp</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">v</span><span class="o">.</span><span class="na">getId</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btn_change</span><span class="o">:</span>
+                <span class="c1">//作用矩阵效果</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">btn_reset</span><span class="o">:</span>
+                <span class="c1">//重置矩阵效果</span>
+                <span class="n">initMatrix</span><span class="o">();</span>
+                <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//作用矩阵效果</span>
+        <span class="n">getMatrix</span><span class="o">();</span>
+        <span class="n">setImageMatrix</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>MyColorMatrixDemo <a href="https://link.jianshu.com?t=https://github.com/DeesonWoo/MyColorMatrixDemo">下载地址</a></p>
+
+<p>至此，我们可以通过 MyColorMatrixDemo 来对图像的色彩特效进行精确地修改。
+ 在了解了Android的颜色矩阵之后，我们知道可以通过修改颜色矩阵的值来改变图像的色彩显示效果。接下来，我们看看Android系统给我们提供的快速修改图像色彩特效的API。</p>
+
+<h3 id="图像的色光属性">图像的色光属性</h3>
+
+<p>在色彩处理中，通常使用以下三个角度来描述一个图像。</p>
+
+<ul>
+  <li><strong>色调——物体传播的颜色</strong></li>
+  <li><strong>饱和度——颜色的纯度，从0（灰）到100%（饱和）来进行描述</strong></li>
+  <li><strong>亮度——颜色的相对明暗程度</strong></li>
+</ul>
+
+<p>在Android 的 ColorMatrix 颜色矩阵中也封装了一些 API 来快速调整上面这三个颜色参数，而不用每次都去计算矩阵的值。</p>
+
+<p>下面我们来看看如何调用这些API：
+ 详情可参考这个文档 <a href="https://link.jianshu.com?t=https://developer.android.com/reference/android/graphics/ColorMatrix.html">https://developer.android.com/reference/android/graphics/ColorMatrix.html</a></p>
+
+<ul>
+  <li>色调</li>
+</ul>
+
+<p>Android系统提供了 setRotate(int axis, float degrees)方法来修改颜色的色调。第一个参数，用0、1、2分别代表红、绿、蓝三个颜色通道，第二个参数就是要修改的值，如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ColorMatrix hueMatrix = new ColorMatrix();
+hueMatrix.setRotate(0,hue0);
+hueMatrix.setRotate(1,hue1);
+hueMatrix.setRotate(2,hue2);
+</code></pre></div></div>
+
+<p>Android系统的 setRotate(int axis, float degrees) 方法其实就是对色彩的旋转运算。RGB色是如何旋转的呢，首先用R、G、B三色建立三维坐标系，如下：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg4mxn2pj30c308iaah.jpg" alt="image-20190613130624059" /></p>
+
+<p>RBG坐标</p>
+
+<p>这里，我们可以把一个色彩值看成三维空间里的一个点，色彩值的三个分量可以看成该点对应的坐标（三维坐标）。我们先不考虑，在三个维度综合情况下是怎么旋转的，我们先看看，在某个轴做为Z轴，在另两个轴形成的平面上旋转的情况。假如，我们现在需要围绕蓝色轴进行旋转，我们对着蓝色箭头观察由红色和绿色构造的平面。然后顺时针旋转 α 度。 如下图所示：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zg4z79q4j30km098abn.jpg" alt="image-20190613130643755" /></p>
+
+<p>围绕蓝色轴进行旋转 α 度</p>
+
+<p>在图中，我们可以看到，在旋转后，原 R 在 R 轴的分量变为：R<em>cosα，且原G分量在旋转后在 R 轴上也有了分量，所以我们要加上这部分分量，因此最终的结果为 R’=R</em>cosα + G<em>sinα，同理，在计算 G’ 时，因为 R 的分量落在了负轴上，所以我们要减去这部分，故 G’=G</em>cosα - R*sinα；
+ 回忆之前讲过的矩阵乘法运算法则：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R1 = aR + bG + cB + dA + e;
+G1 = fR + gG + hB + iA + j;
+B1 = kR + lG + mB + nA + o;
+A1 = pR + qG + rB + sA + t;
+</code></pre></div></div>
+
+<p>我们可以计算出围绕蓝色分量轴顺时针旋转 α 度的颜色矩阵如下：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zg5kty1gj306c02hq2v.jpg" alt="image-20190613130718060" /></p>
+
+<p>同理，我们可以得出围绕红色分量轴顺时针旋转 α 度的颜色矩阵：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zg5ukif2j306c02hdft.jpg" alt="image-20190613130734170" /></p>
+
+<p>围绕绿色分量轴顺时针旋转 α 度的颜色矩阵：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zg694yrdj306c02hmx3.jpg" alt="image-20190613130757600" /></p>
+
+<p>通过上面的分析，我们可以知道，当围绕红色分量轴进行色彩旋转时，由于当前红色分量轴的色彩是不变的，而仅利用三角函数来动态的变更绿色和蓝色的颜色值。这种改变就叫做<strong>色相调节</strong>。当围绕红色分量轴旋转时，是对图片就行红色色相的调节；同理，当围绕蓝色分量轴旋转时，就是对图片就行蓝色色相调节；当然，当围绕绿色分量轴旋转时，就是对图片进行绿色色相的调节.</p>
+
+<p>下面是Android系统对色调修改的源码，我们可以看得到，源码对第二个参数进行转换成弧度，即对红、绿、蓝三个颜色通道分别进行旋转，那我们在第二个参数中传入我们平时用的度数即可。通过对源码的阅读，我们也知道，第二个参数最终被设置的数值范围为 [-1,1] ，然后再设置到颜色矩阵中。即我们在第二个参数传入[-180，180]范围的值（一个最小周期）即可。
+ 另外，相信大家都可以看得出来，系统对存储颜色矩阵的一维数组元素的值的修改正好符合上面的分析。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+     * Set the rotation on a color axis by the specified values.
+     * &lt;p&gt;
+     * &lt;code&gt;axis=0&lt;/code&gt; correspond to a rotation around the RED color
+     * &lt;code&gt;axis=1&lt;/code&gt; correspond to a rotation around the GREEN color
+     * &lt;code&gt;axis=2&lt;/code&gt; correspond to a rotation around the BLUE color
+     * &lt;/p&gt;
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setRotate</span><span class="o">(</span><span class="kt">int</span> <span class="n">axis</span><span class="o">,</span> <span class="kt">float</span> <span class="n">degrees</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">reset</span><span class="o">();</span>
+        <span class="kt">double</span> <span class="n">radians</span> <span class="o">=</span> <span class="n">degrees</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="na">PI</span> <span class="o">/</span> <span class="mi">180</span><span class="n">d</span><span class="o">;</span>
+        <span class="kt">float</span> <span class="n">cosine</span> <span class="o">=</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span> <span class="n">Math</span><span class="o">.</span><span class="na">cos</span><span class="o">(</span><span class="n">radians</span><span class="o">);</span>
+        <span class="kt">float</span> <span class="n">sine</span> <span class="o">=</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span> <span class="n">Math</span><span class="o">.</span><span class="na">sin</span><span class="o">(</span><span class="n">radians</span><span class="o">);</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">axis</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Rotation around the red color</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span> <span class="o">=</span> <span class="n">mArray</span><span class="o">[</span><span class="mi">12</span><span class="o">]</span> <span class="o">=</span> <span class="n">cosine</span><span class="o">;</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">7</span><span class="o">]</span> <span class="o">=</span> <span class="n">sine</span><span class="o">;</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sine</span><span class="o">;</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="c1">// Rotation around the green color</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mArray</span><span class="o">[</span><span class="mi">12</span><span class="o">]</span> <span class="o">=</span> <span class="n">cosine</span><span class="o">;</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sine</span><span class="o">;</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="o">=</span> <span class="n">sine</span><span class="o">;</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="c1">// Rotation around the blue color</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mArray</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span> <span class="o">=</span> <span class="n">cosine</span><span class="o">;</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">sine</span><span class="o">;</span>
+            <span class="n">mArray</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sine</span><span class="o">;</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>饱和度</li>
+</ul>
+
+<p>Android系统提供了 setSaturation(float sat) 方法来修改颜色的饱和度。参数 float sat：表示把当前色彩饱和度放大的倍数。取值为0表示完全无色彩，即灰度图像（黑白图像）；取值为1时，表示色彩不变动；当取值大于1时，显示色彩过度饱和 如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ColorMatrix saturationMatrix = new ColorMatrix();
+saturationMatrix.setSaturation(saturation);
+</code></pre></div></div>
+
+<p>同样贴出修改饱和度值的源码，通过源码我们可以看到系统是通过改变颜色矩阵中对角线上系数的比例来改变饱和度。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+     * Set the matrix to affect the saturation of colors.
+     *
+     * @param sat A value of 0 maps the color to gray-scale. 1 is identity.
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSaturation</span><span class="o">(</span><span class="kt">float</span> <span class="n">sat</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">reset</span><span class="o">();</span>
+        <span class="kt">float</span><span class="o">[]</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mArray</span><span class="o">;</span>
+
+        <span class="kd">final</span> <span class="kt">float</span> <span class="n">invSat</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">sat</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">float</span> <span class="n">R</span> <span class="o">=</span> <span class="mf">0.213f</span> <span class="o">*</span> <span class="n">invSat</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">float</span> <span class="n">G</span> <span class="o">=</span> <span class="mf">0.715f</span> <span class="o">*</span> <span class="n">invSat</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">float</span> <span class="n">B</span> <span class="o">=</span> <span class="mf">0.072f</span> <span class="o">*</span> <span class="n">invSat</span><span class="o">;</span>
+
+        <span class="n">m</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">sat</span><span class="o">;</span> <span class="n">m</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">;</span>       <span class="n">m</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">;</span>
+        <span class="n">m</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="o">=</span> <span class="n">R</span><span class="o">;</span>       <span class="n">m</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span> <span class="o">=</span> <span class="n">G</span> <span class="o">+</span> <span class="n">sat</span><span class="o">;</span> <span class="n">m</span><span class="o">[</span><span class="mi">7</span><span class="o">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">;</span>
+        <span class="n">m</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="o">=</span> <span class="n">R</span><span class="o">;</span>      <span class="n">m</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">;</span>      <span class="n">m</span><span class="o">[</span><span class="mi">12</span><span class="o">]</span> <span class="o">=</span> <span class="n">B</span> <span class="o">+</span> <span class="n">sat</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>亮度</li>
+</ul>
+
+<p>当三原色以相同比例进行混合时，就会显示出白色。Android系统正是利用这个原理对图像进行亮度的改变。如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ColorMatrix</span> <span class="n">lumMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+<span class="n">lumMatrix</span><span class="o">.</span><span class="na">setScale</span><span class="o">(</span><span class="n">lum</span><span class="o">,</span><span class="n">lum</span><span class="o">,</span><span class="n">lum</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>同样贴出修改亮度值的源码，当亮度为 0 时，图像就变成全黑了。通过对源码的阅读，我们可以知道， 系统将颜色矩阵置为初始初始颜色矩阵，再将红、绿、蓝、透明度四个分量通道对应的系数修改成我们传入的值。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * Set this colormatrix to scale by the specified values.
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setScale</span><span class="o">(</span><span class="kt">float</span> <span class="n">rScale</span><span class="o">,</span> <span class="kt">float</span> <span class="n">gScale</span><span class="o">,</span> <span class="kt">float</span> <span class="n">bScale</span><span class="o">,</span>
+                         <span class="kt">float</span> <span class="n">aScale</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">float</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="n">mArray</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">19</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="o">--</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">a</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">rScale</span><span class="o">;</span>
+        <span class="n">a</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span> <span class="o">=</span> <span class="n">gScale</span><span class="o">;</span>
+        <span class="n">a</span><span class="o">[</span><span class="mi">12</span><span class="o">]</span> <span class="o">=</span> <span class="n">bScale</span><span class="o">;</span>
+        <span class="n">a</span><span class="o">[</span><span class="mi">18</span><span class="o">]</span> <span class="o">=</span> <span class="n">aScale</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>当然，除了单独使用上面的三种方法来进行颜色效果的处理之外，Android系统还封装了矩阵的乘法运算。它提供了 postConcat(ColorMatrix postmatrix) 方法来将矩阵的作用效果混合，从而叠加处理效果。</strong>如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ColorMatrix</span> <span class="n">imageMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+<span class="n">imageMatrix</span><span class="o">.</span><span class="na">postConcat</span><span class="o">(</span><span class="n">hueMatrix</span><span class="o">);</span>
+<span class="n">imageMatrix</span><span class="o">.</span><span class="na">postConcat</span><span class="o">(</span><span class="n">saturationMatrix</span><span class="o">);</span>
+<span class="n">imageMatrix</span><span class="o">.</span><span class="na">postConcat</span><span class="o">(</span><span class="n">lumMatrix</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>下面，通过一个demo来给大家看看，修改色调、饱和度、亮度的效果。
+ 首先我们看看效果图，如下：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zg788wmwg30an0ir7wj.gif" alt="img" /></p>
+
+<p>ColorMatrix</p>
+
+<p>这里的 demo 通过滑动三个 SeekBar 来改变不同的值，并将这些数值作用到对应色调、饱和度、亮度的颜色矩阵中，最后通过 ColorMatrix 的 postConcat() 方法来混合这三个被修改的颜色矩阵的显示效果。
+ 关键设置图像矩阵的代码如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Bitmap</span> <span class="nf">handleImageEffect</span><span class="o">(</span><span class="n">Bitmap</span> <span class="n">oriBmp</span><span class="o">,</span> <span class="n">Bitmap</span> <span class="n">bmp</span><span class="o">,</span> <span class="kt">float</span> <span class="n">hue</span><span class="o">,</span> <span class="kt">float</span> <span class="n">saturation</span><span class="o">,</span> <span class="kt">float</span> <span class="n">lum</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Canvas</span> <span class="n">canvas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Canvas</span><span class="o">(</span><span class="n">bmp</span><span class="o">);</span>
+        <span class="n">Paint</span> <span class="n">paint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">();</span>
+
+        <span class="n">ColorMatrix</span> <span class="n">hueMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+        <span class="n">hueMatrix</span><span class="o">.</span><span class="na">setRotate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">hue</span><span class="o">);</span>
+        <span class="n">hueMatrix</span><span class="o">.</span><span class="na">setRotate</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">hue</span><span class="o">);</span>
+        <span class="n">hueMatrix</span><span class="o">.</span><span class="na">setRotate</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">hue</span><span class="o">);</span>
+
+        <span class="n">ColorMatrix</span> <span class="n">saturationMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+        <span class="n">saturationMatrix</span><span class="o">.</span><span class="na">setSaturation</span><span class="o">(</span><span class="n">saturation</span><span class="o">);</span>
+
+        <span class="n">ColorMatrix</span> <span class="n">lumMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+        <span class="n">lumMatrix</span><span class="o">.</span><span class="na">setScale</span><span class="o">(</span><span class="n">lum</span><span class="o">,</span> <span class="n">lum</span><span class="o">,</span> <span class="n">lum</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+
+        <span class="n">ColorMatrix</span> <span class="n">imageMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+        <span class="n">imageMatrix</span><span class="o">.</span><span class="na">postConcat</span><span class="o">(</span><span class="n">hueMatrix</span><span class="o">);</span>
+        <span class="n">imageMatrix</span><span class="o">.</span><span class="na">postConcat</span><span class="o">(</span><span class="n">saturationMatrix</span><span class="o">);</span>
+        <span class="n">imageMatrix</span><span class="o">.</span><span class="na">postConcat</span><span class="o">(</span><span class="n">lumMatrix</span><span class="o">);</span>
+
+        <span class="n">paint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">ColorMatrixColorFilter</span><span class="o">(</span><span class="n">imageMatrix</span><span class="o">));</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">oriBmp</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">bmp</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>这里需要注意的是，Android系统不允许直接修改原图，类似 Photoshop 中的锁定，必须通过原图创建一个同样大小的 Bitmap ，并将原图绘制到该 Bitmap 中，以一个副本的形式来修改图像。 在设置好需要处理的颜色矩阵后，通过使用 Paint 类的 setColorFilter() 方法，将通过 imageMatrix 构造的 ColorMatrixColorFilter 对象传递进去，并使用这个画笔来绘制原来的图像，从而将颜色矩阵作用到图像中。</strong></p>
+
+<p>接下来我们看看这个demo的xml代码，很简单，一个 ImageView ，三个 SeekBar ，如下：</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;LinearLayout</span>
+    <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">xmlns:tools=</span><span class="s">"http://schemas.android.com/tools"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span>
+    <span class="na">tools:context=</span><span class="s">"com.example.deeson.mycolor.MainActivity"</span>
+    <span class="na">android:orientation=</span><span class="s">"vertical"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;ImageView</span>
+        <span class="na">android:id=</span><span class="s">"@+id/iv_photo"</span>
+        <span class="na">android:layout_width=</span><span class="s">"300dp"</span>
+        <span class="na">android:layout_height=</span><span class="s">"300dp"</span>
+        <span class="na">android:layout_gravity=</span><span class="s">"center_horizontal"</span>
+        <span class="na">android:layout_marginTop=</span><span class="s">"20dp"</span>
+        <span class="na">android:src=</span><span class="s">"@drawable/iv_model0"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;TextView</span>
+        <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_marginTop=</span><span class="s">"20dp"</span>
+        <span class="na">android:layout_marginLeft=</span><span class="s">"5dp"</span>
+        <span class="na">android:textColor=</span><span class="s">"@android:color/black"</span>
+        <span class="na">android:text=</span><span class="s">"色调"</span>
+        <span class="nt">/&gt;</span>
+    <span class="nt">&lt;SeekBar</span>
+        <span class="na">android:id=</span><span class="s">"@+id/seekbarHue"</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:max=</span><span class="s">"200"</span>
+        <span class="na">android:progress=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;TextView</span>
+        <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_marginTop=</span><span class="s">"10dp"</span>
+        <span class="na">android:layout_marginLeft=</span><span class="s">"5dp"</span>
+        <span class="na">android:textColor=</span><span class="s">"@android:color/black"</span>
+        <span class="na">android:text=</span><span class="s">"饱和度"</span>
+        <span class="nt">/&gt;</span>
+    <span class="nt">&lt;SeekBar</span>
+        <span class="na">android:id=</span><span class="s">"@+id/seekbarSaturation"</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:max=</span><span class="s">"200"</span>
+        <span class="na">android:progress=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;TextView</span>
+        <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:layout_marginTop=</span><span class="s">"10dp"</span>
+        <span class="na">android:layout_marginLeft=</span><span class="s">"5dp"</span>
+        <span class="na">android:textColor=</span><span class="s">"@android:color/black"</span>
+        <span class="na">android:text=</span><span class="s">"亮度"</span>
+        <span class="nt">/&gt;</span>
+    <span class="nt">&lt;SeekBar</span>
+        <span class="na">android:id=</span><span class="s">"@+id/seekbarLum"</span>
+        <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+        <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>
+        <span class="na">android:max=</span><span class="s">"200"</span>
+        <span class="na">android:progress=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<p>然后是 MainActivity 类的代码，就是获取三个 SeekBar 的值，如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">example</span><span class="o">.</span><span class="na">deeson</span><span class="o">.</span><span class="na">mycolor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">android.graphics.Bitmap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.graphics.BitmapFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.os.Bundle</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.support.v7.app.AppCompatActivity</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.ImageView</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">android.widget.SeekBar</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Deeson
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MainActivity</span> <span class="kd">extends</span> <span class="n">AppCompatActivity</span> <span class="kd">implements</span> <span class="n">SeekBar</span><span class="o">.</span><span class="na">OnSeekBarChangeListener</span> <span class="o">{</span>
+
+    <span class="n">ImageView</span> <span class="n">iv_photo</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">mHue</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">mSaturation</span> <span class="o">=</span> <span class="mi">1</span><span class="n">f</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">mLum</span> <span class="o">=</span> <span class="mi">1</span><span class="n">f</span><span class="o">;</span>
+    <span class="kt">float</span> <span class="n">MID_VALUE</span><span class="o">;</span>
+    <span class="n">Bitmap</span> <span class="n">oriBitmap</span><span class="o">,</span><span class="n">newBitmap</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">activity_main</span><span class="o">);</span>
+        <span class="n">iv_photo</span> <span class="o">=</span> <span class="o">(</span><span class="n">ImageView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">iv_photo</span><span class="o">);</span>
+        <span class="n">SeekBar</span> <span class="n">barHue</span> <span class="o">=</span> <span class="o">(</span><span class="n">SeekBar</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">seekbarHue</span><span class="o">);</span>
+        <span class="n">SeekBar</span> <span class="n">barSaturation</span> <span class="o">=</span> <span class="o">(</span><span class="n">SeekBar</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">seekbarSaturation</span><span class="o">);</span>
+        <span class="n">SeekBar</span> <span class="n">barLum</span> <span class="o">=</span> <span class="o">(</span><span class="n">SeekBar</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">seekbarLum</span><span class="o">);</span>
+        <span class="n">MID_VALUE</span> <span class="o">=</span> <span class="n">barHue</span><span class="o">.</span><span class="na">getMax</span><span class="o">()</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">F</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+        <span class="n">oriBitmap</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeResource</span><span class="o">(</span><span class="n">getResources</span><span class="o">(),</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">iv_model0</span><span class="o">);</span>
+        <span class="c1">//Android系统不允许直接修改原图</span>
+        <span class="n">newBitmap</span> <span class="o">=</span> <span class="n">Bitmap</span><span class="o">.</span><span class="na">createBitmap</span><span class="o">(</span><span class="n">oriBitmap</span><span class="o">.</span><span class="na">getWidth</span><span class="o">(),</span> <span class="n">oriBitmap</span><span class="o">.</span><span class="na">getHeight</span><span class="o">(),</span> <span class="n">Bitmap</span><span class="o">.</span><span class="na">Config</span><span class="o">.</span><span class="na">ARGB_8888</span><span class="o">);</span>
+        <span class="n">barHue</span><span class="o">.</span><span class="na">setOnSeekBarChangeListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">barSaturation</span><span class="o">.</span><span class="na">setOnSeekBarChangeListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="n">barLum</span><span class="o">.</span><span class="na">setOnSeekBarChangeListener</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onProgressChanged</span><span class="o">(</span><span class="n">SeekBar</span> <span class="n">seekBar</span><span class="o">,</span> <span class="kt">int</span> <span class="n">progress</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">fromUser</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">switch</span> <span class="o">(</span><span class="n">seekBar</span><span class="o">.</span><span class="na">getId</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">seekbarHue</span><span class="o">:</span>
+                <span class="n">mHue</span> <span class="o">=</span> <span class="o">(</span><span class="n">progress</span> <span class="o">-</span> <span class="n">MID_VALUE</span><span class="o">)</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">F</span> <span class="o">/</span> <span class="n">MID_VALUE</span> <span class="o">*</span> <span class="mi">180</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">seekbarSaturation</span><span class="o">:</span>
+                <span class="n">mSaturation</span> <span class="o">=</span> <span class="n">progress</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">F</span> <span class="o">/</span> <span class="n">MID_VALUE</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="k">case</span> <span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">seekbarLum</span><span class="o">:</span>
+                <span class="n">mLum</span> <span class="o">=</span> <span class="n">progress</span> <span class="o">*</span> <span class="mf">1.0</span><span class="n">F</span> <span class="o">/</span> <span class="n">MID_VALUE</span><span class="o">;</span>
+                <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">iv_photo</span><span class="o">.</span><span class="na">setImageBitmap</span><span class="o">(</span><span class="n">ImageHelper</span><span class="o">.</span><span class="na">handleImageEffect</span><span class="o">(</span><span class="n">oriBitmap</span><span class="o">,</span><span class="n">newBitmap</span><span class="o">,</span> <span class="n">mHue</span><span class="o">,</span> <span class="n">mSaturation</span><span class="o">,</span> <span class="n">mLum</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStartTrackingTouch</span><span class="o">(</span><span class="n">SeekBar</span> <span class="n">seekBar</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStopTrackingTouch</span><span class="o">(</span><span class="n">SeekBar</span> <span class="n">seekBar</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>MyColorDemo <a href="https://link.jianshu.com?t=https://github.com/DeesonWoo/MyColorDemo"> 源码下载 </a></p>
+
+<p>写到这里，我们差不多就可以自己实现一个图像美颜处理的APP。当然这只是一个整体的思路，中间还有很多的细节需要去完善。我们现在都知道改变颜色矩阵的系数就能达到一种意想不到的图片风格，比如什么xx色调，xx滤镜等等。无非是每种色调的颜色矩阵的系数不一样而已。</p>
+
+<h3 id="一些常用的图像处理效果的颜色矩阵">一些常用的图像处理效果的颜色矩阵</h3>
+
+<h5 id="灰度效果">灰度效果</h5>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zg879ejrj306f02h3yj.jpg" alt="image-20190613130949398" /></p>
+
+<p>灰度效果</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zg8eyzp1j30pl0ckk24.jpg" alt="image-20190613131002098" /></p>
+
+<p>灰度效果</p>
+
+<h5 id="图像反转">图像反转</h5>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg9g7cf1j305p02hglj.jpg" alt="image-20190613131101475" /></p>
+
+<p>图像反转</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg8r1if2j30pi0ciqfe.jpg" alt="image-20190613131021036" /></p>
+
+<p>图像反转</p>
+
+<h5 id="怀旧效果">怀旧效果</h5>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zg909yhpj307602hwek.jpg" alt="image-20190613131036246" /></p>
+
+<p>怀旧效果</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zga2q3gdj30pk0cmn9w.jpg" alt="image-20190613131137471" /></p>
+
+<p>怀旧效果</p>
+
+<h5 id="去色效果">去色效果</h5>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zgac1xc1j306202h0sn.jpg" alt="image-20190613131152469" /></p>
+
+<p>去色效果</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zgalua4wj30pn0ckth3.jpg" alt="image-20190613131207887" /></p>
+
+<p>去色效果</p>
+
+<h5 id="高饱和度">高饱和度</h5>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zgauerklj309d02hglq.jpg" alt="image-20190613131222164" /></p>
+
+<p>高饱和度</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zgb3t7a3j30pf0cjwrq.jpg" alt="image-20190613131236887" /></p>
+
+<p>高饱和度</p>
+
+<h5 id="色彩反色">色彩反色</h5>
+
+<p>这里是红绿反色，另外红蓝、蓝绿反色原理一样，就是把颜色初始矩阵中对应颜色通道的值交换处理，如下：</p>
+
+<p>色彩反色——红绿反色</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zgbdj2dcj304i02ha9z.jpg" alt="image-20190613131252701" /></p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zgbyqf5dj30pi0citl5.jpg" alt="image-20190613131326421" /></p>
+
+<p>色彩反色——红绿反色</p>
+
+<h4 id="后续">后续</h4>
+
+<p><strong>学习资料</strong>
+ 《Android群英传》</p>
+
+<p><strong>源码下载</strong>
+ MyColorMatrixDemo <a href="https://link.jianshu.com?t=https://github.com/DeesonWoo/MyColorMatrixDemo">下载地址</a>
+ MyColorDemo <a href="https://link.jianshu.com?t=https://github.com/DeesonWoo/MyColorDemo"> 源码下载</a></p>
+
+<p>作者：涤生_Woo</p>
+
+<p>链接：https://www.jianshu.com/p/9a44d04f39fc</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

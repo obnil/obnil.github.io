@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>高级渲染</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>高级渲染 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="高级渲染" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="渲染功能是应用程序最普遍的功能" />
+<meta property="og:description" content="渲染功能是应用程序最普遍的功能" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T04:30:42+00:00" />
+<script type="application/ld+json">
+{"description":"渲染功能是应用程序最普遍的功能","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/","headline":"高级渲染","dateModified":"2019-06-13T04:30:42+00:00","datePublished":"2019-06-13T04:30:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>高级渲染</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <blockquote>
+  <p>渲染功能是应用程序最普遍的功能，开发任何应用程序都是这样，一方面，设计师要求为用户展现可用性最高的超然体验，另一方面，那些华丽的图片和动画，并不是在所有的设备上都能刘畅地运行。我们来了解一下什么是渲染性能。
+首先，我们要知道Android系统每隔16ms就重新绘制一次Activity，也就是说，我们的应用必须在16ms内完成屏幕刷新的全部逻辑操作，这样才能达到每秒60帧，然而这个每秒帧数的参数由手机硬件所决定，现在大多数手机屏幕刷新率是60赫兹（赫兹是国际单位制中频率的单位，它是每秒中的周期性变动重复次数的计量），也就是说我们有16ms（1000ms/60次=16.66ms）的时间去完成每帧的绘制逻辑操作，如果错过了，比如说我们花费34ms才完成计算，那么就会出现我们称之为丢帧的情况。</p>
+</blockquote>
+
+<h6 id="简单理解16ms应该完成所有事情">简单理解16ms应该完成所有事情</h6>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zfbq7u3yj30jg09ago3.jpg" alt="image-20190613123837437" /></p>
+
+<h4 id="渲染管线">渲染管线</h4>
+
+<blockquote>
+  <p>Android系统的渲染管线分为两个关键组件：CPU和GPU，它们共同工作，在屏幕上绘制图片，每个组件都有自身定义&gt;的特定流程。我们必须遵守这些特定的操作规则才能达到效果。</p>
+</blockquote>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfc1sj03j305x06pq3t.jpg" alt="image-20190613123855911" /></p>
+
+<blockquote>
+  <p>在CPU方面，最常见的性能问题是不必要的布局和失效，这些内容必须在视图层次结构中进行测量、清除并重新创建，引发这种问题通常有两个原因：一是重建显示列表的次数太多，二是花费太多时间作废视图层次并进行不必要的重绘，这两个原因在更新显示列表或者其他缓存GPU资源时导致CPU工作过度。
+ 在GPU方面，最常见的问题是我们所说的过度绘制（overdraw），通常是在像素着色过程中，通过其他工具进行后期着色时浪费了GPU处理时间。
+ 接下来我们将讲解更多关于失效布局和重绘的内容，以及如何使用SDK中的工具找出拖累应用性能的原因</p>
+</blockquote>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zfcf5rdpj30dx090gow.jpg" alt="image-20190613123917086" /></p>
+
+<blockquote>
+  <p>想要开发一款性能优越的应用，我们必须了解底层是如何运行的。有一个主要问题就是，Activity是如何绘制到屏幕上的？那些复杂的XML布局文件和标记语言，是如何转化成用户能看懂的图像的？
+ 实际上，这是由格栅化操作来完成的，栅格化就是将例如字符串、按钮、路径或者形状的一些高级对象，拆分到不同的像素上在屏幕上进行显示，栅格化是一个非常费时的操作。我们所有人的手机里面都有一块特殊硬件，它就是图像处理器（GPU显卡的处理器），目的就是加快栅格化的操作，GPU在上个世纪90年代被引入用来帮助加快栅格化操作。</p>
+</blockquote>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfcrimshj307k051wfn.jpg" alt="image-20190613123936824" /></p>
+
+<blockquote>
+  <p>GPU使用一些指定的基础指令集，主要是多边形和纹理，也就是图片，CPU在屏幕上绘制图像前会向GPU输入这些指令，这一过程通常使用的API就是Android的OpenGL ES，这就是说，在屏幕上绘制UI对象时无论是按钮、路径或者复选框，都需要在CPU中首先转换为多边形或者纹理，然后再传递给GPU进行栅格化。</p>
+</blockquote>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfd2l2azj306n07mab8.jpg" alt="image-20190613123954204" /></p>
+
+<p>polygons多边形和textures纹理</p>
+
+<blockquote>
+  <p>我们要知道，一个UI对象转换为一系列多边形和纹理的过程肯定相当耗时，从CPU上传处理数据到GPU同样也很耗时。所以很明显，我们需要尽量减少对象转换的次数，以及上传数据的次数，幸亏，OpenGL ES API允许数据上传到GPU后可以对数据进行保存，当我们下次绘制一个按钮时，只需要在GPU存储器里引用它，然后告诉OpenGL如何绘制就可以了，一条经验之谈：渲染性能的优化就是尽可能地上传数据到GPU，然后尽可能长地在不修改的情况下保存数据，因为每次上传资源到GPU时，我们都会浪费宝贵的处理时间，Android系统的Honeycomb版本发布之后，整个UI渲染系统就在GPU中运行，之后各个版本都在渲染系统性能方面有更多改进。
+ Android系统在降低、重新利用GPU资源方面做了很多工作，这方面完全不用担心，举例说，任何我们的主题所提供的资源，例如Bitmaps、Drawables等都是一起打包到统一的纹理当中，然后使用网格工具上传到GPU，例如Nine Patches等，这样每次我需要绘制这些资源时，我们就不用做任何转换，他们已经存储在GPU中了，大大加快了这些视图类型的显示。然而随着UI对象的不断升级，渲染流程也变得越来越复杂，例如说绘制图像，就是把图片上传到CPU存储器，然后传递到GPU中进行渲染。路径使用时完全另外一码事，我们需要在CPU中创建一系列的多边形，甚至在GPU中创建掩蔽纹理来定义路径。绘制字符就更加复杂一些，首先我们需要在CPU中把字符绘制制成图像，然后把图像上传到GPU进行渲染再返回到CPU，在屏幕上为字符串的每个字符绘制一个正方形。</p>
+</blockquote>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfdd6m2bj306h077ta1.jpg" alt="image-20190613124011816" /></p>
+
+<h5 id="总结上述原因在我们的绘制渲染机制里面比较耗时的">总结上述原因，在我们的绘制渲染机制里面比较耗时的：</h5>
+
+<h6 id="1cpu计算时间">1.CPU计算时间</h6>
+
+<p>CPU的优化，从减轻加工View对象成Polygons和Texture来下手
+ View Hierarchy中包涵了太多没有的View，这些view根本就不会显示在屏幕上面，一旦触发测量和布局操作，就会拖累应用的性能表现。</p>
+
+<h6 id="2cpu将计算好的polygons和texture传递到gpu的时候也需要时间">2.CPU将计算好的Polygons和Texture传递到GPU的时候也需要时间</h6>
+
+<p>OpenGL ES API允许数据上传到GPU后可以对数据进行保存，缓存到display list。因此，我们平移等操作一个view是几乎不怎么耗时的。</p>
+
+<h6 id="3gpu进行栅格化">3.GPU进行栅格化</h6>
+
+<h6 id="cpu优化建议">CPU优化建议</h6>
+
+<p>针对CPU的优化，从减轻加工View对象成Polygons和Texture来下手：</p>
+
+<p>View Hierarchy中包涵了太多的没有用的view，这些view根本就不会显示在屏幕上面，一旦触发测量和布局操作，就会拖累应用的性能表现。那么我们就需要利用工具进行分析。</p>
+
+<p>如何找出里面没用的view呢？或者减少不必要的view嵌套。</p>
+
+<p>我们利用工具：Hierarchy Viewer进行检测，优化思想是：查看自己的布局，层次是否很深以及渲染比较耗时，然后想办法能否减少层级以及优化每一个View的渲染时间。</p>
+
+<p>我们打开APP，然后打开Android Device Monitor，然后切换到Hierarchy Viewer面板。除了看层次结构之外，还可以看到一些耗时的信息：</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zfdstnvuj30f50bp76w.jpg" alt="image-20190613124036383" /></p>
+
+<blockquote>
+  <p>三个圆点分别代表：测量、布局、绘制三个阶段的性能表现。
+ 1）绿色：渲染的管道阶段，这个视图的渲染速度快于至少一半的其他的视图。
+ 2）黄色：渲染速度比较慢的50%。
+ 3）红色：渲染速度非常慢。</p>
+</blockquote>
+
+<p>优化思想:查看自己的布局，层次是否很深以及渲染比较耗时，然后想办法能否减少层级以及优化每一个View的渲染时间。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zfe4djxvj30fe0bead9.jpg" alt="image-20190613124055249" /></p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfee2w1hj30fe0cedie.jpg" alt="image-20190613124110575" /></p>
+
+<p>优化建议：</p>
+
+<p>1.当我们的布局是用的FrameLayout的时候，我们可以把它改成merge，可以避免自己的帧布局和系统的ContentFrameLayout帧布局重叠造成重复计算(measure和layout)。
+ 2.使用ViewStub：当加载的时候才会占用。不加载的时候就是隐藏的，仅仅占用位置。</p>
+
+<h6 id="gpu优化建议就是一句话尽量避免过度绘制overdraw">GPU优化建议就是一句话：尽量避免过度绘制（overdraw）</h6>
+
+<blockquote>
+  <p>GPU的主要问题 -过度绘制（overdraw）
+ 如果我们曾经粉刷过房子，我们应该知道，给墙壁粉刷工作量非常大，如果我们需要重新粉刷，第一次的粉刷就白干了。同样的道理，我们的应用程序会因为过度绘制，从而导致性能问题，如果我们想兼顾高性能和完美的设计，往往会碰到一种性能问题，即过度绘制。过度绘制是一个术语，指的是屏幕上的某个像素点在同一帧的时间内被绘制了多次。假如我们有一堆重叠的UI卡片，最接近用户的卡片在最上面，其余卡片都藏在下面，也就是说我们花大力气绘制的那些下面的卡片基本都是不可见的。</p>
+</blockquote>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zfepx4gtj30a907x76h.jpg" alt="image-20190613124129902" /></p>
+
+<blockquote>
+  <p>问题就在于此，因为每次像素经过渲染后，并不是用户最后看到的部分，这就是在浪费GPU的时间。目前流行的一些布局是一把双刃剑，带给我们漂亮视觉感受的同时，也造成过度绘制的问题，为了最大限度地提高应用程序的性能，我们必须尽量减少过度绘制。幸运的是，Android手机提供了查看过度绘制情况的工具，在开发者选项中打开“Show GPU overdraw”选项，手机屏幕显示会出现一些异常不用过于惊慌，Android在屏幕上使用不同颜色，标记过度绘制的区域，如果某个像素点只渲染了一次，我们看到的是它原来的颜色，随着过度绘制的增多，标记颜色也会逐渐加深，例如1倍过度绘制会被标记为蓝色，2倍、3倍、4倍过度绘制遵循同样的模式。所以当我们调试应用程序的用户界面时，目标就是尽可能的减少过度绘制，将红色区块转变成蓝色区块，为了完成目标有两种清楚过度绘制的方法，首先要从视图中清楚那些，不必要的背景和图片，他们不会在最终渲染图像中显示，记住，这些都会影响性能。其次，对视图中重叠的屏幕区域进行定义，从而降低CPU和GPU的消耗，接下来我们深入了解过度绘制</p>
+</blockquote>
+
+<h5 id="1背景经常容易造成过度绘制">1、背景经常容易造成过度绘制。</h5>
+
+<p>手机开发者选项里面找到工具：Debug GPU overdraw，其中，不同颜色代表了绘制了几次：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfezl5b8j307b088wgb.jpg" alt="image-20190613124145312" /></p>
+
+<p>举例
+ 由于我们布局设置了背景，同时用到的MaterialDesign的主题会默认给一个背景。解决的办法：将主题添加的背景去掉：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//将主题的背景去掉</span>
+<span class="n">getWindow</span><span class="o">().</span><span class="na">setBackgroundDrawable</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>又例如我们的根布局经常会设置重复的背景，那么这时候就应该去掉一些不必要的背景。</p>
+
+<p>还有的就是，我们在写列表控件的时候，如果Item在没有图片的时候需要一个背景色的时候，那么我们这时候就需要灵活地利用透明色来防止过度绘制：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">if</span> <span class="o">(</span><span class="n">chat</span><span class="o">.</span><span class="na">getAuthor</span><span class="o">().</span><span class="na">getAvatarId</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">Picasso</span><span class="o">.</span><span class="na">with</span><span class="o">(</span><span class="n">getContext</span><span class="o">()).</span><span class="na">load</span><span class="o">(</span><span class="n">chat</span><span class="o">.</span><span class="na">getAuthor</span><span class="o">().</span><span class="na">getAvatarId</span><span class="o">()).</span><span class="na">into</span><span class="o">(</span>
+                    <span class="n">chat_author_avatar</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">chat_author_avatar</span><span class="o">.</span><span class="na">setBackgroundColor</span><span class="o">(</span><span class="n">chat</span><span class="o">.</span><span class="na">getAuthor</span><span class="o">().</span><span class="na">getColor</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zfgc4g4mj30dc0nqai6.jpg" alt="image-20190613124302446" /></p>
+
+<h5 id="listview-item中设置图片的同时要设置背景colortransparent-防止因复用导致的过度绘制">ListView item中设置图片的同时，要设置背景Color.TRANSPARENT 防止因复用导致的过度绘制</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">chat</span><span class="o">.</span><span class="na">getAuthor</span><span class="o">().</span><span class="na">getAvatarId</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">//没有头像的时候，需要把Drawable设置为透明，防止过度绘制（每次都要设置，因为Item会复用）</span>
+    <span class="n">Picasso</span><span class="o">.</span><span class="na">with</span><span class="o">(</span><span class="n">getContext</span><span class="o">()).</span><span class="na">load</span><span class="o">(</span><span class="n">android</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">color</span><span class="o">.</span><span class="na">transparent</span><span class="o">).</span><span class="na">into</span><span class="o">(</span><span class="n">chat_author_avatar</span><span class="o">);</span>
+    <span class="c1">//没有头像的时候，需要设置默认的背景色</span>
+    <span class="n">chat_author_avatar</span><span class="o">.</span><span class="na">setBackgroundColor</span><span class="o">(</span><span class="n">chat</span><span class="o">.</span><span class="na">getAuthor</span><span class="o">().</span><span class="na">getColor</span><span class="o">());</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="c1">//有头像的时候，直接设置头像，并且把背景色设置为透明，同样也是防止过度绘制</span>
+    <span class="n">Picasso</span><span class="o">.</span><span class="na">with</span><span class="o">(</span><span class="n">getContext</span><span class="o">()).</span><span class="na">load</span><span class="o">(</span><span class="n">chat</span><span class="o">.</span><span class="na">getAuthor</span><span class="o">().</span><span class="na">getAvatarId</span><span class="o">()).</span><span class="na">into</span><span class="o">(</span>
+            <span class="n">chat_author_avatar</span><span class="o">);</span>
+    <span class="n">chat_author_avatar</span><span class="o">.</span><span class="na">setBackgroundColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">TRANSPARENT</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfgn4o62j30dc0nqdnf.jpg" alt="image-20190613124320426" /></p>
+
+<p>发现设置的图片过度绘制颜色由红色变为绿色，减少了过渡绘制</p>
+
+<h5 id="2自定义控件处理过度绘制">2.自定义控件处理过度绘制。</h5>
+
+<p>如果我们的自定义控件存在一些被遮挡的不需要显示的区域，可以通过画布的裁剪来处理</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DroidCardsView</span> <span class="kd">extends</span> <span class="n">View</span> <span class="o">{</span>
+    <span class="c1">//图片与图片之间的间距</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">mCardSpacing</span> <span class="o">=</span> <span class="mi">150</span><span class="o">;</span>
+    <span class="c1">//图片与左侧距离的记录</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">mCardLeft</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">DroidCard</span><span class="o">&gt;</span> <span class="n">mDroidCards</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">DroidCard</span><span class="o">&gt;();</span>
+
+    <span class="kd">private</span> <span class="n">Paint</span> <span class="n">paint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nf">DroidCardsView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+        <span class="n">initCards</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">DroidCardsView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="n">initCards</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 初始化卡片集合
+     */</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">initCards</span><span class="o">(){</span>
+        <span class="n">Resources</span> <span class="n">res</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">();</span>
+        <span class="n">mDroidCards</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">DroidCard</span><span class="o">(</span><span class="n">res</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">alex</span><span class="o">,</span><span class="n">mCardLeft</span><span class="o">));</span>
+
+        <span class="n">mCardLeft</span><span class="o">+=</span><span class="n">mCardSpacing</span><span class="o">;</span>
+        <span class="n">mDroidCards</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">DroidCard</span><span class="o">(</span><span class="n">res</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">claire</span><span class="o">,</span><span class="n">mCardLeft</span><span class="o">));</span>
+
+        <span class="n">mCardLeft</span><span class="o">+=</span><span class="n">mCardSpacing</span><span class="o">;</span>
+        <span class="n">mDroidCards</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">DroidCard</span><span class="o">(</span><span class="n">res</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">kathryn</span><span class="o">,</span><span class="n">mCardLeft</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">DroidCard</span> <span class="n">c</span> <span class="o">:</span> <span class="n">mDroidCards</span><span class="o">){</span>
+            <span class="n">drawDroidCard</span><span class="o">(</span><span class="n">canvas</span><span class="o">,</span> <span class="n">c</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">invalidate</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 绘制DroidCard
+     * @param canvas
+     * @param c
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">drawDroidCard</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">,</span> <span class="n">DroidCard</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">bitmap</span><span class="o">,</span><span class="n">c</span><span class="o">.</span><span class="na">x</span><span class="o">,</span><span class="mi">0</span><span class="n">f</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zfh5vqfmj30dc0nqgpx.jpg" alt="image-20190613124336757" /></p>
+
+<h5 id="自定义控件中通过画布的裁剪处理掉不需要显示的区域">自定义控件中，通过画布的裁剪，处理掉不需要显示的区域</h5>
+
+<blockquote>
+  <p>canvas.clipRect(c.x,0.0f,mDroidCards.get(i+1).x,c.height); //裁剪函数</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DroidCardsView</span> <span class="kd">extends</span> <span class="n">View</span> <span class="o">{</span>
+    <span class="c1">//图片与图片之间的间距</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">mCardSpacing</span> <span class="o">=</span> <span class="mi">150</span><span class="o">;</span>
+    <span class="c1">//图片与左侧距离的记录</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">mCardLeft</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">DroidCard</span><span class="o">&gt;</span> <span class="n">mDroidCards</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">DroidCard</span><span class="o">&gt;();</span>
+
+    <span class="kd">private</span> <span class="n">Paint</span> <span class="n">paint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nf">DroidCardsView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+        <span class="n">initCards</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">DroidCardsView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="n">initCards</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 初始化卡片集合
+     */</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">initCards</span><span class="o">(){</span>
+        <span class="n">Resources</span> <span class="n">res</span> <span class="o">=</span> <span class="n">getResources</span><span class="o">();</span>
+        <span class="n">mDroidCards</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">DroidCard</span><span class="o">(</span><span class="n">res</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">alex</span><span class="o">,</span><span class="n">mCardLeft</span><span class="o">));</span>
+
+        <span class="n">mCardLeft</span><span class="o">+=</span><span class="n">mCardSpacing</span><span class="o">;</span>
+        <span class="n">mDroidCards</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">DroidCard</span><span class="o">(</span><span class="n">res</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">claire</span><span class="o">,</span><span class="n">mCardLeft</span><span class="o">));</span>
+
+        <span class="n">mCardLeft</span><span class="o">+=</span><span class="n">mCardSpacing</span><span class="o">;</span>
+        <span class="n">mDroidCards</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">DroidCard</span><span class="o">(</span><span class="n">res</span><span class="o">,</span><span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">kathryn</span><span class="o">,</span><span class="n">mCardLeft</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">mDroidCards</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">++){</span>
+            <span class="n">DroidCard</span> <span class="n">droidCard</span> <span class="o">=</span> <span class="n">mDroidCards</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">drawDroidCard</span><span class="o">(</span><span class="n">canvas</span><span class="o">,</span><span class="n">droidCard</span><span class="o">,</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">last</span> <span class="o">=</span> <span class="n">mDroidCards</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">last</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">){</span>
+            <span class="n">drawDroidCard</span><span class="o">(</span><span class="n">canvas</span><span class="o">,</span><span class="n">mDroidCards</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">last</span><span class="o">));</span>
+        <span class="o">}</span>
+
+        <span class="n">invalidate</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 绘制DroidCard
+     * @param canvas
+     * @param c
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">drawDroidCard</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">,</span> <span class="n">DroidCard</span> <span class="n">c</span><span class="o">,</span><span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">//  canvas.drawBitmap(c.bitmap,c.x,0f,paint);</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">save</span><span class="o">();</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">clipRect</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">x</span><span class="o">,</span><span class="mf">0.0f</span><span class="o">,</span><span class="n">mDroidCards</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">).</span><span class="na">x</span><span class="o">,</span><span class="n">c</span><span class="o">.</span><span class="na">height</span><span class="o">);</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">bitmap</span><span class="o">,</span><span class="n">c</span><span class="o">.</span><span class="na">x</span><span class="o">,</span><span class="mi">0</span><span class="n">f</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">restore</span><span class="o">();</span><span class="c1">//裁剪和绘制完毕后恢复画布</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 绘制最后一张
+     * @param canvas
+     * @param c
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">drawDroidCard</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">,</span> <span class="n">DroidCard</span> <span class="n">c</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">bitmap</span><span class="o">,</span><span class="n">c</span><span class="o">.</span><span class="na">x</span><span class="o">,</span><span class="mi">0</span><span class="n">f</span><span class="o">,</span><span class="n">paint</span><span class="o">);</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zfh9lga1j30dc0nq0wv.jpg" alt="image-20190613124356394" /></p>
+
+<p>作者：锐心凌志</p>
+
+<p>链接：https://www.jianshu.com/p/0e19e2f780d1</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

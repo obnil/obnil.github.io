@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Handler源码分析</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Handler源码分析 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Handler源码分析" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Android SDK中用来处理异步消息的核心类，子线程可以通过Handler来通知主线程进行更新UI" />
+<meta property="og:description" content="Android SDK中用来处理异步消息的核心类，子线程可以通过Handler来通知主线程进行更新UI" />
+<link rel="canonical" href="http://localhost:4000/2019-03-29/Handler%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" />
+<meta property="og:url" content="http://localhost:4000/2019-03-29/Handler%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-29T07:40:42+00:00" />
+<script type="application/ld+json">
+{"description":"Android SDK中用来处理异步消息的核心类，子线程可以通过Handler来通知主线程进行更新UI","@type":"BlogPosting","url":"http://localhost:4000/2019-03-29/Handler%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/","headline":"Handler源码分析","dateModified":"2019-03-29T07:40:42+00:00","datePublished":"2019-03-29T07:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-03-29/Handler%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>Handler源码分析</h1>
+    <div class="post-date">
+        2019年03月29日
+    </div>
+
+    <h3 id="一什么是handelr">一.什么是Handelr</h3>
+
+<ul>
+  <li>Android SDK中用来处理异步消息的核心类</li>
+  <li>子现程可以通过Handler来通知主线程进行更新UI</li>
+</ul>
+
+<h3 id="二handler机制的核心类">二.Handler机制的核心类</h3>
+
+<ul>
+  <li>Handler</li>
+  <li>Message</li>
+  <li>Looper</li>
+  <li>MessageQueue
+ 1.Message：
+ 在整个消息处理机制中，message又叫task，封装了任务携带的消息和处理该任务的handler。有这么几点需要处理：
+ （1）尽管Message有public 的默认构造方法，但是你应该通过Message.obtain()来从消息池中获得空消息对象，以节省资源
+ （2） message  如果只需要携带简单的int信息，请优先使用arg1和arg2来传递信息，这比用bundler更节省内存。</li>
+</ul>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zmy7n0lqj30rs0iujw4.jpg" alt="image-20190613170225093" /></p>
+
+<h3 id="三源码分析">三.源码分析</h3>
+
+<h6 id="1handler在哪个地方使用在哪个地方点进去看">1.handler在哪个地方使用在哪个地方点进去看</h6>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmyh4xoqj30rs0m9k0w.jpg" alt="image-20190613170240436" /></p>
+
+<h6 id="2进入到sendmessage">2.进入到sendMessage()</h6>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zmysoldhj30rs06fgo0.jpg" alt="image-20190613170259326" /></p>
+
+<h6 id="3再进入到sendmessagedelayed">3.再进入到sendMessageDelayed()</h6>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zmz3bx18j30rs0ftdof.jpg" alt="image-20190613170314222" /></p>
+
+<h6 id="4进入sendmessageattime">4.进入sendMessageAtTime()</h6>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zmzlby2zj30rs0glq4p.jpg" alt="" /></p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmzxtzh7j30rs08h3zw.jpg" alt="" /></p>
+
+<p>会看到调用的各种发送消息的方法，最终都会走到这个方法。</p>
+
+<h6 id="5msg-里面有个成员变量拿到了handler的引用最后一句代码进入消息队列">5.msg 里面有个成员变量拿到了handler的引用，最后一句代码进入消息队列</h6>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zn075ynlj30rs0ct75a.jpg" alt="" /></p>
+
+<h6 id="6点进入messagequeue中看">6.点进入MessageQueue中看</h6>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn0juzbmj30rs0ih0ui.jpg" alt="" /></p>
+
+<p>消息入队方法enqueueMessage()，一个线程就只有一个消息队列 ，这里的MessageQueue不是一个链表结构，其实它是一个链式结构，就是单链。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zn0sc7vyj30rs0hqjt2.jpg" alt="" /></p>
+
+<p>这里大致，就是根据延时时间把要插入的message插入响应的位置，如果延时时间为0，新消息就会插入到队头，如果延时时间不为0 就会和队列里的其他消息对比插入到应用位置。</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zn1185eoj30rs0hzta7.jpg" alt="" /></p>
+
+<p>既然有入队，对应就有出队，出队是在messageQuenue方法中的next（）方法，就是把message消息从队列里面取出返还给looper</p>
+
+<h6 id="7点进looper看">7.点进looper看</h6>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zn1bw979j30rs0m7jto.jpg" alt="" /></p>
+
+<p>looper 中拿出消息，有可能会堵塞，当我们队里里面没有消息，或者message的延时时间没到，他就会进行堵塞。</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zn1ktgw2j30rs0ky40x.jpg" alt="" /></p>
+
+<p>上面说过msg 的target保存的是handler 的引用，所以这句话调用的是handler 的dispatchMessage（）方法，然后我们回到handler 看看这个方法。</p>
+
+<h6 id="8回到handler类">8.回到Handler类</h6>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn1tpmdpj30rs0ljq4d.jpg" alt="" /></p>
+
+<p>然后看到数据的方法在dispatchmessage中最后调用了handlerMessage（）</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zn22l9s6j30rs087wep.jpg" alt="" /></p>
+
+<p>这个handelMessage是子类必须实现的方法，也就是我们创建handler 必须实现的方法。</p>
+
+<h6 id="9回到我们创建的handler子类">9.回到我们创建的Handler子类</h6>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn29mdbaj30rs0c5wff.jpg" alt="" /></p>
+
+<p>其实如果我们的message不拿handler 这个句柄的话也可以实现，我们也可以再创建一个类，把message传给这个类，像实现handlemessage方法一样，但是这样我们使用者就要学习更多的handelr 知识，不但要了解handler还要会使用新类和message，这就导致我们学习成本更高了，所以这也是一个设计思想，方便使用者更简单，更方便的调用，直接把message返回给handler引用，传入到handlerMessage方法，让子类去实现这个方法，</p>
+
+<h4 id="下面我们来具体的梳理下流程">下面我们来具体的梳理下流程</h4>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zn2i4ykrj30rs0d1t94.jpg" alt="" /></p>
+
+<p>1.创建Handler子类通过调用sendMessage() 发送消息
+ 2.Handelr 最终调用messageQuene的enqueueMessage()将消息传入到消息队列中
+ 3.Looper中的调用MessageQueue的next()方法将取出消息。
+ 4.Looper中通过Message的成员变量target拿到Handler的引用，继而回调到Handler的 handelMessage()方法
+ 5.消息回到我们创建的子类实现的HandelMessage()方法</p>
+
+<h3 id="四但是现在有几个疑问">四.但是现在有几个疑问</h3>
+
+<ul>
+  <li>looper 谁调用的</li>
+  <li>sendMessage是在子线程中发送的消息，为什么最后handleMessage 又回到了主线程</li>
+  <li>为什么messagequen 只有一个</li>
+</ul>
+
+<h6 id="1looper中创建messagequeue-主线程中activitythread调用looper">1.Looper中创建MessageQueue ，主线程中ActivityThread调用Looper。</h6>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zn36hnwwj30rs0h8gms.jpg" alt="" /></p>
+
+<p>我们看我们new Handelr() 里面调用了this(null,false),false 又是什么</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zn3ewmoyj30rs0dswfr.jpg" alt="" /></p>
+
+<p>代表callback 和async ，callback又是什么，我们回到dispatchMessage方法看</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zn3mrzi9j30rs0dagmd.jpg" alt="" /></p>
+
+<p>我们创建时 callback为空就会进入else方法，else里面又为空，就会走handlerMessage方法</p>
+
+<p>再看Handler构造函数中调用Looper.myLooper(),</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zn41r523j30rs0b4ab5.jpg" alt="" /></p>
+
+<p>再点进ThreadLocal是什么东西</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zn4j6ak6j30rs0by0u5.jpg" alt="" /></p>
+
+<p>ThreadLocal是做线程间数据隔离用的，就类似我们多线程操作共享数据，需要有同步锁机制，我们就记住，ThreadLocal对象最后返回的是当前线程的Looper对象</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn4sjw7wj30rs0chwfn.jpg" alt="" /></p>
+
+<p>最后回到handler 中看如果mLooper 为空就会抛出异常，因为还没有调用Looper.prepar（），下面 mQuene=mLooper.mQueue,消息队列实际是从Looper中返回的，他是在Looper里，再来看Looper.prepar()是干什么</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zn51jskuj30rs0dgjsl.jpg" alt="" /></p>
+
+<p>点进prepare()</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn5bs90lj30rs05qt93.jpg" alt="" /></p>
+
+<p>prepare() 如果不为空，抛出异常，提示一个线程只能有一个Looper ，为空则创建一个Looper ，ThreadLocal 操作和map很像通过set去放，通过get去拉，点击newLooper看</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zn6j6o1tj30rs0fvgmz.jpg" alt="" /></p>
+
+<p>创建了一个MessageQuene</p>
+
+<p>在回到Looper中看，刚才prepare传的是true，还有什么地方传false，原来prepareMainLooper().传的是false ，那prepareMainLooper是谁调用的</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn7bqwd8j30rs06cjro.jpg" alt="" /></p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zn7b63blj30rs0i5q4d.jpg" alt="" /></p>
+
+<p>ActivityThread 类里面调用了这个方法，那为什么主线程会传prepare()会传false，因为主线程的looper 是不允许退出的 ，因为你退出了再发handler 消息谁来处理呢
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zn7mk5aoj30rs0flta8.jpg" alt="" /></p>
+
+<p>再来看looper的构造函数为私有，也就是一个线程只有一个looper，每个线程也就有一个对应的looper  ，一个looper 又只有一个meesageQuene 也就是一个线程里只有个messageQuen 一个looper</p>
+
+<h6 id="2handler-消息驱动">2.Handler 消息驱动</h6>
+
+<p>再来考虑一个问题，为什么looper 轮训器一直轮训messagequne缺没有造成阻塞
+ <img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zn7u3z2aj30rs0jijtd.jpg" alt="" /></p>
+
+<p>看for循环中有消息就立即处理，因此handler 是通过</p>
+
+<p>消息驱动</p>
+
+<p>的，没有阻塞说明有消息要处理，阻塞是因为没有消息，或消息的延时时间未到</p>
+
+<h6 id="3handler-线程切换由于线程间内存共享">3.Handler 线程切换由于线程间内存共享</h6>
+
+<p>为什么会切换线程：一个app里面的内存，就是我们进程，进程与进程之前的内存是不共享的，但是线程与线程之间的内存是共享的，在子线程能拿到主线程创建的handler，而主线程的looper 对象是在ActivityThread中main方法创建的 那looper.looper()也在主线程中，那looper 中的dispatchMessage().也是在主线程 ，也就是创建和接受在主线程中 只有发送和入队是在子线程中</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zn881sxaj30rs0c2q3m.jpg" alt="" /></p>
+
+<p>看完handler源码 很明显的看到handler 的设计模式就是一个生产者与消费者的模式</p>
+
+<h4 id="总结">总结：</h4>
+
+<p>1.一个线程中只能有一个looper 所以，一个线程也就只能有一个MessageQueue，因为 Looper在构造方法中创建MessageQueue 队列 。</p>
+
+<p>2.主线程的Looper 调用默认在ActivityThread中已经调用开启。</p>
+
+<p>3.Handler是消息驱动的所以Looper轮训器一直轮询消息并没有阻塞主线程。</p>
+
+<p>4.Handler实现线程切换的原因是线程间内存是共享的。</p>
+
+<p>5.MessageQueue中有两个主要的方法，一个是消息入队方法enqueueMessage() 一个是消息出队方法 next()</p>
+
+<p>(1)enqueueMessage()：消息入队，插入消息的时候对消息进行排序</p>
+
+<p>(2)next()：消息出队，next 方法在looper中调用，消息出队过程中会出现队列阻塞，阻塞原因就是队头的消息延迟时间未到，或者现在消息队列没有消息</p>
+
+<p><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fstudy.163.com%2Fcourse%2FcourseLearn.htm%3FcourseId%3D1209146813%23%2Flearn%2Flive%3FlessonId%3D1278714699%26courseId%3D1209146813">https://study.163.com/course/courseLearn.htm?courseId=1209146813#/learn/live?lessonId=1278714699&amp;courseId=1209146813</a></p>
+
+<p>作者：苏大燕子</p>
+
+<p>链接：https://www.jianshu.com/p/b891fc26811f</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

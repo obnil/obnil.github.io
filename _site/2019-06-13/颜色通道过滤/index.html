@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>颜色通道过滤</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>颜色通道过滤 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="颜色通道过滤" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="对图像进行一定的过滤加工处理。使用Paint设置滤镜效果" />
+<meta property="og:description" content="对图像进行一定的过滤加工处理。使用Paint设置滤镜效果" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/%E9%A2%9C%E8%89%B2%E9%80%9A%E9%81%93%E8%BF%87%E6%BB%A4/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/%E9%A2%9C%E8%89%B2%E9%80%9A%E9%81%93%E8%BF%87%E6%BB%A4/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T05:34:42+00:00" />
+<script type="application/ld+json">
+{"description":"对图像进行一定的过滤加工处理。使用Paint设置滤镜效果","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/%E9%A2%9C%E8%89%B2%E9%80%9A%E9%81%93%E8%BF%87%E6%BB%A4/","headline":"颜色通道过滤","dateModified":"2019-06-13T05:34:42+00:00","datePublished":"2019-06-13T05:34:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/%E9%A2%9C%E8%89%B2%E9%80%9A%E9%81%93%E8%BF%87%E6%BB%A4/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>颜色通道过滤</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <h4 id="一setcolorfilter">一、setColorFilter</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ColorFilter setColorFilter(ColorFilter filter)
+</code></pre></div></div>
+
+<p>在前面我们学习过Paint的<strong>setColor</strong>方法，这里又多了一个<strong>setColorFilter</strong>颜色过滤，看到这里你肯定会疑惑，你说你一个“笔”有颜色还算正常，你还能过滤颜色？
+ 那么<strong>过滤颜色</strong>是什么意思呢？其实就像我们现实中的<strong>筛子</strong>，过滤掉不要的杂质，得到想要的东西，这里的意思就是把颜色“过滤”一遍，得到我们想要的色彩.</p>
+
+<p>仔细观察Paint的这个方法，它需要一个ColorFilter 对象，而且还会返回一个ColorFilter 对象，ColorFilter 翻译为中文就是<strong>颜色过滤器</strong>，也就是<strong>筛子</strong>，在绘图软件中被称为<strong>颜色滤镜</strong>.</p>
+
+<p>我们再来看ColorFilter 的源码：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ColorFilter</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="n">native_instance</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">finalize</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">finalize</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">destroyFilter</span><span class="o">(</span><span class="n">native_instance</span><span class="o">);</span>
+            <span class="n">native_instance</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kd">native</span> <span class="kt">void</span> <span class="nf">destroyFilter</span><span class="o">(</span><span class="kt">long</span> <span class="n">native_instance</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>发现ColorFilter 源码里面基本啥都没有，这时候我们应该想到：ColorFilter 肯定有子类.
+ 不错，ColorFilter 有3个子类：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zmgocyc6j30c302ldgy.jpg" alt="image-20190613164533884" /></p>
+
+<p>那么接下来就是解析这3个子类了.</p>
+
+<h4 id="二colormatrixcolorfilter">二、ColorMatrixColorFilter</h4>
+
+<p>这个类翻译为中文就是<strong>色彩矩阵颜色过滤器</strong>，我们来看一下这个类的成员变量、构造方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ColorMatrixColorFilter</span> <span class="kd">extends</span> <span class="n">ColorFilter</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">ColorMatrix</span> <span class="n">mMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="nf">ColorMatrixColorFilter</span><span class="o">(</span><span class="n">ColorMatrix</span> <span class="n">matrix</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mMatrix</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">matrix</span><span class="o">);</span>  <span class="c1">//★</span>
+        <span class="o">......</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">ColorMatrixColorFilter</span><span class="o">(</span><span class="kt">float</span><span class="o">[]</span> <span class="n">array</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">array</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArrayIndexOutOfBoundsException</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">mMatrix</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">array</span><span class="o">);</span>  <span class="c1">//★</span>
+        <span class="o">......</span>
+    <span class="o">}</span>
+      <span class="o">......</span>
+</code></pre></div></div>
+
+<p>这个类也很简单，初始化的时候需要一个ColorMatrix 对象或者一个色彩矩阵数组，这两者最终都是设置给了其成员变量<strong>mMatrix</strong> ，所以我们需要关心的就是<strong>ColorMatrix （色彩矩阵）</strong>这个类了.</p>
+
+<h5 id="1colormatrix">1、ColorMatrix</h5>
+
+<p>在Android中：一个色彩信息包含R、G、B、Alpha信息，而修改色彩信息，需要使用ColorMatrix：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ColorMatrix</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">float</span><span class="o">[]</span> <span class="n">mArray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">float</span><span class="o">[</span><span class="mi">20</span><span class="o">];</span>
+
+    <span class="kd">public</span> <span class="nf">ColorMatrix</span><span class="o">()</span> <span class="o">{</span>
+      <span class="o">......</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">ColorMatrix</span><span class="o">(</span><span class="kt">float</span><span class="o">[]</span> <span class="n">src</span><span class="o">)</span> <span class="o">{</span>
+      <span class="o">......</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">ColorMatrix</span><span class="o">(</span><span class="n">ColorMatrix</span> <span class="n">src</span><span class="o">)</span> <span class="o">{</span>
+      <span class="o">......</span>
+    <span class="o">}</span>
+      <span class="o">......</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>在ColorMatrix 中定义了一个4x5的float[]类型的矩阵用来表示、修改颜色信息：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span>  
+        <span class="n">R</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+        <span class="mi">0</span><span class="o">,</span> <span class="n">G</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+        <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">B</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+        <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">A</span><span class="o">,</span> <span class="mi">0</span>
+<span class="o">});</span>
+</code></pre></div></div>
+
+<p>其中：
+ 一共四行，分别代表：R、G、B、A，为1时表示保持原色彩的R、G、B、A值.
+ 每一行最后一列我称之为：增加量，比如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span>  
+        <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">88</span><span class="o">,</span>  
+        <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+        <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+        <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>  
+<span class="o">});</span>
+<span class="err">在原有的色彩</span><span class="n">R</span><span class="err">色上增加</span><span class="mi">88</span><span class="err">的量，使之更偏向红色</span><span class="o">.</span>
+</code></pre></div></div>
+
+<p>接下来我们通过实例来看看颜色矩阵的用法.</p>
+
+<h5 id="2例保持蓝色通道透明度通道的颜色矩阵">2、例（保持蓝色通道、透明度通道的颜色矩阵）</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">gogogo</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setAntiAlias</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setARGB</span><span class="o">(</span><span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">255</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">200</span><span class="o">);</span>
+        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="c1">//保持原色彩B、A信息的颜色矩阵</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>
+        <span class="o">});</span>
+        <span class="n">ColorMatrixColorFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrixColorFilter</span><span class="o">(</span><span class="n">colorMatrix</span><span class="o">);</span><span class="c1">//色彩矩阵颜色过滤器</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="n">filter</span><span class="o">);</span><span class="c1">//为画笔设置颜色过滤器</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="n">mPaint</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zmhbtlrrj30k00f4abr.jpg" alt="image-20190613164611259" /></p>
+
+<p>红绿蓝混合后为白色，所以一开始画笔是白色的，第一个圆是白色的，然后通过setColorFilter设置颜色过滤器，过滤器中仅保存B、A信息，所以第二个圆是蓝色的.</p>
+
+<h5 id="3颜色过滤器原理">3、颜色过滤器原理</h5>
+
+<p>最终的颜色其是通过矩阵相乘得到的，计算方式：</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmhmar08j30kd06utau.jpg" alt="image-20190613164627927" /></p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmi02ub1j30m4061gpk.jpg" alt="image-20190613164650110" /></p>
+
+<p>可能有的人会说，这到底有什么用？其实这个颜色矩阵在相机应用中使用最多：图片是由一个个像素组成的，一张图片可以有几十万像素，而每个像素都有对应的色彩数组，我们可以通过<strong>颜色矩阵ColorMatrix</strong>来转换每个像素的色彩信息，得到经过色彩处理的图片，那些美颜相机就是基于此原理做出来的.</p>
+
+<h5 id="4常见颜色矩阵">4、常见颜色矩阵</h5>
+
+<h6 id="1单通道">（1）单通道</h6>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">XView</span> <span class="kd">extends</span> <span class="n">View</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">Paint</span> <span class="n">mPaint</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Bitmap</span> <span class="n">bitmap</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">XView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">XView</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+        <span class="n">mPaint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">();</span>
+
+        <span class="n">bitmap</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeResource</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getResources</span><span class="o">(),</span> <span class="n">R</span><span class="o">.</span><span class="na">mipmap</span><span class="o">.</span><span class="na">lks</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+        <span class="n">gogogo</span><span class="o">(</span><span class="n">canvas</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">gogogo</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setAntiAlias</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">600</span><span class="o">,</span> <span class="mi">350</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span><span class="c1">//原图</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">350</span><span class="o">);</span><span class="c1">//画布向下平移</span>
+
+        <span class="c1">// 色彩矩阵</span>
+        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="c1">//红色通道</span>
+                <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>
+        <span class="o">});</span>
+
+<span class="c1">//        ColorMatrix colorMatrix = new ColorMatrix(new float[]{//绿色通道</span>
+<span class="c1">//                0, 0, 0, 0, 0,</span>
+<span class="c1">//                0, 1, 0, 0, 0,</span>
+<span class="c1">//                0, 0, 0, 0, 0,</span>
+<span class="c1">//                0, 0, 0, 1, 0</span>
+<span class="c1">//        });</span>
+
+<span class="c1">//        ColorMatrix colorMatrix = new ColorMatrix(new float[]{//蓝色通道</span>
+<span class="c1">//                0, 0, 0, 0, 0,</span>
+<span class="c1">//                0, 0, 0, 0, 0,</span>
+<span class="c1">//                0, 0, 1, 0, 0,</span>
+<span class="c1">//                0, 0, 0, 1, 0</span>
+<span class="c1">//        });</span>
+
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">ColorMatrixColorFilter</span><span class="o">(</span><span class="n">colorMatrix</span><span class="o">));</span><span class="c1">//设置颜色过滤器</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">600</span><span class="o">,</span> <span class="mi">350</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zmiz95ckj30rs0b8dr7.jpg" alt="image-20190613164746690" /></p>
+
+<h6 id="2某个通道颜色加深">（2）某个通道颜色加深</h6>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span>
+                <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">66</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>
+        <span class="o">});</span>
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zmjhiu4mj30k00okh1l.jpg" alt="image-20190613164815708" /></p>
+
+<h6 id="3色彩缩放颜色变暗变亮">（3）色彩缩放（颜色变暗、变亮）</h6>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="c1">//变暗</span>
+                <span class="mf">0.5f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mf">0.5f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>
+        <span class="o">});</span>
+        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="c1">//变亮</span>
+                <span class="mf">1.5f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mf">1.5f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mf">1.5f</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>
+        <span class="o">});</span>
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zmjydxoaj30rs0h44eq.jpg" alt="image-20190613164843071" /></p>
+
+<h6 id="4色彩反转">（4）色彩反转</h6>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">ColorMatrix</span> <span class="n">colorMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColorMatrix</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span>
+                <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span>
+                <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span>
+        <span class="o">});</span>
+</code></pre></div></div>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmkef0q4j30k00os18q.jpg" alt="image-20190613164908628" /></p>
+
+<h5 id="5颜色矩阵colormatrix-的方法">5、颜色矩阵ColorMatrix 的方法</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="n">ColorMatrix</span> <span class="n">src</span><span class="o">)</span>  
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="kt">float</span><span class="o">[]</span> <span class="n">src</span><span class="o">)</span>  
+<span class="err">搭配无参构造使用</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">reset</span><span class="o">()</span>
+<span class="err">重置色彩矩阵，就是把</span><span class="n">colorMatrix</span><span class="err">恢复如下：</span>
+<span class="o">[</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+  <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+  <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+  <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span> <span class="o">]</span> 
+</code></pre></div></div>
+
+<p>直接使用矩阵调节色彩，这对于很多不熟悉矩阵的人来说很困难.
+ ColorMatrix 也提供了一些方法用来调节色彩.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">setScale</span><span class="o">(</span><span class="kt">float</span> <span class="n">rScale</span><span class="o">,</span> <span class="kt">float</span> <span class="n">gScale</span><span class="o">,</span> <span class="kt">float</span> <span class="n">bScale</span><span class="o">,</span> <span class="kt">float</span> <span class="n">aScale</span><span class="o">)</span>
+<span class="err">色彩缩放：效果和上面例子中一样，</span><span class="n">rScale</span><span class="err">、</span><span class="n">gScale</span><span class="err">、</span><span class="n">bScale</span><span class="err">、</span><span class="n">aScale</span><span class="err">分别是</span><span class="n">R</span><span class="err">、</span><span class="n">G</span><span class="err">、</span><span class="n">B</span><span class="err">、</span><span class="n">A</span><span class="err">的缩放比例</span><span class="o">.</span>                      
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSaturation</span><span class="o">(</span><span class="kt">float</span> <span class="n">sat</span><span class="o">)</span>  <span class="err">调节饱和度</span>
+</code></pre></div></div>
+
+<p>还有一些色彩旋转、色彩矩阵相乘方法，有兴趣的可以去了解一下.</p>
+
+<h4 id="三lightingcolorfilter">三、LightingColorFilter</h4>
+
+<h6 id="光照颜色过滤器">光照颜色过滤器</h6>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">LightingColorFilter</span><span class="o">(</span><span class="kt">int</span> <span class="n">mul</span><span class="o">,</span> <span class="kt">int</span> <span class="n">add</span><span class="o">)</span>
+<span class="n">mul</span><span class="err">：色彩倍增</span>
+<span class="n">add</span><span class="err">：色彩增加</span>
+
+<span class="n">mul</span><span class="err">、</span><span class="n">add</span><span class="err">的取值都是</span><span class="mi">0</span><span class="n">xRRGGBB</span><span class="err">，对应</span><span class="n">RGB</span><span class="err">颜色值</span>
+<span class="err">注意：</span><span class="n">LightingColorFilter</span><span class="err">只对</span><span class="n">RGB</span><span class="err">色值起作用，对透明度不起作用</span>
+</code></pre></div></div>
+
+<p>源码中给出了它的计算方式：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">给定一个色彩</span><span class="n">R</span><span class="err">、</span><span class="n">G</span><span class="err">、</span><span class="n">B</span><span class="err">值，最终色彩值为：</span>
+
+ <span class="o">*</span> <span class="n">R</span><span class="err">'</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">colorMultiply</span><span class="o">.</span><span class="na">R</span> <span class="o">+</span> <span class="n">colorAdd</span><span class="o">.</span><span class="na">R</span>
+ <span class="o">*</span> <span class="n">G</span><span class="err">'</span> <span class="o">=</span> <span class="n">G</span> <span class="o">*</span> <span class="n">colorMultiply</span><span class="o">.</span><span class="na">G</span> <span class="o">+</span> <span class="n">colorAdd</span><span class="o">.</span><span class="na">G</span>
+ <span class="o">*</span> <span class="n">B</span><span class="err">'</span> <span class="o">=</span> <span class="n">B</span> <span class="o">*</span> <span class="n">colorMultiply</span><span class="o">.</span><span class="na">B</span> <span class="o">+</span> <span class="n">colorAdd</span><span class="o">.</span><span class="na">B</span>
+</code></pre></div></div>
+
+<h5 id="1mul-光照效果">1、mul 光照效果</h5>
+
+<p>LightingColorFilterw为什么叫光照颜色过滤器，其实就是因为第一个参数<strong>mul</strong>.
+ 下面我们通过实例查看，还是在XView的gogogo方法里面做更改：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">gogogo</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setAntiAlias</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//白光照射,无变化</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">240</span><span class="o">,</span> <span class="mi">140</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">140</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">RED</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//红光照射</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">240</span><span class="o">,</span> <span class="mi">140</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">140</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">GREEN</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//绿光照射</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">240</span><span class="o">,</span> <span class="mi">140</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">140</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//蓝光照射</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">240</span><span class="o">,</span> <span class="mi">140</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">140</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">GRAY</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//灰光照射</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">240</span><span class="o">,</span> <span class="mi">140</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">140</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">YELLOW</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//黄光照射</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">240</span><span class="o">,</span> <span class="mi">140</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zmld4x10j30k00skti4.jpg" alt="image-20190613165004370" /></p>
+
+<p>可以发现，在不同的光照下得到的图片不一样，所以这个类叫：光照颜色过滤器，上面给出的计算公式只是为了让大家更好理解这个类，实际上这个类设计的本意不是为了让我们去进行复杂的计算，而是显示光照效果。</p>
+
+<h5 id="2add-色彩增强效果">2、add 色彩增强效果</h5>
+
+<p>add的作用是增强某个通道的颜色值，例：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">gogogo</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setAntiAlias</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span><span class="c1">//白光照射,无变化</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">600</span><span class="o">,</span> <span class="mi">350</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">350</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">,</span> <span class="mh">0x0000f0</span><span class="o">));</span><span class="c1">//白光照射,加深蓝色通道值，让图片更蓝</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">600</span><span class="o">,</span> <span class="mi">350</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmmhxgiqj30k00og18o.jpg" alt="image-20190613165109796" /></p>
+
+<p>利用add这个参数，我们可以很容易作出图片按压后颜色变深的效果，只要改变相应通道add值即可.</p>
+
+<h4 id="四porterduffcolorfilter">四、PorterDuffColorFilter</h4>
+
+<h6 id="porterduff颜色过滤器图形混合过滤器">PorterDuff颜色过滤器（图形混合过滤器）</h6>
+
+<p>这个过滤器类名用Tomas Proter和Tom Duff两个人的名字组合而成，因为这两个人提出<strong>图形混合</strong>的概念，PorterDuffColorFilter正是<strong>图形混合过滤器</strong>，所以用这两个人名字命名.</p>
+
+<h5 id="1构造方法">1、构造方法</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">PorterDuffColorFilter</span><span class="o">(</span><span class="kt">int</span> <span class="n">color</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span> <span class="n">mode</span><span class="o">)</span>
+<span class="n">color</span><span class="err">：</span><span class="mi">16</span><span class="err">进制的颜色值</span><span class="o">(</span><span class="mh">0xAA</span><span class="n">RRGGBB</span><span class="o">)</span>
+<span class="n">mode</span><span class="err">：图形混合模式，可选值是在</span><span class="n">PorterDuff</span><span class="err">这个类中，一共</span><span class="mi">18</span><span class="err">个：</span>
+
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">CLEAR</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SRC</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DST</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SRC_OVER</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DST_OVER</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SRC_IN</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DST_IN</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SRC_OUT</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DST_OUT</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SRC_ATOP</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DST_ATOP</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">XOR</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DARKEN</span>  <span class="err">变暗</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">LIGHTEN</span>   <span class="err">变亮</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">MULTIPLY</span>  <span class="err">正片叠底</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SCREEN</span>  <span class="err">滤色</span>   
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">ADD</span>  <span class="err">饱和度相加</span>
+        <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">OVERLAY</span>  <span class="err">叠加</span>
+</code></pre></div></div>
+
+<p>这里我们需要关注的只有中文注释的6个Mode，因为PorterDuff.Mode这个类表示：<strong>图形混合模式</strong>，而不是<strong>色彩混合模式</strong>，在PorterDuff.Mode这18个Mode中，只有注释的6个Mode是与<strong>色彩混合</strong>相关的，而本节我们学习的是<strong>颜色过滤</strong>，使用其它的Mode在这里其实并没有什么用，它们的用处在别的地方，后续的文章会介绍到.</p>
+
+<p>ok，我们来看一下这6个Mode的具体效果：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">gogogo</span><span class="o">(</span><span class="n">Canvas</span> <span class="n">canvas</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">PorterDuffColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DARKEN</span><span class="o">));</span><span class="c1">//变暗</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">170</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">PorterDuffColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">LIGHTEN</span><span class="o">));</span><span class="c1">//变亮</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">170</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">PorterDuffColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">MULTIPLY</span><span class="o">));</span><span class="c1">//正片叠底</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">170</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">PorterDuffColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SCREEN</span><span class="o">));</span><span class="c1">//滤色</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">170</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">PorterDuffColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">ADD</span><span class="o">));</span><span class="c1">//饱和度相加</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+
+        <span class="n">canvas</span><span class="o">.</span><span class="na">translate</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">170</span><span class="o">);</span>
+        <span class="n">mPaint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">PorterDuffColorFilter</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">OVERLAY</span><span class="o">));</span><span class="c1">//叠加</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="n">RectF</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">170</span><span class="o">),</span> <span class="n">mPaint</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zmn4ccisj30k00x47ka.jpg" alt="image-20190613165145510" /></p>
+
+<p>作者：随风飘扬的smile</p>
+
+<p>链接：https://www.jianshu.com/p/3d0530e1272f</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android 屏幕适配</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Android 屏幕适配 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Android 屏幕适配" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="一种全新、全面而逻辑清晰的Android屏幕适配思路，只要你认真阅读，保证你能解决Android的屏幕适配问题" />
+<meta property="og:description" content="一种全新、全面而逻辑清晰的Android屏幕适配思路，只要你认真阅读，保证你能解决Android的屏幕适配问题" />
+<link rel="canonical" href="http://localhost:4000/2019-06-12/Android-%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-12/Android-%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-12T01:40:42+00:00" />
+<script type="application/ld+json">
+{"description":"一种全新、全面而逻辑清晰的Android屏幕适配思路，只要你认真阅读，保证你能解决Android的屏幕适配问题","@type":"BlogPosting","url":"http://localhost:4000/2019-06-12/Android-%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/","headline":"Android 屏幕适配","dateModified":"2019-06-12T01:40:42+00:00","datePublished":"2019-06-12T01:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-12/Android-%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>Android 屏幕适配</h1>
+    <div class="post-date">
+        2019年06月12日
+    </div>
+
+    <h1 id="前言">前言</h1>
+
+<p>Android的屏幕适配一直以来都在折磨着我们Android开发者，本文将结合：</p>
+
+<ul>
+  <li>Google的官方权威适配文档</li>
+  <li>郭霖：<a href="https://links.jianshu.com/go?to=http%3A%2F%2Fblog.csdn.net%2Fguolin_blog%2Farticle%2Fdetails%2F8830286"> Android官方提供的支持不同屏幕大小的全部方法</a></li>
+  <li>Stormzhang：<a href="https://links.jianshu.com/go?to=http%3A%2F%2Fstormzhang.com%2Fandroid%2F2014%2F05%2F16%2Fandroid-screen-adaptation%2F">Android 屏幕适配</a></li>
+  <li>鸿洋：<a href="https://links.jianshu.com/go?to=http%3A%2F%2Fblog.csdn.net%2Flmj623565791%2Farticle%2Fdetails%2F45460089">Android 屏幕适配方案</a></li>
+  <li>凯子：<a href="https://links.jianshu.com/go?to=http%3A%2F%2Fblog.csdn.net%2Fzhaokaiqiang1992%2Farticle%2Fdetails%2F45419023"> Android屏幕适配全攻略(最权威的官方适配指导)</a></li>
+  <li>自身的思考&amp;实践</li>
+</ul>
+
+<p>给你带来一种全新、全面而逻辑清晰的Android屏幕适配思路，只要你认真阅读，保证你能解决Android的屏幕适配问题！</p>
+
+<hr />
+
+<h1 id="目录">目录</h1>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3ylp3x4wfj30rs0gkq73.jpg" alt="image-20190612193330487" /></p>
+
+<p>Android屏幕适配解决方案.png</p>
+
+<hr />
+
+<h1 id="定义">定义</h1>
+
+<p>使得某一元素在Android不同尺寸、不同分辨率的手机上具备相同的显示效果</p>
+
+<hr />
+
+<h1 id="相关重要概念">相关重要概念</h1>
+
+<h4 id="屏幕尺寸">屏幕尺寸</h4>
+
+<ul>
+  <li>含义：手机对角线的物理尺寸</li>
+  <li>单位：英寸（inch），1英寸=2.54cm</li>
+</ul>
+
+<blockquote>
+  <p>Android手机常见的尺寸有5寸、5.5寸、6寸等等</p>
+</blockquote>
+
+<h4 id="屏幕分辨率">屏幕分辨率</h4>
+
+<ul>
+  <li>含义：手机在横向、纵向上的像素点数总和</li>
+</ul>
+
+<blockquote>
+  <ol>
+    <li>一般描述成屏幕的”宽x高”=AxB</li>
+    <li>含义：屏幕在横向方向（宽度）上有A个像素点，在纵向方向
+ （高）有B个像素点</li>
+    <li>例子：1080x1920，即宽度方向上有1080个像素点，在高度方向上有1920个像素点</li>
+  </ol>
+</blockquote>
+
+<ul>
+  <li>单位：px（pixel），1px=1像素点</li>
+</ul>
+
+<blockquote>
+  <p>UI设计师的设计图会以px作为统一的计量单位</p>
+</blockquote>
+
+<ul>
+  <li>Android手机常见的分辨率：320x480、480x800、720x1280、1080x1920</li>
+</ul>
+
+<h4 id="屏幕像素密度">屏幕像素密度</h4>
+
+<ul>
+  <li>含义：每英寸的像素点数</li>
+  <li>单位：dpi（dots per ich）</li>
+</ul>
+
+<blockquote>
+  <p>假设设备内每英寸有160个像素，那么该设备的屏幕像素密度=160dpi</p>
+</blockquote>
+
+<ul>
+  <li>安卓手机对于每类手机屏幕大小都有一个相应的屏幕像素密度：</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>密度类型</th>
+      <th style="text-align: center">代表的分辨率（px）</th>
+      <th style="text-align: right">屏幕像素密度（dpi）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>低密度（ldpi）</td>
+      <td style="text-align: center">240x320</td>
+      <td style="text-align: right">120</td>
+    </tr>
+    <tr>
+      <td>中密度（mdpi）</td>
+      <td style="text-align: center">320x480</td>
+      <td style="text-align: right">160</td>
+    </tr>
+    <tr>
+      <td>高密度（hdpi）</td>
+      <td style="text-align: center">480x800</td>
+      <td style="text-align: right">240</td>
+    </tr>
+    <tr>
+      <td>超高密度（xhdpi）</td>
+      <td style="text-align: center">720x1280</td>
+      <td style="text-align: right">320</td>
+    </tr>
+    <tr>
+      <td>超超高密度（xxhdpi）</td>
+      <td style="text-align: center">1080x1920</td>
+      <td style="text-align: right">480</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="屏幕尺寸分辨率像素密度三者关系">屏幕尺寸、分辨率、像素密度三者关系</h4>
+
+<p>一部手机的分辨率是宽x高，屏幕大小是以寸为单位，那么三者的关系是：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3ylpl63pyj30a00badgw.jpg" alt="image-20190612193358171" /></p>
+
+<p>三者关系示意图</p>
+
+<p>数学不太差的人应该能懂…..吧？</p>
+
+<p><strong>不懂没关系，在这里举个例子</strong>
+ 假设一部手机的分辨率是1080x1920（px），屏幕大小是5寸，问密度是多少？
+ 解：请直接套公式</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3ylq16ojqj30ez0oygom.jpg" alt="image-20190612193423146" /></p>
+
+<p>解答过程</p>
+
+<h4 id="密度无关像素">密度无关像素</h4>
+
+<ul>
+  <li>含义：density-independent pixel，叫dp或dip，与终端上的实际物理像素点无关。</li>
+  <li>单位：dp，可以保证在不同屏幕像素密度的设备上显示相同的效果</li>
+</ul>
+
+<blockquote>
+  <ol>
+    <li>Android开发时用dp而不是px单位设置图片大小，是Android特有的单位</li>
+    <li>场景：假如同样都是画一条长度是屏幕一半的线，如果使用px作为计量单位，那么在480x800分辨率手机上设置应为240px；在320x480的手机上应设置为160px，二者设置就不同了；如果使用dp为单位，在这两种分辨率下，160dp都显示为屏幕一半的长度。</li>
+  </ol>
+</blockquote>
+
+<ul>
+  <li>dp与px的转换
+ 因为ui设计师给你的设计图是以px为单位的，Android开发则是使用dp作为单位的，那么我们需要进行转换：</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>密度类型</th>
+      <th>代表的分辨率（px）</th>
+      <th>屏幕密度（dpi）</th>
+      <th>换算（px/dp）</th>
+      <th>比例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>低密度（ldpi）</td>
+      <td>240x320</td>
+      <td>120</td>
+      <td>1dp=0.75px</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>中密度（mdpi）</td>
+      <td>320x480</td>
+      <td>160</td>
+      <td>1dp=1px</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>高密度（hdpi）</td>
+      <td>480x800</td>
+      <td>240</td>
+      <td>1dp=1.5px</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>超高密度（xhdpi）</td>
+      <td>720x1280</td>
+      <td>320</td>
+      <td>1dp=2px</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>超超高密度（xxhdpi）</td>
+      <td>1080x1920</td>
+      <td>480</td>
+      <td>1dp=3px</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>在Android中，规定以160dpi（即屏幕分辨率为320x480）为基准：1dp=1px</p>
+
+<h4 id="独立比例像素">独立比例像素</h4>
+
+<ul>
+  <li>含义：scale-independent pixel，叫sp或sip</li>
+  <li>单位：sp</li>
+</ul>
+
+<blockquote>
+  <ol>
+    <li>Android开发时用此单位设置文字大小，可根据字体大小首选项进行缩放</li>
+    <li>推荐使用12sp、14sp、18sp、22sp作为字体设置的大小，不推荐使用奇数和小数，容易造成精度的丢失问题；小于12sp的字体会太小导致用户看不清</li>
+  </ol>
+</blockquote>
+
+<p><strong>请把上面的概念记住，因为下面讲解都会用到！</strong></p>
+
+<hr />
+
+<h1 id="为什么要进行android屏幕适配">为什么要进行Android屏幕适配</h1>
+
+<p>由于Android系统的开放性，任何用户、开发者、OEM厂商、运营商都可以对Android进行定制，于是导致：</p>
+
+<ul>
+  <li>Android系统碎片化：小米定制的MIUI、魅族定制的flyme、华为定制的EMUI等等</li>
+</ul>
+
+<blockquote>
+  <p>当然都是基于Google原生系统定制的</p>
+</blockquote>
+
+<ul>
+  <li>Android机型屏幕尺寸碎片化：5寸、5.5寸、6寸等等</li>
+  <li>Android屏幕分辨率碎片化：320x480、480x800、720x1280、1080x1920</li>
+</ul>
+
+<blockquote>
+  <p>据友盟指数显示，统计至2015年12月，支持Android的设备共有27796种</p>
+</blockquote>
+
+<p>当Android系统、屏幕尺寸、屏幕密度出现碎片化的时候，就很容易出现同一元素在不同手机上显示不同的问题。</p>
+
+<blockquote>
+  <p>试想一下这么一个场景：
+ 为4.3寸屏幕准备的UI设计图，运行在5.0寸的屏幕上，很可能在右侧和下侧存在大量的空白；而5.0寸的UI设计图运行到4.3寸的设备上，很可能显示不下。</p>
+</blockquote>
+
+<p><strong>为了保证用户获得一致的用户体验效果：</strong></p>
+
+<blockquote>
+  <p>使得某一元素在Android不同尺寸、不同分辨率的手机上具备相同的显示效果</p>
+</blockquote>
+
+<p>于是，我们便需要对Android屏幕进行适配。</p>
+
+<hr />
+
+<h1 id="屏幕适配问题的本质">屏幕适配问题的本质</h1>
+
+<ul>
+  <li>使得“布局”、“布局组件”、“图片资源”、“用户界面流程”匹配<strong>不同的屏幕尺寸</strong></li>
+</ul>
+
+<blockquote>
+  <p>使得布局、布局组件自适应屏幕尺寸；
+ 根据屏幕的配置来加载相应的UI布局、用户界面流程</p>
+</blockquote>
+
+<ul>
+  <li>使得“图片资源”匹配<strong>不同的屏幕密度</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="解决方案">解决方案</h1>
+
+<ul>
+  <li>问题：如何进行屏幕尺寸匹配？</li>
+  <li>答：</li>
+</ul>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3ylqojmxoj30pa0ckwic.jpg" alt="image-20190612193500620" /></p>
+
+<p>屏幕尺寸适配解决方案.png</p>
+
+<hr />
+
+<h3 id="布局匹配">“布局”匹配</h3>
+
+<p><strong>本质1：使得布局元素自适应屏幕尺寸</strong></p>
+
+<ul>
+  <li>做法
+ 使用相对布局（RelativeLayout），禁用绝对布局（AbsoluteLayout）</li>
+</ul>
+
+<p>开发中，我们使用的布局一般有：</p>
+
+<ul>
+  <li>线性布局（Linearlayout）</li>
+  <li>相对布局（RelativeLayout）</li>
+  <li>帧布局（FrameLayout）</li>
+  <li>绝对布局（AbsoluteLayout）</li>
+</ul>
+
+<blockquote>
+  <p>由于绝对布局（AbsoluteLayout）适配性极差，所以极少使用。</p>
+</blockquote>
+
+<p>对于线性布局（Linearlayout）、相对布局（RelativeLayout）和帧布局（FrameLayout）需要根据需求进行选择，但要记住：</p>
+
+<ul>
+  <li>RelativeLayout
+ 布局的子控件之间使用<strong>相对位置</strong>的方式排列，因为RelativeLayout讲究的是<strong>相对位置</strong>，即使屏幕的大小改变，视图之前的相对位置都不会变化，与屏幕大小无关，灵活性很强</li>
+  <li>LinearLayout
+ 通过多层嵌套LinearLayout和组合使
+ 用”wrap_content”和”match_parent”已经可以构建出足够复杂的布局。但是LinearLayout<strong>无法准确地控制子视图之间的位置关系</strong>，只能简单的一个挨着一个地排列</li>
+</ul>
+
+<p><strong>所以，对于屏幕适配来说，使用相对布局（RelativeLayout）将会是更好的解决方案</strong></p>
+
+<p><strong>本质2：根据屏幕的配置来加载相应的UI布局</strong></p>
+
+<blockquote>
+  <p>应用场景：需要为不同屏幕尺寸的设备设计不同的布局</p>
+</blockquote>
+
+<ul>
+  <li>做法：<strong>使用限定符</strong></li>
+  <li>
+    <p>作用：通过配置<strong>限定符</strong>使得程序在运行时根据当前设备的配置（屏幕尺寸）自动加载合适的布局资源</p>
+  </li>
+  <li>限定符类型：</li>
+  <li>尺寸（size）限定符</li>
+  <li>最小宽度（Smallest-width）限定符</li>
+  <li>布局别名</li>
+  <li>屏幕方向（Orientation）限定符</li>
+</ul>
+
+<h3 id="尺寸size限定符">尺寸（size）限定符</h3>
+
+<ul>
+  <li>使用场景：当一款应用显示的内容较多，希望进行以下设置：</li>
+</ul>
+
+<blockquote>
+  <ul>
+    <li>在平板电脑和电视的屏幕（&gt;7英寸）上：实施<strong>“双面板”</strong>模式以同时显示更多内容</li>
+    <li>在手机较小的屏幕上：使用<strong>单面板</strong>分别显示内容</li>
+  </ul>
+</blockquote>
+
+<p>因此，我们可以使用尺寸限定符（layout-large）通过创建一个文件</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>res/layout-large/main.xml
+</code></pre></div></div>
+
+<p>来完成上述设定：</p>
+
+<blockquote>
+  <ul>
+    <li>让系统在屏幕尺寸&gt;7英寸时采用适配平板的双面板布局</li>
+    <li>反之（默认情况下）采用适配手机的单面板布局</li>
+  </ul>
+</blockquote>
+
+<p>文件配置如下：</p>
+
+<ul>
+  <li>适配手机的单面板（默认）布局：res/layout/main.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:orientation=</span><span class="s">"vertical"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"match_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>适配尺寸&gt;7寸平板的双面板布局：：res/layout-large/main.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:orientation=</span><span class="s">"horizontal"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"400dp"</span>
+              <span class="na">android:layout_marginRight=</span><span class="s">"10dp"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/article"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.ArticleFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>请注意：</p>
+</blockquote>
+
+<ul>
+  <li>两个布局名称均为main.xml，只有布局的目录名不同：第一个布局的目录名为：layout，第二个布局的目录名为：layout-large，包含了尺寸限定符（large）</li>
+  <li>被定义为大屏的设备(7寸以上的平板)会自动加载包含了large限定符目录的布局，而小屏设备会加载另一个默认的布局</li>
+</ul>
+
+<p><strong>但要注意的是，这种方式只适合Android 3.2版本之前。</strong></p>
+
+<h3 id="最小宽度smallest-width限定符">最小宽度（Smallest-width）限定符</h3>
+
+<blockquote>
+  <ul>
+    <li>背景：上述提到的限定符“large”具体是指多大呢？似乎没有一个定量的指标，这便意味着可能没办法准确地根据当前设备的配置（屏幕尺寸）自动加载合适的布局资源</li>
+    <li>例子：比如说large同时包含着5寸和7寸，这意味着使用“large”限定符的话我没办法实现为5寸和7寸的平板电脑分别加载不同的布局</li>
+  </ul>
+</blockquote>
+
+<p>于是，在Android 3.2及之后版本，引入了最小宽度（Smallest-width）限定符</p>
+
+<blockquote>
+  <p>定义：通过指定某个最小宽度（以 dp 为单位）来精确定位屏幕从而加载不同的UI资源</p>
+</blockquote>
+
+<ul>
+  <li>使用场景</li>
+</ul>
+
+<blockquote>
+  <p>你需要为标准 7 英寸平板电脑匹配双面板布局（其最小宽度为 600 dp），在手机（较小的屏幕上）匹配单面板布局</p>
+</blockquote>
+
+<p>解决方案：您可以使用上文中所述的单面板和双面板这两种布局，但您应使用 <strong>sw600dp</strong> 指明双面板布局仅适用于最小宽度为 600 dp 的屏幕，而不是使用 large 尺寸限定符。</p>
+
+<blockquote>
+  <ul>
+    <li>sw xxxdp，即small width的缩写，其不区分方向，即无论是宽度还是高度，只要大于 xxxdp，就采用次此布局</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li>例子：使用了layout-sw 600dp的最小宽度限定符，即无论是宽度还是高度，只要大于600dp，就采用layout-sw 600dp目录下的布局</li>
+</ul>
+
+<p>代码展示：</p>
+
+<ul>
+  <li>适配手机的单面板（默认）布局：res/layout/main.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:orientation=</span><span class="s">"vertical"</span>
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"match_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>适配尺寸&gt;7寸平板的双面板布局：res/layout-sw600dp/main.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:orientation=</span><span class="s">"horizontal"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"400dp"</span>
+              <span class="na">android:layout_marginRight=</span><span class="s">"10dp"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/article"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.ArticleFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <ul>
+    <li>对于最小宽度≥ 600 dp 的设备
+ 系统会自动加载 layout-sw600dp/main.xml（双面板）布局，否则系统就会选择 layout/main.xml（单面板）布局
+ （这个选择过程是Android系统自动选择的）</li>
+  </ul>
+</blockquote>
+
+<h2 id="使用布局别名">使用布局别名</h2>
+
+<h6 id="设想这么一个场景">设想这么一个场景</h6>
+
+<blockquote>
+  <p>当你需要同时为Android 3.2版本前和Android 3.2版本后的手机进行屏幕尺寸适配的时候，由于尺寸限定符仅用于Android 3.2版本前，最小宽度限定符仅用于Android 3.2版本后，所以这会带来一个问题，为了很好地进行屏幕尺寸的适配，你需要同时维护layout-sw600dp和layout-large的两套main.xml平板布局，如下：</p>
+</blockquote>
+
+<ul>
+  <li>适配手机的单面板（默认）布局：res/layout/main.xml</li>
+  <li>适配尺寸&gt;7寸平板的双面板布局（Android 3.2前）：res/layout-large/main.xml</li>
+  <li>适配尺寸&gt;7寸平板的双面板布局（Android 3.2后）res/layout-sw600dp/main.xml</li>
+</ul>
+
+<p>最后的两个文件的xml内容是完全相同的，这会带来：<strong>文件名的重复从而带来一些列后期维护的问题</strong></p>
+
+<h4 id="于是为了要解决这种重复问题我们引入了布局别名">于是为了要解决这种重复问题，我们引入了“布局别名”</h4>
+
+<p>还是上面的例子，你可以定义以下布局：</p>
+
+<ul>
+  <li>适配手机的单面板（默认）布局：res/layout/main.xml</li>
+  <li>适配尺寸&gt;7寸平板的双面板布局：res/layout/main_twopanes.xml</li>
+</ul>
+
+<p>然后加入以下两个文件，以便进行Android 3.2前和Android 3.2后的版本双面板布局适配：</p>
+
+<ol>
+  <li>res/values-large/layout.xml（Android 3.2之前的双面板布局）</li>
+</ol>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/main_twopanes<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>res/values-sw600dp/layout.xml（Android 3.2及之后的双面板布局）</li>
+</ol>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>
+<span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/main_twopanes<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>注：</p>
+</blockquote>
+
+<ul>
+  <li>最后两个文件有着相同的内容，但是它们并没有真正去定义布局，它们仅仅只是<strong>将main设置成了@layout/main_twopanes的别名</strong></li>
+  <li>由于这些文件包含 large 和 sw600dp 选择器，因此，系统会将此文件匹配到不同版本的&gt;7寸平板上：
+ a. 版本低于 3.2 的平板会匹配 large的文件
+ b. 版本高于 3.2 的平板会匹配 sw600dp的文件</li>
+</ul>
+
+<p>这样两个layout.xml都只是引用了@layout/main_twopanes，就避免了重复定义布局文件的情况</p>
+
+<h3 id="屏幕方向orientation限定符">屏幕方向（Orientation）限定符</h3>
+
+<ul>
+  <li>使用场景：根据屏幕方向进行布局的调整</li>
+</ul>
+
+<blockquote>
+  <p>取以下为例子：</p>
+
+  <ul>
+    <li>小屏幕, 竖屏: 单面板</li>
+    <li>小屏幕, 横屏: 单面板</li>
+    <li>7 英寸平板电脑，纵向：单面板，带操作栏</li>
+    <li>7 英寸平板电脑，横向：双面板，宽，带操作栏</li>
+    <li>10 英寸平板电脑，纵向：双面板，窄，带操作栏</li>
+    <li>10 英寸平板电脑，横向：双面板，宽，带操作栏</li>
+    <li>电视，横向：双面板，宽，带操作栏</li>
+  </ul>
+</blockquote>
+
+<p><strong>方法是：</strong></p>
+
+<ul>
+  <li>先定义类别：单/双面板、是否带操作栏、宽/窄</li>
+</ul>
+
+<blockquote>
+  <p>定义在 res/layout/ 目录下的某个 XML 文件中</p>
+</blockquote>
+
+<ul>
+  <li>再进行相应的匹配：屏幕尺寸（小屏、7寸、10寸）、方向（横、纵）</li>
+</ul>
+
+<blockquote>
+  <p>使用布局别名进行匹配</p>
+</blockquote>
+
+<ol>
+  <li>在 res/layout/ 目录下的某个 XML 文件中定义所需要的布局类别
+ （单/双面板、是否带操作栏、宽/窄）
+ res/layout/onepane.xml:(单面板)</li>
+</ol>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>  
+    <span class="na">android:orientation=</span><span class="s">"vertical"</span>  
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>  
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span><span class="nt">&gt;</span>  
+  
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>  
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>  
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>  
+              <span class="na">android:layout_width=</span><span class="s">"match_parent"</span> <span class="nt">/&gt;</span>  
+<span class="nt">&lt;/LinearLayout&gt;</span>  
+</code></pre></div></div>
+
+<p>res/layout/onepane_with_bar.xml:(单面板带操作栏)</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>  
+    <span class="na">android:orientation=</span><span class="s">"vertical"</span>  
+    <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>  
+    <span class="na">android:layout_height=</span><span class="s">"match_parent"</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;LinearLayout</span> <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>   
+                  <span class="na">android:id=</span><span class="s">"@+id/linearLayout1"</span>    
+                  <span class="na">android:gravity=</span><span class="s">"center"</span>  
+                  <span class="na">android:layout_height=</span><span class="s">"50dp"</span><span class="nt">&gt;</span>  
+        <span class="nt">&lt;ImageView</span> <span class="na">android:id=</span><span class="s">"@+id/imageView1"</span>   
+                   <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>  
+                   <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>  
+                   <span class="na">android:src=</span><span class="s">"@drawable/logo"</span>  
+                   <span class="na">android:paddingRight=</span><span class="s">"30dp"</span>  
+                   <span class="na">android:layout_gravity=</span><span class="s">"left"</span>  
+                   <span class="na">android:layout_weight=</span><span class="s">"0"</span> <span class="nt">/&gt;</span>  
+        <span class="nt">&lt;View</span> <span class="na">android:layout_height=</span><span class="s">"wrap_content"</span>   
+              <span class="na">android:id=</span><span class="s">"@+id/view1"</span>  
+              <span class="na">android:layout_width=</span><span class="s">"wrap_content"</span>  
+              <span class="na">android:layout_weight=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>  
+        <span class="nt">&lt;Button</span> <span class="na">android:id=</span><span class="s">"@+id/categorybutton"</span>  
+                <span class="na">android:background=</span><span class="s">"@drawable/button_bg"</span>  
+                <span class="na">android:layout_height=</span><span class="s">"match_parent"</span>  
+                <span class="na">android:layout_weight=</span><span class="s">"0"</span>  
+                <span class="na">android:layout_width=</span><span class="s">"120dp"</span>  
+                <span class="na">style=</span><span class="s">"@style/CategoryButtonStyle"</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;/LinearLayout&gt;</span>  
+  
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>   
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>  
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>  
+              <span class="na">android:layout_width=</span><span class="s">"match_parent"</span> <span class="nt">/&gt;</span>  
+<span class="nt">&lt;/LinearLayout&gt;</span> 
+</code></pre></div></div>
+
+<p>res/layout/twopanes.xml:(双面板，宽布局)</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:orientation=</span><span class="s">"horizontal"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"400dp"</span>
+              <span class="na">android:layout_marginRight=</span><span class="s">"10dp"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/article"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.ArticleFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<p>res/layout/twopanes_narrow.xml:(双面板，窄布局)</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:orientation=</span><span class="s">"horizontal"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"200dp"</span>
+              <span class="na">android:layout_marginRight=</span><span class="s">"10dp"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/article"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.ArticleFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<p>2.使用布局别名进行相应的匹配
+ (屏幕尺寸（小屏、7寸、10寸）、方向（横、纵）)
+ res/values/layouts.xml:（默认布局）</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>  
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main_layout"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/onepane_with_bar<span class="nt">&lt;/item&gt;</span>  
+    <span class="nt">&lt;bool</span> <span class="na">name=</span><span class="s">"has_two_panes"</span><span class="nt">&gt;</span>false<span class="nt">&lt;/bool&gt;</span>  
+<span class="nt">&lt;/resources&gt;</span> 
+</code></pre></div></div>
+
+<blockquote>
+  <p>可为resources设置bool，通过获取其值来动态判断目前已处在哪个适配布局</p>
+</blockquote>
+
+<p>res/values-sw600dp-land/layouts.xml
+ （大屏、横向、双面板、宽-Andorid 3.2版本后）</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main_layout"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/twopanes<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;bool</span> <span class="na">name=</span><span class="s">"has_two_panes"</span><span class="nt">&gt;</span>true<span class="nt">&lt;/bool&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<p>res/values-sw600dp-port/layouts.xml
+ （大屏、纵向、单面板带操作栏-Andorid 3.2版本后）</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main_layout"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/onepane<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;bool</span> <span class="na">name=</span><span class="s">"has_two_panes"</span><span class="nt">&gt;</span>false<span class="nt">&lt;/bool&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<p>res/values-large-land/layouts.xml
+ （大屏、横向、双面板、宽-Andorid 3.2版本前）</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main_layout"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/twopanes<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;bool</span> <span class="na">name=</span><span class="s">"has_two_panes"</span><span class="nt">&gt;</span>true<span class="nt">&lt;/bool&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<p>res/values-large-port/layouts.xml
+ （大屏、纵向、单面板带操作栏-Andorid 3.2版本前）</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resources&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">"main_layout"</span> <span class="na">type=</span><span class="s">"layout"</span><span class="nt">&gt;</span>@layout/onepane<span class="nt">&lt;/item&gt;</span>
+    <span class="nt">&lt;bool</span> <span class="na">name=</span><span class="s">"has_two_panes"</span><span class="nt">&gt;</span>false<span class="nt">&lt;/bool&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>这里没有完全把全部尺寸匹配类型的代码贴出来，大家可以自己去尝试把其补充完整</p>
+</blockquote>
+
+<hr />
+
+<h3 id="布局组件匹配">“布局组件”匹配</h3>
+
+<p><strong>本质：使得布局组件自适应屏幕尺寸</strong></p>
+
+<ul>
+  <li>做法
+ 使用”wrap_content”、”match_parent”和”weight“来控制视图组件的宽度和高度</li>
+</ul>
+
+<blockquote>
+  <ul>
+    <li>“wrap_content”
+ 相应视图的宽和高就会被设定成所需的最小尺寸以适应视图中的内容</li>
+    <li>“match_parent”(在Android API 8之前叫作”fill_parent”)
+ 视图的宽和高延伸至充满整个父布局</li>
+    <li>“weight”
+ 1.定义：是线性布局（Linelayout）的一个独特比例分配属性
+ 2.作用：使用此属性设置权重，然后按照比例对界面进行空间的分配，公式计算是：控件宽度=控件设置宽度+剩余空间所占百分比宽幅
+ 具体可以参考这篇<a href="https://links.jianshu.com/go?to=http%3A%2F%2Fmobile.51cto.com%2Fabased-375428.htm">文章</a>，讲解得非常详细</li>
+  </ul>
+</blockquote>
+
+<p>通过使用”wrap_content”、”match_parent”和”weight”来替代硬编码的方式定义视图大小&amp;位置，你的视图要么仅仅使用了需要的那边一点空间，要么就会充满所有可用的空间，即按需占据空间大小，能让你的布局元素充分适应你的屏幕尺寸</p>
+
+<hr />
+
+<h3 id="图片资源匹配">“图片资源”匹配</h3>
+
+<p><strong>本质：使得图片资源在不同屏幕密度上显示相同的像素效果</strong></p>
+
+<ul>
+  <li>做法：<strong>使用自动拉伸位图：Nine-Patch的图片类型</strong>
+ 假设需要匹配不同屏幕大小，你的图片资源也必须自动适应各种屏幕尺寸</li>
+</ul>
+
+<blockquote>
+  <p>使用场景：一个按钮的背景图片必须能够随着按钮大小的改变而改变。
+ 使用普通的图片将无法实现上述功能,因为运行时会均匀地拉伸或压缩你的图片</p>
+</blockquote>
+
+<ul>
+  <li>解决方案：使用自动拉伸位图（nine-patch图片），后缀名是.9.png，它是一种被特殊处理过的PNG图片，设计时可以指定图片的拉伸区域和非拉伸区域；使用时，系统就会根据控件的大小自动地拉伸你想要拉伸的部分</li>
+</ul>
+
+<blockquote>
+  <p>1.必须要使用.9.png后缀名，因为系统就是根据这个来区别nine-patch图片和普通的PNG图片的；
+ 2.当你需要在一个控件中使用nine-patch图片时,如</p>
+</blockquote>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>android:background="@drawable/button"
+</code></pre></div></div>
+
+<p>系统就会根据控件的大小自动地拉伸你想要拉伸的部分</p>
+
+<hr />
+
+<h3 id="用户界面流程匹配">”用户界面流程“匹配</h3>
+
+<blockquote>
+  <ul>
+    <li>使用场景：我们会根据设备特点显示恰当的布局，但是这样做，会使得用户界面流程可能会有所不同。</li>
+    <li>例如，如果应用处于双面板模式下，点击左侧面板上的项即可直接在右侧面板上显示相关内容；而如果该应用处于单面板模式下，点击相关的内容应该跳转到另外一个Activity进行后续的处理。</li>
+  </ul>
+</blockquote>
+
+<p><strong>本质：根据屏幕的配置来加载相应的用户界面流程</strong></p>
+
+<ul>
+  <li>做法
+ 进行用户界面流程的自适应配置：</li>
+</ul>
+
+<ol>
+  <li>确定当前布局</li>
+  <li>根据当前布局做出响应</li>
+  <li>重复使用其他活动中的片段</li>
+  <li>处理屏幕配置变化</li>
+</ol>
+
+<ul>
+  <li>步骤1：确定当前布局
+ 由于每种布局的实施都会稍有不同，因此我们需要先确定当前向用户显示的布局。例如，我们可以先了解用户所处的是“单面板”模式还是“双面板”模式。要做到这一点，可以通过查询指定视图是否存在以及是否已显示出来。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NewsReaderActivity</span> <span class="kd">extends</span> <span class="n">FragmentActivity</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="n">mIsDualPane</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main_layout</span><span class="o">);</span>
+
+        <span class="n">View</span> <span class="n">articleView</span> <span class="o">=</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">article</span><span class="o">);</span>
+        <span class="n">mIsDualPane</span> <span class="o">=</span> <span class="n">articleView</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span>
+                        <span class="n">articleView</span><span class="o">.</span><span class="na">getVisibility</span><span class="o">()</span> <span class="o">==</span> <span class="n">View</span><span class="o">.</span><span class="na">VISIBLE</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>这段代码用于查询“报道”面板是否可用，与针对具体布局的硬编码查询相比，这段代码的灵活性要大得多。</p>
+</blockquote>
+
+<ul>
+  <li>步骤2：根据当前布局做出响应
+ 有些操作可能会因当前的具体布局而产生不同的结果。</li>
+</ul>
+
+<blockquote>
+  <p>例如，在新闻阅读器示例中，如果用户界面处于双面板模式下，那么点击标题列表中的标题就会在右侧面板中打开相应报道；但如果用户界面处于单面板模式下，那么上述操作就会启动一个独立活动：</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onHeadlineSelected</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mArtIndex</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mIsDualPane</span><span class="o">)</span> <span class="o">{</span>
+        <span class="cm">/* display article on the right pane */</span>
+        <span class="n">mArticleFragment</span><span class="o">.</span><span class="na">displayArticle</span><span class="o">(</span><span class="n">mCurrentCat</span><span class="o">.</span><span class="na">getArticle</span><span class="o">(</span><span class="n">index</span><span class="o">));</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="cm">/* start a separate activity */</span>
+        <span class="n">Intent</span> <span class="n">intent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">ArticleActivity</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">intent</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">"catIndex"</span><span class="o">,</span> <span class="n">mCatIndex</span><span class="o">);</span>
+        <span class="n">intent</span><span class="o">.</span><span class="na">putExtra</span><span class="o">(</span><span class="s">"artIndex"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="n">startActivity</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>步骤3：重复使用其他活动中的片段
+ 多屏幕设计中的重复模式是指，对于某些屏幕配置，已实施界面的一部分会用作面板；但对于其他配置，这部分就会以独立活动的形式存在。</li>
+</ul>
+
+<blockquote>
+  <p>例如，在新闻阅读器示例中，对于较大的屏幕，新闻报道文本会显示在右侧面板中；但对于较小的屏幕，这些文本就会以独立活动的形式存在。</p>
+</blockquote>
+
+<p>在类似情况下，通常可以在多个活动中重复使用相同的 Fragment 子类以避免代码重复。例如，在双面板布局中使用了 ArticleFragment：</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;LinearLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+    <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+    <span class="na">android:orientation=</span><span class="s">"horizontal"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/headlines"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.HeadlinesFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"400dp"</span>
+              <span class="na">android:layout_marginRight=</span><span class="s">"10dp"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fragment</span> <span class="na">android:id=</span><span class="s">"@+id/article"</span>
+              <span class="na">android:layout_height=</span><span class="s">"fill_parent"</span>
+              <span class="na">android:name=</span><span class="s">"com.example.android.newsreader.ArticleFragment"</span>
+              <span class="na">android:layout_width=</span><span class="s">"fill_parent"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/LinearLayout&gt;</span>
+</code></pre></div></div>
+
+<p>然后又在小屏幕的Activity布局中重复使用了它 ：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ArticleFragment frag = new ArticleFragment();
+getSupportFragmentManager().beginTransaction().add(android.R.id.content, frag).commit();
+</code></pre></div></div>
+
+<ul>
+  <li>步骤3：处理屏幕配置变化
+ 如果我们使用独立Activity实施界面的独立部分，那么请注意，我们可能需要对特定配置变化（例如屏幕方向的变化）做出响应，以便保持界面的一致性。</li>
+</ul>
+
+<blockquote>
+  <p>例如，在运行 Android 3.0 或更高版本的标准 7 英寸平板电脑上，如果新闻阅读器示例应用运行在纵向模式下，就会在使用独立活动显示新闻报道；但如果该应用运行在横向模式下，就会使用双面板布局。</p>
+</blockquote>
+
+<p>也就是说，如果用户处于纵向模式下且屏幕上显示的是用于阅读报道的活动，那么就需要在检测到屏幕方向变化（变成横向模式）后执行相应操作，即停止上述活动并返回主活动，以便在双面板布局中显示相关内容：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ArticleActivity</span> <span class="kd">extends</span> <span class="n">FragmentActivity</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">mCatIndex</span><span class="o">,</span> <span class="n">mArtIndex</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+        <span class="n">mCatIndex</span> <span class="o">=</span> <span class="n">getIntent</span><span class="o">().</span><span class="na">getExtras</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span><span class="s">"catIndex"</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+        <span class="n">mArtIndex</span> <span class="o">=</span> <span class="n">getIntent</span><span class="o">().</span><span class="na">getExtras</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span><span class="s">"artIndex"</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+
+        <span class="c1">// If should be in two-pane mode, finish to return to main activity</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">getResources</span><span class="o">().</span><span class="na">getBoolean</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">bool</span><span class="o">.</span><span class="na">has_two_panes</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">finish</span><span class="o">();</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>通过上面一系列步骤，我们就完全可以建立一个可以根据用户界面配置进行自适应的应用程序App了。</p>
+
+<hr />
+
+<h1 id="总结">总结</h1>
+
+<p>经过上面的介绍，对于屏幕尺寸大小适配问题应该是不成问题了。</p>
+
+<hr />
+
+<h1 id="解决方案-1">解决方案</h1>
+
+<ul>
+  <li>问题：如何进行屏幕密度匹配？</li>
+  <li>答：</li>
+</ul>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3ylrl97k8j30la04kgn5.jpg" alt="image-20190612193552863" /></p>
+
+<p>屏幕密度匹配解决方案.png</p>
+
+<h3 id="布局控件匹配">“布局控件”匹配</h3>
+
+<p><strong>本质：使得布局组件在不同屏幕密度上显示相同的像素效果</strong></p>
+
+<ul>
+  <li>做法1：使用密度无关像素
+ 由于各种屏幕的像素密度都有所不同，因此相同数量的像素在不同设备上的实际大小也有所差异，这样使用像素（px）定义布局尺寸就会产生问题。
+ 因此，请务必使用<strong>密度无关像素 dp</strong> 或**独立比例像素 sp **单位指定尺寸。</li>
+  <li>相关概念介绍
+ <strong>密度无关像素</strong></li>
+  <li>含义：density-independent pixel，叫dp或dip，与终端上的实际物理像素点无关。</li>
+  <li>单位：dp，可以保证在不同屏幕像素密度的设备上显示相同的效果</li>
+</ul>
+
+<blockquote>
+  <ol>
+    <li>Android开发时用dp而不是px单位设置图片大小，是Android特有的单位</li>
+    <li>场景：假如同样都是画一条长度是屏幕一半的线，如果使用px作为计量单位，那么在480x800分辨率手机上设置应为240px；在320x480的手机上应设置为160px，二者设置就不同了；如果使用dp为单位，在这两种分辨率下，160dp都显示为屏幕一半的长度。</li>
+  </ol>
+</blockquote>
+
+<ul>
+  <li>dp与px的转换
+ 因为ui给你的设计图是以px为单位的，Android开发则是使用dp作为单位的，那么该如何转换呢？</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>密度类型</th>
+      <th>代表的分辨率（px）</th>
+      <th>屏幕密度（dpi）</th>
+      <th>换算（px/dp）</th>
+      <th>比例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>低密度（ldpi）</td>
+      <td>240x320</td>
+      <td>120</td>
+      <td>1dp=0.75px</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>中密度（mdpi）</td>
+      <td>320x480</td>
+      <td>160</td>
+      <td>1dp=1px</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>高密度（hdpi）</td>
+      <td>480x800</td>
+      <td>240</td>
+      <td>1dp=1.5px</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>超高密度（xhdpi）</td>
+      <td>720x1280</td>
+      <td>320</td>
+      <td>1dp=2px</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>超超高密度（xxhdpi）</td>
+      <td>1080x1920</td>
+      <td>480</td>
+      <td>1dp=3px</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>在Android中，规定以160dpi（即屏幕分辨率为320x480）为基准：1dp=1px</p>
+
+<p><strong>独立比例像素</strong></p>
+
+<ul>
+  <li>含义：scale-independent pixel，叫sp或sip</li>
+  <li>单位：sp</li>
+</ul>
+
+<blockquote>
+  <ol>
+    <li>Android开发时用此单位设置文字大小，可根据用户的偏好文字大小/字体大小首选项进行缩放</li>
+    <li>推荐使用12sp、14sp、18sp、22sp作为字体设置的大小，不推荐使用奇数和小数，容易造成精度的丢失问题；小于12sp的字体会太小导致用户看不清</li>
+  </ol>
+</blockquote>
+
+<p>所以，为了能够进行不同屏幕像素密度的匹配，我们推荐：</p>
+
+<ul>
+  <li>使用dp来代替px作为控件长度的统一度量单位</li>
+  <li>使用sp作为文字的统一度量单位</li>
+</ul>
+
+<p>可是，请看以下一种场景：</p>
+
+<blockquote>
+  <p>Nexus5的总宽度为360dp，我们现在在水平方向上放置两个按钮，一个是150dp左对齐，另外一个是200dp右对齐，那么中间留有10dp间隔；但假如同样地设置在Nexus S（屏幕宽度是320dp），会发现，两个按钮会重叠，因为320dp&lt;200+150dp</p>
+</blockquote>
+
+<p>从上面可以看出，由于Android屏幕设备的多样性，如果使用dp来作为度量单位，并不是所有的屏幕的宽度都具备相同的dp长度</p>
+
+<blockquote>
+  <p>再次明确，<strong>屏幕宽度和像素密度没有任何关联关系</strong></p>
+</blockquote>
+
+<p>所以说，dp解决了同一数值在不同分辨率中展示相同尺寸大小的问题（即屏幕像素密度匹配问题），但却没有解决设备尺寸大小匹配的问题。（即屏幕尺寸匹配问题）</p>
+
+<blockquote>
+  <p>当然，我们一开始讨论的就是屏幕尺寸匹配问题，使用match_parent、wrap_content和weight，尽可能少用dp来指定控件的具体长宽，大部分的情况我们都是可以做到适配的。</p>
+</blockquote>
+
+<h1 id="那么该如何解决控件的屏幕尺寸和屏幕密度的适配问题呢">那么该如何解决控件的屏幕尺寸和屏幕密度的适配问题呢？</h1>
+
+<p>从上面可以看出：</p>
+
+<ul>
+  <li>因为屏幕密度（分辨率）不一样，所以不能用固定的px</li>
+  <li>因为屏幕宽度不一样，所以要小心的用dp</li>
+</ul>
+
+<p>因为本质上是希望使得布局组件在不同屏幕密度上显示相同的像素效果，那么，之前是绕了个弯使用dp解决这个问题，那么到底能不能直接用px解决呢？</p>
+
+<blockquote>
+  <p>即根据不同屏幕密度，控件选择对应的像素值大小</p>
+</blockquote>
+
+<p>接下来介绍一种方法：<strong>百分比适配方法</strong>，步骤如下：</p>
+
+<ol>
+  <li>以某一分辨率为基准，生成所有分辨率对应像素数列表</li>
+  <li>将生成像素数列表存放在res目录下对应的values文件下</li>
+  <li>根据UI设计师给出设计图上的尺寸，找到对应像素数的单位，然后设置给控件即可</li>
+</ol>
+
+<h1 id="步骤1以某一分辨率为基准生成所有分辨率对应像素数列表">步骤1：以某一分辨率为基准，生成所有分辨率对应像素数列表</h1>
+
+<p>现在我们以320x480的分辨率为基准：</p>
+
+<ul>
+  <li>将屏幕的宽度分为320份，取值为x1~x320</li>
+  <li>将屏幕的高度分为480份，取值为y1~y480</li>
+</ul>
+
+<p>然后生成该分辨率对应像素数的列表，如下图：</p>
+
+<ul>
+  <li>lay_x.xml（宽）</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;resources&gt;&lt;dimen</span> <span class="na">name=</span><span class="s">"x1"</span><span class="nt">&gt;</span>1.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x2"</span><span class="nt">&gt;</span>2.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x3"</span><span class="nt">&gt;</span>3.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x4"</span><span class="nt">&gt;</span>4.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x5"</span><span class="nt">&gt;</span>5.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x6"</span><span class="nt">&gt;</span>6.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x7"</span><span class="nt">&gt;</span>7.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x8"</span><span class="nt">&gt;</span>8.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x9"</span><span class="nt">&gt;</span>9.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x10"</span><span class="nt">&gt;</span>10.0px<span class="nt">&lt;/dimen&gt;</span>
+...
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x300"</span><span class="nt">&gt;</span>300.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x301"</span><span class="nt">&gt;</span>301.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x302"</span><span class="nt">&gt;</span>302.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x303"</span><span class="nt">&gt;</span>303.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x304"</span><span class="nt">&gt;</span>304.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x305"</span><span class="nt">&gt;</span>305.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x306"</span><span class="nt">&gt;</span>306.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x307"</span><span class="nt">&gt;</span>307.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x308"</span><span class="nt">&gt;</span>308.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x309"</span><span class="nt">&gt;</span>309.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x310"</span><span class="nt">&gt;</span>310.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x311"</span><span class="nt">&gt;</span>311.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x312"</span><span class="nt">&gt;</span>312.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x313"</span><span class="nt">&gt;</span>313.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x314"</span><span class="nt">&gt;</span>314.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x315"</span><span class="nt">&gt;</span>315.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x316"</span><span class="nt">&gt;</span>316.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x317"</span><span class="nt">&gt;</span>317.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x318"</span><span class="nt">&gt;</span>318.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x319"</span><span class="nt">&gt;</span>319.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x320"</span><span class="nt">&gt;</span>320px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>lay_y.xml（高）</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;resources&gt;&lt;dimen</span> <span class="na">name=</span><span class="s">"y1"</span><span class="nt">&gt;</span>1.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y2"</span><span class="nt">&gt;</span>2.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y3"</span><span class="nt">&gt;</span>3.0px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y4"</span><span class="nt">&gt;</span>4.0px<span class="nt">&lt;/dimen&gt;</span>
+...
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y480"</span><span class="nt">&gt;</span>480px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<p>找到基准后，是时候把其他分辨率补全了，现今以写1080x1920的分辨率为例：</p>
+
+<blockquote>
+  <p>因为基准是320x480，所以1080/320=3.375px，1920/480=4px，所以相应文件应该是</p>
+</blockquote>
+
+<ul>
+  <li>lay_x.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;resources&gt;&lt;dimen</span> <span class="na">name=</span><span class="s">"x1"</span><span class="nt">&gt;</span>3.375px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x2"</span><span class="nt">&gt;</span>6.65px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x3"</span><span class="nt">&gt;</span>10.125px<span class="nt">&lt;/dimen&gt;</span>
+...
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x320"</span><span class="nt">&gt;</span>1080px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>lay_y.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;resources&gt;&lt;dimen</span> <span class="na">name=</span><span class="s">"y1"</span><span class="nt">&gt;</span>4px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y2"</span><span class="nt">&gt;</span>8px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y3"</span><span class="nt">&gt;</span>12px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y4"</span><span class="nt">&gt;</span>16px<span class="nt">&lt;/dimen&gt;</span>
+...
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"y480"</span><span class="nt">&gt;</span>1920px<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<p>用上面的方法把你需要适配的分辨率的像素列表补全吧~</p>
+
+<p>作为程序猿的我们当然不会做手写的这些蠢事！！！多谢 @鸿洋大神 提供了自动生成工具（内置了常用的分辨率），大家可以直接<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2FhongyangAndroid%2FAndroid_Blog_Demos%2Ftree%2Fmaster%2Fblogcodes%2Fsrc%2Fmain%2Fjava%2Fcom%2Fzhy%2Fblogcodes%2Fgenvalues">点击这里</a>下载
+ 注：工具默认基准为400*320，当然对于特殊需求，通过命令行指定即可：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java -jar 文件名.jar 基准宽 基准高 额外支持尺寸1的宽，额外支持尺寸1的高_额外支持尺寸2的宽,额外支持尺寸2的高：
+</code></pre></div></div>
+
+<blockquote>
+  <p>例如：需要设置的基准是800x1280，额外支持尺寸：735x1152 ；3200x4500；</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java -jar 文件名.jar 800 1280 735，1152_3200,4500
+</code></pre></div></div>
+
+<h1 id="步骤2把生成的各像素数列表放到对应的资源文件">步骤2：把生成的各像素数列表放到对应的资源文件</h1>
+
+<p>将生成像素数列表（lay_x.xml和lay_y.xml）存放在res目录下对应的values文件（注意宽、高要对应），如下图：</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>![img](https:////upload-images.jianshu.io/upload_images/944365-c583e1356f18e329.jpg?imageMogr2/auto-orient/strip</td>
+      <td>imageView2/2/w/870/format/webp)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>res目录下对应的values文件</p>
+
+<blockquote>
+  <p>注：</p>
+</blockquote>
+
+<ul>
+  <li>分辨率为480x320的资源文件应放在res/values-480x320文件夹中；同理分辨率为1920x1080的资源文件应放在res/values-1920x1080文件夹中。（其中values-480x320是分辨率限定符）</li>
+  <li>必须在默认values里面也创建对应默认lay_x.xml和lay_y.xml文件，如下图
+ lay_x.xml</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">&lt;</span>?xml version="1.0" encoding="utf-8"&gt;
+<span class="nt">&lt;resources&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x1"</span><span class="nt">&gt;</span>1.0dp<span class="nt">&lt;/dimen&gt;</span>
+<span class="nt">&lt;dimen</span> <span class="na">name=</span><span class="s">"x2"</span><span class="nt">&gt;</span>2.0dp<span class="nt">&lt;/dimen&gt;</span>
+...
+<span class="nt">&lt;/resources&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>因为对于没有生成对应分辨率文件的手机，会使用默认values文件夹，如果默认values文件夹没有（即没有对应的分辨率、没有对应dimen）就会报错，从而无法进行屏幕适配。
+ （<strong>注意对应单位改为dp，而不同于上面的px。</strong>因为不知道机型的分辨率，所以默认分辨率文件只好默认为x1=1dp以保证尽量兼容（又回到dp老方法了），<strong>这也是这个解决方案的一个弊端</strong>）</li>
+</ul>
+
+<h1 id="步骤3根据ui设计师给出某一分辨率设计图上的尺寸找到对应像素数的单位然后设置给控件即可">步骤3：根据UI设计师给出某一分辨率设计图上的尺寸，找到对应像素数的单位，然后设置给控件即可</h1>
+
+<p>如下图：</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;FrameLayout</span> <span class="nt">&gt;</span>
+
+    <span class="nt">&lt;Button</span>
+        <span class="na">android:layout_gravity=</span><span class="s">"center"</span>
+        <span class="na">android:gravity=</span><span class="s">"center"</span>
+        <span class="na">android:text=</span><span class="s">"@string/hello_world"</span>
+        <span class="na">android:layout_width=</span><span class="s">"@dimen/x160"</span>
+        <span class="na">android:layout_height=</span><span class="s">"@dimen/y160"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/FrameLayout&gt;</span>
+</code></pre></div></div>
+
+<h1 id="总结-1">总结</h1>
+
+<p>使用上述的适配方式，应该能进行90%的适配了，但其缺点还是很明显：</p>
+
+<ul>
+  <li>由于实际上还是使用px作为长度的度量单位，所以和google的要求使用dp作为度量单位会有所背离</li>
+  <li>必须尽可能多的包含所有分辨率，因为这个是使用这个方案的基础，如果有某个分辨率缺少，将无法完成该屏幕的适配</li>
+  <li>过多的分辨率像素描述xml文件会增加软件包的大小和维护的难度</li>
+</ul>
+
+<hr />
+
+<h3 id="图片资源匹配-1">“图片资源”匹配</h3>
+
+<p><strong>本质：使得图片资源在不同屏幕密度上显示相同的像素效果</strong></p>
+
+<ul>
+  <li>做法：提供备用位图（符合屏幕尺寸的图片资源）
+ 由于 Android 可在各种屏幕密度的设备上运行，因此我们提供的位图资源应该始终可以满足各类密度的要求：</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>密度类型</th>
+      <th>代表的分辨率（px）</th>
+      <th>系统密度（dpi）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>低密度（ldpi）</td>
+      <td>240x320</td>
+      <td>120</td>
+    </tr>
+    <tr>
+      <td>中密度（mdpi）</td>
+      <td>320x480</td>
+      <td>160</td>
+    </tr>
+    <tr>
+      <td>高密度（hdpi）</td>
+      <td>480x800</td>
+      <td>240</td>
+    </tr>
+    <tr>
+      <td>超高密度（xhdpi）</td>
+      <td>720x1280</td>
+      <td>320</td>
+    </tr>
+    <tr>
+      <td>超超高密度（xxhdpi）</td>
+      <td>1080x1920</td>
+      <td>480</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>步骤1：根据以下尺寸范围针对各密度生成相应的图片。</li>
+</ul>
+
+<blockquote>
+  <p>比如说，如果我们为 xhdpi 设备生成了 200x200 px尺寸的图片，就应该按照相应比例地为 hdpi、mdpi 和 ldpi 设备分别生成 150x150、100x100 和 75x75 尺寸的图片</p>
+</blockquote>
+
+<p><strong>即一套分辨率=一套位图资源</strong>（这个当然是Ui设计师做了）</p>
+
+<ul>
+  <li>步骤2：将生成的图片文件放在 res/ 下的相应子目录中(mdpi、hdpi、xhdpi、xxhdpi)，系统就会根据运行您应用的设备的屏幕密度自动选择合适的图片</li>
+  <li>步骤3：通过引用 @drawable/id，系统都能根据相应屏幕的 屏幕密度（dpi）自动选取合适的位图。</li>
+</ul>
+
+<blockquote>
+  <p>注：</p>
+
+  <ul>
+    <li>如果是.9图或者是不需要多个分辨率的图片，放在drawable文件夹即可</li>
+    <li>对应分辨率的图片要正确的放在合适的文件夹，否则会造成图片拉伸等问题。</li>
+  </ul>
+</blockquote>
+
+<h1 id="更好地方案解决图片资源适配问题">更好地方案解决“图片资源”适配问题</h1>
+
+<p>上述方案是常见的一种方案，这固然是一种解决办法，但缺点在于：</p>
+
+<ul>
+  <li>每套分辨率出一套图，为美工或者设计增加了许多工作量</li>
+  <li>对Android工程文件的apk包变的很大</li>
+</ul>
+
+<p>那么，有没有一种方法：</p>
+
+<ul>
+  <li>保证屏幕密度适配</li>
+  <li>可以最小占用设计资源</li>
+  <li>使得apk包不变大（只使用一套分辨率的图片资源）</li>
+</ul>
+
+<p>下面我们就来介绍<strong>这个方法</strong>：</p>
+
+<ul>
+  <li>只需选择唯一一套分辨率规格的图片资源</li>
+</ul>
+
+<h1 id="方法介绍">方法介绍</h1>
+
+<p><strong>1. 先来理解下Android 加载资源过程</strong>
+ Android SDK会根据屏幕密度自动选择对应的资源文件进行渲染加载（自动渲染）</p>
+
+<blockquote>
+  <p>比如说，SDK检测到你手机的分辨率是320x480（dpi=160），会优先到drawable-mdpi文件夹下找对应的图片资源；但假设你只在xhpdi文件夹下有对应的图片资源文件（mdpi文件夹是空的），那么SDK会去xhpdi文件夹找到相应的图片资源文件，然后将原有大像素的图片自动缩放成小像素的图片，于是大像素的图片照样可以在小像素分辨率的手机上正常显示。
+ 具体请看<a href="https://links.jianshu.com/go?to=http%3A%2F%2Fblog.csdn.net%2Fxiebudong%2Farticle%2Fdetails%2F37040263">http://blog.csdn.net/xiebudong/article/details/37040263</a></p>
+</blockquote>
+
+<p><strong>所以理论上来说只需要提供一种分辨率规格的图片资源就可以了</strong>。
+ 那么应该提供哪种分辨率规格呢？</p>
+
+<blockquote>
+  <p>如果只提供ldpi规格的图片，对于大分辨率（xdpi、xxdpi）的手机如果把图片放大就会不清晰</p>
+</blockquote>
+
+<p>所以需要提供一套你需要支持的最大dpi分辨率规格的图片资源，这样即使用户的手机分辨率很小，这样图片缩小依然很清晰。那么这一套最大dpi分辨率规格应该是哪种呢？是现在市面手机分辨率最大可达到1080X1920的分辨率（dpi=xxdpi=480）吗？</p>
+
+<p><strong>2. xhdpi应该是首选</strong></p>
+
+<p>原因如下：</p>
+
+<ul>
+  <li>xhdpi分辨率以内的手机需求量最旺盛
+ 目前市面上最普遍的高端机的分辨率还多集中在720X1080范围内（xhdpi），所以目前来看xhpdi规格的图片资源成为了首选</li>
+  <li>节省设计资源&amp;工作量
+ 在现在的App开发中（iOS和Android版本），有些设计师为了保持App不同版本的体验交互一致，可能会以iPhone手机为基础进行设计，包括后期的切图之类的。
+ 设计师们一般都会用最新的iPhone6和iPhone5s（5s和5的尺寸以及分辨率都一样）来做原型设计，所有参数请看下图</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>机型</th>
+      <th>分辨率（px）</th>
+      <th>屏幕尺寸（inch）</th>
+      <th>系统密度（dpi）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>iPhone 5s</td>
+      <td>640X1164</td>
+      <td>4</td>
+      <td>332</td>
+    </tr>
+    <tr>
+      <td>iPhone 6</td>
+      <td>1334x750</td>
+      <td>4.7</td>
+      <td>326</td>
+    </tr>
+    <tr>
+      <td>iPhone 6 Plus</td>
+      <td>1080x1920</td>
+      <td>5</td>
+      <td>400</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>iPhone主流的屏幕dpi约等于320, 刚好属于xhdpi，所以选择xhdpi作为唯一一套dpi图片资源，可以让设计师不用专门为Android端切图，直接把iPhone的那一套切好的图片资源放入drawable-xhdpi文件夹里就好，这样大大减少的设计师的工作量！</p>
+
+<h1 id="额外小tips">额外小tips</h1>
+
+<ul>
+  <li>ImageView的ScaleType属性
+ 设置不同的ScaleType会得到不同的显示效果，一般情况下，设置为centerCrop能获得较好的适配效果。</li>
+  <li>动态设置</li>
+</ul>
+
+<blockquote>
+  <p>使用场景：有些情况下，我们需要动态的设置控件大小或者是位置，比如说popwindow的显示位置和偏移量等</p>
+</blockquote>
+
+<p>这时我们可以动态获取当前的屏幕属性，然后设置合适的数值</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ScreenSizeUtil</span> <span class="o">{</span> 
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getScreenWidth</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span> 
+    <span class="k">return</span> <span class="n">activity</span><span class="o">.</span><span class="na">getWindowManager</span><span class="o">().</span><span class="na">getDefaultDisplay</span><span class="o">().</span><span class="na">getWidth</span><span class="o">();</span> 
+<span class="o">}</span> 
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getScreenHeight</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span> 
+    <span class="k">return</span> <span class="n">activity</span><span class="o">.</span><span class="na">getWindowManager</span><span class="o">().</span><span class="na">getDefaultDisplay</span><span class="o">().</span><span class="na">getHeight</span><span class="o">();</span> 
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="总结-2">总结</h1>
+
+<ul>
+  <li>本文根据现今主流Android的适配方法，以逻辑清晰的方式进行了主流Android适配方法的全面整理</li>
+  <li>接下来我会介绍继续介绍Android开发中的相关知识，感兴趣的同学可以继续关注本人运营的<code class="highlighter-rouge">Wechat Public Account</code>：</li>
+  <li><a href="https://www.jianshu.com/p/2e92908af6ec">我想给你们介绍一个与众不同的Android微信公众号（福利回赠）</a></li>
+  <li><a href="https://www.jianshu.com/p/2c5d57fb054d">我想邀请您和我一起写Android（福利回赠）</a></li>
+</ul>
+
+<p>作者：Carson_Ho</p>
+
+<p>链接：https://www.jianshu.com/p/ec5a1a30694b</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

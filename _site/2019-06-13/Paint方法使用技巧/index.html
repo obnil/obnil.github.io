@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paint方法使用技巧</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Paint方法使用技巧 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Paint方法使用技巧" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Paint的完全功能的掌握，能让你更进一步，做出一些更加细致、炫酷的效果" />
+<meta property="og:description" content="Paint的完全功能的掌握，能让你更进一步，做出一些更加细致、炫酷的效果" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/Paint%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/Paint%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T04:30:42+00:00" />
+<script type="application/ld+json">
+{"description":"Paint的完全功能的掌握，能让你更进一步，做出一些更加细致、炫酷的效果","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/Paint%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/","headline":"Paint方法使用技巧","dateModified":"2019-06-13T04:30:42+00:00","datePublished":"2019-06-13T04:30:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/Paint%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>Paint方法使用技巧</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <h2 id="简介">简介</h2>
+
+<p>上一期我已经简单说过， <code class="highlighter-rouge">Canvas</code> 的 <code class="highlighter-rouge">drawXXX()</code> 方法配合 <code class="highlighter-rouge">Paint</code> 的几个常用方法可以实现最常见的绘制需求；而如果你只会基本的绘制， <code class="highlighter-rouge">Paint</code> 的完全功能的掌握，能让你更进一步，做出一些更加细致、炫酷的效果。把 <code class="highlighter-rouge">Paint</code> 掌握之后，你几乎不再会遇到「iOS 组可以实现，但你却实现不了」的绘制效果。</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5g0wlfj307807tdg3.jpg" alt="img" /></p>
+
+<p>由于依然是讲绘制的，所以这期就没有介绍视频了。绘制的内容一共需要讲大概 5~6 期才能讲完，也就是说你要看 5~6 期才能成为自定义绘制的高手。相对于上期的内容，这期的内容更为专项、深度更深。对于没有深入研究过 <code class="highlighter-rouge">Paint</code> 的人，这期是一个对 <code class="highlighter-rouge">Paint</code> 的诠释；而对于尝试过研究 <code class="highlighter-rouge">Paint</code> 但仍然对其中一些 API 有疑惑的人，这期也可以帮你解惑。</p>
+
+<p>另外，也正由于这期的内容是更为专项的，所以建议你在看的时候，不必像上期那样把所有东西都完全记住，而是只要把内容理解了就好。这期的内容，只要做到「知道有这么个东西」，在需要用到的时候能想起来这个功能能不能做、大致用什么做就好，至于具体的实现，到时候拐回来再翻一次就行了。</p>
+
+<p>好，下面进入正题。</p>
+
+<p><code class="highlighter-rouge">Paint</code> 的 API 大致可以分为 4 类：</p>
+
+<ul>
+  <li>颜色</li>
+  <li>效果</li>
+  <li>drawText() 相关</li>
+  <li>初始化</li>
+</ul>
+
+<p>下面我就对这 4 类分别进行介绍：</p>
+
+<h2 id="1-颜色">1 颜色</h2>
+
+<p><code class="highlighter-rouge">Canvas</code> 绘制的内容，有三层对颜色的处理：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5nbx1mj30j909yaay.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>这图大概看看就行，不用钻研明白再往下看，因为等这章讲完你就懂了。</p>
+</blockquote>
+
+<h3 id="11-基本颜色">1.1 基本颜色</h3>
+
+<p>像素的基本颜色，根据绘制内容的不同而有不同的控制方式： <code class="highlighter-rouge">Canvas</code> 的颜色填充类方法 <code class="highlighter-rouge">drawColor/RGB/ARGB()</code> 的颜色，是直接写在方法的参数里，通过参数来设置的（上期讲过了）； <code class="highlighter-rouge">drawBitmap()</code> 的颜色，是直接由 <code class="highlighter-rouge">Bitmap</code> 对象来提供的（上期也讲过了）；除此之外，是图形和文字的绘制，它们的颜色就需要使用 <code class="highlighter-rouge">paint</code> 参数来额外设置了（下面要讲的）。</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6gxcusnj20iw04xmzr.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">Paint</code> 设置颜色的方法有两种：一种是直接用 <code class="highlighter-rouge">Paint.setColor/ARGB()</code> 来设置颜色，另一种是使用 <code class="highlighter-rouge">Shader</code> 来指定着色方案。</p>
+
+<h4 id="111-直接设置颜色">1.1.1 直接设置颜色</h4>
+
+<h5 id="1111-setcolorint-color">1.1.1.1 setColor(int color)</h5>
+
+<p>方法名和使用方法都非常简单直接，而且这个方法在上期已经介绍过了，不再多说。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#009688"</span><span class="o">));</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawRect</span><span class="o">(</span><span class="mi">30</span><span class="o">,</span> <span class="mi">30</span><span class="o">,</span> <span class="mi">230</span><span class="o">,</span> <span class="mi">180</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>
+
+<span class="n">paint</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#FF9800"</span><span class="o">));</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawLine</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">30</span><span class="o">,</span> <span class="mi">450</span><span class="o">,</span> <span class="mi">180</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>
+
+<span class="n">paint</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#E91E63"</span><span class="o">));</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawText</span><span class="o">(</span><span class="s">"HenCoder"</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="mi">130</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6di0nzij20js05pab1.jpg" alt="img" /></p>
+
+<blockquote>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setColor()` 对应的 get 方法是 `getColor()
+</code></pre></div>  </div>
+</blockquote>
+
+<h5 id="1112-setargbint-a-int-r-int-g-int-b">1.1.1.2 setARGB(int a, int r, int g, int b)</h5>
+
+<p>其实和 <code class="highlighter-rouge">setColor(color)</code> 都是一样一样儿的，只是它的参数用的是更直接的三原色与透明度的值。实际运用中，<code class="highlighter-rouge">setColor()</code> 和 <code class="highlighter-rouge">setARGB()</code> 哪个方便和顺手用哪个吧。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setARGB</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">255</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawRect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setARGB</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawLine</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<h4 id="112-setshadershader-shader-设置-shader">1.1.2 setShader(Shader shader) 设置 Shader</h4>
+
+<p>除了直接设置颜色， <code class="highlighter-rouge">Paint</code> 还可以使用 <code class="highlighter-rouge">Shader</code> 。</p>
+
+<p>Shader 这个英文单词很多人没有见过，它的中文叫做「着色器」，也是用于设置绘制颜色的。「着色器」不是 Android 独有的，它是图形领域里一个通用的概念，它和直接设置颜色的区别是，着色器设置的是一个颜色方案，或者说是一套着色规则。当设置了 <code class="highlighter-rouge">Shader</code> 之后，<code class="highlighter-rouge">Paint</code> 在绘制图形和文字时就不使用 <code class="highlighter-rouge">setColor/ARGB()</code> 设置的颜色了，而是使用 <code class="highlighter-rouge">Shader</code> 的方案中的颜色。</p>
+
+<p>在 Android 的绘制里使用 <code class="highlighter-rouge">Shader</code> ，并不直接用 <code class="highlighter-rouge">Shader</code> 这个类，而是用它的几个子类。具体来讲有 <code class="highlighter-rouge">LinearGradient</code> <code class="highlighter-rouge">RadialGradient</code> <code class="highlighter-rouge">SweepGradient</code> <code class="highlighter-rouge">BitmapShader</code> <code class="highlighter-rouge">ComposeShader</code> 这么几个：</p>
+
+<h5 id="1121-lineargradient-线性渐变">1.1.2.1 LinearGradient 线性渐变</h5>
+
+<p>设置两个点和两种颜色，以这两个点作为端点，使用两种颜色的渐变来绘制颜色。就像这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Shader</span> <span class="n">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinearGradient</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="mi">500</span><span class="o">,</span> <span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#E91E63"</span><span class="o">),</span>  
+        <span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#2196F3"</span><span class="o">),</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">);</span>
+<span class="n">paint</span><span class="o">.</span><span class="na">setShader</span><span class="o">(</span><span class="n">shader</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5jqi5rj306l068dfu.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>设置了 <code class="highlighter-rouge">Shader</code> 之后，绘制出了渐变颜色的圆。（其他形状以及文字都可以这样设置颜色，我只是没给出图。）</p>
+
+  <p>注意：在设置了 <code class="highlighter-rouge">Shader</code> 的情况下， <code class="highlighter-rouge">Paint.setColor/ARGB()</code> 所设置的颜色就不再起作用。</p>
+</blockquote>
+
+<p>构造方法： 
+<code class="highlighter-rouge">LinearGradient(float x0, float y0, float x1, float y1, int color0, int color1, Shader.TileMode tile)</code>。</p>
+
+<p>参数： 
+<code class="highlighter-rouge">x0</code> <code class="highlighter-rouge">y0</code> <code class="highlighter-rouge">x1</code> <code class="highlighter-rouge">y1</code>：渐变的两个端点的位置 
+<code class="highlighter-rouge">color0</code> <code class="highlighter-rouge">color1</code> 是端点的颜色 
+<code class="highlighter-rouge">tile</code>：端点范围之外的着色规则，类型是 <code class="highlighter-rouge">TileMode</code>。<code class="highlighter-rouge">TileMode</code> 一共有 3 个值可选： <code class="highlighter-rouge">CLAMP</code>, <code class="highlighter-rouge">MIRROR</code>和 <code class="highlighter-rouge">REPEAT</code>。<code class="highlighter-rouge">CLAMP</code> （夹子模式？？？算了这个词我不会翻）会在端点之外延续端点处的颜色；<code class="highlighter-rouge">MIRROR</code>是镜像模式；<code class="highlighter-rouge">REPEAT</code> 是重复模式。具体的看一下例子就明白。</p>
+
+<p><code class="highlighter-rouge">CLAMP</code>:</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6e7vbemj20cj090goh.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">MIRROR</code>:</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5ve8ysj30ck08x3yr.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">REPEAT</code>:</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5sk0eqj30ck08xq3e.jpg" alt="img" /></p>
+
+<h5 id="1122-radialgradient-辐射渐变">1.1.2.2 RadialGradient 辐射渐变</h5>
+
+<p>辐射渐变很好理解，就是从中心向周围辐射状的渐变。大概像这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Shader</span> <span class="n">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RadialGradient</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#E91E63"</span><span class="o">),</span>  
+        <span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#2196F3"</span><span class="o">),</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">);</span>
+<span class="n">paint</span><span class="o">.</span><span class="na">setShader</span><span class="o">(</span><span class="n">shader</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5vsg5pj306d066aa4.jpg" alt="img" /></p>
+
+<p>构造方法： 
+<code class="highlighter-rouge">RadialGradient(float centerX, float centerY, float radius, int centerColor, int edgeColor, TileMode tileMode)</code>。</p>
+
+<p>参数： 
+<code class="highlighter-rouge">centerX</code> <code class="highlighter-rouge">centerY</code>：辐射中心的坐标 
+<code class="highlighter-rouge">radius</code>：辐射半径 
+<code class="highlighter-rouge">centerColor</code>：辐射中心的颜色 
+<code class="highlighter-rouge">edgeColor</code>：辐射边缘的颜色 
+<code class="highlighter-rouge">tileMode</code>：辐射范围之外的着色模式。</p>
+
+<p><code class="highlighter-rouge">CLAMP</code>:</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5txn60j30ck08y74e.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">MIRROR</code>:</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6fad0cpj20cm09142x.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">REPEAT</code>:</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6fflc56j20cl090tdr.jpg" alt="img" /></p>
+
+<h5 id="1123-sweepgradient-扫描渐变">1.1.2.3 SweepGradient 扫描渐变</h5>
+
+<p>又是一个渐变。「扫描渐变」这个翻译我也不知道精确不精确。大概是这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Shader</span> <span class="n">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SweepGradient</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#E91E63"</span><span class="o">),</span>  
+        <span class="n">Color</span><span class="o">.</span><span class="na">parseColor</span><span class="o">(</span><span class="s">"#2196F3"</span><span class="o">));</span>
+<span class="n">paint</span><span class="o">.</span><span class="na">setShader</span><span class="o">(</span><span class="n">shader</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6fmbemdj206u061my4.jpg" alt="img" /></p>
+
+<p>构造方法： 
+<code class="highlighter-rouge">SweepGradient(float cx, float cy, int color0, int color1)</code></p>
+
+<p>参数： 
+<code class="highlighter-rouge">cx</code> <code class="highlighter-rouge">cy</code> ：扫描的中心 
+<code class="highlighter-rouge">color0</code>：扫描的起始颜色 
+<code class="highlighter-rouge">color1</code>：扫描的终止颜色</p>
+
+<h5 id="1124-bitmapshader">1.1.2.4 BitmapShader</h5>
+
+<p>用 <code class="highlighter-rouge">Bitmap</code> 来着色（终于不是渐变了）。其实也就是用 <code class="highlighter-rouge">Bitmap</code> 的像素来作为图形或文字的填充。大概像这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Bitmap</span> <span class="n">bitmap</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeResource</span><span class="o">(</span><span class="n">getResources</span><span class="o">(),</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">batman</span><span class="o">);</span>  
+<span class="n">Shader</span> <span class="n">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BitmapShader</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">,</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setShader</span><span class="o">(</span><span class="n">shader</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6fragq2j20lc089djv.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>嗯，看着跟 <code class="highlighter-rouge">Canvas.drawBitmap()</code> 好像啊？事实上也是一样的效果。如果你想绘制圆形的 <code class="highlighter-rouge">Bitmap</code>，就别用 <code class="highlighter-rouge">drawBitmap()</code> 了，改用 <code class="highlighter-rouge">drawCircle()</code> + <code class="highlighter-rouge">BitmapShader</code> 就可以了（其他形状同理）。</p>
+</blockquote>
+
+<p>构造方法： 
+<code class="highlighter-rouge">BitmapShader(Bitmap bitmap, Shader.TileMode tileX, Shader.TileMode tileY)</code></p>
+
+<p>参数： 
+<code class="highlighter-rouge">bitmap</code>：用来做模板的 <code class="highlighter-rouge">Bitmap</code> 对象 
+<code class="highlighter-rouge">tileX</code>：横向的 <code class="highlighter-rouge">TileMode</code> 
+<code class="highlighter-rouge">tileY</code>：纵向的 <code class="highlighter-rouge">TileMode</code>。</p>
+
+<p><code class="highlighter-rouge">CLAMP</code>:</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5gx0xyj30ks0chdgu.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">MIRROR</code>:</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5gh4ncj30kw0cjq78.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">REPEAT</code>:</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6gcxlrfj20kv0ciduo.jpg" alt="img" /></p>
+
+<h5 id="1125-composeshader-混合着色器">1.1.2.5 ComposeShader 混合着色器</h5>
+
+<p>所谓混合，就是把两个 <code class="highlighter-rouge">Shader</code> 一起使用。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 第一个 Shader：头像的 Bitmap</span>
+<span class="n">Bitmap</span> <span class="n">bitmap1</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeResource</span><span class="o">(</span><span class="n">getResources</span><span class="o">(),</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">batman</span><span class="o">);</span>  
+<span class="n">Shader</span> <span class="n">shader1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BitmapShader</span><span class="o">(</span><span class="n">bitmap1</span><span class="o">,</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">,</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">);</span>
+
+<span class="c1">// 第二个 Shader：从上到下的线性渐变（由透明到黑色）</span>
+<span class="n">Bitmap</span> <span class="n">bitmap2</span> <span class="o">=</span> <span class="n">BitmapFactory</span><span class="o">.</span><span class="na">decodeResource</span><span class="o">(</span><span class="n">getResources</span><span class="o">(),</span> <span class="n">R</span><span class="o">.</span><span class="na">drawable</span><span class="o">.</span><span class="na">batman_logo</span><span class="o">);</span>  
+<span class="n">Shader</span> <span class="n">shader2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BitmapShader</span><span class="o">(</span><span class="n">bitmap2</span><span class="o">,</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">,</span> <span class="n">Shader</span><span class="o">.</span><span class="na">TileMode</span><span class="o">.</span><span class="na">CLAMP</span><span class="o">);</span>
+
+<span class="c1">// ComposeShader：结合两个 Shader</span>
+<span class="n">Shader</span> <span class="n">shader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ComposeShader</span><span class="o">(</span><span class="n">shader1</span><span class="o">,</span> <span class="n">shader2</span><span class="o">,</span> <span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">SRC_OVER</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setShader</span><span class="o">(</span><span class="n">shader</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<blockquote>
+  <p>注意：上面这段代码中我使用了两个 <code class="highlighter-rouge">BitmapShader</code> 来作为 <code class="highlighter-rouge">ComposeShader()</code> 的参数，而 <code class="highlighter-rouge">ComposeShader()</code> 在硬件加速下是不支持两个相同类型的 <code class="highlighter-rouge">Shader</code> 的，所以这里也需要关闭硬件加速才能看到效果。</p>
+</blockquote>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5ljqevj30qy08cmyz.jpg" alt="img" /></p>
+
+<p>构造方法：<code class="highlighter-rouge">ComposeShader(Shader shaderA, Shader shaderB, PorterDuff.Mode mode)</code></p>
+
+<p>参数： 
+<code class="highlighter-rouge">shaderA</code>, <code class="highlighter-rouge">shaderB</code>：两个相继使用的 <code class="highlighter-rouge">Shader</code> 
+<code class="highlighter-rouge">mode</code>: 两个 <code class="highlighter-rouge">Shader</code> 的叠加模式，即 <code class="highlighter-rouge">shaderA</code> 和 <code class="highlighter-rouge">shaderB</code> 应该怎样共同绘制。它的类型是 <code class="highlighter-rouge">PorterDuff.Mode</code> 。</p>
+
+<blockquote>
+  <p>PorterDuff.Mode</p>
+
+  <p><code class="highlighter-rouge">PorterDuff.Mode</code> 是用来指定两个图像共同绘制时的颜色策略的。它是一个 enum，不同的 <code class="highlighter-rouge">Mode</code> 可以指定不同的策略。「颜色策略」的意思，就是说把源图像绘制到目标图像处时应该怎样确定二者结合后的颜色，而对于 <code class="highlighter-rouge">ComposeShader(shaderA, shaderB, mode)</code> 这个具体的方法，就是指应该怎样把 <code class="highlighter-rouge">shaderB</code> 绘制在 <code class="highlighter-rouge">shaderA</code> 上来得到一个结合后的 <code class="highlighter-rouge">Shader</code>。</p>
+
+  <p>没有听说过 <code class="highlighter-rouge">PorterDuff.Mode</code> 的人，看到这里很可能依然会一头雾水：「什么怎么结合？就……两个图像一叠加，结合呗？还能怎么结合？」你还别说，还真的是有很多种策略来结合。</p>
+
+  <p>最符合直觉的结合策略，就是我在上面这个例子中使用的 <code class="highlighter-rouge">Mode</code>: <code class="highlighter-rouge">SRC_OVER</code>。它的算法非常直观：就像上面图中的那样，把源图像直接铺在目标图像上。不过，除了这种，其实还有一些其他的结合方式。例如如果我把上面例子中的参数 <code class="highlighter-rouge">mode</code> 改为 <code class="highlighter-rouge">PorterDuff.Mode.DST_OUT</code>，就会变成挖空效果：</p>
+
+  <p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zf5thrrxj30ql09agne.jpg" alt="img" /></p>
+
+  <p>而如果再把 <code class="highlighter-rouge">mode</code> 改为 <code class="highlighter-rouge">PorterDuff.Mode.DST_IN</code>，就会变成蒙版抠图效果：</p>
+
+  <p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6hxsdpij20qv09p43m.jpg" alt="img" /></p>
+
+  <p>这下明白了吧？</p>
+
+  <p>具体来说， <code class="highlighter-rouge">PorterDuff.Mode</code> 一共有 17 个，可以分为两类：</p>
+
+  <ol>
+    <li>Alpha 合成 (Alpha Compositing)</li>
+    <li>混合 (Blending)</li>
+  </ol>
+
+  <p>第一类，Alpha 合成，其实就是 「PorterDuff」 这个词所指代的算法。 「PorterDuff」 并不是一个具有实际意义的词组，而是两个人的名字（准确讲是姓）。这两个人当年共同发表了一篇论文，描述了 12 种将两个图像共同绘制的操作（即算法）。而这篇论文所论述的操作，都是关于 Alpha 通道（也就是我们通俗理解的「透明度」）的计算的，后来人们就把这类计算称为<strong>Alpha 合成</strong> ( Alpha Compositing ) 。</p>
+
+  <p>看下效果吧。效果直接盗 Google 的<a href="https://developer.android.com/reference/android/graphics/PorterDuff.Mode.html">官方文档</a>了。</p>
+
+  <p>源图像和目标图像：</p>
+
+  <p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6ia1twgj20ds07tdgs.jpg" alt="img" /></p>
+
+  <p>Alpha 合成：</p>
+
+  <p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6im3hhcj20o50zt7bj.jpg" alt="img" /></p>
+
+  <p>第二类，混合，也就是 Photoshop 等制图软件里都有的那些混合模式（<code class="highlighter-rouge">multiply</code> <code class="highlighter-rouge">darken</code> <code class="highlighter-rouge">lighten</code>之类的）。这一类操作的是颜色本身而不是 <code class="highlighter-rouge">Alpha</code> 通道，并不属于 <code class="highlighter-rouge">Alpha</code> 合成，所以和 Porter 与 Duff 这两个人也没什么关系，不过为了使用的方便，它们同样也被 Google 加进了 <code class="highlighter-rouge">PorterDuff.Mode</code>里。</p>
+
+  <p>效果依然盗 <a href="https://developer.android.com/reference/android/graphics/PorterDuff.Mode.html">官方文档</a>。</p>
+
+  <p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6iw04v0j20ny0hzmzj.jpg" alt="img" /></p>
+
+  <h5 id="结论">结论</h5>
+
+  <p>从效果图可以看出，Alpha 合成类的效果都比较直观，基本上可以使用简单的口头表达来描述它们的算法（起码对于不透明的源图像和目标图像来说是可以的），例如 <code class="highlighter-rouge">SRC_OVER</code> 表示「二者都绘制，但要源图像放在目标图像的上面」，<code class="highlighter-rouge">DST_IN</code> 表示「只绘制目标图像，并且只绘制它和源图像重合的区域」。</p>
+
+  <p>而混合类的效果就相对抽象一些，只从效果图不太能看得出它们的着色算法，更看不出来它们有什么用。不过没关系，你如果拿着这些名词去问你司的设计师，他们八成都能给你说出来个 123。</p>
+
+  <p>所以对于这些 <code class="highlighter-rouge">Mode</code>，正确的做法是：<strong>对于 Alpha 合成类的操作，掌握他们，并在实际开发中灵活运用；而对于混合类的，你只要把它们的名字记住就好了，这样当某一天设计师告诉你「我要做这种混合效果」的时候，你可以马上知道自己能不能做，怎么做。</strong></p>
+
+  <p>另外：<code class="highlighter-rouge">PorterDuff.Mode</code> 建议你动手用一下试试，对加深理解有帮助。</p>
+</blockquote>
+
+<p>好了，这些就是几个 <code class="highlighter-rouge">Shader</code> 的具体介绍。</p>
+
+<p>除了使用 <code class="highlighter-rouge">setColor/ARGB()</code> 和 <code class="highlighter-rouge">setShader()</code> 来设置基本颜色， <code class="highlighter-rouge">Paint</code> 还可以来设置 <code class="highlighter-rouge">ColorFilter</code>，来对颜色进行第二层处理。</p>
+
+<h3 id="12-setcolorfiltercolorfilter-colorfilter">1.2 setColorFilter(ColorFilter colorFilter)</h3>
+
+<p><code class="highlighter-rouge">ColorFilter</code> 这个类，它的名字已经足够解释它的作用：为绘制设置颜色过滤。颜色过滤的意思，就是为绘制的内容设置一个统一的过滤策略，然后 <code class="highlighter-rouge">Canvas.drawXXX()</code> 方法会对每个像素都进行过滤后再绘制出来。举几个现实中比较常见的颜色过滤的例子：</p>
+
+<ul>
+  <li>
+    <p>有色光照射：</p>
+
+    <p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6j51ronj20rs0kv1kx.jpg" alt="w400" /></p>
+  </li>
+  <li>
+    <p>有色玻璃透视：</p>
+
+    <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5y7ryoj30iw0dbq5u.jpg" alt="w400" /></p>
+  </li>
+  <li>
+    <p>胶卷：</p>
+
+    <p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6jv8idsj206404v40i.jpg" alt="img" /></p>
+  </li>
+</ul>
+
+<p>在 <code class="highlighter-rouge">Paint</code> 里设置 <code class="highlighter-rouge">ColorFilter</code> ，使用的是 <code class="highlighter-rouge">Paint.setColorFilter(ColorFilter filter)</code> 方法。 <code class="highlighter-rouge">ColorFilter</code> 并不直接使用，而是使用它的子类。它共有三个子类：<code class="highlighter-rouge">LightingColorFilter</code><code class="highlighter-rouge">PorterDuffColorFilter</code> 和 <code class="highlighter-rouge">ColorMatrixColorFilter</code>。</p>
+
+<h4 id="121-lightingcolorfilter">1.2.1 LightingColorFilter</h4>
+
+<p>这个 <code class="highlighter-rouge">LightingColorFilter</code> 是用来模拟简单的光照效果的。</p>
+
+<p><code class="highlighter-rouge">LightingColorFilter</code> 的构造方法是 <code class="highlighter-rouge">LightingColorFilter(int mul, int add)</code> ，参数里的 <code class="highlighter-rouge">mul</code> 和 <code class="highlighter-rouge">add</code> 都是和颜色值格式相同的 int 值，其中 <code class="highlighter-rouge">mul</code> 用来和目标像素相乘，<code class="highlighter-rouge">add</code> 用来和目标像素相加：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R' = R * mul.R / 0xff + add.R  
+G' = G * mul.G / 0xff + add.G  
+B' = B * mul.B / 0xff + add.B  
+</code></pre></div></div>
+
+<p>一个「保持原样」的「基本 <code class="highlighter-rouge">LightingColorFilter</code> 」，<code class="highlighter-rouge">mul</code> 为 <code class="highlighter-rouge">0xffffff</code>，<code class="highlighter-rouge">add</code> 为 <code class="highlighter-rouge">0x000000</code>（也就是0），那么对于一个像素，它的计算过程就是：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">R</span><span class="err">'</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="mh">0xff</span> <span class="o">/</span> <span class="mh">0xff</span> <span class="o">+</span> <span class="mh">0x0</span> <span class="o">=</span> <span class="n">R</span> <span class="c1">// R' = R  </span>
+<span class="n">G</span><span class="err">'</span> <span class="o">=</span> <span class="n">G</span> <span class="o">*</span> <span class="mh">0xff</span> <span class="o">/</span> <span class="mh">0xff</span> <span class="o">+</span> <span class="mh">0x0</span> <span class="o">=</span> <span class="n">G</span> <span class="c1">// G' = G  </span>
+<span class="n">B</span><span class="err">'</span> <span class="o">=</span> <span class="n">B</span> <span class="o">*</span> <span class="mh">0xff</span> <span class="o">/</span> <span class="mh">0xff</span> <span class="o">+</span> <span class="mh">0x0</span> <span class="o">=</span> <span class="n">B</span> <span class="c1">// B' = B  </span>
+</code></pre></div></div>
+
+<p>基于这个「基本 <code class="highlighter-rouge">LightingColorFilter</code> 」，你就可以修改一下做出其他的 filter。比如，如果你想去掉原像素中的红色，可以把它的 <code class="highlighter-rouge">mul</code> 改为 <code class="highlighter-rouge">0x00ffff</code> （红色部分为 0 ） ，那么它的计算过程就是：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R' = R * 0x0 / 0xff + 0x0 = 0 // 红色被移除  
+G' = G * 0xff / 0xff + 0x0 = G  
+B' = B * 0xff / 0xff + 0x0 = B  
+</code></pre></div></div>
+
+<p>具体效果是这样的：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ColorFilter</span> <span class="n">lightingColorFilter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="mh">0x00ffff</span><span class="o">,</span> <span class="mh">0x000000</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="n">lightingColorFilter</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6k1n8aij209104faay.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>表情忽然变得阴郁了</p>
+</blockquote>
+
+<p>或者，如果你想让它的绿色更亮一些，就可以把它的 <code class="highlighter-rouge">add</code> 改为 <code class="highlighter-rouge">0x003000</code> （绿色部分为 0x30 ），那么它的计算过程就是：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R' = R * 0xff / 0xff + 0x0 = R  
+G' = G * 0xff / 0xff + 0x30 = G + 0x30 // 绿色被加强  
+B' = B * 0xff / 0xff + 0x0 = B  
+</code></pre></div></div>
+
+<p>效果是这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ColorFilter</span> <span class="n">lightingColorFilter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LightingColorFilter</span><span class="o">(</span><span class="mh">0xffffff</span><span class="o">,</span> <span class="mh">0x003000</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setColorFilter</span><span class="o">(</span><span class="n">lightingColorFilter</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/52eb2279ly1fig6k91tiyj209f04dmy3.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>这样的表情才阳光</p>
+</blockquote>
+
+<p>至于怎么修改参数来模拟你想要的某种具体光照效果，你就别问我了，还是跟你司设计师讨论吧，这个我不专业……</p>
+
+<h4 id="122-porterduffcolorfilter">1.2.2 PorterDuffColorFilter</h4>
+
+<p>这个 <code class="highlighter-rouge">PorterDuffColorFilter</code> 的作用是使用一个指定的颜色和一种指定的 <code class="highlighter-rouge">PorterDuff.Mode</code> 来与绘制对象进行合成。它的构造方法是 <code class="highlighter-rouge">PorterDuffColorFilter(int color, PorterDuff.Mode mode)</code> 其中的 <code class="highlighter-rouge">color</code> 参数是指定的颜色， <code class="highlighter-rouge">mode</code> 参数是指定的 <code class="highlighter-rouge">Mode</code>。同样也是 <code class="highlighter-rouge">PorterDuff.Mode</code> ，不过和 <code class="highlighter-rouge">ComposeShader</code> 不同的是，<code class="highlighter-rouge">PorterDuffColorFilter</code> 作为一个 <code class="highlighter-rouge">ColorFilter</code>，只能指定一种颜色作为源，而不是一个 <code class="highlighter-rouge">Bitmap</code>。</p>
+
+<p><code class="highlighter-rouge">PorterDuff.Mode</code> 前面已经讲过了，而 <code class="highlighter-rouge">PorterDuffColorFilter</code> 本身的使用是非常简单的，所以不再展开讲。</p>
+
+<h4 id="123-colormatrixcolorfilter">1.2.3 ColorMatrixColorFilter</h4>
+
+<p>这个就厉害了。<code class="highlighter-rouge">ColorMatrixColorFilter</code> 使用一个 <code class="highlighter-rouge">ColorMatrix</code> 来对颜色进行处理。 <code class="highlighter-rouge">ColorMatrix</code>这个类，内部是一个 4x5 的矩阵：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ a, b, c, d, e,
+  f, g, h, i, j,
+  k, l, m, n, o,
+  p, q, r, s, t ]
+</code></pre></div></div>
+
+<p>通过计算， <code class="highlighter-rouge">ColorMatrix</code> 可以把要绘制的像素进行转换。对于颜色 [R, G, B, A] ，转换算法是这样的：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>R’ = a*R + b*G + c*B + d*A + e;  
+G’ = f*R + g*G + h*B + i*A + j;  
+B’ = k*R + l*G + m*B + n*A + o;  
+A’ = p*R + q*G + r*B + s*A + t;  
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">ColorMatrix</code> 有一些自带的方法可以做简单的转换，例如可以使用 <code class="highlighter-rouge">setSaturation(float sat)</code> 来设置饱和度；另外你也可以自己去设置它的每一个元素来对转换效果做精细调整。具体怎样设置会有怎样的效果，我就不讲了（其实是我也不太会😅）。如果你有需求，可以试一下程大治同学做的这个库：<a href="https://github.com/chengdazhi/StyleImageView">StyleImageView</a></p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5s0t1fg309c0fzqv7.gif" alt="img" /></p>
+
+<p>以上，就是 <code class="highlighter-rouge">Paint</code> 对颜色的第二层处理：通过 <code class="highlighter-rouge">setColorFilter(colorFilter)</code> 来加工颜色。</p>
+
+<p>除了基本颜色的设置（ <code class="highlighter-rouge">setColor/ARGB()</code>, <code class="highlighter-rouge">setShader()</code> ）以及基于原始颜色的过滤（ <code class="highlighter-rouge">setColorFilter()</code> ）之外，<code class="highlighter-rouge">Paint</code> 最后一层处理颜色的方法是 <code class="highlighter-rouge">setXfermode(Xfermode xfermode)</code> ，它处理的是「当颜色遇上 View」的问题。</p>
+
+<h3 id="13-setxfermodexfermode-xfermode">1.3 setXfermode(Xfermode xfermode)</h3>
+
+<p>“Xfermode” 其实就是 “Transfer mode”，用 “X” 来代替 “Trans” 是一些美国人喜欢用的简写方式。严谨地讲， <code class="highlighter-rouge">Xfermode</code> 指的是你要绘制的内容和 <code class="highlighter-rouge">Canvas</code> 的目标位置的内容应该怎样结合计算出最终的颜色。但通俗地说，其实就是要你以绘制的内容作为源图像，以 View 中已有的内容作为目标图像，选取一个 <code class="highlighter-rouge">PorterDuff.Mode</code> 作为绘制内容的颜色处理方案。就像这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Xfermode</span> <span class="n">xfermode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PorterDuffXfermode</span><span class="o">(</span><span class="n">PorterDuff</span><span class="o">.</span><span class="na">Mode</span><span class="o">.</span><span class="na">DST_IN</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">rectBitmap</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span> <span class="c1">// 画方  </span>
+<span class="n">paint</span><span class="o">.</span><span class="na">setXfermode</span><span class="o">(</span><span class="n">xfermode</span><span class="o">);</span> <span class="c1">// 设置 Xfermode  </span>
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">circleBitmap</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span> <span class="c1">// 画圆  </span>
+<span class="n">paint</span><span class="o">.</span><span class="na">setXfermode</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span> <span class="c1">// 用完及时清除 Xfermode  </span>
+</code></pre></div></div>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5haf8xj30nl0psq3n.jpg" alt="img" /></p>
+
+<p><img src="http://ws4.sinaimg.cn/large/006tNc79ly1fig70910n6g30eg0b4x6p.gif" alt="img" /></p>
+
+<p>又是 <code class="highlighter-rouge">PorterDuff.Mode</code> 。 <code class="highlighter-rouge">PorterDuff.Mode</code> 在 <code class="highlighter-rouge">Paint</code> 一共有三处 API ，它们的工作原理都一样，只是用途不同：</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zf5qoywrj30fs04uwev.jpg" alt="img" /></p>
+
+<p>另外，从上面的示例代码可以看出，创建 <code class="highlighter-rouge">Xfermode</code> 的时候其实是创建的它的子类 <code class="highlighter-rouge">PorterDuffXfermode</code>。而事实上，<code class="highlighter-rouge">Xfermode</code> 也只有这一个子类。所以在设置 <code class="highlighter-rouge">Xfermode</code> 的时候不用多想，直接用 <code class="highlighter-rouge">PorterDuffXfermode</code> 吧。</p>
+
+<blockquote>
+  <p>「只有一个子类？？？什么设计？」</p>
+
+  <p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig71bvcguj305t05wq35.jpg" alt="img" /></p>
+
+  <p>其实在更早的 Android 版本中，<code class="highlighter-rouge">Xfermode</code> 还有别的子类，但别的子类现在已经 <code class="highlighter-rouge">deprecated</code> 了，如今只剩下了 <code class="highlighter-rouge">PorterDuffXfermode</code>。所以目前它的使用看起来好像有点啰嗦，但其实是由于历史遗留问题。</p>
+</blockquote>
+
+<h4 id="xfermode-注意事项">Xfermode 注意事项</h4>
+
+<p><code class="highlighter-rouge">Xfermode</code> 使用很简单，不过有两点需要注意：</p>
+
+<h5 id="1-使用离屏缓冲off-screen-buffer">1. 使用离屏缓冲（Off-screen Buffer）</h5>
+
+<p>实质上，上面这段例子代码，如果直接执行的话是不会绘制出图中效果的，程序的绘制也不会像上面的动画那样执行，而是会像这样：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5x918nj30nl0pl3zh.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>为什么会这样？</p>
+</blockquote>
+
+<p>按照逻辑我们会认为，在第二步画圆的时候，跟它共同计算的是第一步绘制的方形。但实际上，却是整个 <code class="highlighter-rouge">View</code> 的显示区域都在画圆的时候参与计算，并且 <code class="highlighter-rouge">View</code> 自身的底色并不是默认的透明色，而且是遵循一种迷之逻辑，导致不仅绘制的是整个圆的范围，而且在范围之外都变成了黑色。就像这样：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5q8af2g30eg0b4u0x.gif" alt="img" /></p>
+
+<blockquote>
+  <p>这……那可如何是好？</p>
+</blockquote>
+
+<p>要想使用 <code class="highlighter-rouge">setXfermode()</code> 正常绘制，必须使用离屏缓存 (Off-screen Buffer) 把内容绘制在额外的层上，再把绘制好的内容贴回 View 中。也就是这样：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5ijsbug30eg0b4npd.gif" alt="img" /></p>
+
+<p>通过使用离屏缓冲，把要绘制的内容单独绘制在缓冲层， <code class="highlighter-rouge">Xfermode</code> 的使用就不会出现奇怪的结果了。使用离屏缓冲有两种方式：</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">Canvas.saveLayer()</code></p>
+
+    <p><code class="highlighter-rouge">saveLayer()</code> 可以做短时的离屏缓冲。使用方法很简单，在绘制代码的前后各加一行代码，在绘制之前保存，绘制之后恢复：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int saved = canvas.saveLayer(null, null, Canvas.ALL_SAVE_FLAG);
+  
+  
+canvas.drawBitmap(rectBitmap, 0, 0, paint); // 画方
+paint.setXfermode(xfermode); // 设置 Xfermode
+canvas.drawBitmap(circleBitmap, 0, 0, paint); // 画圆
+paint.setXfermode(null); // 用完及时清除 Xfermode
+  
+  
+canvas.restoreToCount(saved);
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">View.setLayerType()</code></p>
+
+    <p><code class="highlighter-rouge">View.setLayerType()</code> 是直接把整个 <code class="highlighter-rouge">View</code> 都绘制在离屏缓冲中。 <code class="highlighter-rouge">setLayerType(LAYER_TYPE_HARDWARE)</code> 是使用 GPU 来缓冲， <code class="highlighter-rouge">setLayerType(LAYER_TYPE_SOFTWARE)</code> 是直接直接用一个 <code class="highlighter-rouge">Bitmap</code> 来缓冲。</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>关于 <code class="highlighter-rouge">Canvas.saveLayer()</code> 和 <code class="highlighter-rouge">View.setLayerType()</code> ，这里就不细讲它们的意义和原理了，后面也许我会专门用一期来讲它们。</p>
+</blockquote>
+
+<p>如果没有特殊需求，可以选用第一种方法 <code class="highlighter-rouge">Canvas.saveLayer()</code> 来设置离屏缓冲，以此来获得更高的性能。更多关于离屏缓冲的信息，可以看<a href="https://developer.android.com/guide/topics/graphics/hardware-accel.html">官方文档</a>中对于硬件加速的介绍。</p>
+
+<h5 id="2-控制好透明区域">2. 控制好透明区域</h5>
+
+<p>使用 Xfermode 来绘制的内容，除了注意使用离屏缓冲，还应该注意控制它的透明区域不要太小，要让它足够覆盖到要和它结合绘制的内容，否则得到的结果很可能不是你想要的。我用图片来具体说明一下：</p>
+
+<p><img src="http://ws1.sinaimg.cn/large/006tNc79ly1fig73037soj30sj0x3myt.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>如图所示，由于透明区域过小而覆盖不到的地方，将不会受到 Xfermode 的影响。</p>
+</blockquote>
+
+<p>好，到此为止，前面讲的就是 <code class="highlighter-rouge">Paint</code> 的第一类 API——关于颜色的三层设置：直接设置颜色的 API 用来给图形和文字设置颜色； <code class="highlighter-rouge">setColorFilter()</code> 用来基于颜色进行过滤处理； <code class="highlighter-rouge">setXfermode()</code> 用来处理源图像和 <code class="highlighter-rouge">View</code> 已有内容的关系。</p>
+
+<p>再贴一次本章开始处的图作为回顾：</p>
+
+<p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig738su5oj30j909ymy2.jpg" alt="img" /></p>
+
+<h2 id="2-效果">2 效果</h2>
+
+<p>效果类的 API ，指的就是抗锯齿、填充/轮廓、线条宽度等等这些。</p>
+
+<h3 id="21-setantialias-boolean-aa-设置抗锯齿">2.1 setAntiAlias (boolean aa) 设置抗锯齿</h3>
+
+<p>抗锯齿在上一节已经讲过了，话不多说，直接上图：</p>
+
+<p><img src="http://ws1.sinaimg.cn/large/006tNc79ly1fig73fpp5aj30ks0bqt9f.jpg" alt="img" /></p>
+
+<p>抗锯齿默认是关闭的，如果需要抗锯齿，需要显式地打开。另外，除了 <code class="highlighter-rouge">setAntiAlias(aa)</code> 方法，打开抗锯齿还有一个更方便的方式：构造方法。创建 <code class="highlighter-rouge">Paint</code> 对象的时候，构造方法的参数里加一个 <code class="highlighter-rouge">ANTI_ALIAS_FLAG</code> 的 flag，就可以在初始化的时候就开启抗锯齿。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Paint</span> <span class="n">paint</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Paint</span><span class="o">(</span><span class="n">Paint</span><span class="o">.</span><span class="na">ANTI_ALIAS_FLAG</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<h3 id="22-setstylepaintstyle-style">2.2 setStyle(Paint.Style style)</h3>
+
+<p><code class="highlighter-rouge">setStyle(style)</code> 也在上一节讲过了，用来设置图形是线条风格还是填充风格的（也可以二者并用）：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>paint.setStyle(Paint.Style.FILL); // FILL 模式，填充  
+canvas.drawCircle(300, 300, 200, paint);  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig73rw5yoj303w03s0sm.jpg" alt="img" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>paint.setStyle(Paint.Style.STROKE); // STROKE 模式，画线  
+canvas.drawCircle(300, 300, 200, paint);  
+</code></pre></div></div>
+
+<p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig7lnxj6oj303z03ta9y.jpg" alt="img" /></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>paint.setStyle(Paint.Style.FILL_AND_STROKE); // FILL_AND_STROKE 模式，填充 + 画线  
+canvas.drawCircle(300, 300, 200, paint);  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7litstsj303w03s0sm.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">FILL</code> 模式是默认模式，所以如果之前没有设置过其他的 <code class="highlighter-rouge">Style</code>，可以不用 <code class="highlighter-rouge">setStyle(Paint.Style.FILL)</code> 这句。</p>
+
+<h3 id="23-线条形状">2.3 线条形状</h3>
+
+<p>设置线条形状的一共有 4 个方法：<code class="highlighter-rouge">setStrokeWidth(float width)</code>, <code class="highlighter-rouge">setStrokeCap(Paint.Cap cap)</code>, <code class="highlighter-rouge">setStrokeJoin(Paint.Join join)</code>, <code class="highlighter-rouge">setStrokeMiter(float miter)</code> 。</p>
+
+<h4 id="231-setstrokewidthfloat-width">2.3.1 setStrokeWidth(float width)</h4>
+
+<p>设置线条宽度。单位为像素，默认值是 0。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setStyle</span><span class="o">(</span><span class="n">Paint</span><span class="o">.</span><span class="na">Style</span><span class="o">.</span><span class="na">STROKE</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setStrokeWidth</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">150</span><span class="o">,</span> <span class="mi">125</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setStrokeWidth</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">400</span><span class="o">,</span> <span class="mi">125</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setStrokeWidth</span><span class="o">(</span><span class="mi">40</span><span class="o">);</span>  
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">650</span><span class="o">,</span> <span class="mi">125</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws4.sinaimg.cn/large/006tNc79ly1fig7407tp7j30lj07ljrr.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>线条宽度 0 和 1 的区别</p>
+
+  <p>默认情况下，线条宽度为 0，但你会发现，这个时候它依然能够画出线，线条的宽度为 1 像素。那么它和线条宽度为 1 有什么区别呢？</p>
+
+  <p>其实这个和后面要讲的一个「几何变换」有关：你可以为 <code class="highlighter-rouge">Canvas</code> 设置 <code class="highlighter-rouge">Matrix</code> 来实现几何变换（如放大、缩小、平移、旋转），在几何变换之后 <code class="highlighter-rouge">Canvas</code> 绘制的内容就会发生相应变化，包括线条也会加粗，例如 2 像素宽度的线条在 <code class="highlighter-rouge">Canvas</code> 放大 2 倍后会被以 4 像素宽度来绘制。而当线条宽度被设置为 0 时，它的宽度就被固定为 1 像素，就算 <code class="highlighter-rouge">Canvas</code> 通过几何变换被放大，它也依然会被以 1 像素宽度来绘制。Google 在文档中把线条宽度为 0 时称作「hairline mode（发际线模式）」。</p>
+</blockquote>
+
+<h4 id="232-setstrokecappaintcap-cap">2.3.2 setStrokeCap(Paint.Cap cap)</h4>
+
+<p>设置线头的形状。线头形状有三种：<code class="highlighter-rouge">BUTT</code> 平头、<code class="highlighter-rouge">ROUND</code> 圆头、<code class="highlighter-rouge">SQUARE</code> 方头。默认为 <code class="highlighter-rouge">BUTT</code>。</p>
+
+<blockquote>
+  <p>放出「平头」「圆头」「方头」这种翻译我始终有点纠结：既觉得自己翻译得简洁清晰尽显机智，同时又担心用词会不会有点太过通俗，让人觉得我不够高贵冷艳？</p>
+</blockquote>
+
+<p>当线条的宽度是 1 像素时，这三种线头的表现是完全一致的，全是 1 个像素的点；而当线条变粗的时候，它们就会表现出不同的样子：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5l44l0j30ct05rmx4.jpg" alt="img" /></p>
+
+<p>虚线是额外加的，虚线左边是线的实际长度，虚线右边是线头。有了虚线作为辅助，可以清楚地看出 <code class="highlighter-rouge">BUTT</code> 和 <code class="highlighter-rouge">SQUARE</code> 的区别。</p>
+
+<h4 id="233-setstrokejoinpaintjoin-join">2.3.3 setStrokeJoin(Paint.Join join)</h4>
+
+<p>设置拐角的形状。有三个值可以选择：<code class="highlighter-rouge">MITER</code> 尖角、 <code class="highlighter-rouge">BEVEL</code> 平角和 <code class="highlighter-rouge">ROUND</code> 圆角。默认为 <code class="highlighter-rouge">MITER</code>。</p>
+
+<p><img src="http://ws1.sinaimg.cn/large/006tNc79ly1fig75e27w6j30cp05ewem.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>辅助理解：</p>
+
+  <p>MITER 在现实中其实就是这玩意：</p>
+
+  <p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig75ne2avj30jw0avt9n.jpg" alt="img" /></p>
+
+  <p>而 BEVEL 是这玩意：</p>
+
+  <p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig762ptvdj307u05l74d.jpg" alt="img" /></p>
+</blockquote>
+
+<h4 id="234-setstrokemiterfloat-miter">2.3.4 setStrokeMiter(float miter)</h4>
+
+<p>这个方法是对于 <code class="highlighter-rouge">setStrokeJoin()</code> 的一个补充，它用于设置 <code class="highlighter-rouge">MITER</code> 型拐角的延长线的最大值。所谓「延长线的最大值」，是这么一回事：</p>
+
+<p>当线条拐角为 <code class="highlighter-rouge">MITER</code> 时，拐角处的外缘需要使用延长线来补偿：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5hr5h0j30cs0cqwel.jpg" alt="img" /></p>
+
+<p>而这种补偿方案会有一个问题：如果拐角的角度太小，就有可能由于出现连接点过长的情况。比如这样：</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf603ocrj30eg067q2w.jpg" alt="img" /></p>
+
+<p>所以为了避免意料之外的过长的尖角出现， <code class="highlighter-rouge">MITER</code> 型连接点有一个额外的规则：当尖角过长时，自动改用 <code class="highlighter-rouge">BEVEL</code> 的方式来渲染连接点。例如上图的这个尖角，在默认情况下是不会出现的，而是会由于延长线过长而被转为 <code class="highlighter-rouge">BEVEL</code> 型连接点：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5oapy2j307502yjr6.jpg" alt="img" /></p>
+
+<p>至于多尖的角属于过于尖，尖到需要转为使用 <code class="highlighter-rouge">BEVEL</code> 来绘制，则是由一个属性控制的，而这个属性就是 <code class="highlighter-rouge">setStrokeMiter(miter)</code> 方法中的 <code class="highlighter-rouge">miter</code> 参数。<code class="highlighter-rouge">miter</code> 参数是对于转角长度的限制，具体来讲，是指尖角的外缘端点和内部拐角的距离与线条宽度的比。也就是下面这两个长度的比：</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7btolhij30e706dglp.jpg" alt="img" /></p>
+
+<p>用几何知识很容易得出这个比值的计算公式：如果拐角的大小为 θ ，那么这个比值就等于 1 / sin ( θ / 2 ) 。</p>
+
+<p>这个 miter limit 的默认值是 4，对应的是一个大约 29° 的锐角：</p>
+
+<p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig7bytfd9j307n03lq2v.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>默认情况下，大于这个角的尖角会被保留，而小于这个夹角的就会被「削成平头」</p>
+</blockquote>
+
+<blockquote>
+  <p>所以，这个方法虽然名叫 <code class="highlighter-rouge">setStrokeMiter(miter)</code> ，但它其实设置的是「 线条在 <code class="highlighter-rouge">Join</code> 类型为 <code class="highlighter-rouge">MITER</code> 时对于 <code class="highlighter-rouge">MITER</code> 的长度限制」。它的这个名字虽然短，但却存在一定的迷惑性，如果叫 <code class="highlighter-rouge">setStrokeJoinMiterLimit(limit)</code> 就更准确了。 Google 的工程师没有这么给它命名，大概也是不想伤害大家的手指吧，毕竟程序员何苦为难程序员。</p>
+
+  <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5szzh0j304z05e3yi.jpg" alt="img" /></p>
+</blockquote>
+
+<p>以上就是 4 个关于线条形状的方法： <code class="highlighter-rouge">setStrokeWidth(width)</code> <code class="highlighter-rouge">setStrokeCap(cap)</code><code class="highlighter-rouge">setStrokeJoint(join)</code> 和 <code class="highlighter-rouge">setStrokeMiter(miter)</code>。</p>
+
+<h3 id="24-色彩优化">2.4 色彩优化</h3>
+
+<p><code class="highlighter-rouge">Paint</code> 的色彩优化有两个方法： <code class="highlighter-rouge">setDither(boolean dither)</code> 和 <code class="highlighter-rouge">setFilterBitmap(boolean filter)</code>。它们的作用都是让画面颜色变得更加「顺眼」，但原理和使用场景是不同的。</p>
+
+<h4 id="241-setditherboolean-dither">2.4.1 setDither(boolean dither)</h4>
+
+<p>设置图像的抖动。</p>
+
+<p>在介绍抖动之前，先来看一个猥琐男：</p>
+
+<p><img src="http://ws4.sinaimg.cn/large/006tNc79ly1fig7cf7oc3j30i30a4wfi.jpg" alt="img" /></p>
+
+<p>注意毛利小五郎脸上的红晕，它们并不是使用一片淡红色涂抹出来的，而是画了三道深色的红线。这三道深色红线放在脸上，给人的视觉效果就成了「淡淡的红晕」。</p>
+
+<p>抖动的原理和这个类似。所谓抖动（注意，它就叫抖动，不是防抖动，也不是去抖动，有些人在翻译的时候自作主张地加了一个「防」字或者「去」字，这是不对的），是指把图像从较高色彩深度（即可用的颜色数）向较低色彩深度的区域绘制时，在图像中有意地插入噪点，通过有规律地扰乱图像来让图像对于肉眼更加真实的做法。</p>
+
+<p>比如向 1 位色彩深度的区域中绘制灰色，由于 1 位深度只包含黑和白两种颜色，在默认情况下，即不加抖动的时候，只能选择向上或向下选择最接近灰色的白色或黑色来绘制，那么显示出来也只能是一片白或者一片黑。而加了抖动后，就可以绘制出让肉眼识别为灰色的效果了：</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7clzhfpj30k60armxr.jpg" alt="img" /></p>
+
+<p>瞧，像上面这样，用黑白相间的方式来绘制，就可以骗过肉眼，让肉眼辨别为灰色了。</p>
+
+<p>嗯？你说你看不出灰色，只看出黑白相间？没关系，那是因为像素颗粒太大，我把像素颗粒缩小，看到完整效果你就会发现变灰了：</p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5wx5t7j309q0bygnh.jpg" alt="img" /></p>
+
+<p>这下变灰了吧？</p>
+
+<p>什么，还没有变灰？那一定是你看图的姿势不对了。</p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5wbtkcj30gg0n0779.jpg" alt="img" /></p>
+
+<p>不过，抖动可不只可以用在纯色的绘制。在实际的应用场景中，抖动更多的作用是在图像降低色彩深度绘制时，避免出现大片的色带与色块。效果盗一下<a href="https://en.wikipedia.org/wiki/Dither">维基百科</a>的图：</p>
+
+<p><img src="http://ws4.sinaimg.cn/large/006tNc79ly1fig7d34s0jj30lf07t75x.jpg" alt="img" /></p>
+
+<p>看着很牛逼对吧？确实很牛逼，而且在 Android 里使用起来也很简单，一行代码就搞定：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setDither</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p>只要加这么一行代码，之后的绘制就是加抖动的了。</p>
+
+<p>不过对于现在（2017年）而言， <code class="highlighter-rouge">setDither(dither)</code> 已经没有当年那么实用了，因为现在的 Android 版本的绘制，默认的色彩深度已经是 32 位的 <code class="highlighter-rouge">ARGB_8888</code> ，效果已经足够清晰了。只有当你向自建的 <code class="highlighter-rouge">Bitmap</code> 中绘制，并且选择 16 位色的 <code class="highlighter-rouge">ARGB_4444</code> 或者 <code class="highlighter-rouge">RGB_565</code> 的时候，开启它才会有比较明显的效果。</p>
+
+<h4 id="242-setfilterbitmapboolean-filter">2.4.2 setFilterBitmap(boolean filter)</h4>
+
+<p>设置是否使用双线性过滤来绘制 <code class="highlighter-rouge">Bitmap</code> 。</p>
+
+<p>图像在放大绘制的时候，默认使用的是最近邻插值过滤，这种算法简单，但会出现马赛克现象；而如果开启了双线性过滤，就可以让结果图像显得更加平滑。效果依然盗<a href="https://zh.wikipedia.org/wiki/双线性过滤">维基百科</a>的图：</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zf5z6ra1j30jb0a0dgs.jpg" alt="img" /></p>
+
+<p>牛逼吧？而且它的使用同样也很简单：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setFilterBitmap</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p>加上这一行，在放大绘制 <code class="highlighter-rouge">Bitmap</code> 的时候就会使用双线性过滤了。</p>
+
+<p>以上就是 <code class="highlighter-rouge">Paint</code> 的两个色彩优化的方法： <code class="highlighter-rouge">setDither(dither)</code> ，设置抖动来优化色彩深度降低时的绘制效果； <code class="highlighter-rouge">setFilterBitmap(filterBitmap)</code> ，设置双线性过滤来优化 <code class="highlighter-rouge">Bitmap</code> 放大绘制的效果。</p>
+
+<h3 id="25-setpatheffectpatheffect-effect">2.5 setPathEffect(PathEffect effect)</h3>
+
+<p>使用 <code class="highlighter-rouge">PathEffect</code> 来给图形的轮廓设置效果。对 <code class="highlighter-rouge">Canvas</code> 所有的图形绘制有效，也就是 <code class="highlighter-rouge">drawLine()</code><code class="highlighter-rouge">drawCircle()</code> <code class="highlighter-rouge">drawPath()</code> 这些方法。大概像这样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PathEffect</span> <span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DashPathEffect</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="mi">10</span><span class="o">,</span> <span class="mi">5</span><span class="o">},</span> <span class="mi">10</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setPathEffect</span><span class="o">(</span><span class="n">pathEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawCircle</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="mi">200</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws4.sinaimg.cn/large/006tNc79ly1fig7diyn5jj308h089mx5.jpg" alt="img" /></p>
+
+<p>下面就具体说一下 Android 中的 6 种 <code class="highlighter-rouge">PathEffect</code>。<code class="highlighter-rouge">PathEffect</code> 分为两类，单一效果的 <code class="highlighter-rouge">CornerPathEffect</code> <code class="highlighter-rouge">DiscretePathEffect</code> <code class="highlighter-rouge">DashPathEffect</code> <code class="highlighter-rouge">PathDashPathEffect</code> ，和组合效果的 <code class="highlighter-rouge">SumPathEffect</code> <code class="highlighter-rouge">ComposePathEffect</code>。</p>
+
+<h4 id="251-cornerpatheffect">2.5.1 CornerPathEffect</h4>
+
+<p>把所有拐角变成圆角。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PathEffect</span> <span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CornerPathEffect</span><span class="o">(</span><span class="mi">20</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setPathEffect</span><span class="o">(</span><span class="n">pathEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws1.sinaimg.cn/large/006tNc79ly1fig7dobrizj30iv0agt8z.jpg" alt="img" /></p>
+
+<p>它的构造方法 <code class="highlighter-rouge">CornerPathEffect(float radius)</code> 的参数 <code class="highlighter-rouge">radius</code> 是圆角的半径。</p>
+
+<h4 id="252-discretepatheffect">2.5.2 DiscretePathEffect</h4>
+
+<p>把线条进行随机的偏离，让轮廓变得乱七八糟。乱七八糟的方式和程度由参数决定。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PathEffect</span> <span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DiscretePathEffect</span><span class="o">(</span><span class="mi">20</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setPathEffect</span><span class="o">(</span><span class="n">pathEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig7dug01cj30ir0bawet.jpg" alt="img" /></p>
+
+<p><code class="highlighter-rouge">DiscretePathEffect</code> 具体的做法是，把绘制改为使用定长的线段来拼接，并且在拼接的时候对路径进行随机偏离。它的构造方法 <code class="highlighter-rouge">DiscretePathEffect(float segmentLength, float deviation)</code> 的两个参数中， <code class="highlighter-rouge">segmentLength</code> 是用来拼接的每个线段的长度， <code class="highlighter-rouge">deviation</code> 是偏离量。这两个值设置得不一样，显示效果也会不一样，具体的你自己多试几次就明白了，这里不再贴更多的图。</p>
+
+<h4 id="253-dashpatheffect">2.5.3 DashPathEffect</h4>
+
+<p>使用虚线来绘制线条。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PathEffect</span> <span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DashPathEffect</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="mi">20</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">10</span><span class="o">},</span> <span class="mi">0</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setPathEffect</span><span class="o">(</span><span class="n">pathEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5znxwwj30iw0b9jrl.jpg" alt="img" /></p>
+
+<p>它的构造方法 <code class="highlighter-rouge">DashPathEffect(float[] intervals, float phase)</code> 中， 第一个参数 <code class="highlighter-rouge">intervals</code> 是一个数组，它指定了虚线的格式：数组中元素必须为偶数（最少是 2 个），按照「画线长度、空白长度、画线长度、空白长度」……的顺序排列，例如上面代码中的 <code class="highlighter-rouge">20, 5, 10, 5</code> 就表示虚线是按照「画 20 像素、空 5 像素、画 10 像素、空 5 像素」的模式来绘制；第二个参数 <code class="highlighter-rouge">phase</code> 是虚线的偏移量。</p>
+
+<h4 id="254-pathdashpatheffect">2.5.4 PathDashPathEffect</h4>
+
+<p>这个方法比 <code class="highlighter-rouge">DashPathEffect</code> 多一个前缀 <code class="highlighter-rouge">Path</code> ，所以顾名思义，它是使用一个 <code class="highlighter-rouge">Path</code> 来绘制「虚线」。具体看图吧：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Path</span> <span class="n">dashPath</span> <span class="o">=</span> <span class="o">...;</span> <span class="c1">// 使用一个三角形来做 dash  </span>
+<span class="n">PathEffect</span> <span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PathDashPathEffect</span><span class="o">(</span><span class="n">dashPath</span><span class="o">,</span> <span class="mi">40</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>  
+        <span class="n">PathDashPathEffectStyle</span><span class="o">.</span><span class="na">TRANSLATE</span><span class="o">);</span>
+<span class="n">paint</span><span class="o">.</span><span class="na">setPathEffect</span><span class="o">(</span><span class="n">pathEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig7e4xp38j30j30bc0t7.jpg" alt="img" /></p>
+
+<p>它的构造方法 <code class="highlighter-rouge">PathDashPathEffect(Path shape, float advance, float phase, PathDashPathEffect.Style style)</code>中， <code class="highlighter-rouge">shape</code> 参数是用来绘制的 <code class="highlighter-rouge">Path</code> ； <code class="highlighter-rouge">advance</code> 是两个相邻的 <code class="highlighter-rouge">shape</code> 段之间的间隔，不过注意，这个间隔是两个 <code class="highlighter-rouge">shape</code> 段的起点的间隔，而不是前一个的终点和后一个的起点的距离； <code class="highlighter-rouge">phase</code> 和 <code class="highlighter-rouge">DashPathEffect</code> 中一样，是虚线的偏移；最后一个参数 <code class="highlighter-rouge">style</code>，是用来指定拐弯改变的时候 <code class="highlighter-rouge">shape</code> 的转换方式。<code class="highlighter-rouge">style</code> 的类型为 <code class="highlighter-rouge">PathDashPathEffect.Style</code> ，是一个 <code class="highlighter-rouge">enum</code> ，具体有三个值：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">TRANSLATE</code>：位移</li>
+  <li><code class="highlighter-rouge">ROTATE</code>：旋转</li>
+  <li><code class="highlighter-rouge">MORPH</code>：变体</li>
+</ul>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5palu7j30kn0h3gms.jpg" alt="img" /></p>
+
+<h4 id="255-sumpatheffect">2.5.5 SumPathEffect</h4>
+
+<p>这是一个组合效果类的 <code class="highlighter-rouge">PathEffect</code> 。它的行为特别简单，就是分别按照两种 <code class="highlighter-rouge">PathEffect</code> 分别对目标进行绘制。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PathEffect</span> <span class="n">dashEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DashPathEffect</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="mi">20</span><span class="o">,</span> <span class="mi">10</span><span class="o">},</span> <span class="mi">0</span><span class="o">);</span>  
+<span class="n">PathEffect</span> <span class="n">discreteEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DiscretePathEffect</span><span class="o">(</span><span class="mi">20</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>  
+<span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SumPathEffect</span><span class="o">(</span><span class="n">dashEffect</span><span class="o">,</span> <span class="n">discreteEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws1.sinaimg.cn/large/006tNc79ly1fig7ekjh7lj30dw05jq2z.jpg" alt="img" /></p>
+
+<h4 id="256-composepatheffect">2.5.6 ComposePathEffect</h4>
+
+<p>这也是一个组合效果类的 <code class="highlighter-rouge">PathEffect</code> 。不过它是先对目标 <code class="highlighter-rouge">Path</code> 使用一个 <code class="highlighter-rouge">PathEffect</code>，然后再对这个改变后的 <code class="highlighter-rouge">Path</code> 使用另一个 <code class="highlighter-rouge">PathEffect</code>。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PathEffect</span> <span class="n">dashEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DashPathEffect</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="mi">20</span><span class="o">,</span> <span class="mi">10</span><span class="o">},</span> <span class="mi">0</span><span class="o">);</span>  
+<span class="n">PathEffect</span> <span class="n">discreteEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DiscretePathEffect</span><span class="o">(</span><span class="mi">20</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>  
+<span class="n">pathEffect</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ComposePathEffect</span><span class="o">(</span><span class="n">dashEffect</span><span class="o">,</span> <span class="n">discreteEffect</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7epf94aj30dr05eq2x.jpg" alt="img" /></p>
+
+<p>它的构造方法 <code class="highlighter-rouge">ComposePathEffect(PathEffect outerpe, PathEffect innerpe)</code> 中的两个 <code class="highlighter-rouge">PathEffect</code> 参数， <code class="highlighter-rouge">innerpe</code> 是先应用的， <code class="highlighter-rouge">outerpe</code> 是后应用的。所以上面的代码就是「先偏离，再变虚线」。而如果把两个参数调换，就成了「先变虚线，再偏离」。至于具体的视觉效果……我就不贴图了，你自己试试看吧！</p>
+
+<p>上面这些就是 <code class="highlighter-rouge">Paint</code> 中的 6 种 <code class="highlighter-rouge">PathEffect</code>。它们有的是有独立效果的，有的是用来组合不同的 <code class="highlighter-rouge">PathEffect</code> 的，功能各不一样。</p>
+
+<blockquote>
+  <p>注意： <code class="highlighter-rouge">PathEffect</code> 在有些情况下不支持硬件加速，需要关闭硬件加速才能正常使用：</p>
+
+  <ol>
+    <li><code class="highlighter-rouge">Canvas.drawLine()</code> 和 <code class="highlighter-rouge">Canvas.drawLines()</code> 方法画直线时，<code class="highlighter-rouge">setPathEffect()</code> 是不支持硬件加速的；</li>
+    <li><code class="highlighter-rouge">PathDashPathEffect</code> 对硬件加速的支持也有问题，所以当使用 <code class="highlighter-rouge">PathDashPathEffect</code> 的时候，最好也把硬件加速关了。</li>
+  </ol>
+</blockquote>
+
+<p>剩下的两个效果类方法：<code class="highlighter-rouge">setShadowLayer()</code> 和 <code class="highlighter-rouge">setMaskFilter()</code> ，它们和前面的效果类方法有点不一样：它们设置的是「附加效果」，也就是基于在绘制内容的额外效果。</p>
+
+<h3 id="26-setshadowlayerfloat-radius-float-dx-float-dy-int-shadowcolor">2.6 setShadowLayer(float radius, float dx, float dy, int shadowColor)</h3>
+
+<p>在之后的绘制内容下面加一层阴影。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setShadowLayer</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">Color</span><span class="o">.</span><span class="na">RED</span><span class="o">);</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawText</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="mi">80</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws4.sinaimg.cn/large/006tNc79ly1fig7ev8io8j30cv02y74f.jpg" alt="img" /></p>
+
+<p>效果就是上面这样。方法的参数里， <code class="highlighter-rouge">radius</code> 是阴影的模糊范围； <code class="highlighter-rouge">dx</code> <code class="highlighter-rouge">dy</code> 是阴影的偏移量； <code class="highlighter-rouge">shadowColor</code> 是阴影的颜色。</p>
+
+<p>如果要清除阴影层，使用 <code class="highlighter-rouge">clearShadowLayer()</code> 。</p>
+
+<p>注意：</p>
+
+<ul>
+  <li>在硬件加速开启的情况下， <code class="highlighter-rouge">setShadowLayer()</code> 只支持文字的绘制，文字之外的绘制必须关闭硬件加速才能正常绘制阴影。</li>
+  <li>如果 <code class="highlighter-rouge">shadowColor</code> 是半透明的，阴影的透明度就使用 <code class="highlighter-rouge">shadowColor</code> 自己的透明度；而如果 <code class="highlighter-rouge">shadowColor</code> 是不透明的，阴影的透明度就使用 <code class="highlighter-rouge">paint</code> 的透明度。</li>
+</ul>
+
+<h3 id="27-setmaskfiltermaskfilter-maskfilter">2.7 setMaskFilter(MaskFilter maskfilter)</h3>
+
+<p>为之后的绘制设置 <code class="highlighter-rouge">MaskFilter</code>。上一个方法 <code class="highlighter-rouge">setShadowLayer()</code> 是设置的在绘制层下方的附加效果；而这个 <code class="highlighter-rouge">MaskFilter</code> 和它相反，设置的是在绘制层上方的附加效果。</p>
+
+<blockquote>
+  <p>到现在已经有两个 <code class="highlighter-rouge">setXxxFilter(filter)</code> 了。前面有一个 <code class="highlighter-rouge">setColorFilter(filter)</code> ，是对每个像素的颜色进行过滤；而这里的 <code class="highlighter-rouge">setMaskFilter(filter)</code> 则是基于整个画面来进行过滤。</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">MaskFilter</code> 有两种： <code class="highlighter-rouge">BlurMaskFilter</code> 和 <code class="highlighter-rouge">EmbossMaskFilter</code>。</p>
+
+<h4 id="271-blurmaskfilter">2.7.1 BlurMaskFilter</h4>
+
+<p>模糊效果的 <code class="highlighter-rouge">MaskFilter</code>。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setMaskFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">BlurMaskFilter</span><span class="o">(</span><span class="mi">50</span><span class="o">,</span> <span class="n">BlurMaskFilter</span><span class="o">.</span><span class="na">Blur</span><span class="o">.</span><span class="na">NORMAL</span><span class="o">));</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws1.sinaimg.cn/large/006tNc79ly1fig7f17yu0j30kl0b2q3w.jpg" alt="img" /></p>
+
+<p>它的构造方法 <code class="highlighter-rouge">BlurMaskFilter(float radius, BlurMaskFilter.Blur style)</code> 中， <code class="highlighter-rouge">radius</code> 参数是模糊的范围， <code class="highlighter-rouge">style</code> 是模糊的类型。一共有四种：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">NORMAL</code>: 内外都模糊绘制</li>
+  <li><code class="highlighter-rouge">SOLID</code>: 内部正常绘制，外部模糊</li>
+  <li><code class="highlighter-rouge">INNER</code>: 内部模糊，外部不绘制</li>
+  <li><code class="highlighter-rouge">OUTER</code>: 内部不绘制，外部模糊（什么鬼？）</li>
+</ul>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7fr4dwgj30lk0mbgne.jpg" alt="img" /></p>
+
+<h4 id="272-embossmaskfilter">2.7.2 EmbossMaskFilter</h4>
+
+<p>浮雕效果的 <code class="highlighter-rouge">MaskFilter</code>。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setMaskFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">EmbossMaskFilter</span><span class="o">(</span><span class="k">new</span> <span class="kt">float</span><span class="o">[]{</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span> <span class="mf">0.2f</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">10</span><span class="o">));</span>
+
+<span class="o">...</span>
+
+<span class="n">canvas</span><span class="o">.</span><span class="na">drawBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="n">paint</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7g3ktlmj30kp09g0tl.jpg" alt="img" /></p>
+
+<p>它的构造方法 <code class="highlighter-rouge">EmbossMaskFilter(float[] direction, float ambient, float specular, float blurRadius)</code> 的参数里， <code class="highlighter-rouge">direction</code> 是一个 3 个元素的数组，指定了光源的方向； <code class="highlighter-rouge">ambient</code> 是环境光的强度，数值范围是 0 到 1； <code class="highlighter-rouge">specular</code> 是炫光的系数； <code class="highlighter-rouge">blurRadius</code> 是应用光线的范围。</p>
+
+<p>不过由于我没有在项目中使用过 <code class="highlighter-rouge">EmbossMaskFilter</code>，对它的每个参数具体调节方式并不熟，你有兴趣的话自己研究一下吧。</p>
+
+<h3 id="28-获取绘制的-path">2.8 获取绘制的 Path</h3>
+
+<p>这是效果类的最后一组方法，也是效果类唯一的一组 <code class="highlighter-rouge">get</code> 方法。</p>
+
+<p>这组方法做的事是，根据 <code class="highlighter-rouge">paint</code> 的设置，计算出绘制 <code class="highlighter-rouge">Path</code> 或文字时的<strong>实际 Path</strong>。</p>
+
+<p>这里你可能会冒出两个问题：</p>
+
+<ol>
+  <li>什么叫「实际 <code class="highlighter-rouge">Path</code>」？ <code class="highlighter-rouge">Path</code> 就是 <code class="highlighter-rouge">Path</code>，这加上个「实际」是什么意思？</li>
+  <li>文字的 <code class="highlighter-rouge">Path</code> ？文字还有 <code class="highlighter-rouge">Path</code>？</li>
+</ol>
+
+<p>这两个问题（咦好像有四个问号）的答案就在后面的内容里。</p>
+
+<h4 id="281-getfillpathpath-src-path-dst">2.8.1 getFillPath(Path src, Path dst)</h4>
+
+<p>首先解答第一个问题：「实际 <code class="highlighter-rouge">Path</code>」。所谓实际 <code class="highlighter-rouge">Path</code> ，指的就是 <code class="highlighter-rouge">drawPath()</code> 的绘制内容的轮廓，要算上线条宽度和设置的 <code class="highlighter-rouge">PathEffect</code>。</p>
+
+<p>默认情况下（线条宽度为 0、没有 <code class="highlighter-rouge">PathEffect</code>），原 <code class="highlighter-rouge">Path</code> 和实际 <code class="highlighter-rouge">Path</code> 是一样的；而在线条宽度不为 0 （并且模式为 <code class="highlighter-rouge">STROKE</code> 模式或 <code class="highlighter-rouge">FLL_AND_STROKE</code> ），或者设置了 <code class="highlighter-rouge">PathEffect</code> 的时候，实际 <code class="highlighter-rouge">Path</code> 就和原 <code class="highlighter-rouge">Path</code> 不一样了：</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7ggbut0j30rw0me76k.jpg" alt="img" /></p>
+
+<blockquote>
+  <p>看明白了吗？</p>
+</blockquote>
+
+<p>通过 <code class="highlighter-rouge">getFillPath(src, dst)</code> 方法就能获取这个实际 <code class="highlighter-rouge">Path</code>。方法的参数里，<code class="highlighter-rouge">src</code> 是原 <code class="highlighter-rouge">Path</code> ，而 <code class="highlighter-rouge">dst</code>就是实际 <code class="highlighter-rouge">Path</code> 的保存位置。 <code class="highlighter-rouge">getFillPath(src, dst)</code> 会计算出实际 <code class="highlighter-rouge">Path</code>，然后把结果保存在 <code class="highlighter-rouge">dst</code>里。</p>
+
+<h4 id="282-gettextpathstring-text-int-start-int-end-float-x-float-y-path-path--gettextpathchar-text-int-index-int-count-float-x-float-y-path-path">2.8.2 getTextPath(String text, int start, int end, float x, float y, Path path) / getTextPath(char[] text, int index, int count, float x, float y, Path path)</h4>
+
+<p>这里就回答第二个问题：「文字的 <code class="highlighter-rouge">Path</code>」。文字的绘制，虽然是使用 <code class="highlighter-rouge">Canvas.drawText()</code> 方法，但其实在下层，文字信息全是被转化成图形，对图形进行绘制的。 <code class="highlighter-rouge">getTextPath()</code> 方法，获取的就是目标文字所对应的 <code class="highlighter-rouge">Path</code> 。这个就是所谓「文字的 <code class="highlighter-rouge">Path</code>」。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zf5un8bij30i005mjrs.jpg" alt="img" /></p>
+
+<p>这两个方法， <code class="highlighter-rouge">getFillPath()</code> 和 <code class="highlighter-rouge">getTextPath()</code> ，就是获取绘制的 <code class="highlighter-rouge">Path</code> 的方法。之所以把它们归类到「效果」类方法，是因为它们主要是用于图形和文字的装饰效果的位置计算，比如<a href="https://medium.com/google-developers/a-better-underline-for-android-90ba3a2e4fb">自定义的下划线效果</a>。</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7h4hk1kj30d506q3yw.jpg" alt="img" /></p>
+
+<p>到此为止， <code class="highlighter-rouge">Paint</code> 的第二类方法——效果类，就也介绍完了。</p>
+
+<h2 id="3-drawtext-相关">3 drawText() 相关</h2>
+
+<p><code class="highlighter-rouge">Paint</code> 有些设置是文字绘制相关的，即和 <code class="highlighter-rouge">drawText()</code> 相关的。</p>
+
+<p>比如设置文字大小：</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7hgo6ioj30jv089aat.jpg" alt="img" /></p>
+
+<p>比如设置文字间隔：</p>
+
+<p><img src="http://ws2.sinaimg.cn/large/006tNc79ly1fig7hp9k9kj30js070t99.jpg" alt="img" /></p>
+
+<p>比如设置各种文字效果：</p>
+
+<p><img src="http://ws3.sinaimg.cn/large/006tNc79ly1fig7hwqeokj30dj09oaaz.jpg" alt="img" /></p>
+
+<p>除此之外，<code class="highlighter-rouge">Paint</code> 还有很多与文字绘制相关的设置或计算的方法，非常详细。不过由于太详细了，相关方法太多了（<code class="highlighter-rouge">Paint</code> 超过一半的方法都是 <code class="highlighter-rouge">drawText()</code> 相关的，算不算多？），如果放在这里讲它们的话，内容会显得有点过量。所以这一节我就不讲它们了，把它们放在下一节里单独讲。</p>
+
+<h2 id="4-初始化类">4 初始化类</h2>
+
+<p>这一类方法很简单，它们是用来初始化 <code class="highlighter-rouge">Paint</code> 对象，或者是批量设置 <code class="highlighter-rouge">Paint</code> 的多个属性的方法。</p>
+
+<h3 id="41-reset">4.1 reset()</h3>
+
+<p>重置 <code class="highlighter-rouge">Paint</code> 的所有属性为默认值。相当于重新 <code class="highlighter-rouge">new</code> 一个，不过性能当然高一些啦。</p>
+
+<h3 id="42-setpaint-src">4.2 set(Paint src)</h3>
+
+<p>把 <code class="highlighter-rouge">src</code> 的所有属性全部复制过来。相当于调用 <code class="highlighter-rouge">src</code> 所有的 <code class="highlighter-rouge">get</code> 方法，然后调用这个 <code class="highlighter-rouge">Paint</code> 的对应的 <code class="highlighter-rouge">set</code> 方法来设置它们。</p>
+
+<h3 id="43-setflagsint-flags">4.3 setFlags(int flags)</h3>
+
+<p>批量设置 flags。相当于依次调用它们的 <code class="highlighter-rouge">set</code> 方法。例如： </p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setFlags</span><span class="o">(</span><span class="n">Paint</span><span class="o">.</span><span class="na">ANTI_ALIAS_FLAG</span> <span class="o">|</span> <span class="n">Paint</span><span class="o">.</span><span class="na">DITHER_FLAG</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p>这行代码，和下面这两行是等价的：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">paint</span><span class="o">.</span><span class="na">setAntiAlias</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>  
+<span class="n">paint</span><span class="o">.</span><span class="na">setDither</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>  
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">setFlags(flags)</code> 对应的 <code class="highlighter-rouge">get</code> 方法是 <code class="highlighter-rouge">int getFlags()</code>。</p>
+
+<p>好了，这些就是 <code class="highlighter-rouge">Paint</code> 的四类方法：<strong>颜色类</strong>、<strong>效果类</strong>、<strong>文字绘制相关</strong>以及<strong>初始化类</strong>。其中颜色类、效果类和初始化类都已经在这节里面讲过了，剩下的一类——文字绘制类，下一节单独讲。</p>
+
+<p>最后再强调一遍：<strong>这期的内容没必要全部背会，只要看懂、理解，记住有这么个东西就行了。以后在用到的时候，再拐回来翻一翻就行了。</strong></p>
+
+<h2 id="练习项目">练习项目</h2>
+
+<p>为了避免转头就忘，强烈建议你趁热打铁，做一下这个练习项目：<a href="https://github.com/hencoder/PracticeDraw2">HenCoderPracticeDraw2</a></p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zf5o06ayj30si0fswh2.jpg" alt="img" /></p>
+
+<h2 id="下期预告">下期预告</h2>
+
+<p>下期是文字绘制专场，我将会花一整期的篇幅来详述文字的绘制。惯例放出部分配图作为预览：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zf5m2q33j30do077dge.jpg" alt="img" /></p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5j7wpoj30cx09d3zd.jpg" alt="img" /></p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1g3zf5uzpijj30l8076myc.jpg" alt="img" /></p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g3zf5ymhddj30ff0al751.jpg" alt="img" /></p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>

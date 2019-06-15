@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android 事件传递机制</title>
+  <!--Leancloud 操作库:-->
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!--Valine 的核心代码库:-->
+  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <script type="text/javascript" src="/assets/scripts.js"></script>
+
+<script>
+  (function(w, d){
+   var id='embedly-platform', n = 'script';
+   if (!d.getElementById(id)){
+     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+     var e = d.createElement(n); e.id = id; e.async=1;
+     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+     var s = d.getElementsByTagName(n)[0];
+     s.parentNode.insertBefore(e, s);
+   }
+  })(window, document);
+</script>
+
+
+
+  <!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Android 事件传递机制 | GitClub</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Android 事件传递机制" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="四个事件，三个方法，两套机制" />
+<meta property="og:description" content="四个事件，三个方法，两套机制" />
+<link rel="canonical" href="http://localhost:4000/2019-06-13/Android-%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6/" />
+<meta property="og:url" content="http://localhost:4000/2019-06-13/Android-%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6/" />
+<meta property="og:site_name" content="GitClub" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-13T04:10:42+00:00" />
+<script type="application/ld+json">
+{"description":"四个事件，三个方法，两套机制","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/Android-%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6/","headline":"Android 事件传递机制","dateModified":"2019-06-13T04:10:42+00:00","datePublished":"2019-06-13T04:10:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/Android-%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6/"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+
+  <!-- Google Analytics -->
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="content-container">
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">LeetCode</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">Reading</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">Categories</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</aside>
+
+    <div class="post">
+    <h1>Android 事件传递机制</h1>
+    <div class="post-date">
+        2019年06月13日
+    </div>
+
+    <h1 id="一总结">一、总结</h1>
+
+<p>四个事件，三个方法，两套机制</p>
+
+<h2 id="11-四个事件">1.1 四个事件</h2>
+
+<ul>
+  <li>Down</li>
+  <li>Move</li>
+  <li>Up/Cancel</li>
+</ul>
+
+<h2 id="12-三个方法">1.2 三个方法</h2>
+
+<ul>
+  <li>dispatchTouchEvent</li>
+  <li>onInterceptTouchEvent</li>
+  <li>onTouchEvent</li>
+</ul>
+
+<h2 id="13-两套机制">1.3 两套机制</h2>
+
+<p>Talk is cheap, show you the code.</p>
+
+<p>ViewGroup处理机制：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchTouchEvent</span><span class="o">(</span><span class="n">MotionEvent</span> <span class="n">ev</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">onInterceptTouchEvent</span><span class="o">(</span><span class="n">ev</span><span class="o">))</span> <span class="o">{</span>                   <span class="c1">// 1. 判断是否拦截</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">childrenCount</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>  <span class="c1">// 2. 逆序遍历子View，寻找意欲消费该事件的子View</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">children</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">dispatchTouchEvent</span><span class="o">(</span><span class="n">ev</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">dispatchTouchEvent</span><span class="o">(</span><span class="n">ev</span><span class="o">);</span>               <span class="c1">// 3. 如果没有子View消费事件，则走View处理机制</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>View处理机制：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchTouchEvent</span><span class="o">(</span><span class="n">MotionEvent</span> <span class="n">ev</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">onTouchListener</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">onTouchListener</span><span class="o">.</span><span class="na">onTouch</span><span class="o">(</span><span class="n">ev</span><span class="o">)</span> <span class="o">||</span> <span class="n">onTouchEvent</span><span class="o">(</span><span class="n">ev</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="nf">onTouchEvent</span><span class="o">(</span><span class="n">ev</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>注意</strong>
+ 1、上述机制是极度简化后的（后文详述）
+ 2、ViewGroup本身也是View</p>
+</blockquote>
+
+<h1 id="二细化">二、细化</h1>
+
+<h2 id="21-四个事件">2.1 四个事件</h2>
+
+<p>只考虑单点触控的情况下，一次手势操作产生的事件序列如下图所示：</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g3zer0eb8ej30d807vq3b.jpg" alt="image-20190613121842633" /></p>
+
+<p>基本事件序列</p>
+
+<blockquote>
+  <p><strong>注意</strong>
+ <strong>事件消费以手势为单位</strong>，如果View不消费Down事件，则它将不再收到其它事件；反之，如果它消费了Down事件，则必然以一个Up或Cancel事件结束。</p>
+</blockquote>
+
+<h2 id="22-三个方法">2.2 三个方法</h2>
+
+<p>dispatchTouchEvent、onInterceptTouchEvent和onTouchEvent都接收一个TouchEvent作为参数，返回值类型都是boolean。</p>
+
+<p>dispatchTouchEvent自上而下分发，onTouchEvent自下而上处理，onInterceptTouchEvent居中拦截，构成了Android事件的处理机制。</p>
+
+<h5 id="221-dispatchtouchevent">2.2.1 dispatchTouchEvent</h5>
+
+<blockquote>
+  <p>dispatchTouchEvent定义在Activity、ViewGroup和View中，控制TouchEvent走向，其目的就是找出哪个View应该处理该TouchEvent，简言之，它用于事件的分发。</p>
+</blockquote>
+
+<p>Activity.dispatchTouchEvent总是最先收到事件，经过一系列下发后，传递给布局。本文只考虑布局对手势事件的处理。</p>
+
+<p>dispatchTouchEvent有几个原则非常关键</p>
+
+<ol>
+  <li>其对Down事件的返回值表征是否消费该事件（对其它事件的返回值无所谓）</li>
+  <li>自上而下分发，采用逐层负责制</li>
+  <li>分发之前先判断是否要拦截</li>
+</ol>
+
+<h5 id="222-onintercepttouchevent">2.2.2 onInterceptTouchEvent</h5>
+
+<blockquote>
+  <p>onInterceptTouchEvent定义在ViewGroup中，用于拦截事件。</p>
+</blockquote>
+
+<p>onInterceptTouchEvent被调用需要满足两个条件：</p>
+
+<ol>
+  <li>当前传递的是Down事件或者有子View消费了之前的Down事件</li>
+  <li>允许拦截</li>
+</ol>
+
+<p>如果onInterceptTouchEvent拦截的是Down事件，Down事件不会继续向下传递；如果拦截的是Move或Up事件，则会下发Cancel事件给下层。</p>
+
+<p>onInterceptTouchEvent一旦返回true，就不会再调用。</p>
+
+<h5 id="223-ontouchevent">2.2.3 onTouchEvent</h5>
+
+<blockquote>
+  <p>onTouchEvent定义在Activity、ViewGroup和View中，消费事件。</p>
+</blockquote>
+
+<h2 id="23-两套机制">2.3 两套机制</h2>
+
+<p><strong>1.3节中所示的机制确切来说是不正确的</strong>，实际的事件传递机制要复杂得多。</p>
+
+<p>Android事件处理涉及三个操作：分发、拦截与消费。</p>
+
+<ul>
+  <li>分发</li>
+  <li>dispatchTouchEvent负责分发</li>
+  <li>分发自上而下</li>
+  <li>分发前判断是否拦截</li>
+  <li>dispatchTouchEvent对Down事件返回true表征View/ViewGroup消费该事件</li>
+  <li>dispatchTouchEvent对其余事件的返回值对分发没有任何影响</li>
+  <li>ViewGroup会逆序遍历边界包含触控点的所有子View，调用其dispatchTouchEvent判断其是否消费</li>
+  <li>一旦找到消费事件的子View
+    <ul>
+      <li>ViewGroup会停止遍历</li>
+      <li>后续事件会直接分发给该子View，不再遍历</li>
+    </ul>
+  </li>
+  <li>拦截</li>
+  <li>onInterceptTouchEvent负责拦截</li>
+  <li>onInterceptTouchEvent返回true表征拦截</li>
+  <li>如果ViewGroup A拦截Down事件
+    <ul>
+      <li>所有事件由拦截事件的ViewGroup处理，不向下分发</li>
+    </ul>
+  </li>
+  <li>如果ViewGroup A拦截Move/Up事件
+    <ul>
+      <li>事件转为Cancel向下分发</li>
+      <li>A.onTouchEvent在本次事件中不会被调用</li>
+      <li>A.dispatchTouchEvent会将后续事件直接传递给A.onTouchEvent，不向下分发</li>
+    </ul>
+  </li>
+  <li>一旦onInterceptTouchEvent返回true，就不会再被调用</li>
+  <li>消费
+    <ul>
+      <li>OnTouchListener或onTouchEvent负责消费</li>
+      <li>OnTouchListener优先于onTouchEvent</li>
+      <li>如果OnTouchListener.onTouch返回true，则onTouchEvent不会再被调用</li>
+      <li>如果没有注册OnTouchListener或OnTouchListener.onTouch返回false，onTouchEvent会再被调用</li>
+    </ul>
+  </li>
+</ul>
+
+<p>第三章通过推演详述这两套机制。</p>
+
+<h1 id="三推演">三、推演</h1>
+
+<p>假定有一个如下布局：L里包了一个R，R里包了B、T1、T2三个子View，T2叠在T1上。</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1g3zeqg5clxj307h05bt8x.jpg" alt="image-20190613121810112" /></p>
+
+<p>L继承自LinearLayout，R继承自RelativeLayout，B继承自Button，T1、T2继承自TextView，在它们各事件方法的头部和尾部分别插入日志以观察其行为：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// public boolean onInterceptTouchEvent(MotionEvent ev) {
+// public boolean onTouchEvent(MotionEvent event) {
+public boolean dispatchTouchEvent(MotionEvent ev) {
+    L.e(MotionEvent.actionToString(ev.getAction()));
+    boolean result = super.dispatchTouchEvent(ev);
+    L.e(MotionEvent.actionToString(ev.getAction()) + " " + result);
+    return result;
+}
+</code></pre></div></div>
+
+<p><strong>默认情况</strong>
+ 在T1的右侧（未被T2覆盖的部分）滑动手指，生成如下日志：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_DOWN
+2. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3. L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_DOWN false
+4.  R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_DOWN
+5.  R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_DOWN
+6.  R.onInterceptTouchEvent(R.java:39) ==&gt; ACTION_DOWN false
+7.      T1.dispatchTouchEvent(T1.java:35) ==&gt; ACTION_DOWN
+8.      T1.onTouchEvent(T1.java:43) ==&gt; ACTION_DOWN
+9.      T1.onTouchEvent(T1.java:45) ==&gt; ACTION_DOWN false
+10.     T1.dispatchTouchEvent(T1.java:37) ==&gt; ACTION_DOWN false
+11. R.onTouchEvent(R.java:53) ==&gt; ACTION_DOWN
+12. R.onTouchEvent(R.java:55) ==&gt; ACTION_DOWN false
+13. R.dispatchTouchEvent(R.java:47) ==&gt; ACTION_DOWN false
+14. L.onTouchEvent(L.java:49) ==&gt; ACTION_DOWN
+15. L.onTouchEvent(L.java:51) ==&gt; ACTION_DOWN false
+16. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_DOWN false
+</code></pre></div></div>
+
+<p>从日志中可以看出，事件传递经历了如下步骤：</p>
+
+<ol>
+  <li>首先产生的是Down事件，传递给L.dispatchTouchEvent</li>
+  <li>L随之调用自身的onInterceptTouchEvent方法</li>
+  <li>L.onInterceptTouchEvent返回false，表明L不拦截</li>
+  <li>L于是把事件分发给R（调用R.dispatchTouchEvent)</li>
+  <li>同样的，R先调用自身的onInterceptTouchEvent</li>
+  <li>R.onInterceptTouchEvent返回false，表明R也不拦截</li>
+  <li>R于是把事件分发给T1（调用T1.dispatchTouchEvent)</li>
+  <li>T1是普通View，不再需要向下分发，于是调用自身的onTouchEvent
+ （自此，事件分发完成，开始处理事件）</li>
+  <li>T1.onTouchEvent返回false</li>
+  <li>T1.dispatchTouchEvent收到T1.onTouchEvent的返回值，同样返回false，表明T1不消费Down事件
+ （第9、10步参见1.3节View处理机制）</li>
+  <li>R根据T1.dispatchTouchEvent的返回值判断T1没有消费事件，于是尝试自己处理该事件，调用自身的onTouchEvent</li>
+  <li>R.onTouchEvent返回false</li>
+  <li>从而导致R.dispatchTouchEvent返回false，表明R不消费Down事件</li>
+  <li>由于R没有消费事件，L尝试自己处理事件，调用自身的onTouchEvent</li>
+  <li>L.onTouchEvent返回false</li>
+  <li>从而导致L.dispatchTouchEvent返回false
+ （由于Down事件没有被消费，因此它们都将不再收到其它事件，事件处理结束）</li>
+</ol>
+
+<blockquote>
+  <p><strong>结论</strong>
+ 1、dispatchTouchEvent自上而下分发
+ 2、onTouchEvent自下而上消费
+ 3、ViewGroup.dispatchTouchEvent向下分发之前，会先调用onInterceptTouchEvent
+ 4、如果Down事件没有被消费，将不再收到其余事件（Move，Up）</p>
+</blockquote>
+
+<p><strong>消费事件</strong>
+ 如果View是clickable的，或者View注册了OnTouchListener且其onTouch方法返回true，或者实现了自定义的返回值为true的onTouchEvent，则认为View消费了事件。</p>
+
+<p>根据我们的假定，B继承自Button，它是clickable的，因此可用于做消费事件的实验，但为了同时说明ViewGroup寻找子View的机制，我们在T1上注册一个OnTouchListener回调并返回true。</p>
+
+<p>在T2上点击，日志如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_DOWN
+2. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3. L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_DOWN false
+4.     R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_DOWN
+5.     R.onInterceptTouchEvent(R.java:35) ==&gt; ACTION_DOWN
+6.     R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_DOWN false
+7.          T2.dispatchTouchEvent(T2.java:35) ==&gt; ACTION_DOWN
+8.          T2.onTouchEvent(T2.java:43) ==&gt; ACTION_DOWN
+9.          T2.onTouchEvent(T2.java:45) ==&gt; ACTION_DOWN false
+10.         T2.dispatchTouchEvent(T2.java:37) ==&gt; ACTION_DOWN false
+11.         T1.dispatchTouchEvent(T1.java:35) ==&gt; ACTION_DOWN
+12.         MainActivity$1.onTouch(MainActivity.java:21) ==&gt; ACTION_DOWN true
+13.         T1.dispatchTouchEvent(T1.java:37) ==&gt; ACTION_DOWN true
+14.    R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_DOWN true
+15. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_DOWN true
+
+16. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_UP
+17. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_UP
+18. L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_UP false
+19.     R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_UP
+20.     R.onInterceptTouchEvent(R.java:35) ==&gt; ACTION_UP
+21.     R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_UP false
+22.         T1.dispatchTouchEvent(T1.java:35) ==&gt; ACTION_UP
+23.         MainActivity$1.onTouch(MainActivity.java:21) ==&gt; ACTION_UP true
+24.         T1.dispatchTouchEvent(T1.java:37) ==&gt; ACTION_UP true
+25.     R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_UP true
+26. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_UP true
+</code></pre></div></div>
+
+<p>日志分析：
+ 日志1至日志10与默认情况无异，下面主要说说几处不同。
+ <strong>11至13：</strong>事件透过T2继续向T1分发，且T1注册的回调返回了true，因此T1消费了Down事件
+ <strong>14至15：</strong>由于有子View消费了事件，因此L、R的onTouchEvent方法没有被调用
+ <strong>16至26：</strong>由于Down事件被消费，因此系统继续下发后续事件（Up）
+ （手指滑动小于20像素，不会产生Move事件，本例为简化没有令其产生）
+ 另外注意，<strong>R没有将Up事件传递给T2，而是直接传给了T1</strong></p>
+
+<blockquote>
+
+</blockquote>
+
+<p>结论
+ 1、如果消费了Down事件，则会继续收到后续事件
+ 2、ViewGroup会以子View添加顺序的逆序查找边界包含触控点的所有子View
+ （2.1 事实上，如果遍历时发现某子View消费了该事件，ViewGroup会停止遍历）
+ 3、一旦查找到消费事件的子View，后续事件会直接传递给它，不会再遍历</p>
+
+<p>关于结论中2.1的论证，可以做这样一个实验：
+ 在T2上注册OnTouchListener回调，实验方式不变，会发现事件不会传递给T1，而是由T2消费Down和Up事件。</p>
+
+<p><strong>如何判断事件是否被消费？</strong>
+ 关于事件是否被消费，有说法说是看onTouchEvent是否返回true，这是不对的，实际上要看dispatchTouchEvent是否返回true，之所以会有这种说法，是因为默认情况下如果onTouchEvent返回true，则dispatchTouchEvent必然返回true（见1.3）。</p>
+
+<p>做两个实验验证：</p>
+
+<ol>
+  <li>令T1.onTouchEvent返回true，而T1.dispatchTouchEvent返回false</li>
+  <li>令T1.onTouchEvent返回false，而T1.dispatchTouchEvent返回true</li>
+</ol>
+
+<p>实验一日志输出除第9条外与默认情况完全一样，这里从略。
+ 实验二日志如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_DOWN
+2. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3. L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_DOWN false
+4.  R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_DOWN
+5.  R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_DOWN
+6.  R.onInterceptTouchEvent(R.java:39) ==&gt; ACTION_DOWN false
+7.          T1.dispatchTouchEvent(T1.java:35) ==&gt; ACTION_DOWN
+8.          T1.onTouchEvent(T1.java:44) ==&gt; ACTION_DOWN
+9.          T1.onTouchEvent(T1.java:46) ==&gt; ACTION_DOWN false
+10.         T1.dispatchTouchEvent(T1.java:38) ==&gt; ACTION_DOWN true
+11.     R.dispatchTouchEvent(R.java:47) ==&gt; ACTION_DOWN true
+12. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_DOWN true
+
+13. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_UP
+14. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_UP
+15. L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_UP false
+16.     R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_UP
+17.     R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_UP
+18.     R.onInterceptTouchEvent(R.java:39) ==&gt; ACTION_UP false
+19.         T1.dispatchTouchEvent(T1.java:35) ==&gt; ACTION_UP
+20.         T1.onTouchEvent(T1.java:44) ==&gt; ACTION_UP
+21.         T1.onTouchEvent(T1.java:46) ==&gt; ACTION_UP false
+22.         T1.dispatchTouchEvent(T1.java:38) ==&gt; ACTION_UP true
+23.     R.dispatchTouchEvent(R.java:47) ==&gt; ACTION_UP true
+24. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_UP true
+</code></pre></div></div>
+
+<p>从日志中可以看出，
+ （实验1）虽然T1.onTouchEvent返回true，但由于T1.dispatchTouchEvent返回false，系统仍然认为T1没有消费Down事件，因此T1不再收到后续事件。
+ （实验2）反之，强制使T1.dispatchTouchEvent返回true后，T1（及T1的父控件L、R）会收到后续事件(Up)，
+ 由此可知</p>
+
+<blockquote>
+  <p><strong>dispatchTouchEvent返回true &lt;=&gt; View消费了事件</strong></p>
+</blockquote>
+
+<p><strong>逐层负责制</strong>
+ 为了说明事件下发是采用逐层负责制，做两个实验（点击T1）：</p>
+
+<ol>
+  <li>令T1.dispatchTouchEvent返回false（默认情况），R.dispatchTouchEvent返回true（点击T1）</li>
+  <li>令R.dispatchTouchEvent返回false，L.dispatchTouchEvent返回true（点击B）</li>
+</ol>
+
+<p>实验1日志如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_DOWN
+2.  L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3.  L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_DOWN false
+4.      R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_DOWN
+5.      R.onInterceptTouchEvent(R.java:35) ==&gt; ACTION_DOWN
+6.      R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_DOWN false
+7.          T1.dispatchTouchEvent(T1.java:35) ==&gt; ACTION_DOWN
+8.          T1.onTouchEvent(T1.java:43) ==&gt; ACTION_DOWN
+9.          T1.onTouchEvent(T1.java:45) ==&gt; ACTION_DOWN false
+10.         T1.dispatchTouchEvent(T1.java:37) ==&gt; ACTION_DOWN false
+11.     R.onTouchEvent(R.java:52) ==&gt; ACTION_DOWN
+12.     R.onTouchEvent(R.java:54) ==&gt; ACTION_DOWN false
+13.     R.dispatchTouchEvent(R.java:46) ==&gt; ACTION_DOWN true
+14. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_DOWN true
+
+15. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_UP
+16. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_UP
+17. L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_UP false
+18.     R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_UP
+19.     R.onTouchEvent(R.java:52) ==&gt; ACTION_UP
+20.     R.onTouchEvent(R.java:54) ==&gt; ACTION_UP false
+21.     R.dispatchTouchEvent(R.java:46) ==&gt; ACTION_UP true
+22. L.dispatchTouchEvent(L.java:43) ==&gt; ACTION_UP true
+</code></pre></div></div>
+
+<p>实验2日志如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_DOWN
+2.  L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3.  L.onInterceptTouchEvent(L.java:35) ==&gt; ACTION_DOWN false
+4.      R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_DOWN
+5.      R.onInterceptTouchEvent(R.java:35) ==&gt; ACTION_DOWN
+6.      R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_DOWN false
+7.          B.dispatchTouchEvent(B.java:35) ==&gt; ACTION_DOWN
+8.          B.onTouchEvent(B.java:43) ==&gt; ACTION_DOWN
+9.          B.onTouchEvent(B.java:45) ==&gt; ACTION_DOWN true
+10.         B.dispatchTouchEvent(B.java:37) ==&gt; ACTION_DOWN true
+11.     R.dispatchTouchEvent(R.java:46) ==&gt; ACTION_DOWN false
+12. L.onTouchEvent(L.java:50) ==&gt; ACTION_DOWN
+13. L.onTouchEvent(L.java:52) ==&gt; ACTION_DOWN false
+14. L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_DOWN true
+
+15. L.dispatchTouchEvent(L.java:41) ==&gt; ACTION_UP
+16. L.onTouchEvent(L.java:50) ==&gt; ACTION_UP
+17. L.onTouchEvent(L.java:52) ==&gt; ACTION_UP false
+18. L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_UP true
+</code></pre></div></div>
+
+<p>从实验1日志可以看出，T1没有消费Down事件，R消费了Down事件，所以Up事件继续传递给R，但R不再向T1分发。
+ 从实验2日志可以看出，虽然B消费了Down事件，但由于R.dispatchTouchEvent返回了false，表征R没有消费Down事件，因此系统不再向R下发后续事件，也就不会向B下发后续事件。</p>
+
+<blockquote>
+  <p><strong>结论</strong>
+ 如果ViewGroup没有消费Down事件，即使其子View消费了Down事件，该ViewGroup及其子View都不会再收到后续事件。</p>
+</blockquote>
+
+<p><strong>拦截机制</strong>
+ 做两个实验：</p>
+
+<ol>
+  <li>（拦截Down事件）令L.onInterceptTouchEvent(ACTION_DOWN)返回true，同时L.dispatchTouchEvent(ACTION_DOWN)返回true，其它默认（点击T1）</li>
+  <li>（拦截Move事件）令L.onInterceptTouchEvent(ACTION_MOVE)返回true，其它默认（点击B）</li>
+</ol>
+
+<p>实验1日志输出如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_DOWN
+2.  L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3.  L.onInterceptTouchEvent(L.java:38) ==&gt; ACTION_DOWN true
+4.  L.onTouchEvent(L.java:55) ==&gt; ACTION_DOWN
+5.  L.onTouchEvent(L.java:57) ==&gt; ACTION_DOWN false
+6.  L.dispatchTouchEvent(L.java:49) ==&gt; ACTION_DOWN true
+
+7.  L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_UP
+8.  L.onTouchEvent(L.java:55) ==&gt; ACTION_UP
+9.  L.onTouchEvent(L.java:57) ==&gt; ACTION_UP false
+10. L.dispatchTouchEvent(L.java:49) ==&gt; ACTION_UP false
+</code></pre></div></div>
+
+<p>实验2日志输出如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_DOWN
+2.  L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_DOWN
+3.  L.onInterceptTouchEvent(L.java:38) ==&gt; ACTION_DOWN false
+4.      R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_DOWN
+5.      R.onInterceptTouchEvent(R.java:35) ==&gt; ACTION_DOWN
+6.      R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_DOWN false
+7.          B.dispatchTouchEvent(B.java:35) ==&gt; ACTION_DOWN
+8.          B.onTouchEvent(B.java:43) ==&gt; ACTION_DOWN
+9.          B.onTouchEvent(B.java:45) ==&gt; ACTION_DOWN true
+10.         B.dispatchTouchEvent(B.java:37) ==&gt; ACTION_DOWN true
+11.     R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_DOWN true
+12. L.dispatchTouchEvent(L.java:46) ==&gt; ACTION_DOWN true
+
+13. L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_MOVE
+14. L.onInterceptTouchEvent(L.java:33) ==&gt; ACTION_MOVE
+15. L.onInterceptTouchEvent(L.java:38) ==&gt; ACTION_MOVE true
+16.     R.dispatchTouchEvent(R.java:43) ==&gt; ACTION_CANCEL
+17.     R.onInterceptTouchEvent(R.java:35) ==&gt; ACTION_CANCEL
+18.     R.onInterceptTouchEvent(R.java:37) ==&gt; ACTION_CANCEL false
+19.         B.dispatchTouchEvent(B.java:35) ==&gt; ACTION_CANCEL
+20.         B.onTouchEvent(B.java:43) ==&gt; ACTION_CANCEL
+21.         B.onTouchEvent(B.java:45) ==&gt; ACTION_CANCEL true
+22.         B.dispatchTouchEvent(B.java:37) ==&gt; ACTION_CANCEL true
+23.     R.dispatchTouchEvent(R.java:45) ==&gt; ACTION_CANCEL true
+24. L.dispatchTouchEvent(L.java:46) ==&gt; ACTION_MOVE true
+
+25. L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_MOVE
+26. L.onTouchEvent(L.java:52) ==&gt; ACTION_MOVE
+27. L.onTouchEvent(L.java:54) ==&gt; ACTION_MOVE false
+28. L.dispatchTouchEvent(L.java:46) ==&gt; ACTION_MOVE false
+
+29. L.dispatchTouchEvent(L.java:44) ==&gt; ACTION_UP
+30. L.onTouchEvent(L.java:52) ==&gt; ACTION_UP
+31. L.onTouchEvent(L.java:54) ==&gt; ACTION_UP false
+32. L.dispatchTouchEvent(L.java:46) ==&gt; ACTION_UP false
+</code></pre></div></div>
+
+<p>实验1日志分析：</p>
+
+<ol>
+  <li>（日志1至6）L拦截了Down事件，事件由L进行处理，不再向下分发</li>
+  <li>（日志7至10）系统下发Up事件给L后，L不再调用自身的onInterceptTouchEvent。</li>
+</ol>
+
+<p>实验2日志分析：</p>
+
+<ol>
+  <li>L拦截了第一个Move事件</li>
+</ol>
+
+<ul>
+  <li>该事件转为Cancel事件，继续向下分发</li>
+  <li>L.onTouchEvent不会被调用</li>
+</ul>
+
+<ol>
+  <li>后续事件（Move/Up）直接由L处理</li>
+</ol>
+
+<ul>
+  <li>不再调用onInterceptTouchEvent</li>
+  <li>也不再向下分发</li>
+</ul>
+
+<blockquote>
+  <p><strong>结论</strong>
+ 1、 如果ViewGroup拦截了Down事件，则该ViewGroup不向下分发任何事件，该ViewGroup会消费整个手势事件。
+ 2、如果ViewGroup拦截了Move事件，则该事件会转为Cancel事件继续向下分发，但不会调用自身的onTouchEvent，而后续的事件则会直接有该ViewGroup处理，不在询问是否拦截，也不再向下分发
+ 3、一旦onInterceptTouchEvent返回true，就不会再被调用
+ 4、 如果子View没有消费事件而ViewGroup消费了Down事件，则后续不会再调用ViewGroup的onInterceptTouchEvent</p>
+</blockquote>
+
+<p><a href="https://link.jianshu.com?t=http://codetheory.in/understanding-android-input-touch-events/">拓展阅读</a></p>
+
+<p>作者：剑舞潇湘</p>
+
+<p>链接：https://www.jianshu.com/p/f696ca2dde74</p>
+
+<p>来源：简书</p>
+
+<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
+    
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    
+    <!-- Disqus -->
+    <!--
+    
+    <hr>
+    <div class="comment"></div>
+    <script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV,
+            el: '.comment', //
+            app_id: 'ox8SrmOHTcTKRcdkXjx1ViaN-gzGzoHsz', // 这里填写上面得到的APP ID
+            app_key: '8vnBKUOjehYPThhUstedQf6a', // 这里填写上面得到的APP KEY
+            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+        });
+    </script>
+    -->
+</div>
+
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  <div class="footer-link">
+    
+    <a href="https://www.facebook.com/100032298188362"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+    <a href="https://twitter.com/HeyLinBo"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    
+
+    
+    <a href="https://github.com/obnil"><i class="fa fa-github" aria-hidden="true"></i></a>
+    
+	
+	
+	
+	
+
+    
+	
+	
+	
+	
+	
+	
+	
+	
+
+    
+
+    
+
+    
+    <a href="mailto:namilin@icloud.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+    
+
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
+  </div>
+  <style>
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.333%;
+	height: 0;
+    background: black;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+    border: 0;
+}    
+</style>
+
+<script>
+function get_youtube_id(url) {
+    var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return (url.match(p)) ? RegExp.$1 : false;
+}
+function vimeo_embed(url,el) {
+    var id = false;
+    $.ajax({
+      url: 'https://vimeo.com/api/oembed.json?url='+url,
+      async: true,
+      success: function(response) {
+        if(response.video_id) {
+          id = response.video_id;
+          if(url.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+          if(url.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+          var theInnerHTML = '<div class="videoWrapper"><iframe src="https://player.vimeo.com/video/'+id+'/?byline=0&title=0&portrait=0';
+          if(autoplay==1) theInnerHTML += '&autoplay=1';
+          if(loop==1) theInnerHTML += '&loop=1';
+          theInnerHTML += '" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>'; 
+          el.innerHTML = theInnerHTML;
+        }
+      }
+    });
+}
+function video_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        //check if this is an external url (that starts with https:// or http://
+        if (p[i].innerHTML.indexOf("http://") == 0 ||
+            p[i].innerHTML.indexOf("https://") == 0) {
+            var youtube_id = get_youtube_id(p[i].innerHTML);
+            if(youtube_id) {
+                if(p[i].innerHTML.indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(p[i].innerHTML.indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                var theInnerHTML = '<div class="videoWrapper"><iframe width="720" height="420" src="https://www.youtube.com/embed/' + youtube_id + '?rel=0&showinfo=0';
+                if(autoplay==1) theInnerHTML += '&autoplay=1';
+                if(loop==1) theInnerHTML += '&loop=1&playlist='+youtube_id+'&version=3';
+                theInnerHTML += '" frameborder="0" allowfullscreen></iframe></div>';
+                p[i].innerHTML = theInnerHTML;
+            }
+            if(p[i].innerHTML.indexOf('vimeo.com') !== -1) {
+                //ask vimeo for the id and place the embed
+                vimeo_embed(p[i].innerHTML,p[i]);
+            }
+        }
+    }
+}
+video_embed();
+
+function mp3_embed() {
+    var p = document.getElementsByTagName('p');
+    for(var i = 0; i < p.length; i++) {
+        if(p[i].innerHTML.indexOf('.mp3') !== -1) {
+            var str = p[i].innerHTML.split('?');
+            if(str.length == 1) str[1] = '';
+            var str1 = str[1];
+            str1 = str1.replace('&','').replace('&','');
+            str1 = str1.replace('autoplay=1','').replace('autoplay=0','');
+            str1 = str1.replace('loop=1','').replace('loop=0','');
+            str1 = str1.replace('controls=0','').replace('controls=1','');
+
+            if (str[0].lastIndexOf('.mp3', str[0].length - 4) === str[0].length - 4 && str1.length == 0) {
+                if(str[1].indexOf('autoplay=1') !== -1) var autoplay=1; else var autoplay=0;
+                if(str[1].indexOf('loop=1') !== -1) var loop=1; else var loop=0;
+                if(str[1].indexOf('controls=0') !== -1) var controls=0; else var controls=1;
+                var newInnerHTML = '<audio';
+                if(autoplay==1) newInnerHTML += ' autoplay';
+                if(loop==1) newInnerHTML += ' loop';
+                if(controls==1) newInnerHTML += ' controls';
+                newInnerHTML += '><source src="'+str[0]+'" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+                p[i].innerHTML = newInnerHTML;
+            }
+        }
+    }
+}
+mp3_embed();
+</script>
+</body>
+</html>
