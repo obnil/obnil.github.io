@@ -6,6 +6,408 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>全面理解Java内存模型(JMM)及volatile关键字</title>
+        <description>&lt;p&gt;【版权申明】未经博主同意，谢绝转载！（请尊重原创，博主保留追究权） 
+http://blog.csdn.net/javazejian/article/details/72772461 
+出自【zejian的博客】&lt;/p&gt;
+
+&lt;p&gt;关联文章：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/70768369&quot;&gt;深入理解Java类型信息(Class对象)与反射机制&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/71333103&quot;&gt;深入理解Java枚举类型(enum)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/71860633&quot;&gt;深入理解Java注解类型(@Annotation)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/73413292&quot;&gt;深入理解Java类加载器(ClassLoader)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/72828483&quot;&gt;深入理解Java并发之synchronized实现原理&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/72772470&quot;&gt;Java并发编程-无锁CAS与Unsafe类及其并发包Atomic&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/72772461&quot;&gt;深入理解Java内存模型(JMM)及volatile关键字&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/75043422&quot;&gt;剖析基于并发AQS的重入锁(ReetrantLock)及其Condition实现原理&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/76167357&quot;&gt;剖析基于并发AQS的共享锁的实现(基于信号量Semaphore)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/javazejian/article/details/77410889&quot;&gt;并发之阻塞队列LinkedBlockingQueue与ArrayBlockingQueue&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;本篇主要结合博主个人对Java内存模型的理解以及相关书籍内容的分析作为前提，对JMM进行较为全面的分析，本篇的写作思路是先阐明Java内存区域划分、硬件内存架构、Java多线程的实现原理与Java内存模型的具体关系，在弄明白它们间的关系后，进一步分析Java内存模型作用以及一些必要的实现手段，以下是本篇主要内容（如有错误，欢迎留言，谢谢！）&lt;/p&gt;
+
+&lt;p&gt;理解Java内存区域与Java内存模型&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#java内存区域&quot;&gt;Java内存区域&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#java内存模型概述&quot;&gt;Java内存模型概述&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;硬件内存架构与Java内存模型&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#硬件内存架构&quot;&gt;硬件内存架构&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#java线程与硬件处理器&quot;&gt;Java线程与硬件处理器&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#java内存模型与硬件内存架构的关系&quot;&gt;Java内存模型与硬件内存架构的关系&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#jmm存在的必要性&quot;&gt;JMM存在的必要性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#java内存模型的承诺&quot;&gt;Java内存模型的承诺&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#原子性&quot;&gt;原子性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;理解指令重排
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#编译器重排&quot;&gt;编译器重排&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#处理器指令重排&quot;&gt;处理器指令重排&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#可见性&quot;&gt;可见性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#有序性&quot;&gt;有序性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#jmm提供的解决方案&quot;&gt;JMM提供的解决方案&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#理解jmm中的happens-before-原则&quot;&gt;理解JMM中的happens-before 原则&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#volatile内存语义&quot;&gt;volatile内存语义&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#volatile的可见性&quot;&gt;volatile的可见性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/javazejian/article/details/72772461#volatile禁止重排优化&quot;&gt;volatile禁止重排优化&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;理解Java内存区域与Java内存模型
+Java内存区域&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1g40jx957jnj30jx097n08.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Java虚拟机在运行程序时会把其自动管理的内存划分为以上几个区域，每个区域都有的用途以及创建销毁的时机，其中蓝色部分代表的是所有线程共享的数据区域，而绿色部分代表的是每个线程的私有数据区域。&lt;/p&gt;
+
+&lt;p&gt;方法区（Method Area）：&lt;/p&gt;
+
+&lt;p&gt;方法区属于线程共享的内存区域，又称Non-Heap（非堆），主要用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据，根据Java 虚拟机规范的规定，当方法区无法满足内存分配需求时，将抛出OutOfMemoryError 异常。值得注意的是在方法区中存在一个叫运行时常量池(Runtime Constant Pool）的区域，它主要用于存放编译器生成的各种字面量和符号引用，这些内容将在类加载后存放到运行时常量池中，以便后续使用。&lt;/p&gt;
+
+&lt;p&gt;JVM堆（Java Heap）：&lt;/p&gt;
+
+&lt;p&gt;Java 堆也是属于线程共享的内存区域，它在虚拟机启动时创建，是Java 虚拟机所管理的内存中最大的一块，主要用于存放对象实例，几乎所有的对象实例都在这里分配内存，注意Java 堆是垃圾收集器管理的主要区域，因此很多时候也被称做GC 堆，如果在堆中没有内存完成实例分配，并且堆也无法再扩展时，将会抛出OutOfMemoryError 异常。&lt;/p&gt;
+
+&lt;p&gt;程序计数器(Program Counter Register)：&lt;/p&gt;
+
+&lt;p&gt;属于线程私有的数据区域，是一小块内存空间，主要代表当前线程所执行的字节码行号指示器。字节码解释器工作时，通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。&lt;/p&gt;
+
+&lt;p&gt;虚拟机栈(Java Virtual Machine Stacks)：&lt;/p&gt;
+
+&lt;p&gt;属于线程私有的数据区域，与线程同时创建，总数与线程关联，代表Java方法执行的内存模型。每个方法执行时都会创建一个栈桢来存储方法的的变量表、操作数栈、动态链接方法、返回值、返回地址等信息。每个方法从调用直结束就对于一个栈桢在虚拟机栈中的入栈和出栈过程，如下（图有误，应该为栈桢）：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws3.sinaimg.cn/large/006tNc79gy1g40jxuxc7pj30iu0a1q66.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;本地方法栈(Native Method Stacks)：&lt;/p&gt;
+
+&lt;p&gt;本地方法栈属于线程私有的数据区域，这部分主要与虚拟机用到的 Native 方法相关，一般情况下，我们无需关心此区域。&lt;/p&gt;
+
+&lt;p&gt;这里之所以简要说明这部分内容，注意是为了区别Java内存模型与Java内存区域的划分，毕竟这两种划分是属于不同层次的概念。&lt;/p&gt;
+
+&lt;p&gt;Java内存模型概述
+Java内存模型(即Java Memory Model，简称JMM)本身是一种抽象的概念，并不真实存在，它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段，静态字段和构成数组对象的元素）的访问方式。由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，用于存储线程私有的数据，而Java内存模型中规定所有变量都存储在主内存，主内存是共享内存区域，所有线程都可以访问，但线程对变量的操作(读取赋值等)必须在工作内存中进行，首先要将变量从主内存拷贝的自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存，不能直接操作主内存中的变量，工作内存中存储着主内存中的变量副本拷贝，前面说过，工作内存是每个线程的私有数据区域，因此不同的线程间无法访问对方的工作内存，线程间的通信(传值)必须通过主内存来完成，其简要访问过程如下图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1g40jxyfwu9j30lp0dyq7w.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;需要注意的是，JMM与Java内存区域的划分是不同的概念层次，更恰当说JMM描述的是一组规则，通过这组规则控制程序中各个变量在共享数据区域和私有数据区域的访问方式，JMM是围绕原子性，有序性、可见性展开的(稍后会分析)。JMM与Java内存区域唯一相似点，都存在共享数据区域和私有数据区域，在JMM中主内存属于共享数据区域，从某个程度上讲应该包括了堆和方法区，而工作内存数据线程私有数据区域，从某个程度上讲则应该包括程序计数器、虚拟机栈以及本地方法栈。或许在某些地方，我们可能会看见主内存被描述为堆内存，工作内存被称为线程栈，实际上他们表达的都是同一个含义。关于JMM中的主内存和工作内存说明如下&lt;/p&gt;
+
+&lt;p&gt;主内存&lt;/p&gt;
+
+&lt;p&gt;主要存储的是Java实例对象，所有线程创建的实例对象都存放在主内存中，不管该实例对象是成员变量还是方法中的本地变量(也称局部变量)，当然也包括了共享的类信息、常量、静态变量。由于是共享数据区域，多条线程对同一个变量进行访问可能会发现线程安全问题。&lt;/p&gt;
+
+&lt;p&gt;工作内存&lt;/p&gt;
+
+&lt;p&gt;主要存储当前方法的所有本地变量信息(工作内存中存储着主内存中的变量副本拷贝)，每个线程只能访问自己的工作内存，即线程中的本地变量对其它线程是不可见的，就算是两个线程执行的是同一段代码，它们也会各自在自己的工作内存中创建属于当前线程的本地变量，当然也包括了字节码行号指示器、相关Native方法的信息。注意由于工作内存是每个线程的私有数据，线程间无法相互访问工作内存，因此存储在工作内存的数据不存在线程安全问题。&lt;/p&gt;
+
+&lt;p&gt;弄清楚主内存和工作内存后，接了解一下主内存与工作内存的数据存储类型以及操作方式，根据虚拟机规范，对于一个实例对象中的成员方法而言，如果方法中包含本地变量是基本数据类型（boolean,byte,short,char,int,long,float,double），将直接存储在工作内存的帧栈结构中，但倘若本地变量是引用类型，那么该变量的引用会存储在功能内存的帧栈中，而对象实例将存储在主内存(共享数据区域，堆)中。但对于实例对象的成员变量，不管它是基本数据类型或者包装类型(Integer、Double等)还是引用类型，都会被存储到堆区。至于static变量以及类本身相关信息将会存储在主内存中。需要注意的是，在主内存中的实例对象可以被多线程共享，倘若两个线程同时调用了同一个对象的同一个方法，那么两条线程会将要操作的数据拷贝一份到自己的工作内存中，执行完成操作后才刷新到主内存，简单示意图如下所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1g40jy5ck51j30jx0h4434.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;硬件内存架构与Java内存模型
+硬件内存架构&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws2.sinaimg.cn/large/006tNc79gy1g40jyexqvhj30hi0an0ui.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;正如上图所示，经过简化CPU与内存操作的简易图，实际上没有这么简单，这里为了理解方便，我们省去了南北桥并将三级缓存统一为CPU缓存(有些CPU只有二级缓存，有些CPU有三级缓存)。就目前计算机而言，一般拥有多个CPU并且每个CPU可能存在多个核心，多核是指在一枚处理器(CPU)中集成两个或多个完整的计算引擎(内核),这样就可以支持多任务并行执行，从多线程的调度来说，每个线程都会映射到各个CPU核心中并行运行。在CPU内部有一组CPU寄存器，寄存器是cpu直接访问和处理的数据，是一个临时放数据的空间。一般CPU都会从内存取数据到寄存器，然后进行处理，但由于内存的处理速度远远低于CPU，导致CPU在处理指令时往往花费很多时间在等待内存做准备工作，于是在寄存器和主内存间添加了CPU缓存，CPU缓存比较小，但访问速度比主内存快得多，如果CPU总是操作主内存中的同一址地的数据，很容易影响CPU执行速度，此时CPU缓存就可以把从内存提取的数据暂时保存起来，如果寄存器要取内存中同一位置的数据，直接从缓存中提取，无需直接从主内存取。需要注意的是，寄存器并不每次数据都可以从缓存中取得数据，万一不是同一个内存地址中的数据，那寄存器还必须直接绕过缓存从内存中取数据。所以并不每次都得到缓存中取数据，这种现象有个专业的名称叫做缓存的命中率，从缓存中取就命中，不从缓存中取从内存中取，就没命中，可见缓存命中率的高低也会影响CPU执行性能，这就是CPU、缓存以及主内存间的简要交互过程，总而言之当一个CPU需要访问主存时，会先读取一部分主存数据到CPU缓存(当然如果CPU缓存中存在需要的数据就会直接从缓存获取)，进而在读取CPU缓存到寄存器，当CPU需要写数据到主存时，同样会先刷新寄存器中的数据到CPU缓存，然后再把数据刷新到主内存中。&lt;/p&gt;
+
+&lt;p&gt;Java线程与硬件处理器
+了解完硬件的内存架构后，接着了解JVM中线程的实现原理，理解线程的实现原理，有助于我们了解Java内存模型与硬件内存架构的关系，在Window系统和Linux系统上，Java线程的实现是基于一对一的线程模型，所谓的一对一模型，实际上就是通过语言级别层面程序去间接调用系统内核的线程模型，即我们在使用Java线程时，Java虚拟机内部是转而调用当前操作系统的内核线程来完成当前任务。这里需要了解一个术语，内核线程(Kernel-Level Thread，KLT)，它是由操作系统内核(Kernel)支持的线程，这种线程是由操作系统内核来完成线程切换，内核通过操作调度器进而对线程执行调度，并将线程的任务映射到各个处理器上。每个内核线程可以视为内核的一个分身,这也就是操作系统可以同时处理多任务的原因。由于我们编写的多线程程序属于语言层面的，程序一般不会直接去调用内核线程，取而代之的是一种轻量级的进程(Light Weight Process)，也是通常意义上的线程，由于每个轻量级进程都会映射到一个内核线程，因此我们可以通过轻量级进程调用内核线程，进而由操作系统内核将任务映射到各个处理器，这种轻量级进程与内核线程间1对1的关系就称为一对一的线程模型。如下图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws4.sinaimg.cn/large/006tNc79gy1g40jyofavuj30i60i2dlk.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示，每个线程最终都会映射到CPU中进行处理，如果CPU存在多核，那么一个CPU将可以并行执行多个线程任务。&lt;/p&gt;
+
+&lt;p&gt;Java内存模型与硬件内存架构的关系
+通过对前面的硬件内存架构、Java内存模型以及Java多线程的实现原理的了解，我们应该已经意识到，多线程的执行最终都会映射到硬件处理器上进行执行，但Java内存模型和硬件内存架构并不完全一致。对于硬件内存来说只有寄存器、缓存内存、主内存的概念，并没有工作内存(线程私有数据区域)和主内存(堆内存)之分，也就是说Java内存模型对内存的划分对硬件内存并没有任何影响，因为JMM只是一种抽象的概念，是一组规则，并不实际存在，不管是工作内存的数据还是主内存的数据，对于计算机硬件来说都会存储在计算机主内存中，当然也有可能存储到CPU缓存或者寄存器中，因此总体上来说，Java内存模型和计算机硬件内存架构是一个相互交叉的关系，是一种抽象概念划分与真实物理硬件的交叉。(注意对于Java内存区域划分也是同样的道理)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws4.sinaimg.cn/large/006tNc79gy1g40jyu8nhrj30p30cogpx.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;JMM存在的必要性
+在明白了Java内存区域划分、硬件内存架构、Java多线程的实现原理与Java内存模型的具体关系后，接着来谈谈Java内存模型存在的必要性。由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，用于存储线程私有的数据，线程与主内存中的变量操作必须通过工作内存间接完成，主要过程是将变量从主内存拷贝的每个线程各自的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存，如果存在两个线程同时对一个主内存中的实例对象的变量进行操作就有可能诱发线程安全问题。如下图，主内存中存在一个共享变量x，现在有A和B两条线程分别对该变量x=1进行操作，A/B线程各自的工作内存中存在共享变量副本x。假设现在A线程想要修改x的值为2，而B线程却想要读取x的值，那么B线程读取到的值是A线程更新后的值2还是更新前的值1呢？答案是，不确定，即B线程有可能读取到A线程更新前的值1，也有可能读取到A线程更新后的值2，这是因为工作内存是每个线程私有的数据区域，而线程A变量x时，首先是将变量从主内存拷贝到A线程的工作内存中，然后对变量进行操作，操作完成后再将变量x写回主内，而对于B线程的也是类似的，这样就有可能造成主内存与工作内存间数据存在一致性问题，假如A线程修改完后正在将数据写回主内存，而B线程此时正在读取主内存，即将x=1拷贝到自己的工作内存中，这样B线程读取到的值就是x=1，但如果A线程已将x=2写回主内存后，B线程才开始读取的话，那么此时B线程读取到的就是x=2，但到底是哪种情况先发生呢？这是不确定的，这也就是所谓的线程安全问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws4.sinaimg.cn/large/006tNc79gy1g40jz6u45pj30i70da0v7.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;为了解决类似上述的问题，JVM定义了一组规则，通过这组规则来决定一个线程对共享变量的写入何时对另一个线程可见，这组规则也称为Java内存模型（即JMM），JMM是围绕着程序执行的原子性、有序性、可见性展开的，下面我们看看这三个特性。&lt;/p&gt;
+
+&lt;p&gt;Java内存模型的承诺
+这里我们先来了解几个概念，即原子性？可见性？有序性？最后再阐明JMM是如何保证这3个特性。&lt;/p&gt;
+
+&lt;p&gt;原子性
+原子性指的是一个操作是不可中断的，即使是在多线程环境下，一个操作一旦开始就不会被其他线程影响。比如对于一个静态变量int x，两条线程同时对他赋值，线程A赋值为1，而线程B赋值为2，不管线程如何运行，最终x的值要么是1，要么是2，线程A和线程B间的操作是没有干扰的，这就是原子性操作，不可被中断的特点。有点要注意的是，对于32位系统的来说，long类型数据和double类型数据(对于基本数据类型，byte,short,int,float,boolean,char读写是原子操作)，它们的读写并非原子性的，也就是说如果存在两条线程同时对long类型或者double类型的数据进行读写是存在相互干扰的，因为对于32位虚拟机来说，每次原子读写是32位的，而long和double则是64位的存储单元，这样会导致一个线程在写时，操作完前32位的原子操作后，轮到B线程读取时，恰好只读取到了后32位的数据，这样可能会读取到一个既非原值又不是线程修改值的变量，它可能是“半个变量”的数值，即64位数据被两个线程分成了两次读取。但也不必太担心，因为读取到“半个变量”的情况比较少见，至少在目前的商用的虚拟机中，几乎都把64位的数据的读写操作作为原子操作来执行，因此对于这个问题不必太在意，知道这么回事即可。&lt;/p&gt;
+
+&lt;p&gt;理解指令重排
+计算机在执行程序时，为了提高性能，编译器和处理器的常常会对指令做重排，一般分以下3种&lt;/p&gt;
+
+&lt;p&gt;编译器优化的重排&lt;/p&gt;
+
+&lt;p&gt;编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。&lt;/p&gt;
+
+&lt;p&gt;指令并行的重排&lt;/p&gt;
+
+&lt;p&gt;现代处理器采用了指令级并行技术来将多条指令重叠执行。如果不存在数据依赖性(即后一个执行的语句无需依赖前面执行的语句的结果)，处理器可以改变语句对应的机器指令的执行顺序&lt;/p&gt;
+
+&lt;p&gt;内存系统的重排&lt;/p&gt;
+
+&lt;p&gt;由于处理器使用缓存和读写缓存冲区，这使得加载(load)和存储(store)操作看上去可能是在乱序执行，因为三级缓存的存在，导致内存与缓存的数据同步存在时间差。&lt;/p&gt;
+
+&lt;p&gt;其中编译器优化的重排属于编译期重排，指令并行的重排和内存系统的重排属于处理器重排，在多线程环境中，这些重排优化可能会导致程序出现内存可见性问题，下面分别阐明这两种重排优化可能带来的问题&lt;/p&gt;
+
+&lt;p&gt;编译器重排
+下面我们简单看一个编译器重排的例子：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;线程 1             线程 2
+1： x2 = a ;      3: x1 = b ;
+2: b = 1;         4: a = 2 ;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;两个线程同时执行，分别有1、2、3、4四段执行代码，其中1、2属于线程1 ， 3、4属于线程2 ，从程序的执行顺序上看，似乎不太可能出现x1 = 1 和x2 = 2 的情况，但实际上这种情况是有可能发现的，因为如果编译器对这段程序代码执行重排优化后，可能出现下列情况&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;线程 1              线程 2
+2: b = 1;          4: a = 2 ; 
+1：x2 = a ;        3: x1 = b ;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这种执行顺序下就有可能出现x1 = 1 和x2 = 2 的情况，这也就说明在多线程环境下，由于编译器优化重排的存在，两个线程中使用的变量能否保证一致性是无法确定的。&lt;/p&gt;
+
+&lt;p&gt;处理器指令重排
+先了解一下指令重排的概念，处理器指令重排是对CPU的性能优化，从指令的执行角度来说一条指令可以分为多个步骤完成，如下&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws3.sinaimg.cn/large/006tNc79gy1g40jzx4ddjj30f304ut9a.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;取指 IF
+译码和取寄存器操作数 ID
+执行或者有效地址计算 EX
+存储器访问 MEM
+写回 WB
+CPU在工作时，需要将上述指令分为多个步骤依次执行(注意硬件不同有可能不一样),由于每一个步会使用到不同的硬件操作，比如取指时会只有PC寄存器和存储器，译码时会执行到指令寄存器组，执行时会执行ALU(算术逻辑单元)、写回时使用到寄存器组。为了提高硬件利用率，CPU指令是按流水线技术来执行的，如下：&lt;/p&gt;
+
+&lt;p&gt;从图中可以看出当指令1还未执行完成时，第2条指令便利用空闲的硬件开始执行，这样做是有好处的，如果每个步骤花费1ms，那么如果第2条指令需要等待第1条指令执行完成后再执行的话，则需要等待5ms，但如果使用流水线技术的话，指令2只需等待1ms就可以开始执行了，这样就能大大提升CPU的执行性能。虽然流水线技术可以大大提升CPU的性能，但不幸的是一旦出现流水中断，所有硬件设备将会进入一轮停顿期，当再次弥补中断点可能需要几个周期，这样性能损失也会很大，就好比工厂组装手机的流水线，一旦某个零件组装中断，那么该零件往后的工人都有可能进入一轮或者几轮等待组装零件的过程。因此我们需要尽量阻止指令中断的情况，指令重排就是其中一种优化中断的手段，我们通过一个例子来阐明指令重排是如何阻止流水线技术中断的&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;a = b + c ;
+d = e + f ;
+下面通过汇编指令展示了上述代码在CPU执行的处理过程&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws4.sinaimg.cn/large/006tNc79gy1g40k06uvb4j30mp09240g.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;LW指令 表示 load，其中LW R1,b表示把b的值加载到寄存器R1中
+LW R2,c 表示把c的值加载到寄存器R2中
+ADD 指令表示加法，把R1 、R2的值相加，并存入R3寄存器中。
+SW 表示 store 即将 R3寄存器的值保持到变量a中
+LW R4,e 表示把e的值加载到寄存器R4中
+LW R5,f 表示把f的值加载到寄存器R5中
+SUB 指令表示减法，把R4 、R5的值相减，并存入R6寄存器中。
+SW d,R6 表示将R6寄存器的值保持到变量d中
+上述便是汇编指令的执行过程，在某些指令上存在X的标志，X代表中断的含义，也就是只要有X的地方就会导致指令流水线技术停顿，同时也会影响后续指令的执行，可能需要经过1个或几个指令周期才可能恢复正常，那为什么停顿呢？这是因为部分数据还没准备好，如执行ADD指令时，需要使用到前面指令的数据R1，R2，而此时R2的MEM操作没有完成，即未拷贝到存储器中，这样加法计算就无法进行，必须等到MEM操作完成后才能执行，也就因此而停顿了，其他指令也是类似的情况。前面阐述过，停顿会造成CPU性能下降，因此我们应该想办法消除这些停顿，这时就需要使用到指令重排了，如下图，既然ADD指令需要等待，那我们就利用等待的时间做些别的事情，如把LW R4,e 和 LW R5,f 移动到前面执行，毕竟LW R4,e 和 LW R5,f执行并没有数据依赖关系，对他们有数据依赖关系的SUB R6,R5,R4指令在R4,R5加载完成后才执行的，没有影响，过程如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ws1.sinaimg.cn/large/006tNc79gy1g40k0e8el4j30py0i4jwd.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;正如上图所示，所有的停顿都完美消除了，指令流水线也无需中断了，这样CPU的性能也能带来很好的提升，这就是处理器指令重排的作用。关于编译器重排以及指令重排(这两种重排我们后面统一称为指令重排)相关内容已阐述清晰了，我们必须意识到对于单线程而已指令重排几乎不会带来任何影响，比竟重排的前提是保证串行语义执行的一致性，但对于多线程环境而已，指令重排就可能导致严重的程序轮序执行问题，如下&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MixedOrder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;；&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;如上述代码，同时存在线程A和线程B对该实例对象进行操作，其中A线程调用写入方法，而B线程调用读取方法，由于指令重排等原因，可能导致程序执行顺序变为如下：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;线程A                    线程B
+ writer：                 read：
+ 1:flag = true;           1:flag = true;
+ 2:a = 1;                    2: a = 0 ; //误读
+                                  3: i = 1 ;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;由于指令重排的原因，线程A的flag置为true被提前执行了，而a赋值为1的程序还未执行完，此时线程B，恰好读取flag的值为true，直接获取a的值（此时B线程并不知道a为0）并执行i赋值操作，结果i的值为1，而不是预期的2，这就是多线程环境下，指令重排导致的程序乱序执行的结果。因此，请记住，指令重排只会保证单线程中串行语义的执行的一致性，但并不会关心多线程间的语义一致性。&lt;/p&gt;
+
+&lt;p&gt;可见性
+理解了指令重排现象后，可见性容易了，可见性指的是当一个线程修改了某个共享变量的值，其他线程是否能够马上得知这个修改的值。对于串行程序来说，可见性是不存在的，因为我们在任何一个操作中修改了某个变量的值，后续的操作中都能读取这个变量值，并且是修改过的新值。但在多线程环境中可就不一定了，前面我们分析过，由于线程对共享变量的操作都是线程拷贝到各自的工作内存进行操作后才写回到主内存中的，这就可能存在一个线程A修改了共享变量x的值，还未写回主内存时，另外一个线程B又对主内存中同一个共享变量x进行操作，但此时A线程工作内存中共享变量x对线程B来说并不可见，这种工作内存与主内存同步延迟现象就造成了可见性问题，另外指令重排以及编译器优化也可能导致可见性问题，通过前面的分析，我们知道无论是编译器优化还是处理器优化的重排现象，在多线程环境下，确实会导致程序轮序执行的问题，从而也就导致可见性问题。&lt;/p&gt;
+
+&lt;p&gt;有序性
+有序性是指对于单线程的执行代码，我们总是认为代码的执行是按顺序依次执行的，这样的理解并没有毛病，毕竟对于单线程而言确实如此，但对于多线程环境，则可能出现乱序现象，因为程序编译成机器码指令后可能会出现指令重排现象，重排后的指令与原指令的顺序未必一致，要明白的是，在Java程序中，倘若在本线程内，所有操作都视为有序行为，如果是多线程环境下，一个线程中观察另外一个线程，所有操作都是无序的，前半句指的是单线程内保证串行语义执行的一致性，后半句则指指令重排现象和工作内存与主内存同步延迟现象。&lt;/p&gt;
+
+&lt;p&gt;JMM提供的解决方案
+在理解了原子性，可见性以及有序性问题后，看看JMM是如何保证的，在Java内存模型中都提供一套解决方案供Java工程师在开发过程使用，如原子性问题，除了JVM自身提供的对基本数据类型读写操作的原子性外，对于方法级别或者代码块级别的原子性操作，可以使用synchronized关键字或者重入锁(ReentrantLock)保证程序执行的原子性，关于synchronized的详解，看博主另外一篇文章( 深入理解Java并发之synchronized实现原理)。而工作内存与主内存同步延迟现象导致的可见性问题，可以使用synchronized关键字或者volatile关键字解决，它们都可以使一个线程修改后的变量立即对其他线程可见。对于指令重排导致的可见性问题和有序性问题，则可以利用volatile关键字解决，因为volatile的另外一个作用就是禁止重排序优化，关于volatile稍后会进一步分析。除了靠sychronized和volatile关键字来保证原子性、可见性以及有序性外，JMM内部还定义一套happens-before 原则来保证多线程环境下两个操作间的原子性、可见性以及有序性。&lt;/p&gt;
+
+&lt;p&gt;理解JMM中的happens-before 原则
+倘若在程序开发中，仅靠sychronized和volatile关键字来保证原子性、可见性以及有序性，那么编写并发程序可能会显得十分麻烦，幸运的是，在Java内存模型中，还提供了happens-before 原则来辅助保证程序执行的原子性、可见性以及有序性的问题，它是判断数据是否存在竞争、线程是否安全的依据，happens-before 原则内容如下&lt;/p&gt;
+
+&lt;p&gt;程序顺序原则，即在一个线程内必须保证语义串行性，也就是说按照代码顺序执行。&lt;/p&gt;
+
+&lt;p&gt;锁规则 解锁(unlock)操作必然发生在后续的同一个锁的加锁(lock)之前，也就是说，如果对于一个锁解锁后，再加锁，那么加锁的动作必须在解锁动作之后(同一个锁)。&lt;/p&gt;
+
+&lt;p&gt;volatile规则 volatile变量的写，先发生于读，这保证了volatile变量的可见性，简单的理解就是，volatile变量在每次被线程访问时，都强迫从主内存中读该变量的值，而当该变量发生变化时，又会强迫将最新的值刷新到主内存，任何时刻，不同的线程总是能够看到该变量的最新值。&lt;/p&gt;
+
+&lt;p&gt;线程启动规则 线程的start()方法先于它的每一个动作，即如果线程A在执行线程B的start方法之前修改了共享变量的值，那么当线程B执行start方法时，线程A对共享变量的修改对线程B可见&lt;/p&gt;
+
+&lt;p&gt;传递性 A先于B ，B先于C 那么A必然先于C&lt;/p&gt;
+
+&lt;p&gt;线程终止规则 线程的所有操作先于线程的终结，Thread.join()方法的作用是等待当前执行的线程终止。假设在线程B终止之前，修改了共享变量，线程A从线程B的join方法成功返回后，线程B对共享变量的修改将对线程A可见。&lt;/p&gt;
+
+&lt;p&gt;线程中断规则 对线程 interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测线程是否中断。&lt;/p&gt;
+
+&lt;p&gt;对象终结规则 对象的构造函数执行，结束先于finalize()方法&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;上述8条原则无需手动添加任何同步手段(synchronized&lt;/td&gt;
+      &lt;td&gt;volatile)即可达到效果，下面我们结合前面的案例演示这8条原则如何判断线程是否安全，如下：&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MixedOrder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;；&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;同样的道理，存在两条线程A和B，线程A调用实例对象的writer()方法，而线程B调用实例对象的read()方法，线程A先启动而线程B后启动，那么线程B读取到的i值是多少呢？现在依据8条原则，由于存在两条线程同时调用，因此程序次序原则不合适。writer()方法和read()方法都没有使用同步手段，锁规则也不合适。没有使用volatile关键字，volatile变量原则不适应。线程启动规则、线程终止规则、线程中断规则、对象终结规则、传递性和本次测试案例也不合适。线程A和线程B的启动时间虽然有先后，但线程B执行结果却是不确定，也是说上述代码没有适合8条原则中的任意一条，也没有使用任何同步手段，所以上述的操作是线程不安全的，因此线程B读取的值自然也是不确定的。修复这个问题的方式很简单，要么给writer()方法和read()方法添加同步手段，如synchronized或者给变量flag添加volatile关键字，确保线程A修改的值对线程B总是可见。&lt;/p&gt;
+
+&lt;p&gt;volatile内存语义
+volatile在并发编程中很常见，但也容易被滥用，现在我们就进一步分析volatile关键字的语义。volatile是Java虚拟机提供的轻量级的同步机制。volatile关键字有如下两个作用&lt;/p&gt;
+
+&lt;p&gt;保证被volatile修饰的共享gong’x变量对所有线程总数可见的，也就是当一个线程修改了一个被volatile修饰共享变量的值，新值总数可以被其他线程立即得知。&lt;/p&gt;
+
+&lt;p&gt;禁止指令重排序优化。&lt;/p&gt;
+
+&lt;p&gt;volatile的可见性
+关于volatile的可见性作用，我们必须意识到被volatile修饰的变量对所有线程总数立即可见的，对volatile变量的所有写操作总是能立刻反应到其他线程中，但是对于volatile变量运算操作在多线程环境并不保证安全性，如下&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;VolatileVisibility&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;increase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;正如上述代码所示，i变量的任何改变都会立马反应到其他线程中，但是如此存在多条线程同时调用increase()方法的话，就会出现线程安全问题，毕竟i++;操作并不具备原子性，该操作是先读取值，然后写回一个新值，相当于原来的值加上1，分两步完成，如果第二个线程在第一个线程读取旧值和写回新值期间读取i的域值，那么第二个线程就会与第一个线程一起看到同一个值，并执行相同值的加1操作，这也就造成了线程安全失败，因此对于increase方法必须使用synchronized修饰，以便保证线程安全，需要注意的是一旦使用synchronized修饰方法后，由于synchronized本身也具备与volatile相同的特性，即可见性，因此在这样种情况下就完全可以省去volatile修饰变量。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class VolatileVisibility {
+    public static int i =0;
+    public synchronized static void increase(){
+        i++;
+    }
+} 现在来看另外一种场景，可以使用volatile修饰变量达到线程安全的目的，如下
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;VolatileSafe&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doWork&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;safe....&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;由于对于boolean变量close值的修改属于原子性操作，因此可以通过使用volatile修饰变量close，使用该变量对其他线程立即可见，从而达到线程安全的目的。那么JMM是如何实现让volatile变量对其他线程立即可见的呢？实际上，当写一个volatile变量时，JMM会把该线程对应的工作内存中的共享变量值刷新到主内存中，当读取一个volatile变量时，JMM会把该线程对应的工作内存置为无效，那么该线程将只能从主内存中重新读取共享变量。volatile变量正是通过这种写-读方式实现对其他线程可见（但其内存语义实现则是通过内存屏障，稍后会说明）。&lt;/p&gt;
+
+&lt;p&gt;volatile禁止重排优化
+volatile关键字另一个作用就是禁止指令重排优化，从而避免多线程环境下程序出现乱序执行的现象，关于指令重排优化前面已详细分析过，这里主要简单说明一下volatile是如何实现禁止指令重排优化的。先了解一个概念，内存屏障(Memory Barrier）。 
+内存屏障，又称内存栅栏，是一个CPU指令，它的作用有两个，一是保证特定操作的执行顺序，二是保证某些变量的内存可见性（利用该特性实现volatile的内存可见性）。由于编译器和处理器都能执行指令重排优化。如果在指令间插入一条Memory Barrier则会告诉编译器和CPU，不管什么指令都不能和这条Memory Barrier指令重排序，也就是说通过插入内存屏障禁止在内存屏障前后的指令执行重排序优化。Memory Barrier的另外一个作用是强制刷出各种CPU的缓存数据，因此任何CPU上的线程都能读取到这些数据的最新版本。总之，volatile变量正是通过内存屏障实现其在内存中的语义，即可见性和禁止重排优化。下面看一个非常典型的禁止重排优化的例子DCL，如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/**
+ * Created by zejian on 2017/6/11.
+ * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]
+ */
+public class DoubleCheckLock {
+
+    private static DoubleCheckLock instance;
+
+    private DoubleCheckLock(){}
+
+    public static DoubleCheckLock getInstance(){
+
+        //第一次检测
+        if (instance==null){
+            //同步
+            synchronized (DoubleCheckLock.class){
+                if (instance == null){
+                    //多线程环境下可能会出现问题的地方
+                    instance = new DoubleCheckLock();
+                }
+            }
+        }
+        return instance;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上述代码一个经典的单例的双重检测的代码，这段代码在单线程环境下并没有什么问题，但如果在多线程环境下就可以出现线程安全问题。原因在于某一个线程执行到第一次检测，读取到的instance不为null时，instance的引用对象可能没有完成初始化。因为instance = new DoubleCheckLock();可以分为以下3步完成(伪代码)&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;memory = allocate(); //1.分配对象内存空间
+instance(memory);    //2.初始化对象
+instance = memory;   //3.设置instance指向刚分配的内存地址，此时instance！=null&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;由于步骤1和步骤2间可能会重排序，如下：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;memory = allocate(); //1.分配对象内存空间
+instance = memory;   //3.设置instance指向刚分配的内存地址，此时instance！=null，但是对象还没有初始化完成！
+instance(memory);    //2.初始化对象&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;由于步骤2和步骤3不存在数据依赖关系，而且无论重排前还是重排后程序的执行结果在单线程中并没有改变，因此这种重排优化是允许的。但是指令重排只会保证串行语义的执行的一致性(单线程)，但并不会关心多线程间的语义一致性。所以当一条线程访问instance不为null时，由于instance实例未必已初始化完成，也就造成了线程安全问题。那么该如何解决呢，很简单，我们使用volatile禁止instance变量被执行指令重排优化即可。&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 13 Jun 2019 08:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-06-13/%E5%85%A8%E9%9D%A2%E7%90%86%E8%A7%A3Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B(JMM)%E5%8F%8Avolatile%E5%85%B3%E9%94%AE%E5%AD%97/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-06-13/%E5%85%A8%E9%9D%A2%E7%90%86%E8%A7%A3Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B(JMM)%E5%8F%8Avolatile%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
+      </item>
+    
+      <item>
         <title>Message链表原理与重用机制</title>
         <description>&lt;p&gt;在使用 Handler 发送消息之前，我们一般都会使用如下代码调用 &lt;code class=&quot;highlighter-rouge&quot;&gt;mHandler.obtainMessage()&lt;/code&gt; 方法获取一个 Message 对象。这其中究竟是怎么实现的呢？&lt;/p&gt;
 
@@ -9457,2006 +9859,6 @@ cond(no)-&amp;gt;op
         <pubDate>Mon, 03 Dec 2018 07:40:42 +0000</pubDate>
         <link>http://localhost:4000/2018-12-03/welcome-to-jekyll/</link>
         <guid isPermaLink="true">http://localhost:4000/2018-12-03/welcome-to-jekyll/</guid>
-      </item>
-    
-      <item>
-        <title>解谜英语语法（1）</title>
-        <description>&lt;h3 id=&quot;第一章初识句子&quot;&gt;第一章：初识句子&lt;/h3&gt;
-
-&lt;p&gt;直到几百年前，各个不同大陆上的人还从来没见过面，可是他们的语言里却不约而同出现了同样的结构：句子。这难道不是很奇妙的事情吗？这说明句子的出现似乎是一种自然规律。&lt;/p&gt;
-
-&lt;h3 id=&quot;句子的核心地位&quot;&gt;句子的核心地位&lt;/h3&gt;
-
-&lt;p&gt;句子是人类语言最核心的构造。为什么呢？因为人和人说话终究是为了一个目的：描述一件事。&lt;/p&gt;
-
-&lt;p&gt;这件事也许只有一个字：吃！&lt;/p&gt;
-
-&lt;p&gt;也许可以很长：昨天晚上在上海某路边餐厅吃的&lt;strong&gt;鹅肝&lt;/strong&gt;，&lt;strong&gt;是&lt;/strong&gt;我吃遍全世界&lt;strong&gt;最好的&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;一个句子表达的就是一件事，或者叫做一个“事件”。人与人交流，无非就是讲述一个个的事件。&lt;/p&gt;
-
-&lt;h3 id=&quot;你需要的能力&quot;&gt;你需要的能力&lt;/h3&gt;
-
-&lt;p&gt;所以要掌握一种语言，你只要掌握句子就行了。有了句子就有了一切。&lt;/p&gt;
-
-&lt;p&gt;掌握句子包括两件事情：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;能够迅速地造出正确的句子，准确地表达自己的意思。&lt;/li&gt;
-  &lt;li&gt;能够迅速地理解别人的句子，准确地接收别人的意思。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;这两件事，一个是“发送”，一个是“接收”。因为语言是沟通（或者叫“通讯”）的工具，所以它就只包含这两件事。&lt;/p&gt;
-
-&lt;h3 id=&quot;句子的本质&quot;&gt;句子的本质&lt;/h3&gt;
-
-&lt;p&gt;假设我们是原始人，还没有语言。我想告诉同伴“我吃苹果”这件事，该怎么表达呢？没有语言，那我可以先画个图嘛：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/i-eat-apple.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;到后来，部落里的人聪明了一点，发明了“符号”这种东西。他们给事物起了简单的符号名字，不再需要画图了，所以我们有了 I, apple 这样的词用来指代事物。有了 eat 这样的词，用来代表动作。所以画面变成这个样子：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/i-eat-apple-symbol.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;后来干脆连框也不画了。直接写出这些符号来：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;I eat apples.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;那么，你觉得“我吃苹果”这个事，里面最关键的部分是什么呢？是“我”，“苹果”，还是“吃”呢？&lt;/p&gt;
-
-&lt;p&gt;稍微想一下，你也许会发现，关键在于“吃”这个动作。因为那是我和苹果之间发生的&lt;strong&gt;事件&lt;/strong&gt;。这句话是说“吃”这件事，而“我”或者“苹果”，只是“吃”的一部分。&lt;/p&gt;
-
-&lt;p&gt;用 eat 这个词，你不但可以表达“我吃苹果”，还可以表达“他吃面条”，“猫吃老鼠”之类的很多事情。于是，聪明一点的人就把 eat 这个词提取出来，做成一个“模板”：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/eat-verb.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这个模板就是所谓“动词”。eat 这个动词给你留下两个空，填进去之后，左边的东西吃右边的。&lt;/p&gt;
-
-&lt;h3 id=&quot;动词是句子的核心&quot;&gt;动词是句子的核心&lt;/h3&gt;
-
-&lt;p&gt;就像我说的，句子是语言的核心，而动词就是句子的核心。动词是事件的关键，比如 eat。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;A eat B.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;我们可以选择空格里的 A 或者 B 是什么。但不管怎么换，事情仍然是“吃”。为了描述方便，我们把 A 和 B 这两个空格叫做&lt;strong&gt;参数&lt;/strong&gt;（parameter）。&lt;/p&gt;
-
-&lt;p&gt;这跟数学函数的参数（f(x) 里面那个 x）类似，也跟程序函数的参数类似。用数学或者程序的方式来表示这个句子，就是这样：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;eat(A, B)&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;其中 A 和 B，是动作 eat 的参数。我只是打个比方帮助你理解，当然我们不会这样写英语。如果你完全不懂数学或者编程，可以忽略这个比方。&lt;/p&gt;
-
-&lt;p&gt;动词决定了它的参数在什么位置，它们可以是什么种类的成分。比如 eat，它的两个参数只能是某种“物”。你不能放另一个动词（比如 walk）进去，也不能放 red 这样的形容词进去。这种动词对参数的约束，我们把它叫做“参数类型”。&lt;/p&gt;
-
-&lt;p&gt;你可能发现了，一个句子除了动词，就只剩下动词的参数了。动词对它的参数具有决定性的作用，动词就是句子的核心。准确理解一个动词“想要什么参数”，什么样的构造可以出现在那个参数位置，就是造出正确句子的关键。&lt;/p&gt;
-
-&lt;p&gt;使用不同的动词可以造出不同的句子。所以要理解语法，你在初期应该把大部分精力放在各种各样的动词身上，而不是花几个月时间去背名词和形容词。我并不是说名词和形容词不重要，只是它们并不是核心或者骨架。&lt;/p&gt;
-
-&lt;p&gt;没有人会怪你不认识某种恐龙的名字，但如果你不能理解“I am not used to eating garbage food.” 是什么意思，那你可能就有麻烦了。&lt;/p&gt;
-
-&lt;h3 id=&quot;如何造出正确的句子&quot;&gt;如何造出正确的句子&lt;/h3&gt;
-
-&lt;p&gt;我已经提到，对于人的语言能力，“造句”能力占了一半。很多人不知道复杂的长句是怎么造出来的，所以他们也很难看懂别人写的长句。&lt;/p&gt;
-
-&lt;p&gt;我并不是说一味追求长句是好事，正好相反。如果你能用短句表达出你的意思，就最好不要用长句。虽说如此，拥有造长句的“能力”是很重要的。这就像拥有制造核武器的能力是重要的，虽然我们可能永远不会用到核武器。&lt;/p&gt;
-
-&lt;p&gt;当然，制造长句不可能有核武器那种难度。造长句其实挺容易。你只需要先造出一个正确的短句，然后按照规则，一步步往上面添加成分，或者把其中某一部分“扩大”，就可以逐渐“生成”一个长句。&lt;/p&gt;
-
-&lt;p&gt;这就像造一个房子，你首先打稳地基，用钢板造一个架子，然后往上面添砖加瓦。你可以自由地选择你想要的窗户的样式，瓦片的颜色，墙壁的材质，浴缸的形状…… 好像有点抽象了，我举个例子吧。&lt;/p&gt;
-
-&lt;p&gt;首先，我造一个最简单的句子。最简单的句子是什么呢？我们已经知道动词是句子的核心，有些动词自己就可以是一个句子。所以我们的第一个句子就是：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;eat.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;它适用于这样的场景：你在碗里放上狗粮，然后对狗儿说：“吃。” 当然，你体会到了，这句话缺乏一些爱意，或者你只是早上起来还比较迷糊，不想多说一个字，但它至少是一个正确的句子。&lt;/p&gt;
-
-&lt;p&gt;接下来，我们知道 eat 可以加上两个参数，所以我就给它两个参数：I, apples。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;I&lt;/strong&gt; eat &lt;strong&gt;apples&lt;/strong&gt;. （我吃苹果）&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;这个句子适用于这样的场景：别人问我：“你一般吃什么水果呢？” 我说：“我吃苹果。”&lt;/p&gt;
-
-&lt;p&gt;有点单调，所以我再加点东西上去。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;I eat &lt;strong&gt;Fuji apples&lt;/strong&gt;. （我吃富士苹果）&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Fuji 被我加在了 apples 前面，它给 apples 增加了一个“修饰”或者“限定”。它只能是富士苹果，而不是其它种类的苹果。&lt;/p&gt;
-
-&lt;p&gt;但我并不总是吃富士苹果，我有时不吃苹果。我想表达我只是“有时”吃富士苹果，所以句子又被我扩充了：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;Sometimes&lt;/strong&gt; I eat Fuji apples. （我有时吃富士苹果）&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;你觉得这个 sometimes 是在修饰（限制）句子的哪个部分呢？它在修饰“我”，“苹果”，还是“吃”？实际上，它是在限制“吃”这个动作发生的频率，所以它跟 eat 的关系紧密一些，也就是说它是在修饰 eat，而不是 I 或者 apples。&lt;/p&gt;
-
-&lt;p&gt;以此类推，我们可以把它发展得很长：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Sometimes &lt;strong&gt;I&lt;/strong&gt; &lt;strong&gt;eat&lt;/strong&gt; fresh Fuji &lt;strong&gt;apples&lt;/strong&gt; bought from a local grocery store.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;我有时候吃从一个本地杂货店买来的新鲜富士苹果。注意，虽然这句子挺长，但它的“骨架”仍然是 I eat apples.&lt;/p&gt;
-
-&lt;p&gt;我已经演示了，一个长句是怎么“生成”的。先造一个短句，然后往上面添砖加瓦，是写出长句的关键。正确的短句，按照规则加上一些成分，就成为正确的长句。这样你的语法就会一直是正确的。&lt;/p&gt;
-
-&lt;p&gt;当然，扩展句子的时候，你不能随意往上加东西，它们必须满足一定的规则才能正确的衔接。比如，你只能把 Fuji 放在 apple 前面，而不是后面。这就像造房子的时候，你不能在该放窗户的地方放一道门，你不能用错配件和胶水。所谓语法，很多时候就是在告诉你这些部件要怎么样才能接的上。&lt;/p&gt;
-
-&lt;p&gt;在后面的章节，我们会逐渐接触到这些细节的规则。&lt;/p&gt;
-
-&lt;h3 id=&quot;如何理解长句&quot;&gt;如何理解长句&lt;/h3&gt;
-
-&lt;p&gt;人与人交流的另一个部分就是“接收”。如果书上有很长一句话，你要怎么才能理解它呢？许多人看到长句就头痛，不知道该怎么办。这是因为他们不明白长句都是从短句扩展出来的，所以产生了恐惧感。&lt;/p&gt;
-
-&lt;p&gt;其实理解长句的方法，都隐含在了上一节介绍的造出长句的方法里面。造句的时候我们先勾画出一个框架，然后往里面填修饰的东西。理解的时候如果有困难，我们可以用类似的办法。我们首先分析出句子的主干，把它理解了，然后再往上面添加其它的成分，逐步理解到整个句子的含义。&lt;/p&gt;
-
-&lt;p&gt;比如之前的那个例子：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Sometimes &lt;strong&gt;I eat&lt;/strong&gt; fresh Fuji &lt;strong&gt;apples&lt;/strong&gt; bought from a local grocery store.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;你需要“反向思考”，分析出句子的主干是短句“I eat apples”。如果你觉得一下子找不到主干，那么你可以试试挨个的找到“修饰成分”，把它们逐个删掉，最后留下来的就是主干了。&lt;/p&gt;
-
-&lt;p&gt;注意，主干“I eat apples” 本身就是一个语法正确的句子，它满足所有的语法规则。于是你理解了它在说“我吃苹果”。然后你逐渐加上细节，知道是什么样的苹果，从哪里买来的，什么时候吃。&lt;/p&gt;
-
-&lt;p&gt;漏掉或者误解了细节，你可能会误解一部分意思，但抓住了主干，你就不会完全不理解这个句子在说什么。&lt;/p&gt;
-
-&lt;p&gt;再次强调，每一个复杂的长句，里面都藏着一个非常短的，语法正确的短句。理解长句的关键，就在于找到这个短句。&lt;/p&gt;
-
-&lt;p&gt;如何获得识别修饰成分，找到主干短句的能力，也在于你对具体的语法规则的理解。这些我们在稍后的章节介绍。&lt;/p&gt;
-
-&lt;h3 id=&quot;如何培养真正的能力&quot;&gt;如何培养真正的能力&lt;/h3&gt;
-
-&lt;p&gt;这一章我只是介绍了你需要的两种能力，可是如何培养这两种能力呢？其实它们两者是相辅相成的。造句的能力可以帮助你理解别人的句子，而阅读别人的句子，分析其结构，可以帮助你获得造出类似句子的能力。&lt;/p&gt;
-
-&lt;p&gt;所以我给你开的处方是这样：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;练习造句。每学一个动词，要用它造出多个句子来。这样你就获得对它的灵活运用的能力。&lt;/li&gt;
-  &lt;li&gt;分析句子。看到一个复杂的句子，觉得理解有难度，你就把它抄下来。按照我介绍的“造句方法”，把它分解成主干和修饰成分。不久，你就会发现你的理解能力和造句能力都提高了。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;要注意的是，分析句子的时候，没有必要去纠结一个成分“叫什么”，对应什么术语。比如它是表语还是宾语，还是宾补…… 这没有意义。&lt;/p&gt;
-
-&lt;p&gt;你可以理解任何英语句子，你可以成为很好的记者或者作家，却仍然不知道什么叫做“宾补”。你只需要造句的能力和理解句子的能力，而你不需要术语就能做到这两点。&lt;/p&gt;
-
-&lt;p&gt;最后可能有人问，你这是提高实际的英语能力，可是我需要应付的是标准化的考试。这样做能行吗？当然行，而且你做语法题的速度会非常快。没有考试题目会要求你“找出句子里的宾补成分来”。实际上，题目里不可能出现“宾补”这个词。他们只会在那个成分的位置留一个空，让你选择合适的内容填进去。也就是说，你不需要知道那个位置叫“宾补”，就能做对题。&lt;/p&gt;
-
-&lt;p&gt;实际上，做题的时候，你的头脑里根本不应该出现“宾补”这样的术语。具有了真正的英语能力，做语法选择题的时候，你会一眼就选对正确的答案，却说不出这道题在考你哪方面的能力。是时态呢，还是某种句子成分？我不知道，因为那毫无意义，关键是我做对了题目！我就是感觉其它答案都不“顺口”，我根本不会写那样的句子，而正确的选项一眼看起来就是“通的”。&lt;/p&gt;
-
-&lt;p&gt;所以不管是实际的交流还是做题，死抠语法术语都没有什么意义。你去问问每一个英国人，美国人，他们是怎么做对语法题的，你会得到同样的答案。这本书就是要帮助你得到这种母语级别的能力，而不是一些纸上谈兵的术语。http://www.mq2014.com/after-effect-zhuan-svg-dong-hua-shen-qi-de-bodymovin-cha-jian.html)&lt;/p&gt;
-</description>
-        <pubDate>Sat, 24 Nov 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-11-24/grammar-chapter1/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-11-24/grammar-chapter1/</guid>
-      </item>
-    
-      <item>
-        <title>解谜英语语法</title>
-        <description>&lt;h2 id=&quot;王垠英语语法前言&quot;&gt;王垠英语语法（前言）&lt;/h2&gt;
-
-&lt;h3 id=&quot;封二&quot;&gt;封二&lt;/h3&gt;
-
-&lt;p&gt;—献给 Daisy&lt;/p&gt;
-
-&lt;h3 id=&quot;起因&quot;&gt;起因&lt;/h3&gt;
-
-&lt;p&gt;这是一本独特的语法书。它的作者既不是专业英语教师，也不是语言学家，而是一个程序语言研究者。&lt;/p&gt;
-
-&lt;p&gt;师从世界顶尖的程序语言专家，他钻研过世界上最美最强大的程序语言，他洞察过艰深古怪的逻辑学。现在，他认为程序语言和逻辑是已攻克的目标，山下的风景。&lt;/p&gt;
-
-&lt;p&gt;对程序语言和逻辑的深刻理解，不但让他成为了更好的程序员，而且加深了他对自然语言（特别是英语）的理解。许多年来，他一直利用自己独到的方式来理解和使用英语。英语在他的头脑里有着跟常人很不一样的画面。对他而言，英语语法是如此的简单，琢磨起来趣味盎然。&lt;/p&gt;
-
-&lt;p&gt;可是回国之后，他发现身边的朋友仍然在为语法的枯燥繁复而头痛，所以他萌生了写这样一本书的念头。他想把自己的英语如此流畅的秘密告诉世人，帮助那些正在为学习语法而痛苦挣扎的人们。&lt;/p&gt;
-
-&lt;h3 id=&quot;语法书为什么枯燥难懂&quot;&gt;语法书为什么枯燥难懂&lt;/h3&gt;
-
-&lt;p&gt;在我看来，普通语法书难懂的原因很简单：世代相传的照本宣科。语法书往往是包罗万象，“系统”地列出各种概念：名词，代词，动词，形容词，副词，句子成分，各种从句…… 洋洋洒洒上千页纸。不仅中国人写的语法书是这样，外国人写的语法书也这样。&lt;/p&gt;
-
-&lt;p&gt;只见树木不见森林。这样的书缺乏“活知识”，到用的时候就想不起来，只能作为字典，需要的时候来查。所以很多人学了这些大部头语法书，照样写不出像样的句子来。时间充裕的写作都没法写好，面对外国人的时候进行快速的对话，就更加困难。&lt;/p&gt;
-
-&lt;p&gt;看普通的语法书，学生被各种术语淹没：及物动词，不及物动词，表语，宾语补足语…… 想学会这些术语，却发现头脑在不断地碰壁。&lt;/p&gt;
-
-&lt;p&gt;这就好像几百年前，人们认为地是一个平面，而天是一个穹顶，于是他们无法解释自己观察到的很多现象。过了好久才有人意识到问题的根源：地球是圆的。&lt;/p&gt;
-
-&lt;p&gt;从现代程序语言理论的角度看来，英语语法里的很多术语和概念，其实是子虚乌有的，或者非常不准确的，就像当年的“地平说”一样。这些概念来源于早期语言学家对于人类语言能力的不成熟理解。可惜，很多古老的概念被英语老师们一代传一代，成为了必修的教条。&lt;/p&gt;
-
-&lt;p&gt;这些术语都是祖辈传下来的东西，普通英语老师也不知道它们是怎么产生的。如果离开了这些术语，他们就不知道如何讲述语法，于是只好照原样传下去。所以他们也就没办法接触到本质，不可能把事情变得简单。&lt;/p&gt;
-
-&lt;p&gt;科学的发展史告诉我们，正确的理论往往是最简单的，有毛病的理论才会复杂不堪。从程序语言和逻辑学的观点看来，传统语言学留下的这些概念，很多都是有问题的。这就是为什么学语法那么复杂，那么头痛，那么枯燥。&lt;/p&gt;
-
-&lt;h3 id=&quot;本书的方法&quot;&gt;本书的方法&lt;/h3&gt;
-
-&lt;p&gt;跟几乎所有的语法书不同，这本书不只是传授给你现成的知识，它引导你从人本源的交流需求出发，从无到有把语法“重新发明”出来。如果只是把知识传授给你，你就成为知识的奴隶。但如果你自己发明了知识，你就成为了知识的主宰。所以“重新发明”会贯穿这本书的主线。&lt;/p&gt;
-
-&lt;p&gt;要想重新发明语法，我们当然不能继续沿用现有的语法术语，否则我们就只有步前人的后尘。但如果碰巧遇到可以借用的，真正有用的术语，我们还是继续使用它们。&lt;/p&gt;
-
-&lt;p&gt;因为这个原因，请不要对本书的“术语准确性”吹毛求疵。因为就像物理学家费曼的父亲告诉他的，最重要的不是一个东西“叫什么”，而是它“是什么”。&lt;/p&gt;
-
-&lt;p&gt;这本书就是要告诉你语法是什么。你会成为语法的主人。&lt;/p&gt;
-
-&lt;p&gt;另外，因为这本书不会试图做一本包罗万象的字典，所以你不能指望在里面找到所有你需要的内容。这本书会包含“精华”和“通用”的思想，还有一些常见的例子，但某些具体的情况，比如某个特定动词的用法，你可能还需要看看字典。&lt;/p&gt;
-
-&lt;p&gt;本书的作用是，它让你翻开字典就能找到你需要的东西，并且理解如何使用它。一般的语法书自己就是字典，可惜很少有人能够理解和运用。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 23 Nov 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-11-23/grammar/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-11-23/grammar/</guid>
-      </item>
-    
-      <item>
-        <title>更新一下</title>
-        <description>&lt;p&gt;我好像正好半年没有写东西了。哦不，我其实写了一些。仔细看我的书的人可能发现，那第一章其实悄悄更新了很多次。但我意识到了问题，我似乎没有动力完成这本书。嗯，我似乎是一个以半途而废著称的人。我从来不觉得必须从头到尾做完什么，除非我一直认为那是正确的方向。&lt;/p&gt;
-
-&lt;p&gt;首先的问题是，写作这本书起初并没有良好的动机。我的意思是，当初想写这本书是出于对现状的“不满”，或者说是：恨。相对于爱，恨不是一个好的动机。&lt;/p&gt;
-
-&lt;p&gt;我的老师 Dan Friedman 写了那么多本“小人书”，每一本都精辟而深刻，专注于一个他当时热爱的主题：函数式编程，逻辑式编程，自动定理证明……&lt;/p&gt;
-
-&lt;p&gt;跟他相比，我自愧不如，因为我的动机不是出于爱。心中的恨，让我很像 Anakin Skywalker。不管恨是如何产生的，如果任其发展，它将把我变成 Darth Vader。我不想成为 Darth Vader。&lt;/p&gt;
-
-&lt;p&gt;动机错了，也就导致了写作这本书的各种困难：设定的目标太高太远，太过注重“精华”，太早的解释过于深刻的原理，语言也啰嗦不流畅，充满了带刺或者负面的字眼…… 我开始担心看了我的书的人会变成什么样子。&lt;/p&gt;
-
-&lt;p&gt;我意识到理解一件事和教会别人这件事，是完全不同的难度。如果我不理解人的心理，我就不会成为一个好的老师。如果我的心灵不够清澈，我就写不出纯美的作品。&lt;/p&gt;
-
-&lt;p&gt;更要命的是，我的生活里有各种似乎更加有趣而有益的事情。所以每次想要写书，马上就会有有趣的事情来打断我……&lt;/p&gt;
-
-&lt;p&gt;因此，写书这个事就被我一拖再拖。我想先研究一下人的心理，我想成为更好的人。只有当我成为一个很好的人，看我的书的人才会成为更好的人。&lt;/p&gt;
-
-&lt;p&gt;但我还不够好。&lt;/p&gt;
-
-&lt;p&gt;过去的几年我都太关心“教”别人什么东西，以老师自居。可是我最近发现，我最爱的事情其实是从别人那里“学”东西。我喜欢跟人聊天讨论，大大的多过自己看书。经常能体会到“听君一席话，胜读十年书”的道理。&lt;/p&gt;
-
-&lt;p&gt;总之，这半年我就是在学各种新东西。从专家那里学，也从很普通的人那里学。从小说里，电影里，音乐里学。学技术，也学人文。学习和领悟让我快乐。比起把自己封闭在自己的领域和圈子里，写一本旨在“改变现状”的书，学习让我更加快乐。我有了新的朋友和同事，我这才感觉我不再是孤军奋战，感觉新的生活开始了。&lt;/p&gt;
-
-&lt;p&gt;如果只是想教会别人东西，我仍然是原来的我。而从别人那里学东西，我就成为“升级版”的我。学习让我有了朋友，朋友让我心里充满了爱，只有爱才是我前进的动力。&lt;/p&gt;
-
-&lt;p&gt;* * *&lt;/p&gt;
-
-&lt;p&gt;过去的王垠，心中充满了批判，然而世界上有远比批判有效而有益的事情。批判难以达到改进世界的效果，我的价值不可能通过批判而得到实现，而且它会让我失去潜在的朋友。价值的实现只能通过把我的技能，通过友好而快乐的途径作用到现实世界，让世界变得更好。不好的方面应该被忘记，而不是花大力气去批判它们。&lt;/p&gt;
-
-&lt;p&gt;过去的王垠，以“天才”自居，天天谈论技术，各种评判；而现在的王垠，更加重视友谊和人性，比较少评判事物。比起冰冷的技术，真心的朋友更加能让我快乐。我希望有更多的朋友，更少的敌人。&lt;/p&gt;
-
-&lt;p&gt;有个朋友引用一句林徽因的诗来赞美我：“你是爱，是暖，是希望，你是人间的四月天。” 目前感觉言过其实，不过我会努力达到这个境界，嗯。&lt;/p&gt;
-
-&lt;p&gt;除了技术，世界上还有那么多有趣而重要的东西：艺术，文学，音乐，美食…… 它们也越来越多的走进我的生活，让我成为一个更加丰富的人。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/les-miserables.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我要感谢我的朋友们。真的朋友就像一面镜子，从你们我认识到了自己的问题，拓展了自己的视野。我会不断改进自己。&lt;/p&gt;
-
-&lt;p&gt;我不想再做一个不接地气的神，我的心里对自己的能力没有 pride。我不再是“垠神”，也不要叫我“大神”了。与其让人们崇拜我，畏惧我，恭维我，我更愿意让他们发自内心地喜欢我。我欢迎各种形式的互相学习和交流合作。&lt;/p&gt;
-
-&lt;p&gt;虽然不再继续写那本书，我肯定会写技术方面的博文，而且更新会比书频繁很多。写书让我犯困，几个月写不出来一章，还不如写点短的文章分享一下。所以不用为书遗憾，因为专注于一个主题的短文是更加有效而有价值的东西。&lt;/p&gt;
-
-&lt;p&gt;上海是一个神奇的城市。这里有很多我喜欢的故事，是一个人杰地灵的地方。自从民国年代，许许多多的传奇故事发生在上海。我希望我在上海也有美好的故事。&lt;/p&gt;
-
-&lt;p&gt;最后再次感谢大家的支持。&lt;/p&gt;
-</description>
-        <pubDate>Sun, 14 Oct 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-10-14/update/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-10-14/update/</guid>
-      </item>
-    
-      <item>
-        <title>改变</title>
-        <description>&lt;p&gt;我最近对博客和微博作了一些调整，也有一段时间没有更新我的书。博客少了一些文章。我会继续写我的书，但我也有很多其它事情做，我需要限制使用电脑的时间。微博用户群的质量值得怀疑，所以微博不会再有“个人稀里糊涂式”的更新，而只用于发布“冠冕堂皇式”的新闻，新闻联播那种。&lt;/p&gt;
-
-&lt;p&gt;由于在美国的工作给了我一些遗留的伤口，这一段时间最重要的用途，应该是用来修复和放松我的身心，而不是用来实现什么伟大目标或者拯救世界。我在中国的着陆并不是平稳的——实际上我着陆在沼泽里。经过了一年，我仍然在试图建立对国内环境和人的信任。我感觉自己像一个穿着宇宙服的外星人，有时候打开面罩透口气。还好，我终于遇到了一些可爱的人。&lt;/p&gt;
-
-&lt;p&gt;名义上是天才，我的生活也跟真正的天才（比如梵高）一样，可以说是破碎的。不管怎样，这与我本来的价值是极不相称的。为了所谓的“真知”，我错过了许多普通人都有的幸福。我需要重新开始体验生活的美好，我不想和历史上的悲剧天才们一样。如果说我有一件有价值的东西，那就是我得到了心的自由。&lt;/p&gt;
-
-&lt;p&gt;在过去的几年，我花费了太多精力来“关心人类”，这使我疲惫。社会有许多的问题，我所在的 IT 领域惨不忍睹，然而批判人性的丑恶不应该是我的职责。生活中总是有丑陋，猥琐，虚伪的人，然而他们应该被忽略，我应该关注那些美好的。把注意力放在批判上，让我白白浪费人生中最美好的时光。&lt;/p&gt;
-
-&lt;p&gt;我不是超人。我没有精力来关心中东的战火，非洲的饥荒，欧洲和美国的恐袭…… 同样的，我没有精力来为 IT 业界的很多丑恶现象忧心。应该有人去帮助他们，但我大概不是那个人。我曾以为那是我应该做的事，我告诉 Dan Friedman 我在做一件拯救 IT 业的事情。他回复说：“我刚写了一本新书，绝妙无比！你把地址给我，我给你寄过去！We are family！” 我喜欢这样鸡同鸭讲的对话。&lt;/p&gt;
-
-&lt;p&gt;当今社会并不是以前那样脆弱。很多事情我指出了也不会起作用，不说它也糟不到哪里去。大街上的小混混知道谁是王垠吗？不知道。同理，技术界的低等生物也不会在乎王垠说什么，虽然他们吸收的一些养料是王垠不知道什么时候排出去的…… 每个人有自己的圈子，我没必要也不可能去跟他们较量。&lt;/p&gt;
-
-&lt;p&gt;我看到的只是一个领域的人，甚至不是他们的全部。稍微往外面一跳，就发现自己以为很重要的事情，在外人看来其实不知所谓，无关紧要。什么 AI，区块链，黑科技…… 出了它们的圈子，真没多少人在乎。吹嘘它们以及批判它们的人，都像傻子一样。&lt;/p&gt;
-
-&lt;p&gt;很多人，不管他们是什么冠冕堂皇的头衔，应该像街头小混混一样被抛在脑后，被忽略，而不是被仔仔细细记录下来，进行深入的批判。这不是一个顶级人才应该做的事。所以停止批判他们，不是妥协，而是彻底的无视，一种井水不犯河水的“和睦相处”关系。虽然被它们咬过，但痛过之后，我不再关心海底有什么丑陋的虫子，我有自己的风景……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/orca1.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;“拯救人类”不是我的任务。上天赋予我的才华，应该被用到更有意义的地方。我的目标不是跟完全不在一个层次的人较真，而是发现跟我在一个层次的人。当然这里所谓的“层次”，不是通常意义上的社会等级，而是本质上的“人的质量”。就像 Emily Post 所谓的“Best Society”，它无关出身，财富，社会头衔，技术能力……&lt;/p&gt;
-
-&lt;p&gt;世界是多元化的，每个人都有自己的角落，我会找到本来属于我的角落。从今天开始，不再关心人类，做一个幸福的人。&lt;/p&gt;
-</description>
-        <pubDate>Mon, 28 May 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-05-28/change/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-05-28/change/</guid>
-      </item>
-    
-      <item>
-        <title>解谜计算机科学（1）</title>
-        <description>&lt;h1 id=&quot;第一章---初识计算&quot;&gt;第一章 - 初识计算&lt;/h1&gt;
-
-&lt;p&gt;（本书版权归王垠所有，禁止转载。请认准 yinwang.org 为唯一的阅读地址，以获得最近更新。）&lt;/p&gt;
-
-&lt;p&gt;要掌握一个学科的精髓，不能从细枝末节开始。人脑的能力很大程度上受限于信念。一个人不相信自己的时候，他就做不到本来可能的事。信心是很重要的，信心却容易被挫败。如果只见树木不见森林，人会失去信心，以为要到猴年马月才能掌握一个学科。&lt;/p&gt;
-
-&lt;p&gt;所以这本书不从“树木”开始，而是引导读者一起来探索这背后的“森林”。本书把计算机科学最根本的概念用浅显的例子解释，让读者领会到它们的本质。把这些概念稍作发展，你就得到逐渐完整的把握。你一开头就掌握着整个学科，而且一直掌握着它，只不过增添更多细节而已。这就像画画，先勾勒出轮廓，一遍遍的增加细节，日臻完善，却不失去对大局的把握。&lt;/p&gt;
-
-&lt;p&gt;一般计算机专业的学生学了很多课程，可是直到毕业都没能回答一个基础问题：什么是计算？这一章会引导你去发现这个问题的答案。不要小看这基础的问题，它经常是解决现实问题的重要线索。世界上有太多不理解它的人，他们走了很多的弯路，掉进很多的坑，制造出过度复杂或者有漏洞的理论和技术。&lt;/p&gt;
-
-&lt;p&gt;接下来，我们就来理解几个关键的概念，由此接触到计算的本质。&lt;/p&gt;
-
-&lt;h3 id=&quot;自觉付费&quot;&gt;自觉付费&lt;/h3&gt;
-
-&lt;p&gt;跟本书的前言不同，这一章的内容不是免费的。你如果想继续读下去，请自觉进行付费。你的付款将会支持这本书的继续写作和更新。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/csbook1-wechat-pay.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/csbook1-alipay.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;手指算术&quot;&gt;手指算术&lt;/h3&gt;
-
-&lt;p&gt;每个人都做过计算，只是大部分人都没有理解自己在做什么。回想一下幼儿园（大概四岁）的时候，妈妈问你：“帮我算一下，4+3 等于几？” 你掰了一会手指，回答：7。当你掰手指的时候，你自己就是一台简单的计算机。&lt;/p&gt;
-
-&lt;p&gt;不要小看了这手指算术，它蕴含着深刻的原理。计算机科学植根于这类非常简单的过程，而不是复杂的高等数学。&lt;/p&gt;
-
-&lt;p&gt;现在我们来回忆一下这个过程。这里应该有一段动画，但现阶段还没有。请你对每一步发挥一下想象力，增加点“画面感”。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;当妈妈问你“4+3 等于几”的时候，她是一个程序员，你是一台计算机。计算机得到程序员的输入：4，+，3。&lt;/li&gt;
-  &lt;li&gt;听到妈妈的问题之后，你拿出两只手，左手伸出四个指头，右手伸出三个指头。&lt;/li&gt;
-  &lt;li&gt;接着你开始自己的计算过程。一根根地数那些竖起来的手指，每数一根你就把它弯下去，表示它已经被数过了。你念道：“1，2，3，4，5，6，7。”&lt;/li&gt;
-  &lt;li&gt;现在已经没有手指伸着，所以你把最后数到的那个数作为答案：7！整个计算过程就结束了。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;符号和模型&quot;&gt;符号和模型&lt;/h3&gt;
-
-&lt;p&gt;（这个概念太过深入，好像不适合出现在第一章，考虑去掉）&lt;/p&gt;
-
-&lt;p&gt;这里的幼儿园手指算术包含着深刻的哲学问题，现在我们来初步体会一下这个问题。&lt;/p&gt;
-
-&lt;p&gt;当妈妈说“帮我算 4+3”的时候，4，+，3，三个字符传到你耳朵里，它们都是符号（symbol）。符号是“表面”的东西：光是盯着“4”和“3”这两个阿拉伯数字的曲线，一个像旗子，一个像耳朵，你是不能做什么的。你需要先用脑子把它们转换成对应的“模型”（model）。这就是为什么你伸出两只手，一只手表示 4，另一只表示 3。&lt;/p&gt;
-
-&lt;p&gt;这两只手的手势是“可操作”的。比如，你把左手再多弯曲一个手指，它就变成“3”。你再伸开一根手指，它就变成“5”。所以手指是一个相当好的机械模型，它是可以动，可操作的。把符号“4”和“3”转换成手指模型之后，你就可以开始计算了。&lt;/p&gt;
-
-&lt;p&gt;你怎么知道“4”和“3”对应什么样的手指模型呢？因为妈妈以前教过你。十根手指，对应着 1 到 10 十个数。这就是为什么人都用十进制数做算术。&lt;/p&gt;
-
-&lt;p&gt;我们现在没必要深究这个问题。我只是提示你，分清“符号”和“模型”是重要的。&lt;/p&gt;
-
-&lt;h3 id=&quot;计算图&quot;&gt;计算图&lt;/h3&gt;
-
-&lt;p&gt;在计算机领域，我们经常用一些抽象的图示来表达计算的过程，这样就能直观地看到信息的流动和转换。这种图示看起来是一些形状用箭头连接起来。我在这里把它叫做“计算图”。&lt;/p&gt;
-
-&lt;p&gt;对于以上的手指算术 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，我们可以用下图来表示它：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/adder.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;图中的箭头表示信息的流动方向。说到“流动”，你可以想象一下水的流动。首先我们看到数字 4 和 3 流进了一个圆圈，圆圈里有一个“+”号。这个圆圈就是你，一个会做手指加法的小孩。妈妈给你两个数 4 和 3，你现在把它们加起来，得到 7 作为结果。&lt;/p&gt;
-
-&lt;p&gt;注意圆圈的输入和输出方向是由箭头决定的，我们可以根据需要调整那些箭头的位置，只要箭头的连接关系和方向不变就行。它们不一定都是从左到右，也可能从右到左或者从上到下，但“出入关系”都一样：4 和 3 进去，结果 7 出来。比如它还可以是这样：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/adder-topdown.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我们用带加号的圆圈表示一个“加法器”。顾名思义，加法器可以帮我们完成加法。在上个例子里，你就是一个加法器。我们也可以用其他装置作为加法器，比如一堆石头，一个算盘，某种电子线路…… 只要它能做加法就行。&lt;/p&gt;
-
-&lt;p&gt;具体要怎么做加法，就像你具体如何掰手指，很多时候我们是不关心的，我们只需要知道这个东西能做加法就行。圆圈把具体的加法操作给“抽象化”了，这个蓝色的圆圈可以代表很多种东西。抽象（abstraction）是计算机科学至关重要的思维方法，它帮助我们进行高层面的思考，而不为细节所累。&lt;/p&gt;
-
-&lt;h3 id=&quot;表达式&quot;&gt;表达式&lt;/h3&gt;
-
-&lt;p&gt;计算机科学当然不止 4 + 3 这么简单，但它的基本元素确实是如此简单。我们可以创造出很复杂的系统，然而归根结底，它们只是在按某种顺序计算像 4 + 3 这样的东西。&lt;/p&gt;
-
-&lt;p&gt;4 + 3 是一个很简单的表达式（expression）。你也许没听说过“表达式”这个词，但我们先不去定义它。我们先来看一个稍微复杂一些的表达式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2 * (4 + 3)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这个表达式比 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 多了一个运算，我们把它叫做“复合表达式”。这个表达式也可以用计算图来表示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/add-mult.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;你知道它为什么是这个样子吗？它表示的意思是，先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，然后把结果（7）传送到一个“乘法器”，跟 2 相乘，得到最后的结果。那正好就是 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 这个表达式的含义，它的结果应该是 14。&lt;/p&gt;
-
-&lt;p&gt;为什么要先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 呢？因为当我们看到乘法器 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * ...&lt;/code&gt; 的时候，其中一个输入（2）是已知的，而另外一个输入必须通过加法器的输出得到。加法器的结果是由 4 和 3 相加得到的，所以我们必须先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，然后才能与 2 相乘。&lt;/p&gt;
-
-&lt;p&gt;小学的时候，你也许学过：“括号内的内容要先计算”。其实括号只是“符号层”的东西，它并不存在于计算图里面。我这里讲的“计算图”，其实才是本质的东西。数学的括号一类的东西，都只是表象，它们是符号或者叫“语法”。从某种意义上讲，计算图才是表达式的本质或者“模型”，而“2 * (4 + 3)”这串符号，只是对计算图的一种表示或者“编码”（coding）。&lt;/p&gt;
-
-&lt;p&gt;这里我们再次体会到了“符号”和“模型”的差别。符号是对模型的“表示”或者“编码”。我们必须从符号得到模型，才能进行操作。这种从符号到模型的转换过程，在计算机科学里叫做“语法分析”（parsing）。我们会在后面的章节理解这个过程。&lt;/p&gt;
-
-&lt;p&gt;我们现在来给表达式做一个初步的定义。这并不是完整的定义，但你应该试着理解这种定义的方式。稍后我们会逐渐补充这个定义，逐渐完善。&lt;/p&gt;
-
-&lt;p&gt;定义（表达式）：&lt;strong&gt;表达式&lt;/strong&gt;可以是如下几种东西。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;数字是一个表达式。比如 1，2，4，15，……&lt;/li&gt;
-  &lt;li&gt;表达式 + 表达式。两个表达式相加，也是表达式。&lt;/li&gt;
-  &lt;li&gt;表达式 - 表达式。两个表达式相减，也是表达式。&lt;/li&gt;
-  &lt;li&gt;表达式 * 表达式。两个表达式相乘，也是表达式。&lt;/li&gt;
-  &lt;li&gt;表达式 / 表达式。两个表达式相除，也是表达式。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;注意，由于我们之前讲过的符号和模型的差别，为了完全忠于我们的本质认识，这里的“表达式 + 表达式”虽然看起来是一串符号，它必须被想象成它所对应的模型。当你看到“表达式”的时候，你的脑子里应该浮现出它对应的计算图，而不是一串符号。这个计算图的画面大概是这个样子，其中左边的大方框里可以是任意两个表达式。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/expression-graph.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;是不是感觉这个定义有点奇怪？因为在“表达式”的定义里，我们用到了“表达式”自己。这种定义叫做“递归定义”。所谓&lt;strong&gt;递归&lt;/strong&gt;（recursion），就是在一个东西的定义里引用这个东西自己。看上去很奇怪，好像绕回去了一样。递归是一个重要的概念，我们会在将来深入理解它。&lt;/p&gt;
-
-&lt;p&gt;现在我们可以来验证一下，根据我们的定义，&lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 确实是一个表达式：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;首先根据第一种形式，我们知道 4 是表达式，因为它是一个数字。3 也是表达式，因为它是一个数字。&lt;/li&gt;
-  &lt;li&gt;所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 是表达式，因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt; 的左右都是表达式，它满足表达式定义的第二种形式。&lt;/li&gt;
-  &lt;li&gt;所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 是表达式，因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; 的左右都是表达式，它满足表达式定义的第四种形式。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;并行计算&quot;&gt;并行计算&lt;/h3&gt;
-
-&lt;p&gt;考虑这样一个表达式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(4 + 3) * (1 + 2)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它对应一个什么样的计算图呢？大概是这样：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/parallel.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;如果妈妈只有你一个小孩，你应该如何用手指算出它的结果呢？你大概有两种办法。&lt;/p&gt;
-
-&lt;p&gt;第一种办法：先算出 4+3，结果是 7。然后算出 1+2，结果是 3。然后算 7*3，结果是 21。&lt;/p&gt;
-
-&lt;p&gt;第二种办法：先算出 1+2，结果是 3。然后算出 4+3，结果是 7。然后算 7*3，结果是 21。&lt;/p&gt;
-
-&lt;p&gt;注意到没有，你要么先算 4+3，要么先算 1+2，你不能同时算 4+3 和 1+2。为什么呢？因为你只有两只手，所以算 4+3 的时候你就没法算 1+2，反之也是这样。总之，你妈妈只有你一个加法器，所以一次只能做一个加法。&lt;/p&gt;
-
-&lt;p&gt;现在假设你还有一个妹妹，她跟你差不多年纪，她也会手指算术。妈妈现在就多了一些办法来计算这个表达式。她可以这样做：让你算 4+3，不等你算完，马上让妹妹算 1+2。等到你们的结果（7 和 3）都出来之后，让你或者妹妹算 7*3。&lt;/p&gt;
-
-&lt;p&gt;发现没有，在某一段时间之内，你和妹妹&lt;em&gt;同时&lt;/em&gt;在做加法计算。这种时间上重叠的计算，叫做&lt;strong&gt;并行计算&lt;/strong&gt;（parallel computing）。&lt;/p&gt;
-
-&lt;p&gt;你和妹妹同时计算，得到结果的速度可能会比你一个人算更快。如果你妈妈还有其它几个孩子，计算复杂的式子就可能快很多，这就是并行计算潜在的好处。所谓“潜在”的意思是，这种好处不一定会实现。比如，如果你的妹妹做手指算数的速度比你慢很多，你做完了 4+3，只好等着她慢慢的算 1+2。这也许比你自己依次算 4+3 和 1+2 还要慢。&lt;/p&gt;
-
-&lt;p&gt;即使妹妹做算术跟你一样快，这里还有个问题。你和妹妹算出结果 7 和 3 之后，得把结果传递给下一个计算 7*3 的那个人（也许是你，也许是你妹妹）。这种“通信”会带来时间的延迟，叫做“通信开销”。如果你们其中一个说话慢，这比起一个人来做计算可能还要慢。&lt;/p&gt;
-
-&lt;p&gt;如何根据计算单元能力的不同和通信开销的差异，来最大化计算的效率，降低需要的时间，就成为了并行计算领域研究的内容。并行计算虽然看起来是一个“博大精深”的领域，可是你如果理解了我这里说的那点东西，就很容易理解其余的内容。&lt;/p&gt;
-
-&lt;h3 id=&quot;变量和赋值&quot;&gt;变量和赋值&lt;/h3&gt;
-
-&lt;p&gt;如果你有一个复杂的表达式，比如&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(5 - 3) * (4 + (2 * 3 - 5) * 6)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;由于它有比较多的嵌套，人的眼睛是难以看清楚的，它要表达的意义也会难懂。这时候，你希望可以用一些“名字”来代表中间结果，这样表达式就更容易理解。&lt;/p&gt;
-
-&lt;p&gt;打个比方，这就像你有一个亲戚，他是你妈妈的表姐的女儿的丈夫。你不想每次都称他“我妈妈的表姐的女儿的丈夫”，所以你就用他的名字“叮当”来指代他，一下子就简单了。&lt;/p&gt;
-
-&lt;p&gt;我们来看一个例子。之前的复合表达式&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2 * (4 + 3)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;其实可以被转换为等价的，含有变量的代码：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 4 + 3       // 变量 a 得到 4+3 的值
-    2 * a           // 代码块的值
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 是一个名字。&lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt; 是一个“赋值语句”，它的意思是：用 a 来代表 4 + 3 的值。这种名字，计算机术语叫做&lt;strong&gt;变量&lt;/strong&gt;（variable）。&lt;/p&gt;
-
-&lt;p&gt;这段代码的意思可以简单地描述为：计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，把它的结果表示为 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;，然后计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; 作为最后的结果。&lt;/p&gt;
-
-&lt;p&gt;有些东西可能扰乱了你的视线。两根斜杠 &lt;code class=&quot;highlighter-rouge&quot;&gt;//&lt;/code&gt; 后面一直到行末的文字叫做“注释”，是给人看的说明文字。它们对代码的逻辑不产生作用，执行的时候可以忽略。许多语言都有类似这种注释，它们可以帮助阅读的人，但是会被机器忽略。&lt;/p&gt;
-
-&lt;p&gt;这段代码执行过程会是这样：先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 得到 7，用 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 记住这个中间结果 7。接着计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; ，也就是计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * 7&lt;/code&gt;，所以最后结果是 14。很显然，这跟 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 的结果是一样的。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 叫做一个变量，它是一个符号，可以用来代表任意的值。除了 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;，你还有许多的选择，比如 b, c, d, x, y, foo, bar, u21… 只要它不会被误解成其它东西就行。&lt;/p&gt;
-
-&lt;p&gt;如果你觉得这里面的“神奇”成分太多，那我们现在来做更深一层的理解……&lt;/p&gt;
-
-&lt;p&gt;再看一遍上面的代码。这整片代码叫做一个“代码块”（block），或者叫一个“序列”（sequence）。这个代码块包括两条语句，分别是 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt;。代码块里的语句会从上到下依次执行。所以我们先执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt;，然后执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;最后一条语句 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; 比较特别，它是这个代码块的“值”，也就是最后结果。之前的语句都是在为生成这个最后的值做准备。换句话说，这整个代码块的值就是 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; 的值。不光这个例子是这样，这是一个通用的原理：代码块的最后一条语句，总是这个代码块的值。&lt;/p&gt;
-
-&lt;p&gt;我们在代码块的前后加上花括号 &lt;code class=&quot;highlighter-rouge&quot;&gt;{...}&lt;/code&gt; 进行标注，这样里面的语句就不会跟外面的代码混在一起。这两个花括号叫做“边界符”。我们今后会经常遇到代码块，它存在于几乎所有的程序语言里，只是语法稍有不同。比如有些语言可能用括号 &lt;code class=&quot;highlighter-rouge&quot;&gt;(...)&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN...END&lt;/code&gt; 来表示边界，而不是用花括号。&lt;/p&gt;
-
-&lt;p&gt;这片代码已经有点像常用的编程语言了，但我们暂时不把它具体化到某一种语言。我不想固化你的思维方式。在稍后的章节，我们会把这种抽象的表达法对应到几种常见的语言，这样一来你就能理解几乎所有的程序语言。&lt;/p&gt;
-
-&lt;p&gt;另外还有一点需要注意，同一个变量可以被多次赋值。它的值会随着赋值语句而改变。举个例子：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 4 + 3
-    b = a
-    a = 2 * 5
-    c = a
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这段代码执行之后，&lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; 的值是 7，而 &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 的值是 10。你知道为什么吗？因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt; 之后，a 的值是 7。&lt;code class=&quot;highlighter-rouge&quot;&gt;b = a&lt;/code&gt; 使得 &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; 得到值 7。然后 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 2 * 5&lt;/code&gt; 把 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 的值改变了，它现在是 10。所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;c = a&lt;/code&gt; 使得 &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 得到 10。&lt;/p&gt;
-
-&lt;p&gt;对同一个变量多次赋值虽然是可以的，但通常来说这不是一种好的写法，它可能引起程序的混淆，应该尽量避免。只有当变量表示的“意义”相同的时候，你才应该对它重复赋值。&lt;/p&gt;
-
-&lt;h3 id=&quot;编译&quot;&gt;编译&lt;/h3&gt;
-
-&lt;p&gt;一旦引入了变量，我们就可以不用复合表达式。因为你可以把任意复杂的复合表达式拆开成“单操作算术表达式”（像 4 + 3 这样的），使用一些变量记住中间结果，一步一步算下去，得到最后的结果。&lt;/p&gt;
-
-&lt;p&gt;举一个复杂点的例子，也就是这一节最开头的那个表达式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(5 - 3) * (4 + (2 * 3 - 5) * 6)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它可以被转化为一串语句：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 2 * 3
-    b = a - 5
-    c = b * 6
-    d = 4 + c
-    e = 5 - 3
-    e * d
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;最后的表达式 &lt;code class=&quot;highlighter-rouge&quot;&gt;e * d&lt;/code&gt;，算出来就是原来的表达式的值。你观察一下，是不是每个操作都非常简单，不包含嵌套的复合表达式？你可以自己验算一下，它确实算出跟原表达式一样的结果。&lt;/p&gt;
-
-&lt;p&gt;在这里，我们自己动手做了“编译器”（compiler）的工作。通常来说，编译器是一种程序，它的任务是把一片代码“翻译”成另外一种等价形式。这里我们没有写编译器，可是我们自己做了编译器的工作。我们手动地把一个嵌套的复合表达式，编译成了一系列的简单算术语句。&lt;/p&gt;
-
-&lt;p&gt;这些语句的结果与原来的表达式完全一致。这种保留原来语义的翻译过程，叫做&lt;strong&gt;编译&lt;/strong&gt;（compile）。&lt;/p&gt;
-
-&lt;p&gt;我们为什么需要编译呢？原因有好几种。我不想在这里做完整的解释，但从这个例子我们可以看到，编译之后我们就不再需要复杂的嵌套表达式了。我们只需要设计很简单的，只会做单操作算术的机器，就可以算出复杂的嵌套的表达式。实际上最后这段代码已经非常接近现代处理器（CPU）的汇编代码（assembly）。我们只需要多加一些转换，它就可以变成机器指令。&lt;/p&gt;
-
-&lt;p&gt;我们暂时不写编译器，因为你还缺少一些必要的知识。这当然也不是编译技术的所有内容，它还包含另外一些东西。但从这一开头，你就已经初步理解了编译器是什么，你只需要在将来加深这种理解。&lt;/p&gt;
-
-&lt;h3 id=&quot;函数&quot;&gt;函数&lt;/h3&gt;
-
-&lt;p&gt;到目前为止，我们做的计算都是在已知的数字之上，而在现实的计算中我们往往有一些未知数。比如我们想要表达一个“风扇控制器”，有了它之后，风扇的转速总是当前气温的两倍。这个“当前气温”就是一个未知数。&lt;/p&gt;
-
-&lt;p&gt;我们的“风扇控制器”必须要有一个“输入”（input），用于得到当前的温度 t，它是一个温度传感器的读数。它还要有一个输出，就是温度的两倍。&lt;/p&gt;
-
-&lt;p&gt;那么我们可以用这样的方式来表达我们的风扇控制器：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t -&amp;gt; t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;不要把这想成任何一种程序语言，这只是我们自己的表达法。箭头 &lt;code class=&quot;highlighter-rouge&quot;&gt;-&amp;gt;&lt;/code&gt; 的左边表示输入，右边表示输出，够简单吧。&lt;/p&gt;
-
-&lt;p&gt;你可以把 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 想象成从温度传感器出来的一根电线，它连接到风扇控制器上，风扇控制器会把它的输入（t）乘以 2。这个画面像这个样子：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/function1.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我们谈论风扇控制器的时候，其实不关心它的输入是哪里来的，输出到哪里去。如果我们把温度传感器和风扇从画面里拿掉，就变成这个样子：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/function2.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这幅图才是你需要认真理解的函数的计算图。你发现了吗，这幅图画正好对应了之前的风扇控制器的符号表示：&lt;code class=&quot;highlighter-rouge&quot;&gt;t -&amp;gt; t*2&lt;/code&gt;。看到符号就想象出画面，你就得到了符号背后的模型。&lt;/p&gt;
-
-&lt;p&gt;像 &lt;code class=&quot;highlighter-rouge&quot;&gt;t -&amp;gt; t*2&lt;/code&gt; 这样具有未知数作为输入的构造，我们把它叫做函数（function）。其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 这个符号，叫做这个函数的参数。&lt;/p&gt;
-
-&lt;h3 id=&quot;参数变量和电线&quot;&gt;参数，变量和电线&lt;/h3&gt;
-
-&lt;p&gt;你可能发现了，函数的参数和我们之前了解的“变量”是很类似的，它们都是一个符号。之前我们用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;a, b, c, d, e&lt;/code&gt; 现在我们有一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;，这些名字我们都是随便起的，只要它们不要重复就好。如果名字重复的话，可能会带来混淆和干扰。&lt;/p&gt;
-
-&lt;p&gt;其实参数和变量这两种概念不只是相似，它们的本质就是一样的。如果你深刻理解它们的相同本质，你的脑子就可以少记忆很多东西，而且它可能帮助你对代码做出一些有趣而有益的转化。在上一节你已经看到，我用“电线”作为比方来帮助你理解参数。你也可以用同样的方法来理解变量。&lt;/p&gt;
-
-&lt;p&gt;比如我们之前的变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 4 + 3
-    2 * a
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它可以被想象成什么样的画面呢？&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/wire.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我故意把箭头方向画成从右往左，这样它就更像上面的代码。从这个图画里，你也许可以看到变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 和风扇控制器图里的参数 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;，其实没有任何本质差别。它们都表示一根电线，那根电线进入乘法器，将会被乘以 2，然后输出。如果你把这些都看成是电路，那么变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 和参数 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 都代表一根电线而已。&lt;/p&gt;
-
-&lt;p&gt;然后你还发现一个现象，那就是你可以把 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 这个名字换成任何其它名字（比如 &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt;），而这幅图不会产生实质的改变。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/rename.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这说明什么问题呢？这说明以下的代码（把 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 换成了 &lt;code class=&quot;highlighter-rouge&quot;&gt;b）&lt;/code&gt;跟之前的是等价的：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    b = 4 + 3
-    2 * b
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;根据几乎一样的电线命名变化，你也可以对之前的函数得到一样的结论：&lt;code class=&quot;highlighter-rouge&quot;&gt;t -&amp;gt; t*2&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;u -&amp;gt; u*2&lt;/code&gt;，和 &lt;code class=&quot;highlighter-rouge&quot;&gt;x -&amp;gt; x*2&lt;/code&gt; 都是一回事。&lt;/p&gt;
-
-&lt;p&gt;名字是很重要的东西，但它们具体叫什么，对于机器并没有实质的意义，只要它们不要相互混淆就可以。但名字对于人是很重要的，因为人脑没有机器那么精确。不好的变量和参数名会导致代码难以理解，引起程序员的混乱和错误。所以通常说来，你需要给变量和参数起好的名字。&lt;/p&gt;
-
-&lt;p&gt;什么样的名字好呢？我会在后面集中讲解。&lt;/p&gt;
-
-&lt;h3 id=&quot;有名字的函数&quot;&gt;有名字的函数&lt;/h3&gt;
-
-&lt;p&gt;既然变量可以代表“值”，那么一个自然的想法，就是让变量代表函数。所以就像我们可以写&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a = 4 + 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;我们似乎也应该可以写&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f = t -&amp;gt; t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;对的，你可以这么做。&lt;code class=&quot;highlighter-rouge&quot;&gt;f = t-&amp;gt;t*2&lt;/code&gt; 还有一个更加传统的写法，就像数学里的函数写法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(t) = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;请仔细观察 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 的位置变化。我们在函数名字的右边写一对括号，在里面放上参数的名字。&lt;/p&gt;
-
-&lt;p&gt;注意，你不可以只写&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;你必须明确的指出函数的参数是什么，否则你就不会明白函数定义里的 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 是什么东西。明确指出 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 是一个“输入”，你才会知道它是函数的输入，是一个未知数，&lt;strong&gt;而不是在函数外面定义的其它变量&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;这个看似简单的道理，很多数学家都不明白，所以他们经常这样写书：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;有一个函数 y = x*2&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;这是错误的，因为他没有明确指出“&lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; 是函数 y 的参数”。如果这句话之前他们又定义过 &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;，你就会疑惑这是不是之前那个 &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;。很多人就是因为这些糊里糊涂的写法而看不懂数学书。这不怪他们，只怪数学家自己对于语言不严谨。&lt;/p&gt;
-
-&lt;h3 id=&quot;函数调用&quot;&gt;函数调用&lt;/h3&gt;
-
-&lt;p&gt;有了函数，我们可以给它起名字，可是我们怎么使用它的值呢？&lt;/p&gt;
-
-&lt;p&gt;由于函数里面有未知数（参数），所以你必须告诉它这些未知数，它里面的代码才会执行，给你结果。比如之前的风扇控制器函数&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(t) = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它需要一个温度作为输入，才会给你一个输出。于是你就这样给它一个输入：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(2)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;你把输入写在函数名字后面的括号里。那么你就会得到输出：4。也就是说 &lt;code class=&quot;highlighter-rouge&quot;&gt;f(2)&lt;/code&gt; 的值是 4。&lt;/p&gt;
-
-&lt;p&gt;如果你没有调用一个函数，函数体是不会被执行的。因为它不知道未知数是什么，所以什么事也做不了。那么我们定义函数的时候，比如&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(t) = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;当看到这个定义的时候，机器应该做什么呢？它只是记录下：有这么一个函数，它的参数是 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;，它需要计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;t*2&lt;/code&gt;，它的名字叫 &lt;code class=&quot;highlighter-rouge&quot;&gt;f&lt;/code&gt;。但是机器不会立即计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;t*2&lt;/code&gt;，因为它不知道 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 是多少。&lt;/p&gt;
-
-&lt;h3 id=&quot;分支&quot;&gt;分支&lt;/h3&gt;
-
-&lt;p&gt;直到现在，我们的代码都是从头到尾，闷头闷脑地执行，不问任何问题。我们缺少一种“问问题”的方法。比如，如果我想表达这样一个“食物选择器”：如果气温低于 22 度，就返回 “hotpot” 表示今天吃火锅，否则返回 “ice cream” 表示今天吃冰激凌。&lt;/p&gt;
-
-&lt;p&gt;我们可以把它图示如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/branch.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;中间这种判断结构叫做“分支”（branching），它一般用菱形表示。为什么叫分支呢？你想象一下，代码就像一条小溪，平时它沿着一条路线流淌。当它遇到一个棱角分明的大石头，就分成两个支流，分开流淌。&lt;/p&gt;
-
-&lt;p&gt;我们的判断条件 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 就像一块大石头，我们的“代码流”碰到它就会分开成两支，分别做不同的事情。跟溪流不同的是，这种分支不是随机的，而是根据条件来决定，而且分支之后只有一支继续执行，而另外一边不会被执行。&lt;/p&gt;
-
-&lt;p&gt;我们现在看到的都是图形化表示的模型，为了书写方便，现在我们要从符号的层面来表示这个模型。我们需要一种符号表示法来表达分支，我们把它叫做 &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt;（如果）。我们的饮料选择器代码可以这样写：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t -&amp;gt; if (t &amp;lt; 22) 
-     {
-       &quot;hotpot&quot;
-     }
-     else 
-     {
-       &quot;ice cream&quot;
-     }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它是一个函数，输入是一个温度。&lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt; 后面的括号里放我们的判断条件。后面接着条件成立时执行的代码块，然后是一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt;，然后是条件不成立时执行的代码。它说：如果温度低于 22 度，我们就吃火锅，否则就吃冰激凌。&lt;/p&gt;
-
-&lt;p&gt;其中的 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt; 是一个特殊的符号，它表示“否则”。看起来不知道为什么 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt; 要在那里？对的，它只是一个装饰品。我们已经有足够的表达力来分辨两个分支，不过有了 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt; 似乎更加好看一些。很多语言里面都有 else 这个标记词在那里，所以我也把它放在那里。&lt;/p&gt;
-
-&lt;p&gt;这只是一个最简单的例子，其实那两个代码块里面不止可以写一条语句。你可以有任意多的语句，就像这样：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t -&amp;gt;
-if (t &amp;lt; 22)
-{
-    a = 4 + 3
-    b = a * 2
-    &quot;hotpot&quot;
-}
-else
-{
-    x = &quot;ice cream&quot;
-    x
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这段代码和之前是等价的，你知道为什么吗？&lt;/p&gt;
-
-&lt;h3 id=&quot;字符串&quot;&gt;字符串&lt;/h3&gt;
-
-&lt;p&gt;上面一节出现了一种我们之前没见过的东西，我为了简洁而没有介绍它。这两个分支的结果，也就是加上引号的 “hotpot” 和 “ice cream”，它们并不是数字，也不是其它语言构造，而是一种跟数字处于几乎同等地位的“数据类型”，叫做&lt;strong&gt;字符串&lt;/strong&gt;（string）。字符串是我们在计算机里面表示人类语言的基本数据类型。&lt;/p&gt;
-
-&lt;p&gt;关于字符串，在这里我不想讲述更加细节的内容，我把对它的各种操作留到以后再讲，因为虽然字符串对于应用程序很重要，它却并不是计算机科学最关键最本质的内容。&lt;/p&gt;
-
-&lt;p&gt;很多计算机书籍一开头就讲很多对字符串的操作，导致初学者费很大功夫去做很多打印字符串的练习，结果几个星期之后还没学到“函数”之类最根本的概念。这是非常可惜的。&lt;/p&gt;
-
-&lt;h3 id=&quot;布尔值&quot;&gt;布尔值&lt;/h3&gt;
-
-&lt;p&gt;我们之前的 &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt; 语句的条件 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 其实也是一个表达式，它叫做“布尔表达式”。你可以把小于号 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&lt;/code&gt; 看成是跟加法一类的“操作符”。它的输入是两个数值，输出是一个“布尔值”。什么是布尔值呢？布尔值只有两个：true 和 false，也就是“真”和“假”。&lt;/p&gt;
-
-&lt;p&gt;举个例子，如果 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 的值是 15，那么 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 是成立的，那么它的值就是 true。如果 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 的值是 23，那么 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 就不成立，那么它的值就是 false。是不是很好理解呢？&lt;/p&gt;
-
-&lt;p&gt;我们为什么需要“布尔值”这种东西呢？因为它的存在可以简化我们的思维。对于布尔值也有一些操作，这个我也不在这一章赘述，放到以后细讲。&lt;/p&gt;
-
-&lt;h3 id=&quot;计算的要素&quot;&gt;计算的要素&lt;/h3&gt;
-
-&lt;p&gt;好了，现在你已经掌握了计算机科学的几乎所有基本要素。每一个编程语言都包括这些构造：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;基础的数值。比如整数，字符串，布尔值等。&lt;/li&gt;
-  &lt;li&gt;表达式。包括基本的算术表达式，嵌套的表达式。&lt;/li&gt;
-  &lt;li&gt;变量和赋值语句。&lt;/li&gt;
-  &lt;li&gt;分支语句。&lt;/li&gt;
-  &lt;li&gt;函数和函数调用。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;你也许可以感觉到，我是把这些构造按照“从小到大”的顺序排列的。这也许可以帮助你的理解。&lt;/p&gt;
-
-&lt;p&gt;现在你可以回想一下你对它们的印象。每当学习一种新的语言或者系统，你只需要在里面找到对应的构造，而不需要从头学习。这就是掌握所有程序语言的秘诀。这就像学开车一样，一旦你掌握了油门，刹车，换挡器，方向盘，速度表的功能和用法，你就学会了开所有的汽车，不管它是什么型号的汽车。&lt;/p&gt;
-
-&lt;p&gt;我们在这一章不仅理解了这些要素，而且为它们定义了一种我们自己的“语言”。显然这个语言只能在我们的头脑里运行，因为我们没有实现这个语言的系统。在后面的章节，我会逐渐的把我们这种语言映射到现有的多种语言里面，然后你就能掌握这些语言了。&lt;/p&gt;
-
-&lt;p&gt;但是请不要以为掌握了语言就学会了编程或者学会了计算机科学。掌握语言就像学会了各种汽车部件的工作原理。几分钟之内，初学者就能让车子移动，转弯，停止。可是完了之后你还需要学习交通规则，你需要许许多多的实战练习和经验，掌握各种复杂情况下的策略，才能成为一个合格的驾驶员。如果你想成为赛车手，那就还需要很多倍的努力。&lt;/p&gt;
-
-&lt;p&gt;但是请不要被我这些话吓到了，你没有那么多的竞争者。现在的情况是，世界上就没有很多合格的计算机科学驾驶员，更不要说把车开得流畅的赛车手。绝大部分的“程序员”连最基本的引擎，油门，刹车，方向盘的工作原理都不明白，思维方式就不对，所以根本没法独自上路，一上路就出车祸。很多人把过错归结在自己的车身上，以为换一辆车马上就能成为好的驾驶员。这是一种世界范围的计算机教育的失败。&lt;/p&gt;
-
-&lt;p&gt;在后面的章节，我会引导你成为一个合格的驾驶员，随便拿一辆车就能开好。&lt;/p&gt;
-
-&lt;h3 id=&quot;什么是计算&quot;&gt;什么是计算&lt;/h3&gt;
-
-&lt;p&gt;现在你掌握了计算所需要的基本元素，可是什么是计算呢？我好像仍然没有告诉你。这是一个很哲学的问题，不同的人可能会告诉你不同的结果。我试图从最广义的角度来告诉你这个问题的答案。&lt;/p&gt;
-
-&lt;p&gt;当你小时候用手指算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4+3&lt;/code&gt;，那是计算。如果后来你学会了打算盘，你用算盘算 4+3，那也是计算。后来你从我这里学到了表达式，变量，函数，调用，分支语句…… 在每一新的构造加入的过程中，你都在了解不同的计算。&lt;/p&gt;
-
-&lt;p&gt;所以从最广义来讲，计算就是“机械化的信息处理”。所谓机械化，你可以用手指算，可以用算盘，可以用计算器，或者计算机。这些机器里面可以有代码，也可以没有代码，全是电子线路，甚至可以是生物活动或者化学反应。不同的机器也可以有不同的计算功能，不同的速度和性能……&lt;/p&gt;
-
-&lt;p&gt;有这么多种计算的事实不免让人困惑，总害怕少了点什么，其实你可以安心。如果你掌握了上一节的“计算要素”，那么你就掌握了几乎所有类型的计算系统所需要的东西。你在后面所需要做的只是加深这种理解，并且把它“对应”到现实世界遇到的各种计算机器里面。&lt;/p&gt;
-
-&lt;p&gt;为什么你可以相信计算机科学的精华就只有这些呢？因为计算就是处理信息，信息有它诞生的位置（输入设备，固定数值），它传输的方式（赋值，函数调用，返回值），它被查看的地方（分支）。你想不出对于信息还有什么其它的操作，所以你就很安心的相信了，这就是计算机科学这种“棋类游戏”的全部规则。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 13 Apr 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-04-13/csbook-chapter1/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-04-13/csbook-chapter1/</guid>
-      </item>
-    
-      <item>
-        <title>解谜计算机科学</title>
-        <description>&lt;p&gt;要掌握一个学科的精髓，不能从细枝末节开始。人脑的能力很大程度上受限于信念。一个人不相信自己的时候，他就做不到本来可能的事。信心是很重要的，信心却容易被挫败。如果只见树木不见森林，人会失去信心，以为要到猴年马月才能掌握一个学科。&lt;/p&gt;
-
-&lt;p&gt;所以我们不从“树木”开始，而是引导读者一起来探索这背后的“森林”，把计算机科学最根本的概念用浅显的例子解释，让读者领会到它们的本质。把这些概念稍作发展，你就得到逐渐完整的把握。你一开头就掌握着整个学科，而且一直掌握着它，只不过增添更多细节而已。这就像画画，先勾勒出轮廓，一遍遍的增加细节，日臻完善，却不失去对大局的把握。&lt;/p&gt;
-
-&lt;p&gt;一般计算机专业的学生学了很多课程，可是直到毕业都没能回答一个基础问题：什么是计算？这一章会引导你去发现这个问题的答案。不要小看这基础的问题，它经常是解决现实问题的重要线索。世界上有太多不理解它的人，他们走了很多的弯路，掉进很多的坑，制造出过度复杂或者有漏洞的理论和技术。&lt;/p&gt;
-
-&lt;p&gt;接下来，我们就来理解几个关键的概念，由此接触到计算的本质。&lt;/p&gt;
-
-&lt;h3 id=&quot;手指算术&quot;&gt;手指算术&lt;/h3&gt;
-
-&lt;p&gt;每个人都做过计算，只是大部分人都没有理解自己在做什么。回想一下幼儿园（大概四岁）的时候，妈妈问你：“帮我算一下，4+3 等于几？” 你掰了一会手指，回答：7。当你掰手指的时候，你自己就是一台简单的计算机。&lt;/p&gt;
-
-&lt;p&gt;不要小看了这手指算术，它蕴含着深刻的原理。计算机科学植根于这类非常简单的过程，而不是复杂的高等数学。&lt;/p&gt;
-
-&lt;p&gt;现在我们来回忆一下这个过程。这里应该有一段动画，但现阶段还没有。请你对每一步发挥一下想象力，增加点“画面感”。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;当妈妈问你“4+3 等于几”的时候，她是一个程序员，你是一台计算机。计算机得到程序员的输入：4，+，3。&lt;/li&gt;
-  &lt;li&gt;听到妈妈的问题之后，你拿出两只手，左手伸出四个指头，右手伸出三个指头。&lt;/li&gt;
-  &lt;li&gt;接着你开始自己的计算过程。一根根地数那些竖起来的手指，每数一根你就把它弯下去，表示它已经被数过了。你念道：“1，2，3，4，5，6，7。”&lt;/li&gt;
-  &lt;li&gt;现在已经没有手指伸着，所以你把最后数到的那个数作为答案：7！整个计算过程就结束了。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;符号和模型&quot;&gt;符号和模型&lt;/h3&gt;
-
-&lt;p&gt;（这个概念太过深入，好像不适合出现在第一章，考虑去掉）&lt;/p&gt;
-
-&lt;p&gt;这里的幼儿园手指算术包含着深刻的哲学问题，现在我们来初步体会一下这个问题。&lt;/p&gt;
-
-&lt;p&gt;当妈妈说“帮我算 4+3”的时候，4，+，3，三个字符传到你耳朵里，它们都是符号（symbol）。符号是“表面”的东西：光是盯着“4”和“3”这两个阿拉伯数字的曲线，一个像旗子，一个像耳朵，你是不能做什么的。你需要先用脑子把它们转换成对应的“模型”（model）。这就是为什么你伸出两只手，一只手表示 4，另一只表示 3。&lt;/p&gt;
-
-&lt;p&gt;这两只手的手势是“可操作”的。比如，你把左手再多弯曲一个手指，它就变成“3”。你再伸开一根手指，它就变成“5”。所以手指是一个相当好的机械模型，它是可以动，可操作的。把符号“4”和“3”转换成手指模型之后，你就可以开始计算了。&lt;/p&gt;
-
-&lt;p&gt;你怎么知道“4”和“3”对应什么样的手指模型呢？因为妈妈以前教过你。十根手指，对应着 1 到 10 十个数。这就是为什么人都用十进制数做算术。&lt;/p&gt;
-
-&lt;p&gt;我们现在没必要深究这个问题。我只是提示你，分清“符号”和“模型”是重要的。&lt;/p&gt;
-
-&lt;h3 id=&quot;计算图&quot;&gt;计算图&lt;/h3&gt;
-
-&lt;p&gt;在计算机领域，我们经常用一些抽象的图示来表达计算的过程，这样就能直观地看到信息的流动和转换。这种图示看起来是一些形状用箭头连接起来。我在这里把它叫做“计算图”。&lt;/p&gt;
-
-&lt;p&gt;对于以上的手指算术 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，我们可以用下图来表示它：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/adder.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;图中的箭头表示信息的流动方向。说到“流动”，你可以想象一下水的流动。首先我们看到数字 4 和 3 流进了一个圆圈，圆圈里有一个“+”号。这个圆圈就是你，一个会做手指加法的小孩。妈妈给你两个数 4 和 3，你现在把它们加起来，得到 7 作为结果。&lt;/p&gt;
-
-&lt;p&gt;注意圆圈的输入和输出方向是由箭头决定的，我们可以根据需要调整那些箭头的位置，只要箭头的连接关系和方向不变就行。它们不一定都是从左到右，也可能从右到左或者从上到下，但“出入关系”都一样：4 和 3 进去，结果 7 出来。比如它还可以是这样：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/adder-topdown.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我们用带加号的圆圈表示一个“加法器”。顾名思义，加法器可以帮我们完成加法。在上个例子里，你就是一个加法器。我们也可以用其他装置作为加法器，比如一堆石头，一个算盘，某种电子线路…… 只要它能做加法就行。&lt;/p&gt;
-
-&lt;p&gt;具体要怎么做加法，就像你具体如何掰手指，很多时候我们是不关心的，我们只需要知道这个东西能做加法就行。圆圈把具体的加法操作给“抽象化”了，这个蓝色的圆圈可以代表很多种东西。抽象（abstraction）是计算机科学至关重要的思维方法，它帮助我们进行高层面的思考，而不为细节所累。&lt;/p&gt;
-
-&lt;h3 id=&quot;表达式&quot;&gt;表达式&lt;/h3&gt;
-
-&lt;p&gt;计算机科学当然不止 4 + 3 这么简单，但它的基本元素确实是如此简单。我们可以创造出很复杂的系统，然而归根结底，它们只是在按某种顺序计算像 4 + 3 这样的东西。&lt;/p&gt;
-
-&lt;p&gt;4 + 3 是一个很简单的表达式（expression）。你也许没听说过“表达式”这个词，但我们先不去定义它。我们先来看一个稍微复杂一些的表达式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2 * (4 + 3)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这个表达式比 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 多了一个运算，我们把它叫做“复合表达式”。这个表达式也可以用计算图来表示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/add-mult.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;你知道它为什么是这个样子吗？它表示的意思是，先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，然后把结果（7）传送到一个“乘法器”，跟 2 相乘，得到最后的结果。那正好就是 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 这个表达式的含义，它的结果应该是 14。&lt;/p&gt;
-
-&lt;p&gt;为什么要先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 呢？因为当我们看到乘法器 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * ...&lt;/code&gt; 的时候，其中一个输入（2）是已知的，而另外一个输入必须通过加法器的输出得到。加法器的结果是由 4 和 3 相加得到的，所以我们必须先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，然后才能与 2 相乘。&lt;/p&gt;
-
-&lt;p&gt;小学的时候，你也许学过：“括号内的内容要先计算”。其实括号只是“符号层”的东西，它并不存在于计算图里面。我这里讲的“计算图”，其实才是本质的东西。数学的括号一类的东西，都只是表象，它们是符号或者叫“语法”。从某种意义上讲，计算图才是表达式的本质或者“模型”，而“2 * (4 + 3)”这串符号，只是对计算图的一种表示或者“编码”（coding）。&lt;/p&gt;
-
-&lt;p&gt;这里我们再次体会到了“符号”和“模型”的差别。符号是对模型的“表示”或者“编码”。我们必须从符号得到模型，才能进行操作。这种从符号到模型的转换过程，在计算机科学里叫做“语法分析”（parsing）。我们会在后面的章节理解这个过程。&lt;/p&gt;
-
-&lt;p&gt;我们现在来给表达式做一个初步的定义。这并不是完整的定义，但你应该试着理解这种定义的方式。稍后我们会逐渐补充这个定义，逐渐完善。&lt;/p&gt;
-
-&lt;p&gt;定义（表达式）：&lt;strong&gt;表达式&lt;/strong&gt;可以是如下几种东西。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;数字是一个表达式。比如 1，2，4，15，……&lt;/li&gt;
-  &lt;li&gt;表达式 + 表达式。两个表达式相加，也是表达式。&lt;/li&gt;
-  &lt;li&gt;表达式 - 表达式。两个表达式相减，也是表达式。&lt;/li&gt;
-  &lt;li&gt;表达式 * 表达式。两个表达式相乘，也是表达式。&lt;/li&gt;
-  &lt;li&gt;表达式 / 表达式。两个表达式相除，也是表达式。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;注意，由于我们之前讲过的符号和模型的差别，为了完全忠于我们的本质认识，这里的“表达式 + 表达式”虽然看起来是一串符号，它必须被想象成它所对应的模型。当你看到“表达式”的时候，你的脑子里应该浮现出它对应的计算图，而不是一串符号。这个计算图的画面大概是这个样子，其中左边的大方框里可以是任意两个表达式。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/expression-graph.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;是不是感觉这个定义有点奇怪？因为在“表达式”的定义里，我们用到了“表达式”自己。这种定义叫做“递归定义”。所谓&lt;strong&gt;递归&lt;/strong&gt;（recursion），就是在一个东西的定义里引用这个东西自己。看上去很奇怪，好像绕回去了一样。递归是一个重要的概念，我们会在将来深入理解它。&lt;/p&gt;
-
-&lt;p&gt;现在我们可以来验证一下，根据我们的定义，&lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 确实是一个表达式：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;首先根据第一种形式，我们知道 4 是表达式，因为它是一个数字。3 也是表达式，因为它是一个数字。&lt;/li&gt;
-  &lt;li&gt;所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 是表达式，因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt; 的左右都是表达式，它满足表达式定义的第二种形式。&lt;/li&gt;
-  &lt;li&gt;所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 是表达式，因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; 的左右都是表达式，它满足表达式定义的第四种形式。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;并行计算&quot;&gt;并行计算&lt;/h3&gt;
-
-&lt;p&gt;考虑这样一个表达式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(4 + 3) * (1 + 2)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它对应一个什么样的计算图呢？大概是这样：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/parallel.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;如果妈妈只有你一个小孩，你应该如何用手指算出它的结果呢？你大概有两种办法。&lt;/p&gt;
-
-&lt;p&gt;第一种办法：先算出 4+3，结果是 7。然后算出 1+2，结果是 3。然后算 7*3，结果是 21。&lt;/p&gt;
-
-&lt;p&gt;第二种办法：先算出 1+2，结果是 3。然后算出 4+3，结果是 7。然后算 7*3，结果是 21。&lt;/p&gt;
-
-&lt;p&gt;注意到没有，你要么先算 4+3，要么先算 1+2，你不能同时算 4+3 和 1+2。为什么呢？因为你只有两只手，所以算 4+3 的时候你就没法算 1+2，反之也是这样。总之，你妈妈只有你一个加法器，所以一次只能做一个加法。&lt;/p&gt;
-
-&lt;p&gt;现在假设你还有一个妹妹，她跟你差不多年纪，她也会手指算术。妈妈现在就多了一些办法来计算这个表达式。她可以这样做：让你算 4+3，不等你算完，马上让妹妹算 1+2。等到你们的结果（7 和 3）都出来之后，让你或者妹妹算 7*3。&lt;/p&gt;
-
-&lt;p&gt;发现没有，在某一段时间之内，你和妹妹&lt;em&gt;同时&lt;/em&gt;在做加法计算。这种时间上重叠的计算，叫做&lt;strong&gt;并行计算&lt;/strong&gt;（parallel computing）。&lt;/p&gt;
-
-&lt;p&gt;你和妹妹同时计算，得到结果的速度可能会比你一个人算更快。如果你妈妈还有其它几个孩子，计算复杂的式子就可能快很多，这就是并行计算潜在的好处。所谓“潜在”的意思是，这种好处不一定会实现。比如，如果你的妹妹做手指算数的速度比你慢很多，你做完了 4+3，只好等着她慢慢的算 1+2。这也许比你自己依次算 4+3 和 1+2 还要慢。&lt;/p&gt;
-
-&lt;p&gt;即使妹妹做算术跟你一样快，这里还有个问题。你和妹妹算出结果 7 和 3 之后，得把结果传递给下一个计算 7*3 的那个人（也许是你，也许是你妹妹）。这种“通信”会带来时间的延迟，叫做“通信开销”。如果你们其中一个说话慢，这比起一个人来做计算可能还要慢。&lt;/p&gt;
-
-&lt;p&gt;如何根据计算单元能力的不同和通信开销的差异，来最大化计算的效率，降低需要的时间，就成为了并行计算领域研究的内容。并行计算虽然看起来是一个“博大精深”的领域，可是你如果理解了我这里说的那点东西，就很容易理解其余的内容。&lt;/p&gt;
-
-&lt;h3 id=&quot;变量和赋值&quot;&gt;变量和赋值&lt;/h3&gt;
-
-&lt;p&gt;如果你有一个复杂的表达式，比如&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(5 - 3) * (4 + (2 * 3 - 5) * 6)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;由于它有比较多的嵌套，人的眼睛是难以看清楚的，它要表达的意义也会难懂。这时候，你希望可以用一些“名字”来代表中间结果，这样表达式就更容易理解。&lt;/p&gt;
-
-&lt;p&gt;打个比方，这就像你有一个亲戚，他是你妈妈的表姐的女儿的丈夫。你不想每次都称他“我妈妈的表姐的女儿的丈夫”，所以你就用他的名字“叮当”来指代他，一下子就简单了。&lt;/p&gt;
-
-&lt;p&gt;我们来看一个例子。之前的复合表达式&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2 * (4 + 3)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;其实可以被转换为等价的，含有变量的代码：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 4 + 3       // 变量 a 得到 4+3 的值
-    2 * a           // 代码块的值
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 是一个名字。&lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt; 是一个“赋值语句”，它的意思是：用 a 来代表 4 + 3 的值。这种名字，计算机术语叫做&lt;strong&gt;变量&lt;/strong&gt;（variable）。&lt;/p&gt;
-
-&lt;p&gt;这段代码的意思可以简单地描述为：计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt;，把它的结果表示为 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;，然后计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; 作为最后的结果。&lt;/p&gt;
-
-&lt;p&gt;有些东西可能扰乱了你的视线。两根斜杠 &lt;code class=&quot;highlighter-rouge&quot;&gt;//&lt;/code&gt; 后面一直到行末的文字叫做“注释”，是给人看的说明文字。它们对代码的逻辑不产生作用，执行的时候可以忽略。许多语言都有类似这种注释，它们可以帮助阅读的人，但是会被机器忽略。&lt;/p&gt;
-
-&lt;p&gt;这段代码执行过程会是这样：先计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4 + 3&lt;/code&gt; 得到 7，用 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 记住这个中间结果 7。接着计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; ，也就是计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * 7&lt;/code&gt;，所以最后结果是 14。很显然，这跟 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * (4 + 3)&lt;/code&gt; 的结果是一样的。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 叫做一个变量，它是一个符号，可以用来代表任意的值。除了 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;，你还有许多的选择，比如 b, c, d, x, y, foo, bar, u21… 只要它不会被误解成其它东西就行。&lt;/p&gt;
-
-&lt;p&gt;如果你觉得这里面的“神奇”成分太多，那我们现在来做更深一层的理解……&lt;/p&gt;
-
-&lt;p&gt;再看一遍上面的代码。这整片代码叫做一个“代码块”（block），或者叫一个“序列”（sequence）。这个代码块包括两条语句，分别是 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt;。代码块里的语句会从上到下依次执行。所以我们先执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt;，然后执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;最后一条语句 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; 比较特别，它是这个代码块的“值”，也就是最后结果。之前的语句都是在为生成这个最后的值做准备。换句话说，这整个代码块的值就是 &lt;code class=&quot;highlighter-rouge&quot;&gt;2 * a&lt;/code&gt; 的值。不光这个例子是这样，这是一个通用的原理：代码块的最后一条语句，总是这个代码块的值。&lt;/p&gt;
-
-&lt;p&gt;我们在代码块的前后加上花括号 &lt;code class=&quot;highlighter-rouge&quot;&gt;{...}&lt;/code&gt; 进行标注，这样里面的语句就不会跟外面的代码混在一起。这两个花括号叫做“边界符”。我们今后会经常遇到代码块，它存在于几乎所有的程序语言里，只是语法稍有不同。比如有些语言可能用括号 &lt;code class=&quot;highlighter-rouge&quot;&gt;(...)&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN...END&lt;/code&gt; 来表示边界，而不是用花括号。&lt;/p&gt;
-
-&lt;p&gt;这片代码已经有点像常用的编程语言了，但我们暂时不把它具体化到某一种语言。我不想固化你的思维方式。在稍后的章节，我们会把这种抽象的表达法对应到几种常见的语言，这样一来你就能理解几乎所有的程序语言。&lt;/p&gt;
-
-&lt;p&gt;另外还有一点需要注意，同一个变量可以被多次赋值。它的值会随着赋值语句而改变。举个例子：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 4 + 3
-    b = a
-    a = 2 * 5
-    c = a
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这段代码执行之后，&lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; 的值是 7，而 &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 的值是 10。你知道为什么吗？因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 4 + 3&lt;/code&gt; 之后，a 的值是 7。&lt;code class=&quot;highlighter-rouge&quot;&gt;b = a&lt;/code&gt; 使得 &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; 得到值 7。然后 &lt;code class=&quot;highlighter-rouge&quot;&gt;a = 2 * 5&lt;/code&gt; 把 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 的值改变了，它现在是 10。所以 &lt;code class=&quot;highlighter-rouge&quot;&gt;c = a&lt;/code&gt; 使得 &lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt; 得到 10。&lt;/p&gt;
-
-&lt;p&gt;对同一个变量多次赋值虽然是可以的，但通常来说这不是一种好的写法，它可能引起程序的混淆，应该尽量避免。只有当变量表示的“意义”相同的时候，你才应该对它重复赋值。&lt;/p&gt;
-
-&lt;h3 id=&quot;编译&quot;&gt;编译&lt;/h3&gt;
-
-&lt;p&gt;一旦引入了变量，我们就可以不用复合表达式。因为你可以把任意复杂的复合表达式拆开成“单操作算术表达式”（像 4 + 3 这样的），使用一些变量记住中间结果，一步一步算下去，得到最后的结果。&lt;/p&gt;
-
-&lt;p&gt;举一个复杂点的例子，也就是这一节最开头的那个表达式：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(5 - 3) * (4 + (2 * 3 - 5) * 6)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它可以被转化为一串语句：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 2 * 3
-    b = a - 5
-    c = b * 6
-    d = 4 + c
-    e = 5 - 3
-    e * d
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;最后的表达式 &lt;code class=&quot;highlighter-rouge&quot;&gt;e * d&lt;/code&gt;，算出来就是原来的表达式的值。你观察一下，是不是每个操作都非常简单，不包含嵌套的复合表达式？你可以自己验算一下，它确实算出跟原表达式一样的结果。&lt;/p&gt;
-
-&lt;p&gt;在这里，我们自己动手做了“编译器”（compiler）的工作。通常来说，编译器是一种程序，它的任务是把一片代码“翻译”成另外一种等价形式。这里我们没有写编译器，可是我们自己做了编译器的工作。我们手动地把一个嵌套的复合表达式，编译成了一系列的简单算术语句。&lt;/p&gt;
-
-&lt;p&gt;这些语句的结果与原来的表达式完全一致。这种保留原来语义的翻译过程，叫做&lt;strong&gt;编译&lt;/strong&gt;（compile）。&lt;/p&gt;
-
-&lt;p&gt;我们为什么需要编译呢？原因有好几种。我不想在这里做完整的解释，但从这个例子我们可以看到，编译之后我们就不再需要复杂的嵌套表达式了。我们只需要设计很简单的，只会做单操作算术的机器，就可以算出复杂的嵌套的表达式。实际上最后这段代码已经非常接近现代处理器（CPU）的汇编代码（assembly）。我们只需要多加一些转换，它就可以变成机器指令。&lt;/p&gt;
-
-&lt;p&gt;我们暂时不写编译器，因为你还缺少一些必要的知识。这当然也不是编译技术的所有内容，它还包含另外一些东西。但从这一开头，你就已经初步理解了编译器是什么，你只需要在将来加深这种理解。&lt;/p&gt;
-
-&lt;h3 id=&quot;函数&quot;&gt;函数&lt;/h3&gt;
-
-&lt;p&gt;到目前为止，我们做的计算都是在已知的数字之上，而在现实的计算中我们往往有一些未知数。比如我们想要表达一个“风扇控制器”，有了它之后，风扇的转速总是当前气温的两倍。这个“当前气温”就是一个未知数。&lt;/p&gt;
-
-&lt;p&gt;我们的“风扇控制器”必须要有一个“输入”（input），用于得到当前的温度 t，它是一个温度传感器的读数。它还要有一个输出，就是温度的两倍。&lt;/p&gt;
-
-&lt;p&gt;那么我们可以用这样的方式来表达我们的风扇控制器：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t -&amp;gt; t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;不要把这想成任何一种程序语言，这只是我们自己的表达法。箭头 &lt;code class=&quot;highlighter-rouge&quot;&gt;-&amp;gt;&lt;/code&gt; 的左边表示输入，右边表示输出，够简单吧。&lt;/p&gt;
-
-&lt;p&gt;你可以把 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 想象成从温度传感器出来的一根电线，它连接到风扇控制器上，风扇控制器会把它的输入（t）乘以 2。这个画面像这个样子：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/function1.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我们谈论风扇控制器的时候，其实不关心它的输入是哪里来的，输出到哪里去。如果我们把温度传感器和风扇从画面里拿掉，就变成这个样子：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/function2.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这幅图才是你需要认真理解的函数的计算图。你发现了吗，这幅图画正好对应了之前的风扇控制器的符号表示：&lt;code class=&quot;highlighter-rouge&quot;&gt;t -&amp;gt; t*2&lt;/code&gt;。看到符号就想象出画面，你就得到了符号背后的模型。&lt;/p&gt;
-
-&lt;p&gt;像 &lt;code class=&quot;highlighter-rouge&quot;&gt;t -&amp;gt; t*2&lt;/code&gt; 这样具有未知数作为输入的构造，我们把它叫做函数（function）。其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 这个符号，叫做这个函数的参数。&lt;/p&gt;
-
-&lt;h3 id=&quot;参数变量和电线&quot;&gt;参数，变量和电线&lt;/h3&gt;
-
-&lt;p&gt;你可能发现了，函数的参数和我们之前了解的“变量”是很类似的，它们都是一个符号。之前我们用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;a, b, c, d, e&lt;/code&gt; 现在我们有一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;，这些名字我们都是随便起的，只要它们不要重复就好。如果名字重复的话，可能会带来混淆和干扰。&lt;/p&gt;
-
-&lt;p&gt;其实参数和变量这两种概念不只是相似，它们的本质就是一样的。如果你深刻理解它们的相同本质，你的脑子就可以少记忆很多东西，而且它可能帮助你对代码做出一些有趣而有益的转化。在上一节你已经看到，我用“电线”作为比方来帮助你理解参数。你也可以用同样的方法来理解变量。&lt;/p&gt;
-
-&lt;p&gt;比如我们之前的变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    a = 4 + 3
-    2 * a
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它可以被想象成什么样的画面呢？&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/wire.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我故意把箭头方向画成从右往左，这样它就更像上面的代码。从这个图画里，你也许可以看到变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 和风扇控制器图里的参数 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;，其实没有任何本质差别。它们都表示一根电线，那根电线进入乘法器，将会被乘以 2，然后输出。如果你把这些都看成是电路，那么变量 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 和参数 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 都代表一根电线而已。&lt;/p&gt;
-
-&lt;p&gt;然后你还发现一个现象，那就是你可以把 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 这个名字换成任何其它名字（比如 &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt;），而这幅图不会产生实质的改变。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/rename.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这说明什么问题呢？这说明以下的代码（把 &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; 换成了 &lt;code class=&quot;highlighter-rouge&quot;&gt;b）&lt;/code&gt;跟之前的是等价的：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-    b = 4 + 3
-    2 * b
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;根据几乎一样的电线命名变化，你也可以对之前的函数得到一样的结论：&lt;code class=&quot;highlighter-rouge&quot;&gt;t -&amp;gt; t*2&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;u -&amp;gt; u*2&lt;/code&gt;，和 &lt;code class=&quot;highlighter-rouge&quot;&gt;x -&amp;gt; x*2&lt;/code&gt; 都是一回事。&lt;/p&gt;
-
-&lt;p&gt;名字是很重要的东西，但它们具体叫什么，对于机器并没有实质的意义，只要它们不要相互混淆就可以。但名字对于人是很重要的，因为人脑没有机器那么精确。不好的变量和参数名会导致代码难以理解，引起程序员的混乱和错误。所以通常说来，你需要给变量和参数起好的名字。&lt;/p&gt;
-
-&lt;p&gt;什么样的名字好呢？我会在后面集中讲解。&lt;/p&gt;
-
-&lt;h3 id=&quot;有名字的函数&quot;&gt;有名字的函数&lt;/h3&gt;
-
-&lt;p&gt;既然变量可以代表“值”，那么一个自然的想法，就是让变量代表函数。所以就像我们可以写&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a = 4 + 3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;我们似乎也应该可以写&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f = t -&amp;gt; t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;对的，你可以这么做。&lt;code class=&quot;highlighter-rouge&quot;&gt;f = t-&amp;gt;t*2&lt;/code&gt; 还有一个更加传统的写法，就像数学里的函数写法：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(t) = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;请仔细观察 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 的位置变化。我们在函数名字的右边写一对括号，在里面放上参数的名字。&lt;/p&gt;
-
-&lt;p&gt;注意，你不可以只写&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;你必须明确的指出函数的参数是什么，否则你就不会明白函数定义里的 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 是什么东西。明确指出 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 是一个“输入”，你才会知道它是函数的输入，是一个未知数，&lt;strong&gt;而不是在函数外面定义的其它变量&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;这个看似简单的道理，很多数学家都不明白，所以他们经常这样写书：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;有一个函数 y = x*2&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;这是错误的，因为他没有明确指出“&lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; 是函数 y 的参数”。如果这句话之前他们又定义过 &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;，你就会疑惑这是不是之前那个 &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt;。很多人就是因为这些糊里糊涂的写法而看不懂数学书。这不怪他们，只怪数学家自己对于语言不严谨。&lt;/p&gt;
-
-&lt;h3 id=&quot;函数调用&quot;&gt;函数调用&lt;/h3&gt;
-
-&lt;p&gt;有了函数，我们可以给它起名字，可是我们怎么使用它的值呢？&lt;/p&gt;
-
-&lt;p&gt;由于函数里面有未知数（参数），所以你必须告诉它这些未知数，它里面的代码才会执行，给你结果。比如之前的风扇控制器函数&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(t) = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它需要一个温度作为输入，才会给你一个输出。于是你就这样给它一个输入：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(2)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;你把输入写在函数名字后面的括号里。那么你就会得到输出：4。也就是说 &lt;code class=&quot;highlighter-rouge&quot;&gt;f(2)&lt;/code&gt; 的值是 4。&lt;/p&gt;
-
-&lt;p&gt;如果你没有调用一个函数，函数体是不会被执行的。因为它不知道未知数是什么，所以什么事也做不了。那么我们定义函数的时候，比如&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;f(t) = t*2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;当看到这个定义的时候，机器应该做什么呢？它只是记录下：有这么一个函数，它的参数是 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;，它需要计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;t*2&lt;/code&gt;，它的名字叫 &lt;code class=&quot;highlighter-rouge&quot;&gt;f&lt;/code&gt;。但是机器不会立即计算 &lt;code class=&quot;highlighter-rouge&quot;&gt;t*2&lt;/code&gt;，因为它不知道 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 是多少。&lt;/p&gt;
-
-&lt;h3 id=&quot;分支&quot;&gt;分支&lt;/h3&gt;
-
-&lt;p&gt;直到现在，我们的代码都是从头到尾，闷头闷脑地执行，不问任何问题。我们缺少一种“问问题”的方法。比如，如果我想表达这样一个“食物选择器”：如果气温低于 22 度，就返回 “hotpot” 表示今天吃火锅，否则返回 “ice cream” 表示今天吃冰激凌。&lt;/p&gt;
-
-&lt;p&gt;我们可以把它图示如下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/csbook-images/branch.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;中间这种判断结构叫做“分支”（branching），它一般用菱形表示。为什么叫分支呢？你想象一下，代码就像一条小溪，平时它沿着一条路线流淌。当它遇到一个棱角分明的大石头，就分成两个支流，分开流淌。&lt;/p&gt;
-
-&lt;p&gt;我们的判断条件 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 就像一块大石头，我们的“代码流”碰到它就会分开成两支，分别做不同的事情。跟溪流不同的是，这种分支不是随机的，而是根据条件来决定，而且分支之后只有一支继续执行，而另外一边不会被执行。&lt;/p&gt;
-
-&lt;p&gt;我们现在看到的都是图形化表示的模型，为了书写方便，现在我们要从符号的层面来表示这个模型。我们需要一种符号表示法来表达分支，我们把它叫做 &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt;（如果）。我们的饮料选择器代码可以这样写：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t -&amp;gt; if (t &amp;lt; 22) 
-     {
-       &quot;hotpot&quot;
-     }
-     else 
-     {
-       &quot;ice cream&quot;
-     }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它是一个函数，输入是一个温度。&lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt; 后面的括号里放我们的判断条件。后面接着条件成立时执行的代码块，然后是一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt;，然后是条件不成立时执行的代码。它说：如果温度低于 22 度，我们就吃火锅，否则就吃冰激凌。&lt;/p&gt;
-
-&lt;p&gt;其中的 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt; 是一个特殊的符号，它表示“否则”。看起来不知道为什么 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt; 要在那里？对的，它只是一个装饰品。我们已经有足够的表达力来分辨两个分支，不过有了 &lt;code class=&quot;highlighter-rouge&quot;&gt;else&lt;/code&gt; 似乎更加好看一些。很多语言里面都有 else 这个标记词在那里，所以我也把它放在那里。&lt;/p&gt;
-
-&lt;p&gt;这只是一个最简单的例子，其实那两个代码块里面不止可以写一条语句。你可以有任意多的语句，就像这样：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t -&amp;gt;
-if (t &amp;lt; 22)
-{
-    a = 4 + 3
-    b = a * 2
-    &quot;hotpot&quot;
-}
-else
-{
-    x = &quot;ice cream&quot;
-    x
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这段代码和之前是等价的，你知道为什么吗？&lt;/p&gt;
-
-&lt;h3 id=&quot;字符串&quot;&gt;字符串&lt;/h3&gt;
-
-&lt;p&gt;上面一节出现了一种我们之前没见过的东西，我为了简洁而没有介绍它。这两个分支的结果，也就是加上引号的 “hotpot” 和 “ice cream”，它们并不是数字，也不是其它语言构造，而是一种跟数字处于几乎同等地位的“数据类型”，叫做&lt;strong&gt;字符串&lt;/strong&gt;（string）。字符串是我们在计算机里面表示人类语言的基本数据类型。&lt;/p&gt;
-
-&lt;p&gt;关于字符串，在这里我不想讲述更加细节的内容，我把对它的各种操作留到以后再讲，因为虽然字符串对于应用程序很重要，它却并不是计算机科学最关键最本质的内容。&lt;/p&gt;
-
-&lt;p&gt;很多计算机书籍一开头就讲很多对字符串的操作，导致初学者费很大功夫去做很多打印字符串的练习，结果几个星期之后还没学到“函数”之类最根本的概念。这是非常可惜的。&lt;/p&gt;
-
-&lt;h3 id=&quot;布尔值&quot;&gt;布尔值&lt;/h3&gt;
-
-&lt;p&gt;我们之前的 &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt; 语句的条件 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 其实也是一个表达式，它叫做“布尔表达式”。你可以把小于号 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&lt;/code&gt; 看成是跟加法一类的“操作符”。它的输入是两个数值，输出是一个“布尔值”。什么是布尔值呢？布尔值只有两个：true 和 false，也就是“真”和“假”。&lt;/p&gt;
-
-&lt;p&gt;举个例子，如果 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 的值是 15，那么 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 是成立的，那么它的值就是 true。如果 &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; 的值是 23，那么 &lt;code class=&quot;highlighter-rouge&quot;&gt;t &amp;lt; 22&lt;/code&gt; 就不成立，那么它的值就是 false。是不是很好理解呢？&lt;/p&gt;
-
-&lt;p&gt;我们为什么需要“布尔值”这种东西呢？因为它的存在可以简化我们的思维。对于布尔值也有一些操作，这个我也不在这一章赘述，放到以后细讲。&lt;/p&gt;
-
-&lt;h3 id=&quot;计算的要素&quot;&gt;计算的要素&lt;/h3&gt;
-
-&lt;p&gt;好了，现在你已经掌握了计算机科学的几乎所有基本要素。每一个编程语言都包括这些构造：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;基础的数值。比如整数，字符串，布尔值等。&lt;/li&gt;
-  &lt;li&gt;表达式。包括基本的算术表达式，嵌套的表达式。&lt;/li&gt;
-  &lt;li&gt;变量和赋值语句。&lt;/li&gt;
-  &lt;li&gt;分支语句。&lt;/li&gt;
-  &lt;li&gt;函数和函数调用。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;你也许可以感觉到，我是把这些构造按照“从小到大”的顺序排列的。这也许可以帮助你的理解。&lt;/p&gt;
-
-&lt;p&gt;现在你可以回想一下你对它们的印象。每当学习一种新的语言或者系统，你只需要在里面找到对应的构造，而不需要从头学习。这就是掌握所有程序语言的秘诀。这就像学开车一样，一旦你掌握了油门，刹车，换挡器，方向盘，速度表的功能和用法，你就学会了开所有的汽车，不管它是什么型号的汽车。&lt;/p&gt;
-
-&lt;p&gt;我们在这一章不仅理解了这些要素，而且为它们定义了一种我们自己的“语言”。显然这个语言只能在我们的头脑里运行，因为我们没有实现这个语言的系统。在后面的章节，我会逐渐的把我们这种语言映射到现有的多种语言里面，然后你就能掌握这些语言了。&lt;/p&gt;
-
-&lt;p&gt;但是请不要以为掌握了语言就学会了编程或者学会了计算机科学。掌握语言就像学会了各种汽车部件的工作原理。几分钟之内，初学者就能让车子移动，转弯，停止。可是完了之后你还需要学习交通规则，你需要许许多多的实战练习和经验，掌握各种复杂情况下的策略，才能成为一个合格的驾驶员。如果你想成为赛车手，那就还需要很多倍的努力。&lt;/p&gt;
-
-&lt;p&gt;但是请不要被我这些话吓到了，你没有那么多的竞争者。现在的情况是，世界上就没有很多合格的计算机科学驾驶员，更不要说把车开得流畅的赛车手。绝大部分的“程序员”连最基本的引擎，油门，刹车，方向盘的工作原理都不明白，思维方式就不对，所以根本没法独自上路，一上路就出车祸。很多人把过错归结在自己的车身上，以为换一辆车马上就能成为好的驾驶员。这是一种世界范围的计算机教育的失败。&lt;/p&gt;
-
-&lt;p&gt;在后面的章节，我会引导你成为一个合格的驾驶员，随便拿一辆车就能开好。&lt;/p&gt;
-
-&lt;h3 id=&quot;什么是计算&quot;&gt;什么是计算&lt;/h3&gt;
-
-&lt;p&gt;现在你掌握了计算所需要的基本元素，可是什么是计算呢？我好像仍然没有告诉你。这是一个很哲学的问题，不同的人可能会告诉你不同的结果。我试图从最广义的角度来告诉你这个问题的答案。&lt;/p&gt;
-
-&lt;p&gt;当你小时候用手指算 &lt;code class=&quot;highlighter-rouge&quot;&gt;4+3&lt;/code&gt;，那是计算。如果后来你学会了打算盘，你用算盘算 4+3，那也是计算。后来你从我这里学到了表达式，变量，函数，调用，分支语句…… 在每一新的构造加入的过程中，你都在了解不同的计算。&lt;/p&gt;
-
-&lt;p&gt;所以从最广义来讲，计算就是“机械化的信息处理”。所谓机械化，你可以用手指算，可以用算盘，可以用计算器，或者计算机。这些机器里面可以有代码，也可以没有代码，全是电子线路，甚至可以是生物活动或者化学反应。不同的机器也可以有不同的计算功能，不同的速度和性能……&lt;/p&gt;
-
-&lt;p&gt;有这么多种计算的事实不免让人困惑，总害怕少了点什么，其实你可以安心。如果你掌握了上一节的“计算要素”，那么你就掌握了几乎所有类型的计算系统所需要的东西。你在后面所需要做的只是加深这种理解，并且把它“对应”到现实世界遇到的各种计算机器里面。&lt;/p&gt;
-
-&lt;p&gt;为什么你可以相信计算机科学的精华就只有这些呢？因为计算就是处理信息，信息有它诞生的位置（输入设备，固定数值），它传输的方式（赋值，函数调用，返回值），它被查看的地方（分支）。你想不出对于信息还有什么其它的操作，所以你就很安心的相信了，这就是计算机科学这种“棋类游戏”的全部规则。&lt;/p&gt;
-
-&lt;p&gt;（如果你觉得这篇文章有启发，可以点击这里&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/04/13/pay-blog&quot;&gt;付费&lt;/a&gt;）&lt;/p&gt;
-</description>
-        <pubDate>Fri, 13 Apr 2018 07:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-04-13/computer-science/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-04-13/computer-science/</guid>
-      </item>
-    
-      <item>
-        <title>中国人的鉴赏力</title>
-        <description>&lt;p&gt;大部分的中国人都不会鉴别物品的好坏和价值，所以他们只能以“价格”的高低来做判断。你经常听中国人说“穿着一万块一件的衣服”，“开着一百万一辆的车”，“住着二十万一平米的房子”，就是这个原因。他们不懂得这个东西好在哪，只知道它是多少钱买的。他们仿佛认为一万块钱的东西和一万块钱的东西，都是一样的。销售人员最喜欢这种人。&lt;/p&gt;
-
-&lt;p&gt;这种现象跟中国人从小上学就只认数字有关系，他们从小就被当成一个数字。考试成绩是一个数字，期末排名是一个数字。还有竞赛名次啊，金牌总数啊…… 大部分中国人知道数字，但却不知道数字背后的意义。他们不明白，有些东西是不能转化为数字进行比较的。比如我跟有些人说我今天跑步了，他们会问我跑了多少公里，多少圈。我回答：不知道！我只知道沿途的风景很美，我跑了很开心。&lt;/p&gt;
-
-&lt;p&gt;所以一个很简单的愚弄中国人的手段，就是把很普通的东西卖得离谱的贵。只要你卖得贵，就会有人觉得它是好东西，或者觉得买了可以显得自己有钱，于是就会买来招摇过市。买不起的人呢，看到别人有了这个东西，就会产生艳羡的心理，心想等自己有钱就一定要买。这样不知不觉的，他们就把自己的地位降到了东西之下，被狡猾的商家给控制了。&lt;/p&gt;
-
-&lt;p&gt;这就是虚荣心作怪。恐惧和虚荣，是世界上最好卖的两种东西。关于如何卖恐惧，我在之前一篇文章『&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/06/28/yangsheng&quot;&gt;养生节目的危害&lt;/a&gt;』已经讲过了。从小扶植小朋友的虚荣心，等他们长大了，就哭着闹着要买你的东西，逼着父母或者男朋友送那个东西。&lt;/p&gt;
-
-&lt;p&gt;很多中国人花着“土豪价钱”，买着其实不值钱的商品，还顶礼膜拜，受宠若惊的样子。他们不是物品的主人，而是它们的仆人，他们的地位是低于这些物品的。很多商店店员也是那种心理，他们觉得你走进我们这“高大上”的品牌店，就是来膜拜我们的东西的，所以做出一副“你买得起吗”的神情，跟你说“这个很贵”。你要是跟她说这个卖得太贵了，不值那个钱，她就觉得你是买不起。直到客人不爽走了，她也没认出别人身上穿的就是他们家牌子的衣服 :p&lt;/p&gt;
-
-&lt;p&gt;一百年前马克吐温写的『百万英镑』，展现了那个时候英国的情况，跟现在的中国非常类似。&lt;/p&gt;
-
-&lt;p&gt;中国人最爱买宝马车，LV，爱马仕包包，原因很简单：因为它们贵。没有品位，没有鉴别欣赏能力，就只知道一个“贵”字。管它多俗气多丑呢，还搭配不好，贵就是好。LV 还有一个特点，那就是他们家的东西上面都密密麻麻印着“LV”字样，所以拿出去大家都知道你有 LV！可是我每次看到 LV 一类的东西，就想起这个画面 :p&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/tyvek.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;女人爱 LV，男人爱宝马。宝马曾经是中国男人装逼泡妹的神器。宝马车难开的一塌糊涂做工又糙，但女人只认得宝马啊。不过后来宝马也有点烂大街了，显示不出差距，所以现在他们的新宠是 Tesla。每次看到开 Tesla 的人，几乎都是戴着眼镜，刚赚了点钱，内心有强烈装逼需求的呆子。我认识的气质优雅一点的人，几乎没有人会选择 Tesla。&lt;/p&gt;
-
-&lt;p&gt;只要你骂 Tesla，他们就会说你穷，买不起，所以吃不到葡萄说葡萄酸。可是我骂 Tesla 完全是出于社会责任感：Tesla 的车子威胁了公共安全。整死车主也就算了，可是这东西会伤到其他人，所以匹夫有责来谴责一下 Tesla。你可以把这车卖任意高的价钱，可是它仍然不安全，而且设计得&lt;a href=&quot;http://www.yinwang.org/blog-cn/2015/12/12/tesla-model-s&quot;&gt;一塌&lt;/a&gt;&lt;a href=&quot;http://www.yinwang.org/blog-cn/2015/12/21/tesla-model-x&quot;&gt;糊涂&lt;/a&gt;，用料也不好。多次出事起火，然后吹嘘电池现在用了多么严密的弹道导弹材料保护，结果呢，照样爆炸。&lt;/p&gt;
-
-&lt;p&gt;从没见过有汽车撞了烧成那样，消防队都没办法灭火。整个车头都烧掉消失了，如果人在里面就毁尸灭迹了，怎么出的事证据都找不到。对于湾区交通性命攸关的 101 公路，因为一辆 Tesla 着火爆炸，全部车道被封长达 6 小时。要知道这条路要是塞了，你跑长途基本没有其他路可以绕的。这是我从来没遇到过的，其它车怎么撞也会有一条道可以走的。我在路上见过各种车祸，大型卡车着火，最多一个小时就走走停停过去了，因为还有车道可以走。谁来赔这些人的损失？真像是一颗颗导弹跑在公路上，一碰就爆。&lt;/p&gt;
-
-&lt;p&gt;从来没有汽车公司把“驾驶辅助系统”（driver assistant）吹嘘成“自动驾驶系统”（autonomous driving），Tesla 大言不惭开了这个先河。如此不负责的公司，最后还要把责任都推到用户身上。我认识一个 Tesla 的修车技工，他自己也开了个修车铺，修其他牌子的车。他说在 Tesla 工作特别辛苦，因为这车毛病太多了，感觉公司里的工程师都不知道他们自己在干什么，有些东西根本就不该那样设计，容易出毛病。一个修车工都知道的事情，设计师工程师却不懂……&lt;/p&gt;
-
-&lt;p&gt;所以呢，Tesla 这颗葡萄是真的酸，都烂掉了还敢卖那么贵。你还不能骂它，否则一群脑残粉来攻击你，说你穷买不起。你见过我骂奔驰吗？我骂过法拉利，劳斯莱斯吗？出于一个负责的工程师的态度，我尊敬他们。我尊敬他们是因为他们的工匠精神，制造出一些世界上最优美，最可靠的机器，而不是因为它们的价格昂贵。&lt;/p&gt;
-
-&lt;p&gt;大部分的国人要什么时候才能意识到，并不是贵的就好。能忽略价格看到物品的品质，实现不带有虚荣心的鉴赏，是很重要的能力。&lt;/p&gt;
-</description>
-        <pubDate>Thu, 29 Mar 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-03-29/appreciation/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-03-29/appreciation/</guid>
-      </item>
-    
-      <item>
-        <title>扶门的礼仪</title>
-        <description>&lt;p&gt;世界上的很多事情，不是你自己有好意就一定有好的效果，你还必须知道对方的感受，不然你也许会让对方感觉很累。今天我就来讲讲一个看似简单的礼仪：扶门。很多中国人到了国外，特别是美国，看到美国人进了公共场所的大门之后，为了防止门回弹关上，都会礼貌地为后面的人扶住门，等他们接住门才放手。甚至有些先把门拉开，站在门口扶住门，让后面的人都进去了，自己才进去。&lt;/p&gt;
-
-&lt;p&gt;中国人看到美国人这么做，觉得扶门是文明的象征，所以也开始模仿。哪知道，这里面的学问其实比他们想象的要复杂一些。所以你就发现，某些人经常为“谁先进门”这个事情让来让去的，又尴尬又累，那程度胜似吃了饭抢着买单 :p 其中的一些道理，其实很多美国人都不懂。这些道理可能很难在其它地方看到，所以我把它们总结一下。&lt;/p&gt;
-
-&lt;p&gt;显然这些主动为后面人扶门的人，比起那些完全不考虑别人，甚至使劲摔门的人来说，已经很好了。可是我今天要说的不是这个，而是更加深入细致的礼仪。美国作为一个基本文明的国家，在这方面做得已经不错了，可是相对某些欧洲国家还是稍显落后。很多美国人并不懂得完整合理的礼仪规范，只是模仿欧洲的“绅士风度”，所以有些时候做得其实不大对。所以呢，看到美国人那么做，你也不一定完全模仿他们。你应该知道这些礼仪背后的原理，而不是照抄表面现象。&lt;/p&gt;
-
-&lt;p&gt;扶门也许不是你想象的那么简单，无条件扶着门，显示好意就好。很多人懂得应该为后面的人扶门，可是他们忽视了扶门的时机问题，还有人之间的关系问题。正确的作法应该是这样，分好几种情况。&lt;/p&gt;
-
-&lt;p&gt;情况 1：陌生人。进了一扇会自动弹回关上的门，如果回头看到有陌生人紧跟在后面，只有两三步远的地方，就扶住门让他进来，否则就自然把门放开，自己进去就是。原因是，如果后面的人离你还很远，扶住门会迫使他加快脚步。后面的人很可能希望按照自己的节奏走路，可是看到你扶住门等他，不好意思让你久等，或者觉得你一直回头看着他挺尴尬，所以他不得不加快脚步。如果他刚吃了饭不想那么快步走，或者他是在上楼梯，就会更加不舒服。所以呢，出于对他人真正周全的考虑，你不应该扶住门时间太久，迫使后面的人加快脚步。如果你发现自己判断错误，扶住门太久了，你还是可以补救。你只需要微笑着朝后面的人挥挥手，然后放开门自己进去。他会理解你为什么放手，因为他也不会指望你扶太久。这一条原则经常被美国人忽视，遇到扶门太久太早的人，经常感觉挺累。如果你遇到为你扶门太久的人，你也可以朝他挥挥手，示意他先走。&lt;/p&gt;
-
-&lt;p&gt;情况 2：认识的人或者朋友。当然对于认识的人或者朋友同事，第一条就不一定需要严格遵守了。因为后面那个人认识你而且关系不错，所以你可以扶住门比较长时间。他大概不会因为你在那等他而加快脚步，你甚至可以靠着门跟他说句话。当然如果实在太远了，你也同样可以挥挥手，放手进去，别人不会介意这个。&lt;/p&gt;
-
-&lt;p&gt;情况 3：陌生女性。如果身后紧跟的是陌生女性，你可以拉开门，让她先进去，然后自己才进去。你也可以自己先进去，然后把门帮她扶一下。没有规则要你一定让女性先进去，或者扶住门太久。普通的女性完全有能力拉开一扇门，这个不需要你特别照顾。&lt;/p&gt;
-
-&lt;p&gt;情况 4：男性。如果身后紧跟的是男性，不管你是否认识他，你最好自己先进去，然后帮他扶一下门。最好不要请他先走，否则你就会制造“让来让去”的尴尬局面！如果你拉开门让一个男性先进去，自己才进去，会造成这位男性的尴尬。凭什么我需要让另外一个男性，甚至是女性为我开门，让我先走呢？我有哪一点显示出我身体虚弱，需要你帮助呢？他会这样想。他会认为自己的男性气质受到了某种打击，或者感到尴尬，感到欠了你什么。当然，如果你是酒店的礼宾人员，为客人开门让他们先走，不论男女都是天经地义的。所以当男性遇到另一个男性或者女性（非礼宾人员）给他开门，他一般会示意对方先走，可是扶门的这个人却又坚持要他先走，最后就出现了僵持的尴尬局面，跟很多中国人吃了饭抢着买单一样讨厌。所以你开了门，就不要请身后的男性先走，就不会有这回事了。如果开门的人在多次反复之后一定要你先走，而且多次进门都那样，那么请你今后小心这个人了，他似乎很想要你感觉欠他什么 :p&lt;/p&gt;
-
-&lt;p&gt;情况 5：两手被占用的人。两手抱着箱子，或者推着自行车的人，如果跟在你身后，他们需要特殊照顾。你应该扶住门，让他们先走，然后自己才走。这个规则不论男女老幼，不论跟你什么关系都一样适用，因为他们腾不出手来开门，也没有手可以接住你放开的门。&lt;/p&gt;
-
-&lt;p&gt;情况 6：一个推着婴儿车的人。如果是一个人推着一个婴儿车，这个没什么好说的，一定要拉开门，让他先走，确认婴儿车已经进去了，自己才进去。还有一种情况是一家人，其中一个推着婴儿车。因为有人可以开门，这个就不需要你特别照顾了，按情况1处理。&lt;/p&gt;
-
-&lt;p&gt;情况 7：一大群普通关系的人（或者同事）在你后面。如果你身后不是一个人，而是一大群人，而且这群人不是亲密的朋友，只是普通的同学或者同事关系，那么请你先进去，然后帮后面第一个人扶住门，等他接手门之后就放手。他会为后面的人扶一下，这样接力下去。不要站在门口，让一大群人都进去，然后自己才进去。有些人喜欢这样做，以为这样显得很“绅士”，但我觉得这样很装很做作。我见过两三个喜欢扶住门让所有人进去的人，在工作中都是很虚伪的人。他们在工作中可以暗地里捅你几刀，进门的时候却演得像个大好人。让大家进去他才走，得意洋洋的样子，好像每个人走过那道门都欠了他一笔账似的。真的，你没有必要那样做，那种感觉非常的不自然。而且你扶住门，看着后面每个人走向你，可能会让某些人尴尬。其中某些人可能不大喜欢你，不想跟你近距离对视，觉得你在借机打量他们。有些女性甚至会觉得你长时间盯着她们走进去，是一种骚扰。所以如果很多人一起，最好还是你自己先进去，不要站在门口给大家扶门。&lt;/p&gt;
-
-&lt;p&gt;情况 8：跟女性朋友一起。如果是跟熟悉的女性朋友或者女朋友一起，你最好拉开门，让女性朋友先进去，然后自己马上跟进去。注意，跟进去的时机是“马上”。如果她身后紧跟着陌生人，请紧跟你的女性朋友身后进门，不要让陌生人夹到你们中间去。有些刚懂得扶门的男士不知道这个道理。他拉开门，让女性朋友进去了，结果看到她身后又跟着其他陌生人，所以他继续扶着门，让其他人先走。结果门外的人一个个都进去了，他还在那里扶着门。女性朋友在里面，都不知道他哪里去了 :p 这种男士应该明白的是，在这个时候你应该跟女性朋友待在一起，而不应该让陌生人隔在你们之间。没有人会因为你先走而责怪你，他们反而会觉得你让他们先走很奇怪，因为你应该首先照顾自己的朋友。这个对待女性朋友的开门原则，我是从 &lt;a href=&quot;https://en.wikipedia.org/wiki/Emily_Post&quot;&gt;Emily Post&lt;/a&gt; 经典的『Etiquette』（礼仪）一书看到的。&lt;/p&gt;
-
-&lt;p&gt;情况 9：进门马上需要排队的地方。如果你是去邮局或者需要排队下单的咖啡店，除非后面的人真有困难，最好不要拉开门让后面的陌生人先走，即使后面是女性也一样。你应该自己先进去，然后稍微扶一下门。根据先来先服务的原则，你应该排在后面的人前面，不管后面是男是女。如果你拉门让别人先走了，他们自然就排到你前面去了。如果这个人特别懂礼仪而且考虑周到，她可能会让你到前面去排队。但如果你在一个不是每个人都那么懂的地方，她很可能意识不到你应该排在她前面。这样你显示了好意反而吃亏，这会打击你以后继续有礼貌的动机。&lt;/p&gt;
-
-&lt;p&gt;这可能是世界上最全面的关于扶门礼仪的总结，是一个计算机科学家不经常谈论的事情 =) 这些原则看似复杂，其实不需要你死记硬背，只要你看了有印象，就会从实际经验中体会到，不断改进。可惜的是很多人都不知道这里面的道理，也没注意到。这就是我为什么把它们写出来。&lt;/p&gt;
-</description>
-        <pubDate>Tue, 27 Mar 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-03-27/door-etiquette/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-03-27/door-etiquette/</guid>
-      </item>
-    
-      <item>
-        <title>解谜计算机科学（前言）</title>
-        <description>&lt;p&gt;计算机科学直到今天仍然是一个谜。它简单而美丽的精华，被压在沉重的历史包袱和功利诱惑之下。纷繁复杂的 IT 技术充斥着各种浮夸和忽悠，变成一本本大部头“圣经”，让人不知所措，头脑发涨，让外行尤其是女性望而却步。她们说，学计算机能赚钱，可是计算机知识淘汰速度太快，需要不断学习才能跟上，计算机工作枯燥，伤眼睛，伤皮肤，老得快！去看看各位计算机界前辈的照片，你会发现她们说的好像是对的 :)&lt;/p&gt;
-
-&lt;p&gt;“IT 男”和“极客”的苦逼名声，来源于这个领域创造者们的自大和虚伪。他们认为自己是天才，能够理解复杂的理论，所以他们喜欢把简单的问题搞复杂，然后告诉你“只有天才才能理解这种简单”。最后这种自大蔓延到整个领域。计算机科学虽然名字叫“科学”，但它的从业人员在很大程度上是宗教化的。不同信仰的教徒们盲目轻信，跟风拍马，互相鄙视，甚至掀起圣战。进入这个领域面临的，不仅是高度近视，不修边幅的同事，而且很多还很自大，喜欢显示自己聪明，觉得自己了不起。他们所谓的“聪明”，也就是能折腾那些纷繁复杂的理论和代码。发表论文来显示自己解决了一个问题，但别人看了仍然摸不着头脑。这种不健康的心理，进入了计算机科学的基因，完全违背了科学的精神。&lt;/p&gt;
-
-&lt;p&gt;在这种情况下产生出来的所谓“知识”，当然是淘汰速度很快的，因为他们只给了你浮于表面的东西。IT 业的很多知识就像妈妈告诉你，我把勺子放在这个抽屉里了，你记住啊！第二天她又把勺子换了一个地方，要你重新“学习”。这叫知识吗？他们把精华的东西牢牢地锁了起来，只把衍生出来的副产品给其他人。拿到这些副产品的人一知半解，又在上面加上一些乱七八糟的东西，然后转手倒卖给更下一层的学生。这样几层转手之后，你拿到的东西就只能凑合用了，不能用于产生新的想法，甚至使用中有问题还不能解决。这就是为什么很多码工折腾来折腾去，代码也只是碰巧能工作而已。没有理解原理，就成为了“知识”的奴隶。看不准方向，在错误的道路上越走越远。&lt;/p&gt;
-
-&lt;p&gt;爱因斯坦说：“如果你不能把一个问题跟六岁小孩解释清楚，那你并不真的理解它。” 这句话打了计算机前辈们的耳光。计算机界至今没有出现一本像物理界的『费曼讲义』那样负责任的教材。没有人从日常生活解释清楚那些基本的理论和技术是怎么回事。一方面是因为很多人并不真懂，只会照本宣科，拿别人的代码来拼凑折腾。另外一方面，很多懂了的人为了自己的私利，想掩盖这些简单的精华，故意把事情搞复杂。&lt;/p&gt;
-
-&lt;p&gt;我写这本书，就是为了弥补计算机业界这一空缺，改变行业的现状。它将吸引新鲜干净的血液进入这个行业，并且赋予他们力量。它也可以刷新内行人员的头脑，让他们重新理解和审视已有的知识。这样也许我们能冲破这个行业的重重迷雾，让它变得诚实，获得科学的精神，成为像物理一样踏实的学科。&lt;/p&gt;
-
-&lt;p&gt;很多计算机书籍都喜欢从“数学基础”开始，一开头就是长篇累牍的数学公式，定理，证明…… 结果读者还没读完数学基础就倒下睡着了，再也不想打开这本书。所以我不从数学基础开始，而是从最简单的生活常识。在认识发展的过程中，你会自己去创造出所需要的那些数学。&lt;/p&gt;
-
-&lt;p&gt;这本书不要求读者理解高等数学，而只需要幼稚园或者学前班水平的数学：掰手指头算加法，手算多位数加减法。它不要求，也不会试图教会你中学几何，高等数学或者物理学，你不需要那些来理解计算机科学。它不灌输给你死知识，而是从日常生活的经验出发，引导你去“重新发明”它们。最后你不是学会了知识，而是自己创造了它们。只有这样的知识才是属于自己的，才是可靠安心的，不受别人控制，也不会忘记。我讨厌“学习”这个词，因为它基本代表着死记硬背。我不是在教你，你也不是在学习，因为你自己发明了这一切。&lt;/p&gt;
-
-&lt;p&gt;如果有一天，一场灾难毁灭了世界上所有的计算机和电子产品，以及它们的设计文档，我希望看过这本书的人，能够根据他们的日常经验，重新创造出这些东西。对的，这本书不仅是关于编程和软件，它还会告诉你硬件是怎么回事，并且把软件和硬件统一起来。它不只是教会你一种程序语言，而是教会你所有的程序语言，它告诉你如何发明一种语言。它不要你去“记住”计算机里面有哪些东西，而是让你自己发现“需要”它们：晶体管，寄存器，指令，堆栈…… 你会发现虚拟机（VM）到底是什么，指令系统为什么那个样子，怎么创造它们…… 所有这一切，都以掰手指头的幼稚园算术为基础。&lt;/p&gt;
-
-&lt;p&gt;实际上，计算机科学和逻辑学是统一的，你会不知不觉理解很多看似高深的逻辑学，你会看透白胡子逻辑学家爷爷们的把戏。这种理解会为你提供更好的理解数学的工具，所以这本书不仅会帮助你理解计算机科学，而且会帮助你更好的理解数学。理解了数学你就能更好的理解物理。理解了物理，你就能更好的理解所有的科学……&lt;/p&gt;
-
-&lt;p&gt;有人可能怀疑这么浩大的工程，要什么时候才能完成。不会很久的，因为计算机科学最精华的部分，真的没有很多，我掰着手指头都数的出来。剩下来的都是衍生出来的技术，外加自欺欺人和商业炒作。你会掌握精华，识破忽悠和炒作，你可以衍生出自己的技术。即使你决定不进入这个领域，你也会成为一个火眼金睛的投资人，管理者，或者消费者。你不再能被这些“内行”欺骗。为了达到这个目标，你不需要损害自己的视力或者健康，不需要长出鸡窝一样的胡子，不需要成为一个对异性具有排斥力的呆子 ;)&lt;/p&gt;
-
-&lt;p&gt;这本书不是固定不变的，它会不断地完善和发展。有人看我写的东西就是我最大的动力，所以为了使我自己有动力写书，我会采用“快速迭代”的方法。我是一个很懒的人，我不会等书完全写完才发布它，那样我会打瞌睡以至于不能继续，所以我会分章节发布书的内容。每一章发布之后，还会经过成百上千次的修改。每一章的内容，我会在它“基本可读”之后就进行发布，而不会等到它完美。之后我会反复的思考和修改，接受人们的反馈。&lt;/p&gt;
-
-&lt;p&gt;这种做法对早期的读者有益，也有一定的弊端。弊端就在于，由于这些内容随时可能变化和改进，所以早期读者有时候会遇到看不懂的地方，必须之后再次阅读，才能跟上改进的思路。不过这样做也有好处，读者不用等上一年就能读到这本书，而且能跟着我的写作思路去思考，反复琢磨。俗话说，书读百遍，其义自见。他们可以跟我讨论，给我反馈，向我提问。这些都是后期读到完善作品的人无法体验到的。在某种程度上，这些人对问题的理解会更加深刻一些，因为他们被迫去进行独立思考。另外，早早的有了读者，会让我很开心，满怀着爱去做这件事。&lt;/p&gt;
-
-&lt;p&gt;人的短期记忆只能记住七个东西，所以我会努力让这本书简短。每个知识点都不应该长篇大论之后才能理解，而应该是正中要害。当然这篇前言也应该简短，所以前言就到此结束了。&lt;/p&gt;
-
-&lt;p&gt;计算机的世界，就将被你一个人重新发明出来。它的内容没有很多，真的没有很多……&lt;/p&gt;
-</description>
-        <pubDate>Wed, 21 Mar 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-03-21/csbook-preface/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-03-21/csbook-preface/</guid>
-      </item>
-    
-      <item>
-        <title>CIIA 苹果报告自觉付费模式</title>
-        <description>&lt;p&gt;很多人之前购买了我的第一份设计报告，关于苹果 iPhone 的一些设计问题。那份报告采用了付费销售方式，而且价格不便宜。由于我不想再发表设计方面的东西，但希望它能帮助到更多的人，所以现在将这份报告放在这里，进行“自觉付费”的销售，价格也做了大幅度调整。这份报告仍然不是免费的。由于其中涉及到我多年观察得来的结果，其它地方找不到的，所以收取适当的费用是理所应当的。&lt;/p&gt;
-
-&lt;p&gt;自觉付费的原理就像一个水果摊（这次卖的是苹果）。我懒得去守着这个摊子，我就把水果摆在那里，你们吃了之后自己付钱就行。这跟我其他博文的“&lt;strong&gt;自愿&lt;/strong&gt;付费”形式不同。“自愿付费”的意思是，你看了如果不喜欢，或者你根本没看完，那么你可以不付钱。“&lt;strong&gt;自觉&lt;/strong&gt;付费”的意思是，你如果看了内容，那么你就已经“享用了”它，你就应该付钱。如果你不付，就是有道德过错的。如果你不想付钱，就请不要看。&lt;/p&gt;
-
-&lt;p&gt;这就像我摆个“自觉付费”水果摊，你们吃了自己付钱就好，结果你吃了没付钱，这就不好了。你是否付费，将会影响到我的水果摊是否可以继续营业。我的博客含有代码，会统计这段时间的阅读人数。我会根据阅读人数与付费的比例，来推断是否有很多人没付钱。如果我发现付费的比例太小，我会适当调整作法。&lt;/p&gt;
-
-&lt;p&gt;在我的书第一章还没完成之前，我想先把这份报告放在这里，作为“自觉付费”模式的一种实验。效果不错的话，我的 CS 教材会采用同样的作法。&lt;/p&gt;
-
-&lt;p&gt;虽然在&lt;a href=&quot;http://www.yinwang.org/blog-cn/2017/09/25/apple&quot;&gt;预告片&lt;/a&gt;里，我批评了很多人对于苹果公司的膜拜态度，但这份报告的语气是建设性的。它的目的是帮助广大设计人员，技术人员意识到设计是一个重要的问题，没有任何公司的设计是完美的，我们应该不断地改善产品。我仍然喜欢苹果产品的许多设计，而且会继续使用苹果的产品。如果苹果公司的设计人员需要这份文档，价格也是一样的，我不宰客 :p&lt;/p&gt;
-
-&lt;p&gt;如果你感兴趣的话，可以在这里下载这份文档。由于其中有比较多高清晰度的图片，虽然经过最大限度的压缩，文档的大小仍然是 5M 左右，所以请耐心等待下载完毕。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.yinwang.org/resources/ciia1.pdf&quot;&gt;&lt;img src=&quot;http://www.yinwang.org/images/ciia1-icon.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;报告的第一章是免费的。如果你想继续阅读后面的章节，可以扫码付费购买之后继续。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/wechat-ciia1.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/alipay-ciia1.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 08 Mar 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-03-08/ciia1/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-03-08/ciia1/</guid>
-      </item>
-    
-      <item>
-        <title>关于写书</title>
-        <description>&lt;p&gt;写书计划已经进入策划阶段。这篇文章是因为之前那篇的最后部分的一些想法越改越长，开始具有独立的价值，所以截取下来放在这里。其中加入的一些想法，也许可以帮助某些人跳出他们心里的“坎”。我觉得这是很有意义的，这些内容也许会成为我的另外一本书的一部分，这本书的名字也许可以叫『怎样解放你自己』。&lt;/p&gt;
-
-&lt;h3 id=&quot;动机&quot;&gt;动机&lt;/h3&gt;
-
-&lt;p&gt;说了挺久要写书，一直没有动力。一方面是由于我觉得国内的出版社都不大靠谱，而且他们出的很多书水平太低，处于“培训班”级别，尽是教流水线工人的死知识，这有损我的品牌形象。另外很大一部分原因，是因为我写东西都是一针见血，容易懂，而且不会留一手。我很怕一不小心说太明白，就让关键的知识点落到道德水平低的人手里，到处装模作样吹牛逼，还反过来说我是吹牛逼。我也许顾虑太多了。其实我只需要提供我愿意提供的知识，而保留我不愿意提供的就行。另外，这些入门知识被广大群众了解，显然对善良的人有好处，而对吹牛逼的人们不是什么好事。这些知识将会帮助他们识破骗局，成为他们对抗这些虚假权威的武器。所以，我真的决定要写书了。&lt;/p&gt;
-
-&lt;p&gt;有些人虽然支持我，可是他们误解了我写书的目的。他们说我写书是要“证明自己”或者“实现自己的价值”，我觉得这些都是有失尊重的说法。他们说那些话的原因，是因为他们自己的觉悟没到位，所以没能理解我的境界和地位。只有地位低的人才需要向别人证明自己，才需要拿“硅谷”，“Google”一类的招牌来撑起自己的自信，才需要写一些“硅谷回忆录”来让别人瞧得起自己。我不一样的。由于我的地位，世界上没有任何人有资格来接受我的“证明”，所以我不需要向任何人证明自己，当然我更不需要向那些说我闲话的人，被洗脑的蠢人证明自己。&lt;/p&gt;
-
-&lt;p&gt;在这个世界上总是有人对你说，你如果真那么厉害，那你高考考个状元来给我们证明一下啊！等你考了状元，他们又会说状元不算什么，你要是能在 ACM 竞赛拿金牌，才是真的厉害！等你拼得头破血流达到了那些目标，他们又说，你要有影响力的开源代码，那才叫厉害。等你有了开源项目，他们拿你的代码去赚了钱，反而对你各种吹毛求疵，贬低价值，好像那代码是他们也能写出来的一样。现在他们改口说，你在开源社区写点代码算什么啊，你要能进 Google，那才是真的厉害！等你进了 Google，他们又换了标准，你要是能修好我们这堆 JS 代码里的 bug，那才叫真的厉害呢！等你成天加班以为熬出头了，出了 Google，他们又说，那么多人都是 Google 出来的，你算什么啊？你要创业，造出 IPO 的独角兽公司，那才是真的厉害……&lt;/p&gt;
-
-&lt;p&gt;于是你就走上了不归路，你的每一次行动都是为了让别人觉得你厉害。你不得不打着“硅谷牛人”的牌子，显示着你的 Google 经历，你的 ACM 奖牌。可是你仍然没有发现，那些要求你给他们“证明”的人，他们真的有资格评价你吗？他们只是一堆虫子而已！他们通过你的虚荣心掌控了你，他们按照他们自己的利益需要，为你定义了什么是“成功”。你接受了他们的定义，并且朝“成功”的方向努力，你就被控制了。你心目中的成功，只是为别人的野心服务的，而这些人并不需要为此做出努力，他们只需要 judge 你！因为你在乎他们怎么说，你成了那些人的奴隶，虫子的奴隶。你觉得自己“厉害”了，可是你只是别人的奴隶，因为你是否厉害，是别人说了算的！你失去了对自己的主权，这就叫做奴隶。&lt;/p&gt;
-
-&lt;p&gt;我需要向小莫奈肚子里的寄生虫证明自己很厉害吗？不需要。我研究一下寄生虫的生命周期，生理规律，给他吃点药打掉就可以了。那些嘲笑我，说我闲话的人，吹牛皮的人，觉得我应该向他们“证明”什么的人，拿我跟其他人比较的人，不就跟寄生虫一样吗？寄生虫嘲笑我，说我闲话，对我来说有伤害吗？寄生虫如何看待我，对我来说有意义吗？我有必要让寄生虫认可我吗？我有必要跟寄生虫对骂吗？那些在乎寄生虫的看法的生命体，我还有必要尊重他们吗？所以请这些人不要再告诉我寄生虫怎么看待我，因为这会有损你们的地位。请你们看看我的文章和书，那就是给你们的打虫药。&lt;/p&gt;
-
-&lt;p&gt;当然我也不需要实现自己的“价值”，我本来就非常有价值。我每天都感受到自己的价值，欣赏着自己的价值，我知道我不会贬值，而且会不断地升值。所以，我写书的目的很简单，是为了传播知识，把我的巨大价值分一点出去，让社会变得更好。另外，我觉得写东西是一种娱乐。我看电影，我打游戏，我寻找美食，我给小莫奈铲屎，是为了证明自己吗？是为了实现自己的价值吗？哎，这些人都在想些什么啊。&lt;/p&gt;
-
-&lt;p&gt;有些自以为厉害的程序员可能会笑我，王垠你不写高级的技术资料，在这里忽悠初学者算什么？那他们就是大大的误解了。我并不缺高级的技术资料，我也不缺代码。去看看我的博文吧，几乎每一篇里面都有全世界最深入的见解。当全世界人都误解一个&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/06/08/java-value-type&quot;&gt;问题&lt;/a&gt;的时候，全世界的学术会议和期刊都在&lt;a href=&quot;http://www.yinwang.org/blog-cn/2013/03/31/purely-functional&quot;&gt;发烧胡扯&lt;/a&gt;的时候，当人们仰慕的大牛们都&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/10/12/compiler-bug&quot;&gt;犯错误&lt;/a&gt;还认为自己是对的时候，王垠的博文仍然是保持清醒，一针见血的。很显然，我不稀罕争夺所谓“高档”的地位。实际上我不想跟人争什么，写这本书是出于一种社会责任感，我觉得大部分人应该得到基本的知识，这样对社会有好处。&lt;/p&gt;
-
-&lt;p&gt;我写“入门书”的另外一个原因，就像爱因斯坦说的：如果你不能向一个六岁小孩解释清楚一个问题，那么你其实并不真的懂。我在大学里见过太多讲不清楚问题的教授，中国的美国的都有，后来我发现那是因为他们自己都没弄明白。没有非常深入的见解，你是不可能把深奥的东西解释清楚的。反过来，试图把一个问题向完全不懂的人讲清楚，也会大大加深你自己的理解。看了我的『&lt;a href=&quot;http://www.yinwang.org/blog-cn/2012/08/01/interpreter&quot;&gt;怎样写一个解释器&lt;/a&gt;』而学会解释器的人都会明白，我的理解程度在全世界处于什么地位。没有成千上万次写各种各样解释器的试验，失败和领悟，你是不可能理解到那种程度的。&lt;/p&gt;
-
-&lt;p&gt;深入理解任何一门学问的关键，不是试图去回答越来越“高级”，越来越复杂的问题，而是试图去回答最基础的问题，反复地问自己最基础的问题…… 爱因斯坦之所以能发现相对论，不是因为他去思索看起来高级的难题，而是因为他去思索一个最基本的问题：时间是什么？其他人觉得这样的问题很傻，时间不就是一秒一秒过去的那个东西吗？现在是半夜两点，那就是时间！然后这些人就永远没机会发现相对论了。同样的，深入理解计算机科学的关键，不是去学习云计算，大数据或者区块链，而是去思索最最基本的问题：“计算是什么？” “程序是什么？” “函数是什么？” “变量是什么？” …… 你觉得自己当然知道这些问题的答案吗？那请你再想一想！&lt;/p&gt;
-
-&lt;p&gt;实际上直到 20 世纪初，全世界没有一个数学家真正的理解“函数是什么？” 这个如此基础的问题。这些人却天天都在用“函数”这个词，以至于他们的定理和证明里面出现各种奇怪的错误。直到 1904 年 &lt;a href=&quot;https://en.wikipedia.org/wiki/Gottlob_Frege&quot;&gt;Frege&lt;/a&gt; 写了这篇论文“What Is A Function?” 这种情况才得到了改善。数学发展了几千年，居然没有人真的理解如此基础的，天天都在用的概念。他们以为自己明白了，所以根本没有仔细思考过它是什么。就像我们从来没思考过什么是时间，却天天都在谈论“需要多少时间”一样。&lt;/p&gt;
-
-&lt;p&gt;为了感受一下这个问题，我请大家来读一读这篇文章的第一句话：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/what-is-a-function.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;回答最基础，看上去谁都知道的问题，也将会是我这本书的开端。Frege 是一个不幸的人，他的作品在他有生之年都不被人重视。我比他幸运一点，我的博客还有一些读者 :)&lt;/p&gt;
-
-&lt;p&gt;所以这本书虽然被我叫做“普及”或者“入门”读物，但它并不只是针对初学者的：它针对所有人。对我来说，很多“资深”的程序员其实根本就不算入了门。当我进入研究生阶段的时候，偶然发现了 SICP，看了这本所谓“入门书”，我惊讶地发现自己以前其实不会编程。在美国工作的时候，我发现很多高级别的程序员也是一样的情况。他们以为自己懂了，资历很深了，而其实还差很远。由于一些初级问题一开头就没理解清楚，到了关键的时候就会犯错误。这就是我所谓的“入门”的含义。所以这本书也可以作为资深程序员们的进修读物。当然我会降低门槛，努力让初学者都能看懂。&lt;/p&gt;
-
-&lt;h3 id=&quot;与经典书籍的区别&quot;&gt;与经典书籍的区别&lt;/h3&gt;
-
-&lt;p&gt;因为我好像很推崇 Lisp/Scheme 语言。有些人看我想写这种入门读物，可能以为我会写一本“王垠的 Little Schemer”或者“王垠的 SICP”。这是一种比较常见的误解。如果我只是模仿 The Little Schemer （TLS） 或者 &lt;a href=&quot;https://mitpress.mit.edu/sicp/&quot;&gt;SICP&lt;/a&gt;，那是完全没有意义的。你去读那些书的中文版就行了。&lt;/p&gt;
-
-&lt;p&gt;很多年前我就是从 SICP 入门的，但是经过多年的研究，直接跟这些书的作者们学习交流，我发现这些书虽然贡献卓著，是不可磨灭的经典，我尊敬它们的作者，可是它们也有很多不足的地方甚至误导（这句话不要传到某些人耳朵里哈）。这就是为什么有好几个出版社请我翻译 TLS，我最后都拒绝了，因为我想写很不一样的东西。&lt;/p&gt;
-
-&lt;p&gt;很多人曾经问我：“我该看这本书还是那本书？” 我都不想回答，也是类似的原因。因为我的脑子里有一本更好的书，我觉得回答这样的问题有点降低自己的身份。我不再是此类书籍的消费者，而是创造者的级别。出于尊重的原因，你不可以问一个创造者这样的“消费级问题”。这就像你不可以问法拉利的设计者：“我是买奥迪好还是奔驰好？” 出于礼貌他也许会给你一个回答，但他的内心会很受伤 :p 同理的，请我翻译别人的此类书籍，也让我感觉很悲哀。&lt;/p&gt;
-
-&lt;p&gt;我在之前的好几篇文章已经指出了 Scheme 语言的一些设计上的弱点，完全以 Scheme 的方式写书，显然会把很多这样的弱点当成优点，对新手造成误导。从 SICP 或者 TLS 入门的学生，很多偏激的认为 Lisp （或者 Haskell，Scala）是世界上最好的语言，以为 Lisp 的 list 是世界上最好的数据结构，以至于写 Java 代码还要在里面自己造出 Lisp 的 list 结构，搞得又复杂效率还很低。我不希望给我的读者们造成这样的效果，因为很显然我知道 list 的缺点。&lt;/p&gt;
-
-&lt;p&gt;我希望我的书是一本有机融合多种思维方式的精华，它应该本着科学的态度，而不是宗教的。这本书要教会读者的，不是某一种语言或者某一种思维方式，而是所有的语言和所有的思维方式的精华结合在一起，并且提醒你小心它们的缺点。&lt;/p&gt;
-
-&lt;p&gt;另外，我发现 SICP 这样的书籍还有很多写作上的弱点，很多地方有没必要的细节和冗长，导致初学者读起来头痛。书中代码的实现有些时候并不简洁清晰，到了第四章就很难看懂了。TLS 的“孔夫子式”写作方式很精悍，却还是可以很伤脑子看不懂。过度的强调递归和尾递归，会导致学生倾向于在工作中过度使用尾递归代码。另外 TLS 缺少跟实际工作接轨的内容，倒是为 Y combinator 之类完全不实用的东西耗费很多篇幅，这会让读者看了书却不知道怎么改善工作要用的代码，以至于失去动力，半途而废。我曾经很推崇费曼的物理学讲义，可是实话说吧我真想再学点物理，所以看了一些费曼的讲义。感觉开头好玩，到后来还是很累很痛苦想睡觉…… 所以我需要探索更好的方式来表达这些内容。这本书不会再号称“计算机科学的费曼讲义”，它应该更好！如果它不是更好，我就继续改进它 :)&lt;/p&gt;
-
-&lt;p&gt;为了知识的民主和社会的文明，提高普通大众的技术教育水平迫在眉睫。这些事情我不放心其它人来做，更害怕发言权落到吹牛扯淡的野心家手里。仔细看过我的技术文章的人，都应该知道它们的见识深度是很难超越的。所以很希望大家能够支持我开张写书。祝愿大家走出迷茫，获得真知！&lt;/p&gt;
-
-&lt;h3 id=&quot;启动经费和投票支持&quot;&gt;启动经费和投票支持&lt;/h3&gt;
-
-&lt;p&gt;我希望在书的第一章发布之前，也就是现在，收集一些“启动经费”，来开始写作的过程。这些经费用于建立工作环境，也用于“估算”有多少人会想买我的书。&lt;/p&gt;
-
-&lt;p&gt;如果你喜欢这篇文章，而且有意要买我将要写的书，可以点击这个&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/04/13/pay-blog&quot;&gt;付费&lt;/a&gt;页面，对本文进行少量的付费（30元），留言就写“期待CS入门书”。之前已经付过类似费用的就不用了。我会根据付费的人数来估计图书将来的销量，所以你如果感兴趣的话，请一定向我发出你的支持。但是请注意，这个付费不代表你付了买书的钱。我的书显然不会这么便宜的。由于这篇文章本身的价值，你是在给这篇文章付费 :)&lt;/p&gt;
-</description>
-        <pubDate>Mon, 05 Mar 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-03-05/book/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-03-05/book/</guid>
-      </item>
-    
-      <item>
-        <title>真相</title>
-        <description>&lt;p&gt;金钱，是万恶之源。容易得来的金钱，就更加吸引愚蠢的人。这一句，解释了我在美国硅谷看到的一切怪异现象。那些现象在中国也很猖獗。&lt;/p&gt;
-
-&lt;p&gt;每当我批评像 Google 这样的公司里面的风气，就有人把我包装成一个自高自大的人，仿佛错的人是我。作为一个善良的人，我也曾经以为我在某些方面做得不对。然而看透了这一切之后我才发现，我对于那些经历发表的一切感受，几乎全都没有错。&lt;/p&gt;
-
-&lt;p&gt;容易得来的金钱，导致了硅谷公司的平庸化，它已经不再是当年车库里创业的那个硅谷。过度容易得来的发财梦，引来了许许多多一知半解，甚至完全外行的人。他们打着各种绚丽的招牌，来到硅谷，为的就是钱。&lt;/p&gt;
-
-&lt;p&gt;真正爱好计算机技术的人们，遇到这些蜂拥而来的假货，可以说是措手不及。这些吹牛大王们提出这样那样新鲜的口号，却从来没有受到过正规的计算机科学教育。太容易得来的钱，还吸引了大批不合格的人员流入大学相关专业，蒙混过关，导致学术腐败，导致整个大学系统质量体系的瘫痪。&lt;/p&gt;
-
-&lt;p&gt;这就是我在硅谷的时候所面对的。一个受过最艰深的计算机科学教育的人，给吹牛大王们打工，被各种打压。他最后忍无可忍，终于爆发出来，他说：“我就是比你强！我凭什么要被你打压！” 于是乎，他的前半句话就被吹牛大王的同伴们拿过去，断章取义，到处宣扬：“看那，王垠是多么自大的人！竟然说出这样的话来！这种爱吹牛逼的人，跟谁都合作不好！”&lt;/p&gt;
-
-&lt;p&gt;这种说法是非常有效的。任何有良知的人，听到有人这样说自己，都不免产生疑惑和自省：难道我做的过分了一点？这种疑惑由于强大的舆论压力，越来越深，最后导致了精神混乱。他居然以为自己做错了，他以为自己是有点自大，他开始可怜起被自己骂过的人……&lt;/p&gt;
-
-&lt;p&gt;可是他没有发现，吹牛大王们和打压过他的人，正在为他的迷惑而庆祝。他们打着“Google校友”的招牌，回到中国，招摇过市，对 Google 的牛逼和幼稚园式的企业文化各种宣扬。他们开始打起“硅谷”的招牌，进行各种”知识付费“。言之无物，却有千万的收入滚滚而来。他们数着钱，大笑着那些被他们迷惑的人。&lt;/p&gt;
-
-&lt;p&gt;一个善良的人，他需要莫大的支持和勇气，才能冲破这样的迷雾，冲破对自己的怀疑：“我是不是那个错的人？” “我是不是伤害了其他人？” 他反复的问自己…… 可惜他的家人，他心爱的人，都不同程度的被舆论所洗脑，甚至对他进行反向灌输，否认他的价值。这经常使得他头脑胀痛……&lt;/p&gt;
-
-&lt;p&gt;他反反复复的琢磨自己的言论，出尔反尔的删除自己的微博。因为在他的心中，装载着对其他人的关怀。对自己的怀疑，使得他的内心矛盾重重，压力山大。&lt;/p&gt;
-
-&lt;p&gt;可是终于有一天，他看破了这一切。他所经历过的硅谷的一切，原来是一个骗局，一个在强大的金融机构支持下进行的巨大骗局，一场财富转移的浩劫。美联储（Federal Reserve）滥印了大量的美元，通过各种渠道泛滥地投放给硅谷的创业公司。不管这些公司看上去有多傻，不管他们是否可以盈利，都可以拿到很多的投资。可以说是投资人争先恐后在送钱，还生怕别人不要他们的钱了。为什么会这样呢？因为那些钱是不费吹灰之力用印钞机印出来的！&lt;/p&gt;
-
-&lt;p&gt;当然，大部分的创业公司都因为愚蠢而倒闭，而他们其中少数人却会抓住这些投资，成为亿万富翁。极少的创业公司的盈利，其实无法弥补泛滥的投资开销。所以这没有带来社会财富的增加，而只带来社会财富的转移和消耗。这就是所谓“第二次dotcom泡沫”，它终究是会破灭的。&lt;/p&gt;
-
-&lt;p&gt;这是一场没有刀枪的抢劫。大量的印刷美钞，导致了其它地区，其他领域人们的贫穷。很多人做着对社会有贡献的工作，他们的收入却由于通货膨胀，房价上涨而变相的降低，变得生活困窘，不得不卖掉房子，背井离乡。抢劫，让硅谷的吹牛大王们成为了亿万富翁。&lt;/p&gt;
-
-&lt;p&gt;在这样的洗劫运动中，冲在最前面的，当然是人性最丑恶的一面。哪里有容易钱，哪里就必然有愚蠢和虚伪。拿着好几倍高工资的所谓“管理层”，号称 JS 专家，每天开着最新型号的 Tesla 上班，却连几十行 JavaScript 代码都会写的乱七八糟，漏洞百出。&lt;/p&gt;
-
-&lt;p&gt;为什么呢？你们钱太多了，太容易混了！所以一个劣质的人，他只需要稍加伪装，就能混到那样的职位，骑在手下人的头上，各种瞎指挥，各种邀功。我看到整个的公司，建立在这种虚无的基础上，进行非常不公平的管理和分配。真正有能力的人被打压，拿着低廉的工资，加班到深夜。&lt;/p&gt;
-
-&lt;p&gt;各个大公司也因为有太多的“容易钱”，而变得毫无道德底线。每一家都在吹嘘自己有“黑科技”，很多这些项目一开头就明显是不可能成功的，却要利用媒体的洗脑，让外行大众以为有希望成功。其实他们的目的只有一个，那就是把大家辛苦挣来的钱，转移到极少数人的手里。不要忘了，这整个运动完全就是为了“财富转移”，而不是为了制造财富。我很惊讶，这样的行为居然不构成“诈骗罪”！&lt;/p&gt;
-
-&lt;p&gt;看清了这一点之后，人也许就知道该怎么做了，知道该如何对待各种观点。是的，我明白了，我说过的做过的一切，都是没有大错的。我应该挺直腰杆，继续直言不讳。我应该得到我应有的尊重和报酬，我应该得到我应有的生活，我应该有机会做我喜欢的事情。我作为一个世界顶级的专家，当仁不让。&lt;/p&gt;
-
-&lt;p&gt;那些被金钱的大潮引来的浅薄的人们，我无意跟他们指名道姓地较劲，就像我不想亲自去捅一个马蜂窝一样。我的地位不允许我那样伤害自己。我需要保护好自己，保护我关心的，善良的人们，而不应该把注意力集中在打击那些垃圾人类。过度注意低级人类，其实不知不觉降低了我自己的地位。&lt;/p&gt;
-
-&lt;p&gt;所以呢，从今天起，我决定给自己一个转折点。我要让善良的人们知道，什么叫做王者归来！为此，我决定对回国之后的一些做法做出改变。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;我不会再向邪恶的势力妥协，我不会再帮助吹牛大王们。一旦我发现对我不诚恳的人，自以为是的人，或者想利用和诱导我的人，即会终止与他的一切交流与合作。我不会与吹牛大王们掌权的公司合作。我会在与人合作中维护严格的职业道德和科学精神。&lt;/li&gt;
-  &lt;li&gt;由于我的学术水平处于世界顶级的高度，我必须维护品牌的尊严，不能让它与低档货在同样的地点出现。我不会再采用“知识付费”，“付费问答”一类的 app 或者服务。现有的知识付费服务里面，存在太多的低档次信息。我自己都不用那些东西，觉得不但毫无收获，反而受到各种洗脑。我不愿意让我的名字出现在低级别的人甚至吹牛大王的名字旁边。一直都有出版社找我写书，而我一直都拒绝，也是同样的原因。因为这些出版社联系我的时候，方式让我觉得不够尊重。他们喜欢列举为他们出书的另外一些作者，而他们跟我完全不是一个档次，有些甚至是吹牛皮的。所以我一直都未能与国内出版社合作。另外，我还会严格实行通信的高水准，不回低水准或者语气不尊重的来信，不看微博的评论。&lt;/li&gt;
-  &lt;li&gt;我自己的软件项目进入保密阶段，自由发展。我不会再宣扬我自己在写什么代码，我也没有必要一直做我曾经说我要做的事情。我可以告诉人们我的兴趣，但我没必要用代码来证明什么。地位低的人才需要用代码来换取别人的认可。我不吃“Talk is cheap. Show me the code!” 那套，那是错误的想法。应该是反过来，应该是其他人向我证明他们的能力才对 :)&lt;/li&gt;
-  &lt;li&gt;入门书籍准备动工。对抗吹牛大王们的攻击，最有效的一个手段就是教育。只有让大多数人得到精髓的知识，才可能让他们看清楚很多东西。当我批评“AI 浮夸风”的时候，显然很多人是看不懂我在说什么的，只好任凭他们忽悠。甚至很多高级别的工程师，都在问我要不要用 AlphaGo 的方法来实现“自动编程”，这说明他们的知识其实很不到位。如果人们都理解我所掌握的计算机科学原理，就不会这样被忽悠了。为了提高人们的认知水平，我决定开始写计算机科学的入门读物。我曾经考虑过找一些“小白鼠”来测试我的读物是否容易懂，但现在我觉得那样太麻烦，没有那个必要。我会直接把正在进行中的草稿放在这里，让大家随意浏览。有问题或者不懂的人跟我联系就行了，我会考虑作出改进。&lt;/li&gt;
-  &lt;li&gt;书籍的收费。我不想再采用之前的“付费+发货”方式，寄出 PDF 文件的做法非常不方便。这些书的章节，会被陆续撰写出来贴在博客上，这样大家随时都可以得到最新的版本。我打算最开头的时候进行“自觉付费”，这跟我其他博文的“自愿付费”形式不同。“自愿付费”的意思是，你看了我的文章，如果你不喜欢，或者你根本没看完，那么你可以不付钱。“自觉付费”的意思是，你如果仔细看完了书的内容，那么你就已经“享用了”它，你就“应该”付钱。如果你不付，就是有道德过错的，如果你不想付钱，就请不要看。这就像我摆个“自觉付费”水果摊，我不看着这摊子，你们吃了自己付钱就好，结果你吃了没付钱，这就不好了。你是否付费，将会影响到我的水果摊是否可以继续营业，会影响我继续写书的动力。我的博客含有代码，会统计这段时间的阅读人数。我会根据阅读人数与付费的比例，来推断是否有很多人没付钱。如果我发现付费的比例太小，我会适当调整作法。&lt;/li&gt;
-  &lt;li&gt;书籍的启动经费。我希望在书的第一章发布之前，也就是现在，收集一些“启动经费”，来开始写作的过程。这些经费用于建立必须的工作环境。这些经费也用于“估算”有多少人会买我的书。如果你看到这篇文章而且有意要买这本书，可以点击这个&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/04/13/pay-blog&quot;&gt;付费&lt;/a&gt;页面进行少量的付费（30元），留言就写“期待CS入门书”。我会根据付费的人数来估计图书将来的销量，所以你如果感兴趣的话，请一定向我发出你的支持。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;说了挺久要写书，一直没有动力动笔。一方面是由于我觉得国内的出版社都不大靠谱，而且他们出的很多书水平太低，有损我的品牌形象。另外很大一部分原因，是因为我写东西都是一针见血，容易懂，而且不会“留一手”。我很怕一不小心说太明白，就让关键的知识落到道德水平低的人手里。我也许顾虑太多了。其实我只需要提供我愿意提供的知识，而保留我不愿意提供的就行。另外，这些入门知识被广大群众了解，显然对善良的人有好处，而对吹牛逼的人们不是什么好事。这些知识将会帮助他们识破骗局，成为他们对抗这些虚假权威的武器。所以，我真的决定要写书了。&lt;/p&gt;
-
-&lt;p&gt;这本书虽然被我叫做“普及”或者“入门”读物，而其实它将会包含最精髓的计算机科学。我敢打赌，很多工作多年的资深程序员，对于其中的很多东西都不会很清楚。所以它也可以作为资深程序员们的进修读物。当然我会降低门槛，努力让初学者都能看懂。&lt;/p&gt;
-
-&lt;p&gt;为了知识的民主和社会的文明，提高普通大众的技术教育水平迫在眉睫。这些事情我不放心其它人来做，更害怕发言权落到吹牛扯淡的野心家手里。仔细看过我的技术文章的人，都应该知道它们的见识深度，是很难超越的。所以很希望大家能够支持我开张写书。祝愿大家走出迷茫，获得真知！&lt;/p&gt;
-</description>
-        <pubDate>Thu, 01 Mar 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-03-01/truth/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-03-01/truth/</guid>
-      </item>
-    
-      <item>
-        <title>对某领导离任有感</title>
-        <description>&lt;p&gt;最近听老同事说，之前任职的某公司的 VP Engineering，被公司“赶走”了。我吃了一惊，然后却有一股莫名的幸福感涌上心头。这是多么奇怪的感觉！&lt;/p&gt;
-
-&lt;p&gt;离任后的主页，显示着他的“光辉业绩”，把大家的功劳全都拉到了自己身上。在我任职期间，公司增长了xx，提升了xx，培养了xx…… 只有知道内幕的人，才知道那些业绩是谁做出来的！实际上同事们对于他的离去，评价是：“众望所归”。为什么会这个样子呢？&lt;/p&gt;
-
-&lt;p&gt;一个公司的一把手看人不准，就很可能引进这样不靠谱的人。不但没有任何贡献，给同事们制造的障碍和伤害，帮的倒忙，打压的人却不少。最恶心的是，因为这个人而慕名而来的那一大帮光说不做，瞎指挥的害虫。在 IT 领域似乎有很多这样的帮派，他们就像蝗虫一样，穿着迷惑性的外衣，从一块稻田飞到另外一块……&lt;/p&gt;
-
-&lt;p&gt;我也是被打压的人其中之一，不但被他的下属打压，还曾经被他直接攻击。我永远都不会忘记那个危难的时刻，他的一个完全无脑的瞎政策，让我们几乎完全无法工作，大家却都忍气吞声。我又是那个第一个站出来，指出问题所在的人，那个被枪打的出头鸟。幸运的是，顶着压力持续抗争两个星期之后，我终于联合了全组人的力量，扭转了这无脑的作法，让大家的工作可以继续。&lt;/p&gt;
-
-&lt;p&gt;（关于这件事，可以参考这篇&lt;a href=&quot;http://www.yinwang.org/blog-cn/2017/05/17/practical-idealism&quot;&gt;博文&lt;/a&gt;的“个人兴趣与企业兴趣”一节）&lt;/p&gt;
-
-&lt;p&gt;我离开公司的时候，一位经历过此事件的同事发来 email 对我说：“谢谢你，为我们做出的一切。你会被怀念的！” 我很欣慰。我没有什么光辉业绩可以写在自己的简历上，可是我被有正义感的同事们怀念。这对于我来说就是最大的成就。&lt;/p&gt;
-</description>
-        <pubDate>Mon, 26 Feb 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-26/fired/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-26/fired/</guid>
-      </item>
-    
-      <item>
-        <title>中国人如何经营自己</title>
-        <description>&lt;p&gt;大家都知道，在中国人的圈子里，有很多人黑我。我懒得去看，但是有好心人告诉我，黑我的网站有知乎，MITBBS，V2EX。还有成都某码农 QQ 群，里面都是 Python 爱好者，他们可瞧不起我了，每个人都觉得自己比我牛…… 现实生活中也有听说我是谁之后，态度诡异，阴阳怪气的。我妈总是说我不会经营自己，让我向国内的一些名人学习一下技巧。可是我一直对此不屑一顾，直到今天才发现新大陆……&lt;/p&gt;
-
-&lt;p&gt;网络上的网民，喜欢采用像黑美国总统特朗普一样的办法，拿起别人只言片语，断章取义，或者歪曲原意，或者干脆完全杜撰，力图把他塑造成一个自高自大，目空一切，很难相处的人。他们喜欢在“王垠是一个什么样的人”这样的知乎问题下面作答：我认为王垠是一个…… 说得好像认识我，见过我一样。而其实我不认识任何一个会在知乎上回答问题的人。&lt;/p&gt;
-
-&lt;p&gt;现实生活中的某些人呢，也许还是受了网络的影响，见面的时候会这样表示他们的尊敬：“王垠，我听说你在网上很有名啊！” “王垠，我们这个地方做得不好，你可不要在博客上骂我们哈！” “王垠，我听说你有个博客，可以给我看看吗？…… 哦，谈谈这个，谈谈那个…… 哦，呵呵呵，知道了！”&lt;/p&gt;
-
-&lt;p&gt;显然，这些人是话中有话，寓意深刻的。每次遇到这样的人，我就后悔跟他们打招呼。你可能无法理解这种遗憾，一种对人心的失望。久而久之，就不想去认识这个领域的中国人了。&lt;/p&gt;
-
-&lt;p&gt;在与挺多中国人的接触中，我都感觉到一种很不正常的心态。开口闭口这总那总的，互相称呼大牛大师的…… 再加上如果他们听说我是“名人”，或者知道我的一些事情，那种感觉就更诡异了。当然，我也遇到少数真诚一点的中国人，然而实话说吧，这样的人非常之少。&lt;/p&gt;
-
-&lt;p&gt;中国人，特别是 IT 领域的，似乎不明白如何尊重一个人。也许就像柏杨的『丑陋的中国人』所说，中国人的心里只有对彼此的恐惧，不是恐惧就是鄙视，就是没有爱。直接叫你个“大师”，免得你觉得没有受到足够的“尊敬”，或者就干脆戏谑和嘲笑你。不管叫你大师还是嘲笑你，你对于他们不是一个人，而是一个可以利用的东西。恐惧和虚伪在操纵着这一切，而不是真心实意的尊重。对人起码的尊重都是如此困难，这跟中国人吃完饭喜欢抢着付账，吃饭时互相敬酒的习俗，可能是同样的渊源。&lt;/p&gt;
-
-&lt;p&gt;大概是因为中国人生活太无聊吧，很多人特别爱上网，所以经常在现实中遇到的人，感觉跟网民也没有很大差别。很多人闲得无聊就上 MITBBS，知乎，今日头条，微博…… 成天埋着头。所以呢，不知不觉说话想事情就变得跟网民一样了。我问一个老朋友：“你现在哪里工作呢？” 答曰：“哎呀，就是那个你最瞧不起的 Apple 啊！” 我不知道自己哪里说过瞧不起 Apple 了，而且我肯定没跟他说过。很显然，他没有看过我批评 iPhone 设计的文章原文，而只是在网络上听网民们转述：“王垠骂完了 Google 和微软，又开始骂 Apple 了！”&lt;/p&gt;
-
-&lt;p&gt;这些人很喜欢说我在“喷”，而其实我只是在理性的评价。我看出来了，他们是有目的的。他们要妖魔化王垠，把他说成是一个走到哪骂到哪，跟谁也合不来的人。这些人都没有见过我，就开始歪曲我的各种言论。实际生活中呢，恐怕他们才是那种很难相处，两面三刀的人吧。合作过的同事都知道我是什么样的人，可惜他们都不怎么“上网”，只有这些网虫到处散布谣言。&lt;/p&gt;
-
-&lt;p&gt;如果你说我也是网民，因为我在网上写博客，那你就错了。我顶多算是一个作家，或者学者。很多作家和学者都有自己的主页，他们会在上面挂上自己的散文或者学术论文。可是他们从来不去“网络社区”讨论，也不关心网络上的名人言论，业界动态等。写完自己的文章发出去，他们就开始过自己的生活。&lt;/p&gt;
-
-&lt;p&gt;写完文章或者冒点微博，我一般不会去看网上的其他东西，也很少看微博的评论。我不会去知乎（除非搜索到了知乎页面），不去 MITBBS。我不看任何中文媒体，我甚至很少看朋友圈。我的朋友圈小红点是关闭的，只有我想起来的时候，才会主动去看看最亲密的朋友们有没有新鲜事。一大半联系人的朋友圈都是被我屏蔽的，原因往往是他们经常发布让我觉得功利或者显摆的内容。偶尔一两次还好，但如果大部分都是那样的内容，我就选择“不看他（她）的朋友圈”。&lt;/p&gt;
-
-&lt;p&gt;所以虽然我用网络，可是我非常不像网民。我不关心网民们在说些什么，我也不关心他们怎么想。对于我来说，网民是一群心理不大健康的人，我不想让自己受到影响。我发现物理地切断这些信息来源，是唯一有效的办法。你可能以为没必要屏蔽信息，自己不要在意就行了。可是我发现，就算你不经意的看到那些标题或者图片，心理也是会受到影响的。它们操作的是你的潜意识，并不是理智觉得不在乎就真的不在乎的。&lt;/p&gt;
-
-&lt;p&gt;如果你有一点功利，你就变得更加功利和浮躁。如果你不认同那些内容，你就会因为以为每个人都关心那些无聊事，而感到苦涩和绝望。很多人发图片是为了炫耀，那种感觉就更奇怪了。如果有人在朋友圈转载一些 AI 传教士的言论，说你的工作会在不久后消失，被机器取代，你能不产生感觉吗？总之，为了自己不产生任何感觉，最好的办法是屏蔽某些人的信息。屏蔽是如此有效的办法，有一次一个朋友发信息给我，说整个朋友圈都是某明星复婚的事情。我说我怎么没看见呢？后来我发现，那些可能会转载这种内容的人，早就因为其它内容被我给屏蔽了 :)&lt;/p&gt;
-
-&lt;p&gt;扯远了，回到我见到的问题人类身上来吧。虽然这些人遇见我时不知道是什么样的心理，然而当他们提起中国的一些“大牛”或者名人，那可真是顶礼膜拜，非常尊重。他们喜欢转载这些名人的话，仿佛他们说的每一句话都可以写进名言录，每一句都是真理。他们买来这些名人的书，放在自己书架上显眼的位置，这样其他人就知道他心目中的英雄是谁，就以为他也传染了某种高贵的品质……&lt;/p&gt;
-
-&lt;p&gt;这些“职场套路”，逼格模板，可能对其他人管用，然而我一眼看到就知道是怎么回事了。这些不但不会给这个人加分，而且会损害他在我心目中的形象。我从来不看这类名人写的“心得书”或者“回忆录”，我也不关心他们说了什么。我甚至从来没听说过他们的名字，不知道他们是谁。&lt;/p&gt;
-
-&lt;p&gt;但经常看到有人崇拜他们，听说这些人和他们的“名著”，不免产生好奇。为什么我在博客上说了那么多透彻的道理，到头来得不到应有的，基本的，作为一个人的尊重。反而这些名人，打着“硅谷高管”的名号，回国随便写两本书，相当之浅，甚至误导群众，却被人崇拜到这种地步。&lt;/p&gt;
-
-&lt;p&gt;总是听说这些人和这些书，却一直提不起兴趣来看看。当我真正拿起来看的时候，我惊呆了。我错过了那么多可以让自己在国内飞黄腾达的技巧！我以前真的太幼稚。&lt;/p&gt;
-
-&lt;p&gt;这事的起因，是由于我最近装了一个“知识付费”的 app，你可以付费订阅很多中国名人的专栏，讲各种话题。这些人有 IT 名人，心理学家，经济学家…… 于是乎，听说过的一些中国业界名人的名字，就开始反复出现在我的眼前。他们的广告语说：“AI 时代要到了，很多人的工作就要消失了！在这个专栏里，我来教你如何提升自己相对于机器的竞争力，在未来的 AI 世界职场找到工作！”&lt;/p&gt;
-
-&lt;p&gt;这是典型的制造“AI恐慌”的做法，它是利用人们害怕自己的工作被机器取代的恐惧心理，而去花钱拓宽自己的生存方式。在我之前的一篇&lt;a href=&quot;http://www.yinwang.org/blog-cn/2017/04/23/ai&quot;&gt;文章&lt;/a&gt;里已经指出，其实人工智能只能取代最最枯燥简单的工作。连出租车司机和淘宝客服这样的工作，机器都毫无办法胜任。&lt;/p&gt;
-
-&lt;p&gt;我算了一下这专栏的费用，乘以订阅的人数，也超过一千万人民币了。这还不算是里面最高的。人家用“AI 恐慌”收智商税，一年都赚一千万！王垠，你在干什么啊？把那么宝贵的信息，用最容易懂的方式写出来，免费给人看。还跟要饭的似的，贴几个二维码在那里：你们高兴就打发点吧…… 😒&lt;/p&gt;
-
-&lt;p&gt;本来只是听说过这些人，并没有负面看法。可是看到这样的广告语，他们在我心目中的那一点好奇心的位置，也消失了。当然也不会忘了介绍他的事迹，摆出他的名著。由于老是听说这些书，出于好奇，我翻开了其中一些样章。这些内容在技术方面基本是在夸大机器学习的能力，让外行误以为机器已经可以理解人类的语言。但作者同时也不忘“经营自己”，所以看了几页之后，我豁然开朗。这些章节教会了我，在中国要如何正确的吹牛逼！:)&lt;/p&gt;
-
-&lt;p&gt;我如获至宝。我知道很多网民说我喜欢“吹牛逼”，然而你发现没有，我其实很不会吹牛逼，很没有技巧。我的所谓“吹牛逼”基本说的都是实话。一个真有能力的人，给一些半壶水的心机家打工，被各种打压。不开心了，冒几句大实话出来，却被人说成是吹牛逼。&lt;/p&gt;
-
-&lt;p&gt;就当我是吹牛逼吧，我吹牛逼的技术怎么就这么差呢？为什么每次一吹，别人就说我在吹牛逼呢？所以我决定好好地研究一下，真正高级的吹牛逼应该怎么吹。于是乎，我拿着这些样章看了一会，发现了一些通用的技巧。太美妙了！所以我决定把这些心得分享给大家。&lt;/p&gt;
-
-&lt;p&gt;总有人喜欢在微博上评论，说：“王垠，感谢你！自从知道你的博客，我就学会了吹牛逼。” 我觉得真不敢当啊，还是不要误人子弟了。他们应该向这些出过书的名人学习才对！&lt;/p&gt;
-
-&lt;p&gt;注意，我这里是就事论事，说一类人的问题，得给人留面子。我把原文和重要的细节都模糊化了，我描述的现象是很多人的混合体，而不是一个人。利用 AI 恐慌来搞知识付费的有好多人，很多人都可能符合这个特征，所以请勿过度解读和瞎猜。如果你认为猜出了我说的人是谁，你肯定是错的，因为我说的不是某一个人。&lt;/p&gt;
-
-&lt;p&gt;好了，回到正题。凡归国“牛人”写书，必然会有很多地方体现自己的身份和价值。所谓身份，一般就是自己跟外国大牛的关系。为什么一定要是外国大牛呢？因为中国人都瞧不起中国人，你跟他们攀上关系也没有用的。一定要是高鼻梁，黄头发的外国人，才会被人仰慕。&lt;/p&gt;
-
-&lt;p&gt;提高身份和价值的一般的技巧是这样：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;微博，微信公众号，书名，标题，最好出现“硅谷”这个词。比如，“硅谷垠大大”，“垠老师在硅谷”，“硅谷论剑”，“硅谷那些事儿”，“相约在硅谷”…… 因为很多中国人都崇拜硅谷的技术，认为是牛人辈出的地方，所以这个词可以有效的显示自己的来历。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;介绍自己所钻研的学术背景和本领域的牛人。一定要把它说成是一门艰深的科学，要介绍这门学问的鼻祖是谁，如果能扯到图灵或者某位图灵奖得主身上，那最好了。要介绍这门学科先驱者都有哪些重要人物。切记，最好使用“世界级”，“诺贝尔奖”，“图灵奖”一类的标识语。你可以放心的用这些词，而不用担心别人觉得你吹牛。因为你是在赞美其他人而不是自己，所以怎么说都不会让人觉得你在吹牛逼。你先把他们捧上去，在人们心中建立起地位，然后你再往他们身边一站，就立马显示出等级来了不是吗！&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;巧妙的显示出自己与这些世界级大牛有关系。注意“巧妙”二字，切不可像垠神那样，直接说我上过那人的课，得了 A+！那是会被人笑掉大牙的，立马会被认为是在吹牛逼 :p 正确的做法是含蓄一点，自然地引入你认识的，或者见过的一个牛人，我们假设他叫“牛人甲”。如果能把他跟之前的先驱者们联系起来就更好了。然后呢，采用这样的套路：&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;套路1：牛人甲的学识之高深，情操之高雅，真是让人佩服。在学校的时候，他常常对我说：“……” 我从他身上学到了很多做学问，做人的道理。&lt;/p&gt;
-
-        &lt;p&gt;省略号的部分是他说了这么，这其实不要紧。最重要的部分，是“他常常对我说”。这显示出我跟这个牛人认识，而且因为“常常”这个修饰语，暗示这不是普通的交情。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;套路2：我当年在某大学/某公司的时候，牛人甲的办公室就在我对面。我经常看到他埋头苦想……&lt;/p&gt;
-
-        &lt;p&gt;这种套路要稍微弱一些。因为你只是见过这个大牛，没有显示出你传承了他的什么优点。但你能如此近距离的观察到这个人，足以显示出你还是受到过熏陶的。之前提到“某大学/某公司”，多半也是名校，会彰显你的身价。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;套路3：待补充……&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;微信公众号和朋友圈的宣传。最好开通微信公众号，或者使用微信朋友圈。里面的内容最好是显示你有“事业心”的那种。千万别晒猫，别晒吃的，别谈生活上的事情，不然有损自己事业家的形象。其实这些都不用自己写，你转载也会有效果。内容可以是：&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;业界最新动态。比如各种黑科技，自动驾驶车，量子计算机，AlphaGo 战胜人类，iPhone X 人脸解锁技术，SpaceX 火箭着陆…… 注意要有选择，要有逼格。不要选择便宜的东西，或者看起来没有难度的。中国人都喜欢昂贵的，困难的，自己买不起，没法做出来的东西。&lt;/li&gt;
-      &lt;li&gt;职场新闻。比如某牛人跳槽了，年薪上亿美元。某竞赛金牌得主加入了某牛公司，等等。&lt;/li&gt;
-      &lt;li&gt;职场技巧。比如，如何高效的管理一个大型项目团队。如何在职场发展，如何升职加薪，如何转管理岗位之类的话题。这些内容都可以去 LinkedIn 找。当然你知道，这些文章基本都是假话，告诉你除了努力工作没有其他办法一类的。但你要向有权势的人表明，你认同他们让员工加班的作法，这样他们才会提拔你啊。到时候你成了奴隶主的手下，只需要指指点点，就不用担心加班了。重要的是要站对队伍。不要跟王垠一样，总是站在工人阶级一边的样子，甚至骂自己的前雇主残酷压榨。哪个奴隶主敢请这样的人做高层领导呢？注定一辈子做奴隶！&lt;/li&gt;
-      &lt;li&gt;牛人文章或者讲座。跟专业相关的牛人讲座，可以转载视频或者博客。文字部分最好显示你好像认识这个人。比如你可以说：“王老师说得好！” 或者说：“王老师还是跟以前一样思维清晰啊。当年在xx牛校的时候，他如何呕心沥血的栽培我……”&lt;/li&gt;
-      &lt;li&gt;构架分析。不要像垠神一样，写什么“Java有值类型吗”，“编程的智慧” 这样的文章。人家看不懂也就看不出你的水平，看得懂的肯定都是搬砖的，帮不了你爬高。要写就写“某独角兽公司内部大数据体系构架解析”，“xx公司自建分布式支付体系构架”。构架，懂吗？要是大局的！里面一定要有一堆线框图一类的东西，箭头指来指去的。反正别人也不会仔细看，看了也不知道管不管用。各种开源软件的名字要罗列一大堆，说你们试过很多这些东西，发现各自有优缺点，之类的。这些文章可以自己写点，也可以转载或者抄来。反正到处都有这种文章，大家都是拿开源软件拼凑在一起，谁也不知道其中一部分是抄来的。这种构架分析，一方面显示出你是懂一些技术的，一方面显示出你不是做基础编程工作，写底层数据结构的码农，而至少是构架师，团队带头人级别的。&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;互相吹捧。垠神最大的错误，就是自吹自擂。自己在那里说比别人懂得多，管你是不是真懂，当然要被人黑啦。王婆卖瓜，自卖自夸！所以呢，不要自己吹自己，要让别人来吹自己。拉拢几个人，好像不认识你，只是看过你的作品的样子，到知乎一类的网站上去表扬你，在“某某是什么样的人”这样的问题下面回答，说你学识渊博，做人低调，踏踏实实…… 有时候也可以在关于王垠之类大家都黑的人的问题上回答一句：“王垠就是个吹牛逼的！上次我问他那啥，他跟我说了一通，其实他自己都没弄明白。你看人家某某，比他踏实多了，还不会这么嚣张。王垠就是个吹牛逼的，某某才是真牛逼……” 看到没，只顺带一句，你的学识和人品就显示出来了！看到这句话的人产生好奇，不免去找你的资料，然后你可能就多了一个粉丝。当然，你也不要忘了回馈帮助过你的人。在微博或者朋友圈，也要提携人家。别人写了书，别忘了发个简短的封面照，说你看了这个作者送你的书，终于理解了他的深邃思想，等等。这样大家才能处于一种互惠互利的地位，那帮屌丝转来转去，还不是只有看我们的书，听我们的话啊，对不对？&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;关心年轻人的成长，树立正面榜样。中国的名人们还有一个策略，那就是从年轻人那里开始做工作。他们会像唐僧一样地宣讲：我很关心年轻人的成长，你们应该要诚信，要善良，学会做人，我来解答你们的疑惑…… 这就跟希拉里老是向年轻女性宣传一样：年轻女孩们，不要怕，你能行的，Strong，Together！全是空话，没有实际效果，但是非常&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/05/22/positive-thinking&quot;&gt;正面&lt;/a&gt;，鼓舞人心。用这样的方式，确实很容易树立起好人的形象。然后随便你说什么他们都支持，都相信你了，即使你开始损害他们的利益，从中牟利 ;)&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;继续分析中，待续……&lt;/p&gt;
-</description>
-        <pubDate>Sat, 24 Feb 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-24/chinese-fame/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-24/chinese-fame/</guid>
-      </item>
-    
-      <item>
-        <title>智能合约的形式验证</title>
-        <description>&lt;p&gt;在之前一篇&lt;a href=&quot;http://www.yinwang.org/blog-cn/2017/04/23/ai&quot;&gt;关于人工智能的文章&lt;/a&gt;里，我指出了“自动编程”的不可能性。今天我想来谈谈一个相关的话题：智能合约的形式验证。有些人声称要实现基于“深度学习”的，自动的智能合约形式验证（formal verification），用于确保合约的正确性。然而今天我要告诉你的是，跟自动编程一样，完全自动的合约验证，也是不可能实现的。&lt;/p&gt;
-
-&lt;p&gt;随着区块链技术的愈演愈烈，很多人开始在以太坊的“智能合约语言”上做文章。其中一部分是搞 PL 的人，他们试图对 Solidity 之类语言写的智能合约进行形式验证，号称要用严密的数理逻辑方法，自动的验证智能合约的正确性。其中一种方法，是用“深度学习”，经过训练，自动生成 Hoare Logic 的“前条件”和“后条件”。&lt;/p&gt;
-
-&lt;h3 id=&quot;hoare-logic&quot;&gt;Hoare Logic&lt;/h3&gt;
-
-&lt;p&gt;我好像已经把你搞糊涂了…… 我们先来科普一下 Hoare Logic。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Hoare_logic&quot;&gt;Hoare Logic&lt;/a&gt; 是一种形式验证的方法，用于验证程序的正确性。它的做法是，先给代码标注一些“前条件”和“后条件”（pre-condition 和 post-condition），然后就可以进行逻辑推理，验证代码的某些基本属性，比如转账之后余额是正确的。&lt;/p&gt;
-
-&lt;p&gt;举一个很简单的 Hoare Logic 例子：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{x=0}   x:=x+1   {x&amp;gt;0}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;它的意思是，如果开头 x 等于 0，那么 x:=x+1 执行之后，x 应该大于 0。这里的前条件（pre-condition）是 x=0，后条件（post-condition）是 x &amp;gt; 0。如果 x 开头是零，执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;x:=x+1&lt;/code&gt;之后，x 就会大于 0，所以这句代码就验证通过了。&lt;/p&gt;
-
-&lt;p&gt;Hoare Logic 的系统把所有这些前后条件和代码串接起来，经过逻辑推导验证，就可以作出这样的保证：在前条件满足的情况下，执行代码之后，后条件一定是成立的。如果所有这些条件都满足，系统就认为这是“正确的程序”。注意这里的所谓“正确”，完全是由人来决定的，系统并不知道“正确”是什么意思。&lt;/p&gt;
-
-&lt;p&gt;Hoare Logic 对于程序的安全性，确实可以起到一定的效果，它已经被应用到了一些实际的项目。比如微软 Windows 的驱动程序代码里面，有一种“安全标注语言”，叫做 SAL，其实就是 Hoare Logic 的一个实现。然而前条件和后条件是什么，你必须自己给代码加上标注，否则系统就不能工作。&lt;/p&gt;
-
-&lt;p&gt;比如上面的例子，系统如何知道我想要“x&amp;gt;0”这个性质呢？只有我自己把它写出来。所以要使用 Hoare Logic，必须在代码上标注很多的 pre-condtion 和 post-condition。这些条件要如何写，必须要深入理解程序语言和形式逻辑的原理。这个工作需要经过严格训练的专家来完成，而且需要很多的时间。&lt;/p&gt;
-
-&lt;h3 id=&quot;自动生成标注是不可能的&quot;&gt;自动生成标注是不可能的&lt;/h3&gt;
-
-&lt;p&gt;所以即使有了 Hoare Logic，程序验证也不是轻松的事情。于是呢就有人乘火打劫，提出一个类似减肥药的想法，声称他们要用“深度学习”，通过对已有标注的代码进行学习，最后让机器自动标注这些前后条件。还在“空想”阶段呢，却已经把“自动标注”作为自己的“优势”写进了白皮书：“我们的方法是自动的，其他的项目都是手动的……”&lt;/p&gt;
-
-&lt;p&gt;很可惜的是，“自动标注”其实跟“自动编程”是一样的空想。自动编程的难点在于机器没法知道你想要做什么。同理，自动标注的难点在于，机器没法知道你想要代码满足什么样的性质（property）。&lt;/p&gt;
-
-&lt;p&gt;除非你告诉它，机器永远无法知道函数参数必须满足什么样的条件（前条件），它也无法知道函数出口应该满足什么样的条件（后条件）。比如上面的那个例子，机器怎么知道你想要程序执行之后 x 大于零呢？除非你告诉它，它是不可能知道的。&lt;/p&gt;
-
-&lt;p&gt;你也许会问，深度学习难道不能帮上忙吗？想想吧…… 你可以给深度学习系统上千万行已经标注前后条件的代码。你可以把整个 Windows 系统，整个 Linux 系统，FireFox 的代码全都标注好，再加上一些战斗机，宇宙飞船的代码，输入深度学习系统进行“学习”。现在请问系统，我下面要写一个新的函数，你知道我想要做什么吗？你知道我希望它满足什么性质吗？你仍然不知道啊！只有我自己才知道：它是用来自动给我的猫铲屎的 :p&lt;/p&gt;
-
-&lt;p&gt;所以，利用深度学习自动标注 Hoare Logic 的前后条件，跟“自动编程”一样，是在试图实现“读心术”，那显然是不可能的。作为资深的 PL 和形式验证专家，这些人应该知道这是不可能自动实现的。他们提出这样的想法，并且把它作为相对于其他智能合约项目的优势，当然只是为了忽悠外行，为了发币圈钱 ;)&lt;/p&gt;
-
-&lt;p&gt;如果真能用深度学习生成前后条件，从而完全自动的验证程序的正确性，那么这种办法应该早就在形式验证领域炸锅了。每一个形式验证专家都希望能够完全自动的证明程序的正确性，然而他们早就知道那是不可能的。&lt;/p&gt;
-
-&lt;p&gt;设计语言来告诉机器我们想要什么，什么叫做“正确”，这本身就是 PL 专家和形式验证专家的工作。设计出了语言，我们还得依靠优秀的程序员来写这些代码，告诉机器我们想要做什么。我们得依靠优秀的安全专家，给代码加上前后条件标注，告诉机器什么叫做“正确安全的代码”…… 这一切都必须是人工完成的，无法靠机器自动完成。&lt;/p&gt;
-
-&lt;p&gt;说到这些，我就为这些学者感到悲哀，想不鄙视他们都不行了 :p 很早的时候我就有这种感觉，总是有些 PL 人看到什么方向有钱就往什么方向上靠，拿一堆吓人的术语来忽悠外行。管它一个外行设计的语言有多垃圾呢，我们帮它做形式验证工具，我们为它写编译器，写虚拟机，为它提出“形式化语义”（formal semantics）！给外行打下手，给母猪涂口红，完全失去作为一个专家的责任感和尊严。&lt;/p&gt;
-
-&lt;p&gt;现在这种风气愈演愈烈，随着比特币和以太坊的热门，他们开始在 Solidity 之类的语言和智能合约上做文章。新瓶子装老酒，反反复复做同样的事情。甚至完全失去职业道德，号称要实现一些早就知道不可能的事情。现在最热门的两个投资方向就是人工智能和区块链，现在我用机器学习来验证区块链智能合约的正确性，两个热点都占全了！;)&lt;/p&gt;
-
-&lt;p&gt;显然，我也可以轻而易举做出对智能合约进行某种“验证”或者“静态分析”的工具，然而我深刻的理解数理逻辑对于程序正确性的局限性。很多代码没法被证明为正确，但它们确实是正确的。很多代码有 bug，却没有任何工具可以发现它们。这是一个不幸的事实，就像无法实现永动机一样，没有任何人能够改变。&lt;/p&gt;
-
-&lt;p&gt;当然，我并没有排除对智能合约手动加上 Hoare Logic 标记这种做法的可行性，它是有一定价值的。我只是想提醒大家，这些标记必须是人工来写的，不可能自动产生。另外，虽然工具可以有一定的辅助作用，但如果写代码的人自己不小心，是无法保证程序完全正确的。&lt;/p&gt;
-
-&lt;p&gt;如何保证智能合约的正确呢？这跟保证程序的正确性是一样的问题。只有懂得如何写出干净简单的代码，进行严密的思考，才能写出正确的智能合约。关于如何写出干净，简单，严密可靠的代码，你可以参考我之前的一些文章。&lt;/p&gt;
-
-&lt;p&gt;做智能合约验证的工作也许能圈到钱，然而却是非常枯燥而没有成就感的。为此我拒绝了好几个有关区块链的合作项目。虽然我对区块链的其它一些想法（比如去中心化的共识机制）是感兴趣的，我对智能合约的正确性验证一点都不看好。&lt;/p&gt;
-
-&lt;h3 id=&quot;智能合约不可行&quot;&gt;智能合约不可行&lt;/h3&gt;
-
-&lt;p&gt;实际上，我认为智能合约这整个概念就不靠谱。比特币和以太坊的系统里面，根本就不应该，而且没必要存在脚本语言。我认为智能合约系统在当前阶段并不可行。&lt;/p&gt;
-
-&lt;p&gt;比特币的解锁脚本执行方式，一开头就有个低级错误，导致 injection 安全漏洞。用户可以写出恶意代码，导致节点的运行时系统出错。我不可想象，在 2009 年仍然有人把两段代码以文本方式贴在一起，然后执行。稍微有点经验的黑客都知道这里很可能有可攻击的点。&lt;/p&gt;
-
-&lt;p&gt;以太坊的 Solidity 语言一开头就有低级错误，导致价值五千万美元的以太币被盗。以太坊的智能合约系统消耗大量的计算资源，还导致了严重的性能问题。可以说比特币和以太坊的作者都是 PL 外行，然而如果是内行来做这些语言，难道就会更好吗？我并不这么认为。&lt;/p&gt;
-
-&lt;p&gt;如果换做是我设计了比特币，我不会为它设计一种语言。让用户可以编程是很危险的！不仅是因为极少的用户能够写出正确而可靠的代码，而且因为语言系统的实现极少可以不出现 bug。语言系统的设计错误，会给黑客可乘之机，写出恶意脚本来进行破坏。从来没有任何语言和他们的编译器，运行时系统是一开头就正确的，都需要很多年才能稳定下来。另外一旦你让系统来运行这些语言的代码，又会需要考虑性能的问题。这对于普通的语言问题不大，你不要用它来控制飞机就可以。然而电子货币系统的语言，几乎不允许出现这方面的问题。&lt;/p&gt;
-
-&lt;p&gt;所以与其提心吊胆的设计这些智能合约语言，还不如干脆不要这种功能。&lt;/p&gt;
-
-&lt;p&gt;而且我们真的需要那些脚本的功能吗？比特币虽然有脚本语言，可是常用的脚本其实只有不超过 5 个，直接 hard code 进去就可以了。以太坊的白皮书虽然做了那么多的应用展望，EVM 上出现过什么有价值的应用吗？我并不觉得我们需要这些智能合约。电子货币只要做好一件事，能被安全高效的当成钱用，就已经不错了。&lt;/p&gt;
-
-&lt;p&gt;美元，人民币，黄金…… 它们有合约的功能吗？没有。为什么电子货币一定要捆绑这种功能呢？我觉得这是不够模块化的设计。电子货币就应该像货币一样，能够实现转账交换的简单功能就可以了。合约应该是另外单独的系统，不应该跟货币捆绑在一起。&lt;/p&gt;
-
-&lt;p&gt;那合约怎么办呢？交给律师和会计去办 :) 你有没有想过，为什么世界上的法律系统不是程序控制自动执行的呢？为什么我们需要律师和法官，而不只是机器人？这不只是历史遗留问题。需要理解法律的本质属性才会明白，完全不通过人来进行的机械化执法是不可行的。&lt;/p&gt;
-
-&lt;p&gt;奢望过多的功能其实是一种过度工程（over-engineering）。花费精力去折腾智能合约系统，将会大大的延缓电子货币真正被世界接受。实话说嘛，试用了多种电子货币之后，我发现它们的技术相当有趣，但其实仍然处于玩具和试验阶段，基本无法作为货币使用。绝大部分电子货币都在等着被淘汰。它们的发展方向存在着各种迷茫，很多人走向歧途，或者各种忽悠。&lt;/p&gt;
-
-&lt;h3 id=&quot;待续&quot;&gt;待续……&lt;/h3&gt;
-
-&lt;p&gt;这篇文章可能对于比特币，区块链方向的投资者有很大的价值。如果我拯救了你的投资，欢迎你给我&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/04/13/pay-blog&quot;&gt;付费&lt;/a&gt;支持，一个 BTC 就可以 ;)&lt;/p&gt;
-
-&lt;p&gt;另外，我对于区块链技术还有挺多可以研究可以写的，好的不好的方面都有。甚至也许将来可以变成一本书。如果你觉得有收获，希望我继续发布这方面的内容，也可以付款鼓励一下，也欢迎联系我讨论你的看法。&lt;/p&gt;
-</description>
-        <pubDate>Thu, 22 Feb 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-22/automatic-programming/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-22/automatic-programming/</guid>
-      </item>
-    
-      <item>
-        <title>自动编程和自动形式验证</title>
-        <description>&lt;p&gt;（这是之前关于人工智能的文章里面的一节。由于它关系到我最近发现的一些现象，所以把它提取出来，扩展之后单独成文。）&lt;/p&gt;
-
-&lt;p&gt;有人听说我想创业，给我提出了一些“忽悠”的办法。他们说，既然你是程序语言专家，而现在人工智能（AI）又非常热，那你其实可以搞一个“自动编程系统”，号称可以自动生成程序，取代程序员的工作，节省许许多多的人力支出，这样就可以趁着“AI 热”拉到投资。&lt;/p&gt;
-
-&lt;p&gt;有人甚至把名字都给我想好了，叫“深度程序员”（DeepCoder = Deep Learning + Coder）。口号是：“有了 DeepCoder，不用 Top Coder！” 还有人给我指出了这方向最新的，吹得神乎其神的研究，比如微软的 &lt;a href=&quot;http://www.jiqizhixin.com/article/2691&quot;&gt;Robust Fill&lt;/a&gt;……&lt;/p&gt;
-
-&lt;h3 id=&quot;自动编程是不可能的&quot;&gt;自动编程是不可能的&lt;/h3&gt;
-
-&lt;p&gt;我现在可以很简单的告诉你，自动编程是不可能实现的。微软的 &lt;a href=&quot;http://www.jiqizhixin.com/article/2691&quot;&gt;Robust Fill&lt;/a&gt; 之类，全都是在扯淡。我对微软最近乘着 AI 热，各种煽风点火的做法，表示少许鄙视。不过微软的研究员也许知道这些东西的局限，只是国内小编在夸大它的功效吧。&lt;/p&gt;
-
-&lt;p&gt;你仔细看看他们举出的例子，就知道那是一个玩具问题。人给出少量例子，想要电脑完全正确的猜出他想做什么，那显然是不可能的。很简单的原因，例子不可能包含足够的信息，精确地表达人想要什么。最最简单的变换也许可以，然而只要多出那么一点点例外情况，你就完全没法猜出来他想干什么。就连人看到这些例子，都不知道另一个人想干什么，机器又如何知道？这根本就是想实现“读心术”。甚至人自己都可以是糊涂的，他根本不知道自己想干什么，机器又怎么猜得出来？所以这比读心术还要难！&lt;/p&gt;
-
-&lt;p&gt;对于如此弱智的问题，都不能 100% 正确的解决，遇到稍微有点逻辑的事情，就更没有希望了。论文最后还“高瞻远瞩”一下，提到要把这作法扩展到有“控制流”的情况，完全就是瞎扯。所以 RobustFill 所能做的，也就是让这种极其弱智的玩具问题，达到“接近 92% 的准确率”而已了。另外，这个 92% 是用什么标准算出来的，也很值得怀疑。&lt;/p&gt;
-
-&lt;p&gt;任何一个负责的程序语言专家都会告诉你，自动生成程序是根本不可能的事情。因为“读心术”是不可能实现的，所以要机器做事，人必须至少告诉机器自己“想要什么”，然而表达这个“想要什么”的难度，其实跟编程几乎是一样的。实际上程序员工作的本质，不就是在告诉电脑自己想要它干什么吗？最困难的工作（数据结构，算法，数据库系统）已经被固化到了库代码里面，然而表达“想要干什么”这个任务，是永远无法自动完成的，因为只有程序员自己才知道他想要什么，甚至他自己都要想很久，才知道自己想要什么……&lt;/p&gt;
-
-&lt;p&gt;有句话说得好：编程不过是一门失传的艺术的别名，这门艺术的名字叫做“思考”。没有任何机器可以代替人的思考，所以程序员是一种不可被机器取代的工作。虽然好的编程工具可以让程序员工作更加舒心和高效，任何试图取代程序员工作，节省编程劳力开销，克扣程序员待遇，试图把他们变成“可替换原件”的做法（比如 Agile，TDD），最终都会倒戈，使得雇主收到适得其反的后果。同样的原理也适用于其它的创造性工作：厨师，发型师，画家，……&lt;/p&gt;
-
-&lt;p&gt;所以别妄想自动编程了。节省程序员开销唯一的办法，是邀请优秀的程序员，尊重他们，给他们好的待遇，让他们开心安逸的生活和工作。同时，开掉那些满口“Agile”，“Scrum”，“TDD”，“&lt;a href=&quot;http://www.yinwang.org/blog-cn/2015/06/07/software-engineering&quot;&gt;软件工程&lt;/a&gt;”，光说不做的扯淡管理者，他们才是真正浪费公司资源，降低开发效率和软件质量的祸根。&lt;/p&gt;
-
-&lt;h3 id=&quot;自动形式验证是不可能的&quot;&gt;自动形式验证是不可能的&lt;/h3&gt;
-
-&lt;p&gt;最近由于比特币和以太坊很热门，很多人开始在以太坊的“智能合约语言”上做文章。其中一部分是搞 PL 的人，他们试图对 Solidity 之类语言写的智能合约进行形式验证（formal verification），号称要用数学的方法，自动的验证程序的正确性。&lt;/p&gt;
-
-&lt;p&gt;其中一种办法，是给代码的函数加上“前条件”和“后条件”（pre-condition 和 post-condition），这样就可以使用 &lt;a href=&quot;https://en.wikipedia.org/wiki/Hoare_logic&quot;&gt;Hoare Logic&lt;/a&gt; 的办法来证明一些代码的基本属性，比如转账之后余额是正确的。&lt;/p&gt;
-
-&lt;p&gt;虽然 Hoare Logic 并不能完全的保证程序的正确，它确实可以起到一定的效果。然而要使用 Hoare Logic，必须人工写上很多 pre-condtion 和 post-condition。这些条件要如何写，必须要很深入的理解程序语言和形式验证。这个工作必须有经过多年严格训练的专家来完成。&lt;/p&gt;
-
-&lt;p&gt;世界上可以完成这种工作的专家，是非常少的，他们要求的报酬，也会非常高。所以呢，这些提出这种验证想法的 PL 人，就提出一个想法，他们要用“深度学习”的方法，通过对手写的前后条件进行机器学习，自动的生成这些前后条件。他们把这种“自动加条件”的特性，作为自己相对于其他手动验证方法的优点。&lt;/p&gt;
-
-&lt;p&gt;很可惜的是，“自动加条件”这种做法，其实跟“自动编程”是一样的，它完全的符合我在上一节指出的特征。自动编程的难点在于机器没法知道你想要什么，而自动加条件的难度在于，机器没法知道程序应该满足什么样的“特性”（property）。除非你告诉它，机器永远没有办法知道一个进入函数的时候，参数必须满足什么样的条件。同理它也不可能知道你想要在函数的出口满足什么条件。&lt;/p&gt;
-
-&lt;p&gt;试图用深度学习加上前后条件，这是同样的试图实现“读心术”的做法。这是根本不可能的，而且作为资深的 PL 和形式验证专家，这些人应该知道这是不可能的！他们提出这样的想法，并且把它作为相对于其他智能合约项目的优势，显而易见只是为了发币圈钱 ;)&lt;/p&gt;
-
-&lt;p&gt;如果真能用深度学习生成前后条件，自动的验证程序的正确性，那么这种办法应该早就在形式验证领域出现了。每一个形式验证专家都希望能够自动的证明程序的正确性，然而他们早就知道那是不可能的。&lt;/p&gt;
-
-&lt;p&gt;我为这些学者感到悲哀。很早的时候我就有这种感觉，总是有些 PL 人看到什么方向有钱就往什么方向钻，管它语言有多垃圾呢，我们帮它做验证工具，我们为它写编译器，写虚拟机！完全没有作为一个专家的尊严。现在这种风气愈演愈烈，随着比特币和以太坊的热门，他们开始在 Solidity 之类的语言和智能合约上做文章。&lt;/p&gt;
-
-&lt;p&gt;很显然，我也可以轻而易举做出对智能合约进行某种“验证”或者“静态分析”的工具，然而我深刻的知道，数理逻辑对于程序正确性的局限。很多程序是没法证明为正确，但它们确实是正确的。做这样的工作也许能圈到钱，然而却是非常枯燥而没有成就感的。为此，我拒绝了好几个区块链圈子里的合作，因为他们想利用我这方面的才能。我对智能合约的正确性验证不感兴趣，虽然我对区块链的其它一些部分是感兴趣的 ;)&lt;/p&gt;
-
-&lt;p&gt;如何保证智能合约的正确呢？你只有懂得如何写出正确的代码，非常小心。另外，静态分析和测试也可以有一些帮助，但要记住它们其实没法证明程序的正确。对于这个问题，你可以参考我的&lt;a href=&quot;http://www.yinwang.org/blog-cn/2015/07/02/program-correctness&quot;&gt;这篇文章&lt;/a&gt;。&lt;/p&gt;
-</description>
-        <pubDate>Thu, 22 Feb 2018 08:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-22/smart-contract/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-22/smart-contract/</guid>
-      </item>
-    
-      <item>
-        <title>体验中国社会的计划</title>
-        <description>&lt;p&gt;密切关注我的博客的人，也许看过我大年初一写的那篇批评成都人的文章。我进而对“中国人”产生了负面情绪，进一步的把自己封闭起来。虽然对于成都和四川的文化，我的认识还是比较准确的。然而，由于我没有足够的样本数据，我觉得自己还没有资格对“中国人”这么广泛的概念产生那样的结论。&lt;/p&gt;
-
-&lt;p&gt;过度和过快的对事物提炼出”规律“（over generalize），可以说是我这个人最大的缺点。这个缺点让我损失了许许多多美好的机会。我现在决定了，要正视自己的这一缺点，改进自己。当然，我应该对我说过的话道个歉，虽然我很可能没有伤害到任何人。因为很多人都知道，我说的多半不是真的 :)&lt;/p&gt;
-
-&lt;p&gt;我现在深刻的认识到了一个问题，那就是我还不完全了解社会和人，虽然我对他们的很多见解是很深入的。我不完全了解美国社会，更不了解中国社会。回到中国的时候，我的心理处于一种半封闭的状态。这种状态让我无法真实的去体验和理解中国社会。&lt;/p&gt;
-
-&lt;p&gt;这种封闭的心理，来源于我在美国的很多不顺利的工作经历，我受到的各种完全不符合自己身份和地位的对待。当回到中国的时候，我对自己说：“我不想再为别人工作。我想创业，做自己的事情！” 所以回到中国之后，我孤注一掷的想创立自己的事业。然而几个月过去之后，我发现这也许并不是最好的办法。&lt;/p&gt;
-
-&lt;p&gt;独自一人创造东西，是完全有可能的。我有网络，我还有可以联系的朋友。然而这样的社交环境，让我无法真正的接触到主流的中国社会。在很长的一段时间内，我每天遇到的人，除了我的父母，就是商店饭店的服务员，路人，还有零星的几个朋友，分布在中国的好几个城市。&lt;/p&gt;
-
-&lt;p&gt;我接触到的人，由于他们各自的局限性，远远不足以让我体验中国的社会和生活。依据这些数据所得出的推论，显然是很偏激而荒谬的。我的回国体验，可以说是不大顺利的。我在中国并没有一个理解和支持我的家庭。我确实在考虑回到美国，而且我知道过一段时间我一定会回去。然而我不想现在就放弃，因为我还没有开始体验中国。我希望快乐和充实的度过自己在国内的这段时光，反正将来我在世界各地也是来去自由的，我将来一定会再回到我有过良好体验的地方 :)&lt;/p&gt;
-
-&lt;p&gt;为了融入和体会真实的中国社会，似乎最好的办法，还是跟其他人一起在公司工作。根据之前在美国公司的经验，朋友都是需要经过长期的面对面的接触，不知不觉体会各自的节奏，才会产生的。人们的心之间总是有各种各样的误解和不理解。公司这样一种环境，使得人们之间形成一种自然的互相了解关系。时间久了，就知道谁是合得来的，谁是应该敬而远之的。&lt;/p&gt;
-
-&lt;p&gt;这种感情可以如此深厚。我在美国的很多同事现在都很想念我，盼望我早日回到美国。这包括在 Shape Security 的很多同事，也包括在微软的同事。虽然微软的领导对待人的方式很不尊重，然而我其实很喜欢我微软的同事。在微软的每一天，我都跟一群印度人，两个美国人，还有一个哈萨克斯坦同事一起吃饭，一起散步。他们是一群很可爱的人，饭桌上我们分享的都是自己如何享受周末，各种有趣的事情，很少说一些功利世俗的东西。我知道他们很怀念我，我也很怀念他们。&lt;/p&gt;
-
-&lt;p&gt;所以呢，出于融入社会的需求，我决定在研究自己创业项目的同时，加入某些公司的团队，跟他们一起工作。刚回国的时候，我觉得回国再给别人打工，是一种耻辱，所以一直避免表达这种想法。然而人工作的目的可以有很多种，有人为了生存而工作，有人为了家庭而工作，有人为了钱而工作，有人为了虚荣而工作，有人为了乐趣而工作。不管是为了什么目的，工作都是值得尊敬的事情，也是每个人的合法权利。&lt;/p&gt;
-
-&lt;p&gt;休息了几个月之后，我不缺钱，可是我真的想工作了。我工作的目的，是为了有更多的朋友和合作伙伴，为了真正的融入和理解中国社会，也是为了让更多的人了解我，跟我互相学习。&lt;/p&gt;
-
-&lt;p&gt;我很理解，自己在美国公司的多次不愉快经历，以及不顾后果的曝光，可能使人会有所顾虑，担心要是我不高兴了，又要公开很多事情。再加上很多对我存在嫉妒或者其它不健康心理的人曲解和误传我的言论，有些人没直接看过我写的东西，就以为王垠是一个自大，目中无人的人。&lt;/p&gt;
-
-&lt;p&gt;对于第一点，我确实得承认有些时候我确实过度公开了一些事情。虽然某些公司的极端恶劣的作法确实应该进行谴责和披露，但普通的不愉快经历，确实属于个人隐私，不应该在博客上披露。对于有些人的顾虑，我当然很可能无法改变。但我确实已经意识到这个问题，并且决定以后只对关系亲密的朋友私下交流，而不再在博客上公开这种事情。&lt;/p&gt;
-
-&lt;p&gt;对于第二点呢，我确实应该让更多的人了解，现实世界的王垠是什么样的人 :) 没见过我的人听了别人的传言，可能确实会以为我是一个恃才傲物，固执己见，难以合作的人。然而真正跟我相处过的合作伙伴，我以前的同事，公司的前台，HR，打扫清洁的大妈，食堂和小卖部的服务员…… 都会告诉你，王垠对待他们是如何尊重而有礼貌，没有一点点的架子，完全看不出来他是做什么的 :)&lt;/p&gt;
-
-&lt;p&gt;实际上，我是如此的尊重身边的人，几乎完全不显示锋芒。以至于不理解这一点的人，心里存在自傲的人，反而会觉得我好欺负，以至于出现一些不尊重的现象。有个朋友告诉我，很多人有这样一种“屌丝心理”，他们只尊重那些鄙视他们的人，他们喜欢被鄙视。你对他们友好谦虚一些，他们反而觉得自己高你一等，于是对你开始采取居高临下的姿态……&lt;/p&gt;
-
-&lt;p&gt;我歧视理解这种心理。我明白，在合适的时候，我应该采取“权威”的，甚至强硬的语气。可是呢，我这个人就是太有礼貌太随和了，真的没法对人采取这种语气。&lt;/p&gt;
-
-&lt;p&gt;给你讲个故事吧，我之前的一个工作，开头是一个很“仰慕”我的人邀请我加入的。但这个人之前从来没见过我，也没有跟我有网络的交流，只是听说我的名气，知道我是研究 PL 的。我觉得这个公司不错，就加入了他的团队。&lt;/p&gt;
-
-&lt;p&gt;当然，开始工作之后，我采取自己一贯的友好而尊重他人的风格。我不会也不可能采取权威式的口气。然而过了一段时间之后，我发现自己的谦虚和随和，“导致”了一个严重的问题。那就是邀请我加入公司的那位队友，开始向我显示出他自己的 ego。显然，他开始觉得自己对于 PL 懂得比我还多。对于很多专业的问题，编程的技巧，他开始对我显露出一种“教育新手”一样的姿态，甚至采用很不尊重的运气说话，像在对一个小学生说话……&lt;/p&gt;
-
-&lt;p&gt;当然，作为一个受过很多年专业教育的 PL 专家，具有精华的编程技术的专业人士，我对于这样的态度并不是可以容忍的。我虽然从来不对水平低于我的人采用居高临下的态度，可是我不可能接受水平低于我的人，反而对我采取居高临下的态度。实话说吧，这个人的各种言论当中，都暴露出他只是一个 PL 的民科，对于很多概念只知道名字，却完全不理解其中的内涵。出于尊重，我从来也没有当面指出这一点。然而到后来，他却开始自高自大起来，处处显示自己聪明，甚至开始“教我”一些他自己都没搞清楚的东西，让我非常的无语 :p&lt;/p&gt;
-
-&lt;p&gt;明白了吗？这就是你们心目中的那个“自大”的王垠。不是我鄙视别人，而是别人喜欢鄙视我，毫无理由的鄙视，只是为了满足他们自己的虚荣和 ego。我知道改变人的心，几乎是不可能的。只有当他们真正理解到自己的缺点，才会懂得如何尊重一个人，如何尊重一个专家。&lt;/p&gt;
-
-&lt;p&gt;解释了这么多，我只是希望避免误会，我不希望由于别人的误传而失去潜在的朋友。现在我来讲一下我对这份工作的要求：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;我的初步目的地，基本锁定在上海或者台湾。在几个月之前的考察中，我发现上海恐怕是中国大陆唯一可以满足我对于生活质量，社会秩序，城市建设，文化娱乐和人文素质的地方。由于长期在美国生活，我对于居住的环境有很高的标准。虽然我不贪图奢华和虚荣，然而我难以再生活在脏，乱，吵的环境下。我对房屋的装修，市政设施的清洁和坚固程度，设计的合理性，对于城市人口的基本素质，礼貌修养，对私人界限的尊重，有相当高的要求。在这种标准下，我发现上海似乎是中国大陆唯一可以满足这种需求的城市，一个真正符合国际标准的大都市。&lt;/p&gt;
-
-    &lt;p&gt;另外如果有可能的话，我希望可以在台湾工作和生活一段时间。我对台湾人有非常好的印象，我认为台湾是一个传承了中华文明，又融合了西方文化优点的宝地。希望能够亲眼见到台湾，体验台湾的生活，认识更多的台湾朋友。&lt;/p&gt;
-
-    &lt;p&gt;当然我也可能之后辗转到其它一些城市。但我希望上海或者台湾是这次“深入考察”的第一站。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;我的兴趣。目前我对分布式系统，分布式数据库，数字货币（区块链）之类的内容比较感兴趣。在国内的这几个月当中，我自己研究了不少这方面的内容，包括分布式系统的同步问题（paxos 一类的算法），数据库的设计，比特币，区块链的共识机制以及各种设计。其实，以太坊初期的好几个设计错误，包括导致被盗取价值五千万美元以太币的 Solidity 语言设计错误，我是一眼就看出来的，而且相关的设计原则，早就已经记录在我的一些文章里了。以太币的初期如果有我做顾问，而且有足够的发言权的话，那一切都是不可能发生的 :p 当然，我也发现现在的数字货币的发展方向有一些误区，很多忽悠和无用功都是我一眼就看得出来的。我可以帮助防止人们走弯路。&lt;/p&gt;
-
-    &lt;p&gt;当然，我也不想把自己局限于自己在行的领域了。知识就像一个圆圈。知道的越多，就越是明白自己的无知。我对自己的圆圈外面的世界充满了好奇。所以呢，如果碰巧有人想请我去尝试一些很不一样的事情，我还是可能会感兴趣的。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;职责。我当然很清楚自己在这个领域的学术地位。所以呢，除非是一个管理很平坦的公司，否则我不会去做最基层的编程工作。我的职责应该是作为一个高级的构架师，设计者，研究员，一个导师，指导者和组织者。当然，这不是说我不会亲自写代码。显然，关键性的，创新的代码构造，应该是直接出自我之手。我指导下的团队成员的代码，应该由我亲自过目和推敲。我当然不愿意亲自去清理前人遗留下来的混乱的，无关紧要的代码，然而我的专业素养允许我去研究和分析已有代码的构造，发现它们的问题，并且利用自己的经验，指导其他人来清理，或者包装隔离这些东西。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;报酬。由于我工作的动机是为了融入和了解中国社会，我对报酬方面的需求不会高得离谱。我不希望由于薪酬的高标准，而阻碍我遇到说话投机的未来合作伙伴，也不希望给工作单位造成经济压力。但是注意了，出于个人尊严的需求和我本身的地位，我当然也是不接受低于国内普通收入水平的报酬的。曾经有认识我的人想请我去工作，一开口给我开出一个还不到国内程序员平均水平的工资。我视这种做法为不尊重，所以不考虑这样的合作。另外，我不是很在乎创业公司开出的期权。很多创业公司喜欢画饼，给比较多的期权，然后把现金工资压低。我必须声明一下，我不相信未来的股权，我只看眼前的现金收入。尊重我，理解我的人，不应该跟我玩这些数字游戏。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;工作强度。当然我早就听说国内的互联网公司的所谓“996”。显然，我是不可能担任有过多加班，没有个人生活的工作的，否则我就违背了自己工作的初衷。显然，我担任这样的创造性脑力工作，必须要有充裕的时间来享受自己的生活。我必须和同事朋友们有充裕的时间进行休闲娱乐活动。我不反对为了完成项目，偶尔超出工作时间，但那种长期进行“996”制度，加班风气过于严重，完全没有生活的公司，就不用考虑让我加入了。自己有时间玩，还找不到同事一起玩，那是多么悲惨的世界 :)&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;同事的智商和技术水平。我对同事的智商和技术水平要求其实不高。我并不是在寻找一群天才一起工作，我是在寻找一群人类一起工作。相反，我很怕进入那种每个人都以为自己是天才的环境。不懂一些事情不要紧，只要我们怀有一颗互相学习的心。我跟水平不如我的人一起工作，从来没有合作的问题。我更看重的是人的心理成熟程度，他们的人格，而不是他们的智商。同理的，我一贯的产品设计宗旨，应该是让普通智商的人都会用，而不只是让聪明人会用。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;氛围。我不喜欢那种过度 geeky，喜欢互相吹捧，攀比或者羡慕，大家都自以为聪明了不起的环境。我希望遇到一群热爱生活，有幽默感，休息时聊些生活趣事，发掘有趣的事情的人。当然，我们必须互相欣赏和尊重。有些创业公司联系我，说很佩服我，但马上又说：“还有某某某天才，也加入了我们，干活非常快……” 这种套路也许对年轻不懂事的人管用，但对于我来说是一种不尊重的做法，所以我只好等他们先去学会如何尊重一个人。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;个人和公司隐私。我不会在博客上宣布我加入了某个公司或者离开了某个公司。我也不希望有人在网络上传言我加入了某个公司。我希望对我感兴趣的公司，是出于对我才华和实力的欣赏和尊重，而不是想利用我的名气来忽悠投资者。所以我要求，我的名字不可以出现在公司对外的主页上，以及其它的公开网络。也就是说，我在某个公司工作，除了公司相关人员和家人朋友，不应该有更多的人知道。我不喜欢国内总是有“某大牛加入了某公司，做某牛X项目”之类的新闻出现。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;好了，可能就说这么多。我不想留下 email 在这里，非诚勿扰 :) 如果你有诚意要想联系工作事宜的话，可以利用我的其中一个&lt;a href=&quot;http://www.yinwang.org/blog-cn/2016/04/13/pay-blog&quot;&gt;付款方式&lt;/a&gt;（支付宝或者微信），付款后进行留言，留下你的工作单位名称和 email 地址。我会跟你联系。&lt;/p&gt;
-
-&lt;p&gt;注意请不要直接留下微信号，因为我的微信联系方式只用于已经有一定了解，有实时通讯需求的人。直接使用微信联系，是一种很容易产生误会的作法，所以恕我不加微信。另外，因为工作关系而加入的微信联系人，出于专业素养，我都会屏蔽不让看朋友圈，这是因为我的朋友圈信息完全属于个人生活和娱乐范畴，不对工作关系开放，请不用介意。谢谢！&lt;/p&gt;
-</description>
-        <pubDate>Tue, 20 Feb 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-20/experience-china/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-20/experience-china/</guid>
-      </item>
-    
-      <item>
-        <title>春节随想</title>
-        <description>&lt;p&gt;大年初一，本来不想写东西的。可是一大早起来，就看到这样的天空，空气质量是“重度污染”。连大年初一都不放过我，出不了门，所以我这个年也不想过了，决定写点什么，在我被这雾霾灭口之前 :)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-air.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-heavy-polution.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;三个月以来，成都的天空一直是这个样子，每一天都像是世界末日。别搞错了，这不是普通的四川盆地的雾气，而是严重污染的雾霾。成都的这三个月，几乎每一天都是雾霾天。查看空气质量历史数据，发现成都就没几天空气是优良的，这比北京上海都要差很多。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-history.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我的博客已经消失一段时间了，好些人在问我，到底发生了什么，我都没有回答他们。导致我关闭博客的，不仅是因为这严重的，长期的，末日般的雾霾天，而且是因为像这雾霾一样阴暗的人心。实际上正因为人心的阴暗和贪婪，才会制造出如此严重的雾霾。&lt;/p&gt;
-
-&lt;p&gt;面对这样的人群，我不仅恍然大悟，我一直以来在给什么样的人提供几乎无偿的信息？我为什么要写那些文章？我为此浪费了多少宝贵的时间！我本可以用它来休息，为自己多做一点，为我爱的人多做一点……&lt;/p&gt;
-
-&lt;p&gt;经过几个月来在国内的感受，我就像回到了出国以前。我彻底的回忆起了自己为什么要离开成都去北京，又为什么离开北京去美国…… 当我回来看的时候，人们确实变富裕了，然而人心却没有变得更善良，更有教养，反而文明程度和素质降低了。&lt;/p&gt;
-
-&lt;p&gt;“在成都的街头走一走……”，然后你就被边走边抽烟的人给熏到了，一路走一路熏，你才意识到香烟的杀伤范围有那么大。走在人行道上，背后飞来个电动车，嫌你挡路呢，朝你狂按喇叭，你一路走他一路按，仿佛人行道本来是该他走的，而不是给行人走的。走出商场，前面那个大汉一把捞起厚重的保暖门帘，明明看见你在后面一步之遥，不但不扶一下，反而故意把它甩起来老高，让它朝你砸下来，然后你就看到他在门口抽起烟来。在星巴克买咖啡，经常有人插队，那方式手法之巧妙，叹为观止，以至于每次去星巴克都会担心有人插队。想坐下发会呆，旁边来一个大汉，醉了似的轰一声倒下去，然后一边看手机一边使劲拍桌子。回家想歇会，楼上的邻居开始把桌子凳子拖得鸡皮疙瘩式的响，一响就是几个小时，他们自己却也受得了。本来你心想这小区环境如此好，车库里都是奥迪宝马奔驰，人应该照应点吧，结果……&lt;/p&gt;
-
-&lt;p&gt;如此各种奇葩现象，这似乎已不是我认识的那个成都，但它也许就是那个成都。每一次的经历你都可以说是个别现象。可是当你几乎每一次出门都遇到“个别现象”，就可以根据概率论，总结出一些规律来了。有些地方人的平均素质，确实比其他地方要低。&lt;/p&gt;
-
-&lt;p&gt;我曾经以为那些打着“硅谷大牛”牌子，回国招摇撞骗的人只是少数。我以为垠黑是少数人。我以为 MITBBS 和知乎的奇葩人士是少数。我写过『对中国人的信心』，说大部分中国人都是好的。我曾经以为写点文章就能改善中国人的社会意识。可是面对活生生的中国人，我醒悟了。这些人不是少数，而是大多数！&lt;/p&gt;
-
-&lt;p&gt;这里暴露一个秘密，写『对中国人的信心』的时候，我压根就没对中国人存在过信心 :P 那些与国人美好的遭遇，都是大幅度美化过，PS 过的…… 虽然在每个地方我都会遇到少数几个可爱的人，然而对于大部分人，我为他们编造了一个美丽的谎言。这是我为数不多的谎言之一。&lt;/p&gt;
-
-&lt;p&gt;在美国的大部分时候，我对于国人的态度一般是：躲得远远的。在学校里的时候，我有过三个中国室友。我的经验是，跟中国人一起住，麻烦就来了。因为他们很多脏乱吵，势利，吝啬，分不清私人界限。连什么是自己的事情，什么是别人的事情都分不清楚。直到最后遇到一个台湾室友，情况才好了很多。他高尚的品德和对理想的追求感化了我，直到今天我都自愧不如。我因此很喜欢台湾人，而事实证明他们大部分都很好。&lt;/p&gt;
-
-&lt;p&gt;本来就没考虑在成都安家工作，只是想在一个号称“休闲城市”待会儿，思索下人生。没想到却因为这连天的雾霾和奇葩的人群，成天只有待在自己的小窝里。有时候戴上口罩出门逛逛，咖啡店坐坐，可几乎每次都会遭遇坏心情的野蛮人，所以已经没什么动力出去了。当然也会遇到会心的微笑和感动的瞬间，然而这些很快又被突如其来的奇葩现象给消磨掉了。&lt;/p&gt;
-
-&lt;p&gt;这个反对膜拜权威的人，他不但外面没有地方可待，而且他的后院也着了火，他的家已经被国内的各种媒体，吹牛大王们攻陷。眼看着自己的亲人成天抱着手机被那些人洗脑，亲自在场都无能为力，还被唠叨和转发各种微信小广告，你还指望写文章就可以改善社会？我醒悟了，美好的动机，它失败得如此彻底，因为我根本不懂得如何利用中国人的心：盲从，攀比，自私，贪小便宜，势利，唯利是图，脏，乱，吵，不讲礼仪，不尊重私人界限……&lt;/p&gt;
-
-&lt;p&gt;这就是所谓五千年的传统文化。一种只有物质和功利，而没有爱的文化。我耗费了十年的人生，跨越了半个地球，经历了种种，才把这些垃圾从我自己的脑子里除去。又如何指望写点文章就让其他人见效呢？十年树木，百年树人，真不是说点话写点文章就可以的，何况别人根本就不看你不听你的。&lt;/p&gt;
-
-&lt;p&gt;这就是为什么我不应该再写博客和文章。它们也许对少数人有帮助，然而对于大面积的社会，对我自己，其实一点用都没有，徒增烦恼而已。不如把时间拿来睡大觉。&lt;/p&gt;
-
-&lt;p&gt;春节，恰恰是这一切的攀比，八卦，势利现象集中爆发的时候。阖家团聚，对于大部分中国人家庭其实都毫无意义，因为他们的心不在一起，没有真正的爱和尊重，只有春晚不断地煽情打鸡血。&lt;/p&gt;
-
-&lt;p&gt;所以从今年开始，我不再过春节，也不再写博客。我不再想给任何人无偿提供信息，也不再提供有偿的咨询。我将停止在中国的一切创业和商业活动，专心做自己的研究和休闲（换个地方）。我很清楚自己学识的地位和价值，我不会再以任何价格把它卖给非文明世界的人。在这个野蛮的世界，我必须实行应付野蛮世界的策略。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 16 Feb 2018 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-16/new-year/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-16/new-year/</guid>
-      </item>
-    
-      <item>
-        <title>成都的雾霾</title>
-        <description>&lt;p&gt;今天是大年初一，本来不想写东西的。可是一大早起来，就看到这样的天空，空气质量又是“重度污染”。连大年初一都不放过我，出不了门，所以我这个年也不想过了，决定写点什么，在我被这雾霾灭口之前 :)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-air.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-heavy-polution.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;三个月以来，成都的天空一直是这个样子，每一天都像是世界末日。当你还能看见太阳的时候就更诡异了，大白天的看到太阳，是一个朦胧的火球，天都是红色橙色的，红得可怕。这只有在好莱坞的外星人入侵地球大片里才能看到。&lt;/p&gt;
-
-&lt;p&gt;别搞错了，这不是普通的四川盆地的雾气，而是严重污染的雾霾。成都的这三个月，几乎每一天都有严重的雾霾。查看空气质量历史数据，发现成都冬天就没几天空气是优良的，这比北京上海都要差很多。北京和上海每个月还是会有几天空气差的时候，然而大部分时候的空气，还是基本可以接受的。而成都呢？三个月来空气好的时候，掰着指头都数的出来。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-history.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;夏天的时候好点，然而那是因为成都夏天下很多的雨，雨水会部分的洗掉空气中的颗粒物。成都夏天的雨多得让人讨厌，每天都得带伞。如果下这么多的雨，在其它城市空气早就变优了，然而成都夏天的空气，也只能算勉强能活下去而已。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-summer.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;所以这污染应该是不分季节常年进行的，并不是冬天才有。&lt;/p&gt;
-
-&lt;p&gt;不要误解了，空气污染绝对不是自然现象，也不是汽车多了造成的。这绝对是人为的行为，是人祸。问自己几个问题，稍微上网搜索一下，你就能明白这些雾霾是怎么来的。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;纽约，东京那么大的城市，那么多汽车在跑。为什么纽约和东京每天空气质量都超级好？pm2.5 基本都是 20 以下。所以看来雾霾并不是汽车尾气造成的。&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/new-york-air.jpg&quot; alt=&quot;img&quot; /&gt; 汽车尾气里面基本都是气体，是没有固体“颗粒物”的。除了原来的空气成分，大部分尾气都是二氧化碳和水蒸气。二氧化碳不是污染物。汽车尾气的污染物主要是二氧化硫，一氧化碳，二氧化氮（NO2）之类的气体。&lt;/p&gt;
-
-    &lt;p&gt;如果你还不信，就再来想想汽车引擎的工作原理。汽车的动力来源于汽油在气缸内点火爆炸，推动活塞运动。如果汽油爆炸产生颗粒物的话，那是会损坏气缸和活塞的。所以汽油应该是没有颗粒物杂质的，它一挥发就干干净净的，它燃烧也不会产生颗粒物排放。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;查看空气质量历史，为什么成都到了晚上，空气质量就变得很差，而白天就稍微好点？请你想想，成都的晚上和白天有什么不同？成都不像北京，它没有烧煤的集体供暖设施，所以晚上并不会比白天需要烧更多的煤。为什么污染会在晚上更严重？&lt;/p&gt;
-
-    &lt;p&gt;你只需要上网搜一下，就基本有了线索：原来那些颗粒物是附近的工厂排出来的。工厂为了掩盖排烟的真相，都选择在晚上偷排，这样就不那么明显了。近一点的人可以看见，远一点就看不见了。  &lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-cause1.jpg&quot; alt=&quot;img&quot; /&gt;  &lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-cause2.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;再研究一下雾霾数据地图，就会发现他们说的那些位置比较准确。污染最严重的地区，是成都的郊区：双流，郫县，崇州，彭州。如果你按时间观察，会发现那些地方晚上就开始污染加重。&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-map.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-    &lt;p&gt;再来印证一下。退一万步说，如果汽车能造成颗粒物污染，那种乡下郊区晚上会有那么多汽车在跑，造成那么严重的污染吗？显然不可能有那么多车在跑。那么是什么造成污染呢？那不很明显了吗。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;另外，去年 6 月我刚到成都的时候，空气还挺好。出租车司机告诉我，这段时间中央来了专家组调查雾霾，所以工厂都收工躲起来了。等到冬天的时候你看看，那雾霾可比北京厉害！现在你们明白了？  &lt;img src=&quot;http://www.yinwang.org/images/chengdu-air-cause3.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;成都人对于雾霾，几乎是集体的无知。大部分人不知道雾霾的危害，严重污染的时候，大街上也没有几个戴口罩的。有一次看我戴口罩，出租车司机对我说：“成都空气常年是这样的。戴口罩干嘛？适应了就好了……”&lt;/p&gt;
-
-&lt;p&gt;好一个“适应了就好”！成都人，建议你们研究一下 pm2.5 颗粒物（大小在2.5微米的颗粒物）的危害。这种细微的颗粒物可以穿过肺部细胞，进入到其它器官里面。由于它们很小，所以经常是进去了就出不来了，一辈子就留在里面。另外，pm2.5 颗粒物的主要成分也不是什么好东西，大部分是硝酸盐。你们有没有想过，自己的慢性咽炎是哪里来的？为什么自己没抽烟还会得那种呼吸道疾病？&lt;/p&gt;
-
-&lt;p&gt;老实告诉你吧，我做过实验的。我本来没有咽喉问题。每逢空气污染比较严重的时候，我带着口罩出门就没事，带着口罩说再多话也没事。但是一旦脱下口罩，跟人说一会儿话，很快就感觉到咽喉不舒服。像腻住了堵住了一样，不断地想清嗓子…… 再想想吧，你们的慢性咽炎是怎么来的 ;)&lt;/p&gt;
-
-&lt;p&gt;成都人对于雾霾的误解，也有可能是因为成都的气候让人模拟两可。以前成都就以雾多而出名，然而雾并不是雾霾。雾是水汽，是对人体无害的。我还清楚的记得小时候吸入雾气的感觉，是那么的清爽，浸人心脾！现在有了雾霾，很多人还以为是像以前一样干净的雾气，所以严重污染的时候还不戴口罩。&lt;/p&gt;
-
-&lt;p&gt;成都号称是“天府之国”，是宜居休闲的城市，还被联合国评为“适宜人类居住的城市”。成都市还想在人才和技术领域有更大的发展，建造了大规模的软件园等设施，引进各种技术公司。可是成都这几年的污染如此严重，比北京上海都要严重很多。连续不断的雾霾天，几乎没法出门，出门也不舒服，使得人的生活无比的沉重和郁闷，就跟蹲监狱差不多。&lt;/p&gt;
-
-&lt;p&gt;成都本来就属于经济相对落后的地区。成都的人才本来一般就是出去了就不再想回来，人才流失严重。外地人才大部分也不愿意来成都发展。现在雾霾让这种情况更加严重。我本来是考虑在成都有所作为的，然而为了自己的身体和心理健康考虑，我决定暂时放弃在成都发展的想法。我不会在成都买房，不会在成都创业，不会在成都工作，也不会推荐本领域的人才到成都工作。连现在成都市轻易可得的户口，我都不想要。我会在短期内离开成都，到空气好的地方生活。&lt;/p&gt;
-
-&lt;p&gt;敬告成都市政府：雾霾严重的伤害了市民的身心健康，给成都抹了黑，严重的损害了成都市的形象。如果不及时采取措施，它将会给成都的发展带来巨大的困扰。政府应该调查，追究和整顿违法排放污染物的工厂。成都市民：为了自己和家人的健康，你们也应该有所觉悟，有所行动了。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 16 Feb 2018 07:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2018-02-16/chengdu-pollution/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018-02-16/chengdu-pollution/</guid>
-      </item>
-    
-      <item>
-        <title>请让耳机孔回到手机上</title>
-        <description>&lt;p&gt;（施工中，请等横幅去掉后再看。）&lt;/p&gt;
-
-&lt;p&gt;苹果公司在 iPhone 7 的时候，决定去掉古老的，默默无闻的 3.5mm 耳机孔。现在各大国内手机厂商竞相效仿，纷纷去掉耳机孔，只留下一个 Type C 接口。我对这种跟风的做法表示不解。在我看来，去掉耳机孔本来就是苹果公司的一个重大设计错误，根本不值得模仿。&lt;/p&gt;
-
-&lt;p&gt;在 CIIA 的一号报告中，我没有提这个事，但由于它给我带来了很大的不便，现在我想把这个耳机孔的事情拿出来详细说一下。&lt;/p&gt;
-
-&lt;p&gt;当时我听说的去掉耳机孔的理由有好几种：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;苹果想把手机继续做薄，但耳机孔直径有 3.5mm，阻碍了手机继续变薄。&lt;/li&gt;
-  &lt;li&gt;苹果想把手机做成防水的，耳机孔不好做防水。&lt;/li&gt;
-  &lt;li&gt;耳机孔是模拟信号。消失之后，它所需要的 DAC 和功放部件的空间，可以用来放其它更好的新式部件。&lt;/li&gt;
-  &lt;li&gt;耳机孔是模拟信号，使用 Lighting 接口传输音乐，可以实现更高品质的数字音乐。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;这些理由当时就没有让我信服，而且我预料到耳机孔的缺失会带来的问题。但我仍然在 iPhone 6 电池坏掉的时候进行了以旧换新，买了一个 iPhone 7。一年的使用之后，我发现我所预料到的问题全部实现了，但苹果公司宣称的去掉耳机孔的好处，却一点都没有看到。我开始怀念被我换掉的 iPhone 6……&lt;/p&gt;
-
-&lt;p&gt;首先，没耳机孔的 iPhone 7 厚度是 7.1mm，跟有耳机孔的 iPhone 6 厚度一模一样。iPhone 8 厚度是 7.3mm，iPhone X 是 7.7mm。所以 iPhone 正在变得越来越厚，说 3.5mm 耳机孔阻碍了手机变薄，这种说法是完全站不住脚的。&lt;/p&gt;
-
-&lt;p&gt;真的，iPhone 6 就已经很薄了，人们不需要更薄的手机。如果你能把手机器件做得更薄，那么请保持它的厚度，在里面填上更多的电池就好。人们不需要手机更加轻薄，但他们永远都想要更长的续航时间！&lt;/p&gt;
-
-&lt;p&gt;第二，说耳机孔阻碍了手机实现防水功能，也是没有根据的。仔细观察一下耳机插头和Lightening 充电线，你会发现它们虽然形状和接触片数量不一样，但它们的本质是一样的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/lightening-earphone.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;耳机孔和手机上的 Ligntening 接口，拓扑结构也几乎是一样的。所以如果你能把手机的 Lightening 接口做成防水的，你就应该可以把耳机孔也做成防水的。很简单嘛，把触片的后面全部用硅胶封起来就行了。&lt;/p&gt;
-
-&lt;p&gt;实际上很多公司的手机都实现了耳机孔防水，包括三星，索尼…… 所以这根本不是问题。&lt;/p&gt;
-
-&lt;p&gt;第三，说耳机孔需要的 DAC 和功放占用的空间可以用来放其它更好的部件，也是无稽之谈。发现没有，iPHone 7 里面仍然有 DAC 和功放部件，不然的话你为什么用一个转接线就可以驱动耳机了？所以说把 DAC 和功放占用的空间拿来放新的部件，根本就是瞎扯。&lt;/p&gt;
-
-&lt;p&gt;另外，iPhone 7 之类就增加了个震动反馈器件，一个很普通的扬声器。我们真的需要为了它们而舍弃耳机孔吗？实话说吧，iPhone 7 的震动反馈，在第一时间就被我关掉了，因为我不喜欢它震。还有那个扬声器，现在都用蓝牙音箱了，谁在乎手机自带的扬声器啊。相反，耳机孔的重要性大大的高于这些附加东西。没有了它，会给很多人带来不便。&lt;/p&gt;
-
-&lt;p&gt;第四，说耳机孔是模拟电路，而 Lightening 可以传输数字信号，所以有潜力实现更高品质的“数字音乐”。比如&lt;a href=&quot;https://www.forbes.com/sites/jvchamary/2016/09/16/apple-iphone-headphone-jack/#47f5250a5348&quot;&gt;这篇文章&lt;/a&gt;所说，如果手机输出数字信号，那么手机里就可以没有数字模拟转换器（DAC）和功放，剩下空间来放其它部件。耳机厂商可以选择更好的 DAC 和功放，放进耳机里。&lt;/p&gt;
-
-&lt;p&gt;这文章里面的“音响专家”，看似好心在给人做科普，其实我怀疑他只是被苹果公司收买的说客。什么数字信号和模拟信号的差别，什么“超越 CD 音质”，谁不懂啊？跟问题完全不沾边，只能骗最外面的外行。&lt;/p&gt;
-
-&lt;p&gt;把 DAC 和功放放到耳机里面，这个设计违背了一个好的设计思想，那就是“一个东西只做一件事”。耳机本来就应该是专门的“模拟设备”，它上面本来就不应该有 DAC 和功放。这些东西应该是可选，可换的。用户应该可以自由的选择自己的手机，或者 DAC 和功放，而耳机原封不动，不需要改变。这才是好的设计。&lt;/p&gt;
-
-&lt;p&gt;苹果的这一改变如果流行起来，你要是换手机，耳机就不能原封不动了，必须换成其它接口的。所以苹果的目的不是为了世界更加美好，而是想让耳机依赖于自己的产品。这不仅违反了设计的原则，而且是一种邪恶的垄断行为。&lt;/p&gt;
-
-&lt;p&gt;由于声音是模拟信号，所以你终究需要把 DAC 和功放在某个地方。一般人都不会去买专业的 DAC 和功放机，所以如果它们不在手机里面，就得在耳机里。请问，用户是希望 DAC 和功放的重量在他们的口袋里呢，还是在他们的耳朵上？而且每个耳机都自带 DAC 和功放，有这个必要吗？白白增加它们的成本和价格而已。&lt;/p&gt;
-
-&lt;p&gt;特别是那种小型耳塞，上面就没多大地方可以给你放 DAC 和功放，所以你就不可能用很好的器件。这就是为什么大部分蓝牙耳塞效果都很差，因为它们上面不但需要足够的电池，控制电路，蓝牙模块，还需要 DAC，功放。把这些复杂的电路都放到用户的耳朵上，其舒服程度就可以想而知了 :p&lt;/p&gt;
-
-&lt;p&gt;说实话，iPhone 和其它手机上的 DAC，都真的很好了。人们需要的不是更好的 DAC，而是更好的耳机，更好的“模拟信号”部件。利用现有的电信号，发出更好的声音。如果你买过专业录音棚耳机，就会知道它们跟普通的耳塞有着质的差别。其原因不在于更好的数字电路或者 DAC，而在于更好的模拟电路材质。&lt;/p&gt;
-
-&lt;p&gt;这些专业耳机的接口，一般都是 3.5mm 插头。这种耳机不光可以接在手机上，还可以接在专业的功放机上。一台好的功放机价钱可以是 iPhone 的好几倍。所以这些厂商显然不可能给你专门造一个 Lightening 接口的耳机，只能接在 iPhone 上面。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.yinwang.org/images/akg-712-amplifier.jpg&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;有些耳机的线是可以换的，但那是设计来让你可以在线坏掉的时候可以换一根线，而不是换掉整个耳机。专门做一根 Lightening 线给 iPhone 用，是一个可笑的想法。要是你同时有一个 iPhone 和一个有 Type C 接口的 Android 手机，岂不是每次都得换线了？&lt;/p&gt;
-
-&lt;p&gt;而且这些 IT 界的接口每隔几年就要换代。想想 USB 的接头都换了多少次了，还稳定不下来？iPhone 的接头也换过没多久。音响领域显然是不愿意跟这个风的。3.5mm耳机接口已经 50 多年老了，没毛病，为什么要换？不是人家固执，而是你们肤浅。有本事 IT 领域做出一个接口，50 年以后都还可以用？:p&lt;/p&gt;
-
-&lt;p&gt;3.5mm 耳机孔是音响界的工业标准。标准存在的意义就在于，同一个耳机，可以插在任何可以输出音频的设备上面。iPhone 7 去掉耳机孔，使用 Lightening 接口来接耳机，就是违背了标准，造成了混乱。&lt;/p&gt;
-
-&lt;p&gt;现在国内各大 Android 手机厂商也竞相模仿，去掉耳机孔，只剩下 Type C 接口，这种混乱就加重了。本来音响公司做个耳机，想都不用想就是 3.5mm 插头。现在因为这些没事找事的手机厂商，你还得考虑做成 Lightening 还是做成 Type C！&lt;/p&gt;
-
-&lt;p&gt;用户买耳机的时候也出现选择困难。我是买 3.5mm 借口呢，还是 Lightening 呢，还是 Type C？反正你买了一个就不好接在另外的设备上。所以苹果的这一举动给耳机的厂商和用户都造成了严重的麻烦。&lt;/p&gt;
-
-&lt;p&gt;你可能会说，不是每个手机都提供了给耳机的转接线吗？但那是有代价的。首先的问题是，因为手机上只有一个接口用于耳机和充电，你充电的时候就没法同时用耳机了。你也许发现网上有卖那种两头的转接头，但我发现那些东西评价一般都很差。没有标准支持这种做法，所以基本都是山寨的。也许你最终能找到质量好的，但这本来不是问题的问题，我们更本就不应该为这种东西费心去挑选。&lt;/p&gt;
-
-&lt;p&gt;而且有了这种两头的转接线，你还得有一根普通的转接线。因为平时在外面的时候，你不想把那个有充电头的转接线挂在外面…… 哎，好麻烦。&lt;/p&gt;
-
-&lt;p&gt;有了转接线你就得多带一件（或者两件）东西，要是它丢了你就没法用耳机了。有时候放在包里，你还得把它找出来。那么小个东西很容易就钻进其它物品的缝隙里去了，还真是不好找。&lt;/p&gt;
-
-&lt;p&gt;而且转接线显然不如手机上的接口可靠。线是会断的，而手机内部接口几乎不可能断。很多转接头因为体型太小，材质不够好，接触也有问题，插上去发现接触不好。我第一次把最近买的新耳机插进几乎全新的 iPhone 7 原装转接线，就发现没有声音。还以为耳机是坏的，折腾了一会儿才发现是转接线那里接触不好。&lt;/p&gt;
-</description>
-        <pubDate>Fri, 17 Nov 2017 10:00:42 +0000</pubDate>
-        <link>http://localhost:4000/2017-11-17/earphone-jack/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017-11-17/earphone-jack/</guid>
       </item>
     
   </channel>
