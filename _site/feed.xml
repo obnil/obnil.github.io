@@ -6,6 +6,157 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>为什么离开第三女神</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;h4 id=&quot;成为一名优秀的android开发需要一份完备的知识体系在这里让我们一起成长为自己所想的那样&quot;&gt;成为一名优秀的Android开发，需要一份完备的&lt;a href=&quot;https://github.com/JsonChao/Awesome-Android-Exercise&quot;&gt;知识体系&lt;/a&gt;，在这里，让我们一起成长为自己所想的那样~。&lt;/h4&gt;
+
+&lt;p&gt;从去年的互联网寒冬开始，移动开发甚至前后端的招聘需求越来越少，公司对开发者的技术要求也越来越高。特别是对于我们Android开发来说，似乎我们的生存空间越来越小，处境也变得越来越困难。所以，在这个时代，我们必须找到适合自己的一条“黄金路”。其实，对于Android来说，它其实有很多个细分领域，比如音视频、iot、图像处理、安全攻防、移动AI、性能优化等，职业生涯的前几年，我们只要选中其中的某一个领域，把它研究到极致，就可以拥有真正的核心竞争力，而对于像前后端、Flutter等跨领域的知识我们只要有一定程度的了解即可。这其实就是很多大厂一直青睐的T型人才。下面，我就性能优化这一细分领域来分析一下如何把它做到极致。&lt;/p&gt;
+
+&lt;p&gt;性能优化其实一块很深很深的知识领域，对于Android来说，它从最上层的应用层，顺延着Framework层、ART/Davilk、Linux内核层，一直到最底层的硬件层，都有我们需要深入研究的技术点。因此，根据这一思路，我根据我自身的情况，定制了一套自下而上的学习路线。下面，我就来说一下详细的学习方案。&lt;/p&gt;
+
+&lt;p&gt;对于学习资源来说，最重要的就是高质量和成体系的知识。因此，在学习的时候，我们必须以经典的高质量书籍为主，其他优秀的文章、视频教程为辅。&lt;/p&gt;
+
+&lt;h3 id=&quot;一成长路线规划&quot;&gt;一、成长路线规划&lt;/h3&gt;
+
+&lt;p&gt;首先是数学和算法，要想成为世界上最顶尖的程序员，这两门功课必须要打好基础。&lt;/p&gt;
+
+&lt;h4 id=&quot;数学&quot;&gt;数学&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;数学之美&lt;/li&gt;
+  &lt;li&gt;程序员的数学基础课（极客时间）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;数据结构和算法&quot;&gt;数据结构和算法&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;大话数据结构&lt;/li&gt;
+  &lt;li&gt;算法图解&lt;/li&gt;
+  &lt;li&gt;剑指Offer&lt;/li&gt;
+  &lt;li&gt;数据结构与算法之美（极客时间）&lt;/li&gt;
+  &lt;li&gt;算法面试通关（极客时间）&lt;/li&gt;
+  &lt;li&gt;LetteCode&lt;/li&gt;
+  &lt;li&gt;编程之美&lt;/li&gt;
+  &lt;li&gt;编程珠玑&lt;/li&gt;
+  &lt;li&gt;趣学算法&lt;/li&gt;
+  &lt;li&gt;算法（红本）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;硬件原理&quot;&gt;硬件原理&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;深入浅出计算机组成原理（极客时间）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;网络&quot;&gt;网络&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;计算机网络：自顶向下方法&lt;/li&gt;
+  &lt;li&gt;趣谈网络协议（极客时间）&lt;/li&gt;
+  &lt;li&gt;图解TCP/IP&lt;/li&gt;
+  &lt;li&gt;HTTP权威指南&lt;/li&gt;
+  &lt;li&gt;Wireshark网络分析就这么简单&lt;/li&gt;
+  &lt;li&gt;Wireshark网络分析的艺术&lt;/li&gt;
+  &lt;li&gt;Web性能权威指南&lt;/li&gt;
+  &lt;li&gt;Unix网络编程：卷1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;linux&quot;&gt;Linux&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;现代操作系统&lt;/li&gt;
+  &lt;li&gt;鸟哥的Linux私房菜&lt;/li&gt;
+  &lt;li&gt;深入理解计算机系统&lt;/li&gt;
+  &lt;li&gt;Linux程序设计&lt;/li&gt;
+  &lt;li&gt;UNIX环境高级编程&lt;/li&gt;
+  &lt;li&gt;深入Linux内核架构&lt;/li&gt;
+  &lt;li&gt;性能之巅&lt;/li&gt;
+  &lt;li&gt;最强Android书&lt;/li&gt;
+  &lt;li&gt;Linux性能优化实战&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;编译原理&quot;&gt;编译原理&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;编码&lt;/li&gt;
+  &lt;li&gt;编译原理&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;虚拟机&quot;&gt;虚拟机&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Java核心技术 卷1&lt;/li&gt;
+  &lt;li&gt;Java编程思想&lt;/li&gt;
+  &lt;li&gt;Java并发编程实战（极客时间）&lt;/li&gt;
+  &lt;li&gt;Java并发编程的艺术&lt;/li&gt;
+  &lt;li&gt;Java核心技术36讲（极客时间）&lt;/li&gt;
+  &lt;li&gt;深入理解JVM&lt;/li&gt;
+  &lt;li&gt;深入拆解JVM（极客时间）&lt;/li&gt;
+  &lt;li&gt;揭秘JVM&lt;/li&gt;
+  &lt;li&gt;程序员的自我修养—链接、装载与库&lt;/li&gt;
+  &lt;li&gt;垃圾回收算法手册&lt;/li&gt;
+  &lt;li&gt;深入理解Android JVM ART&lt;/li&gt;
+  &lt;li&gt;深入解析Android 虚拟机&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;framework&quot;&gt;Framework&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HeadFirst设计模式&lt;/li&gt;
+  &lt;li&gt;Android源码设计模式&lt;/li&gt;
+  &lt;li&gt;Android进阶解密&lt;/li&gt;
+  &lt;li&gt;Android框架解密&lt;/li&gt;
+  &lt;li&gt;深入理解Android内核设计思想&lt;/li&gt;
+  &lt;li&gt;Android系统源代码情景分析&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;编程语言&quot;&gt;编程语言&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;More Effective C++&lt;/li&gt;
+  &lt;li&gt;Effective Java&lt;/li&gt;
+  &lt;li&gt;Kotlin实战、快速上手Kotlin开发（极客时间）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;应用层&quot;&gt;应用层&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第一行代码&lt;/li&gt;
+  &lt;li&gt;Android开发进阶 从小工到专家&lt;/li&gt;
+  &lt;li&gt;Android进阶之光&lt;/li&gt;
+  &lt;li&gt;Android开发艺术探索&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;性能优化&quot;&gt;性能优化&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Android开发高手课（极客时间）&lt;/li&gt;
+  &lt;li&gt;Android应用性能优化最佳实践&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;组件化热修复插件化&quot;&gt;组件化、热修复、插件化&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Android组件化架构&lt;/li&gt;
+  &lt;li&gt;Android热修复技术原理&lt;/li&gt;
+  &lt;li&gt;Android插件化开发指南&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;二如何读书&quot;&gt;二、如何读书？&lt;/h3&gt;
+
+&lt;p&gt;首先，我们需要定一个学习计划，比如一年读50本书，一周一本。读书的时候可以&lt;strong&gt;根据同一个技能点按照难度选取3到5本书阅读，其中最好的书读3遍&lt;/strong&gt;。对于碎片化的时间，我们也可以充分利用起来对某一个知识点进行系统学习，以求真正地将其完全掌握。最后，这里再重申一遍，&lt;strong&gt;要想真正掌握一本书的核心内容，需要读三遍。第一遍：细读，目的在于完整阅读全书，并且划出重点，写上读书笔记；一个月后读第二遍：扫读，主要快速翻阅第一遍阅读时做的笔记和划的重点，目的在于加深记忆；半年后第三遍：忆读，读的时候只看目录，然后去回想内容，如果回想不起来，再去进行扫读。这样三遍下来，基本上一本书的核心内容就能够很好的吸收&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;三总结&quot;&gt;三、总结&lt;/h3&gt;
+
+&lt;p&gt;当你对某一个细分领域有非常深入的理解后，比如性能优化，音视频等，其实，此时许多底层知识都已经打通了。假如，你现在再去学习前端、Vue/React或者后端、其它领域的知识，都能够在较短时间内快速领悟到中高级层面的知识。我想，这就是一通百通的能力吧。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 15 Jun 2019 01:40:42 +0000</pubDate>
+        <link>http://localhost:4000/2019-06-15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%A6%BB%E5%BC%80%E7%AC%AC%E4%B8%89%E5%A5%B3%E7%A5%9E/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019-06-15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%A6%BB%E5%BC%80%E7%AC%AC%E4%B8%89%E5%A5%B3%E7%A5%9E/</guid>
+      </item>
+    
+      <item>
         <title>全面理解Java内存模型(JMM)及volatile关键字</title>
         <description>&lt;p&gt;【版权申明】未经博主同意，谢绝转载！（请尊重原创，博主保留追究权） 
 http://blog.csdn.net/javazejian/article/details/72772461 
@@ -8311,7 +8462,7 @@ Switched to branch 'newDev'
 
 &lt;p&gt;Ubuntu/Debian系统执行这个： apt-get -y install git&lt;/p&gt;
 
-&lt;p&gt;git &lt;strong&gt;clone&lt;/strong&gt; https:&lt;em&gt;//github.com/flyzy2005/ss-fly&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;git &lt;strong&gt;clone&lt;/strong&gt; git@github.com:obnil/flyzy2005-ss-fly.git*&lt;/p&gt;
 
 &lt;p&gt;ss-fly/ss-fly.sh -i t66y.com 1024&lt;/p&gt;
 
