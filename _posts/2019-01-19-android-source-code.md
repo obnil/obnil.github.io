@@ -2,6 +2,7 @@
 layout: post
 title:  "如何查看Android 5.0系统源码"
 description: "由于Android开发艺术探索的所有内容都是基于Android 5.0系统，为了将这本书吃透，所以以后发布的Android文章也都是基于Android 5.0源码"
+categories: experience
 tags: [android]
 date:   2019-01-19 12:09:42 +0800
 ---
