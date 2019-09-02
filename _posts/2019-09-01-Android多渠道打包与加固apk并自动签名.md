@@ -64,7 +64,7 @@ date:   2019-09-02 09:40:42 +0800
 
 这个TD_CHANNEL_ID对应AndroidManifest.xml中的meta-data字段，相当于动态的将渠道名称写入value
 
-```
+```xml
 <meta-data
     android:name="TD_CHANNEL_ID"
     android:value="" />
@@ -74,23 +74,25 @@ date:   2019-09-02 09:40:42 +0800
 
 在App内获取渠道名称的方法其实就是获取TD_CHANNEL_ID对应的value值
 
-    private static String getChannelId() {
-        String appKey = null;
-        try {
-            ApplicationInfo applicationInfo = mContext.getPackageManager().getApplicationInfo(mContext.getPackageName(), PackageManager.GET_META_DATA);
-            if (applicationInfo != null) {
-                appKey = applicationInfo.metaData.getString("TD_CHANNEL_ID");
-            }
-            if (TextUtils.isEmpty(appKey)) {
-                throw new IllegalArgumentException("can't find TD_CHANNEL_ID in AndroidManifest.xml.");
-            }
-    
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            throw new ExceptionInInitializerError("can't find packageName!");
+```java
+private static String getChannelId() {
+    String appKey = null;
+    try {
+        ApplicationInfo applicationInfo = mContext.getPackageManager().getApplicationInfo(mContext.getPackageName(), PackageManager.GET_META_DATA);
+        if (applicationInfo != null) {
+            appKey = applicationInfo.metaData.getString("TD_CHANNEL_ID");
         }
-        return appKey;
+        if (TextUtils.isEmpty(appKey)) {
+            throw new IllegalArgumentException("can't find TD_CHANNEL_ID in AndroidManifest.xml.");
+        }
+
+    } catch (PackageManager.NameNotFoundException e) {
+        e.printStackTrace();
+        throw new ExceptionInInitializerError("can't find packageName!");
     }
+    return appKey;
+}
+```
 这样就可以根据渠道名称来获取对应渠道的在线升级包
 
 最后对所有渠道进行统一签名，建议对多渠道包建一个目录channel，签名包建一个目录signed，这样上传应用市场的时候就不会弄混了
