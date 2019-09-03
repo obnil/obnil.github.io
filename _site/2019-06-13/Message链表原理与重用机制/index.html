@@ -114,10 +114,11 @@ ga('send', 'pageview');
 
     <div class="post">
     <h1>Message链表原理与重用机制</h1>
+    <!--
     <div class="post-date">
         2019年06月13日
     </div>
-
+    -->
     <p>在使用 Handler 发送消息之前，我们一般都会使用如下代码调用 <code class="highlighter-rouge">mHandler.obtainMessage()</code> 方法获取一个 Message 对象。这其中究竟是怎么实现的呢？</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Handler</span> <span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Handler</span><span class="o">();</span>

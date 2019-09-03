@@ -4,12 +4,6 @@
   box-sizing: border-box;
 }
 
-html {
-  font-family: $base-font;
-  font-size: $base-font-size;
-  line-height: 1.6;
-}
-
 html,
 body {
   margin: 0;
@@ -17,7 +11,7 @@ body {
 }
 
 .content-container {
-  max-width: 52rem;
+  max-width: 57rem;
   padding: 1rem;
   margin-left: auto;
   margin-right: auto;

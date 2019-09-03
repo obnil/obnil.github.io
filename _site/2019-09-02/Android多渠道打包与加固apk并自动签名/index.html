@@ -114,13 +114,12 @@ ga('send', 'pageview');
 
     <div class="post">
     <h1>Android多渠道打包与加固apk并自动签名</h1>
+    <!--
     <div class="post-date">
         2019年09月02日
     </div>
-
-    <h1 id="前言">前言</h1>
-
-<p>为了统计App在各渠道的日活和下载量等运营数据，对每一个渠道比如华为，小米，OPPO，VIVO等都需要添加渠道信息，除了方便运营统计，还可以应用在版本的在线更新上，比如华为渠道的App只能更新华为渠道的最新包。</p>
+    -->
+    <p>为了统计App在各渠道的日活和下载量等运营数据，对每一个渠道比如华为，小米，OPPO，VIVO等都需要添加渠道信息，除了方便运营统计，还可以应用在版本的在线更新上，比如华为渠道的App只能更新华为渠道的最新包。</p>
 
 <p>上架应用市场的时候除了需要添加渠道信息、提供软著还经常会提示需要给App进行加固才允许上架比如360。那么上架应用市场流程是怎么样的？为什么要加固，如何加固，如何多渠道打包，如何签名，下面将给出答案。</p>
 
@@ -176,33 +175,34 @@ ga('send', 'pageview');
 
 <p>这个TD_CHANNEL_ID对应AndroidManifest.xml中的meta-data字段，相当于动态的将渠道名称写入value</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;meta-data
-    android:name="TD_CHANNEL_ID"
-    android:value="" /&gt;
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;meta-data</span>
+    <span class="na">android:name=</span><span class="s">"TD_CHANNEL_ID"</span>
+    <span class="na">android:value=</span><span class="s">""</span> <span class="nt">/&gt;</span>
 </code></pre></div></div>
 
 <h3 id="如何获取渠道名称">如何获取渠道名称</h3>
 
 <p>在App内获取渠道名称的方法其实就是获取TD_CHANNEL_ID对应的value值</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private static String getChannelId() {
-    String appKey = null;
-    try {
-        ApplicationInfo applicationInfo = mContext.getPackageManager().getApplicationInfo(mContext.getPackageName(), PackageManager.GET_META_DATA);
-        if (applicationInfo != null) {
-            appKey = applicationInfo.metaData.getString("TD_CHANNEL_ID");
-        }
-        if (TextUtils.isEmpty(appKey)) {
-            throw new IllegalArgumentException("can't find TD_CHANNEL_ID in AndroidManifest.xml.");
-        }
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getChannelId</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">appKey</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">ApplicationInfo</span> <span class="n">applicationInfo</span> <span class="o">=</span> <span class="n">mContext</span><span class="o">.</span><span class="na">getPackageManager</span><span class="o">().</span><span class="na">getApplicationInfo</span><span class="o">(</span><span class="n">mContext</span><span class="o">.</span><span class="na">getPackageName</span><span class="o">(),</span> <span class="n">PackageManager</span><span class="o">.</span><span class="na">GET_META_DATA</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">applicationInfo</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">appKey</span> <span class="o">=</span> <span class="n">applicationInfo</span><span class="o">.</span><span class="na">metaData</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"TD_CHANNEL_ID"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">TextUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">appKey</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"can't find TD_CHANNEL_ID in AndroidManifest.xml."</span><span class="o">);</span>
+        <span class="o">}</span>
 
-    } catch (PackageManager.NameNotFoundException e) {
-        e.printStackTrace();
-        throw new ExceptionInInitializerError("can't find packageName!");
-    }
-    return appKey;
-} 这样就可以根据渠道名称来获取对应渠道的在线升级包
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">PackageManager</span><span class="o">.</span><span class="na">NameNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">ExceptionInInitializerError</span><span class="o">(</span><span class="s">"can't find packageName!"</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">appKey</span><span class="o">;</span>
+<span class="o">}</span>
 </code></pre></div></div>
+<p>这样就可以根据渠道名称来获取对应渠道的在线升级包</p>
 
 <p>最后对所有渠道进行统一签名，建议对多渠道包建一个目录channel，签名包建一个目录signed，这样上传应用市场的时候就不会弄混了</p>
 
