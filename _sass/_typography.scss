@@ -5,7 +5,7 @@
   -------------- */
 
 body {
-  font: $base-font;
+  font-family: $base-font;
   font-size: $base-font-size;
   font-weight: 400;
   background-color: $background-color;
@@ -278,38 +278,35 @@ a {
   Header
   -------------- */
 h1, h2, h3, h4, h5, h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
   font-weight: 600;
+  line-height: 1.25;
 }
 
 h1 {
+  border-bottom: 1px solid #eaecef;
   padding-top: 0.3em;
   padding-bottom: 0.3em;
-  font-size: 2.25em;
-  line-height: 1.4em;
 }
 
 h2 {
+  border-bottom: 1px solid #eaecef;
   padding-top: 0.3em;
   padding-bottom: 0.3em;
-  font-size: 1.75em;
-  line-height: 1.225em;
 }
 
 h3 {
-  font-size: 1.5em;
-  line-height: 1.43em;
-}
-
-h4 {
   font-size: 1.25em;
 }
 
+h4 {
+}
+
 h5 {
-  font-size: 1em;
 }
 
 h6 {
-  font-size: 1em;
   color: $oc-gray-6;
 }
 
@@ -423,7 +420,7 @@ abbr[title] {
 }
 
 blockquote {
-  padding: 1rem;
+  padding: 0 1rem;
   margin: 0 0 1rem 0;
   color: #6a737d;
   border-left: .25rem solid #dfe2e5;
@@ -486,7 +483,6 @@ pre {
   margin-top: 0;
   margin-bottom: 1rem;
   padding: 1rem;
-  line-height: 1.4;
   white-space: pre;
   overflow: auto;
   background-color: $code-background-color;
@@ -543,8 +539,6 @@ pre code {
 img {
   display: block;
   max-width: 100%;
-  margin: auto;
-  border-radius: 5px;
 }
 
 /*--------------
