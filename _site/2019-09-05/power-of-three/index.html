@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>206. Reverse Linked List</title>
+  <title>326. Power of Three</title>
   <!--Leancloud 操作库:-->
   <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
   <!--Valine 的核心代码库:-->
@@ -34,19 +34,19 @@
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Reverse Linked List | GitClub</title>
+<title>Power of Three | GitClub</title>
 <meta name="generator" content="Jekyll v3.8.5" />
-<meta property="og:title" content="Reverse Linked List" />
+<meta property="og:title" content="Power of Three" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Reverse Linked List" />
-<meta property="og:description" content="Reverse Linked List" />
-<link rel="canonical" href="http://localhost:4000/2019-05-23/reverse-linked-list/" />
-<meta property="og:url" content="http://localhost:4000/2019-05-23/reverse-linked-list/" />
+<meta name="description" content="Power of Three" />
+<meta property="og:description" content="Power of Three" />
+<link rel="canonical" href="http://localhost:4000/2019-09-05/power-of-three/" />
+<meta property="og:url" content="http://localhost:4000/2019-09-05/power-of-three/" />
 <meta property="og:site_name" content="GitClub" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2019-05-23T01:40:42+00:00" />
+<meta property="article:published_time" content="2019-09-05T01:40:42+00:00" />
 <script type="application/ld+json">
-{"description":"Reverse Linked List","@type":"BlogPosting","url":"http://localhost:4000/2019-05-23/reverse-linked-list/","headline":"Reverse Linked List","dateModified":"2019-05-23T01:40:42+00:00","datePublished":"2019-05-23T01:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-05-23/reverse-linked-list/"},"@context":"http://schema.org"}</script>
+{"description":"Power of Three","@type":"BlogPosting","url":"http://localhost:4000/2019-09-05/power-of-three/","headline":"Power of Three","dateModified":"2019-09-05T01:40:42+00:00","datePublished":"2019-09-05T01:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-09-05/power-of-three/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -113,58 +113,76 @@ ga('send', 'pageview');
 </aside>
 
     <div class="post">
-    <h1>206. Reverse Linked List</h1>
+    <h1>326. Power of Three</h1>
     <!--
     <div class="post-date">
-        2019年05月23日
+        2019年09月05日
     </div>
     -->
-    <p>Reverse a singly linked list.</p>
+    <p>Given an integer, write a function to determine if it is a power of three.</p>
 
-<p><strong>Example:</strong></p>
+<p><strong>Example 1:</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
-Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 27
+Output: true
 </code></pre></div></div>
 
-<p><strong>Follow up:</strong></p>
+<p><strong>Example 2:</strong></p>
 
-<p>A linked list can be reversed either iteratively or recursively. Could you implement both?</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 0
+Output: false
+</code></pre></div></div>
+
+<p><strong>Example 3:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 9
+Output: true
+</code></pre></div></div>
+
+<p><strong>Example 4:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input: 45
+Output: false
+</code></pre></div></div>
+
+<p><strong>Follow up:</strong>
+Could you do it without using any loop / recursion?</p>
 
 <h3 id="解答">解答</h3>
 
-<p>链表反转</p>
+<p>输入一个整数，判断是否是3的幂（首先判断是否是正数，然后不断除以3，判断结果能否除尽）</p>
 
-<p>每次p为第一个节点，q为第二个节点，r为第三个节点也就是缓存节点，将p和q节点互换，一直循环到q为空最后p节点就是头结点</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="n">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">head</span><span class="o">==</span><span class="kc">null</span><span class="o">||</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
-            <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPowerOfThree</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;=</span><span class="mi">0</span><span class="o">){</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="n">ListNode</span> <span class="n">p</span><span class="o">=</span><span class="n">head</span><span class="o">,</span><span class="n">q</span><span class="o">=</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">,</span><span class="n">r</span><span class="o">=</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-        <span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="k">while</span><span class="o">(</span><span class="n">q</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
-            <span class="n">r</span><span class="o">=</span><span class="n">q</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-            <span class="n">q</span><span class="o">.</span><span class="na">next</span><span class="o">=</span><span class="n">p</span><span class="o">;</span>
-            <span class="n">p</span><span class="o">=</span><span class="n">q</span><span class="o">;</span>
-            <span class="n">q</span><span class="o">=</span><span class="n">r</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">n</span><span class="o">!=</span><span class="mi">1</span><span class="o">){</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">%</span><span class="mi">3</span><span class="o">!=</span><span class="mi">0</span><span class="o">){</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="o">/</span><span class="mi">3</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="n">head</span> <span class="o">=</span> <span class="n">p</span><span class="o">;</span>
-        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
 <h3 id="运行结果">运行结果</h3>
+
+<p>Success</p>
+
+<p><a href="https://leetcode.com/submissions/detail/257977269/">Details </a></p>
+
+<p>Runtime: 11 ms, faster than 76.95% of Java online submissions for Power of Three.</p>
+
+<p>Memory Usage: 35.5 MB, less than 6.25% of Java online submissions for Power of Three.</p>
+
+<p>Next challenges:</p>
+
+<p><a href="https://leetcode.com/problems/range-addition-ii/">Range Addition II</a><a href="https://leetcode.com/problems/solve-the-equation/">Solve the Equation</a><a href="https://leetcode.com/problems/split-array-with-same-average/">Split Array With Same Average</a></p>
+
+<p>Show off your acceptance:</p>
 
 <table>
   <thead>
@@ -178,14 +196,26 @@ Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left">2 months ago</td>
-      <td style="text-align: left"><a href="https://leetcode.com/submissions/detail/214457501/">Accepted</a></td>
-      <td style="text-align: left">0 ms</td>
-      <td style="text-align: left">37.9 MB</td>
+      <td style="text-align: left">a few seconds ago</td>
+      <td style="text-align: left"><a href="https://leetcode.com/submissions/detail/257977269/">Accepted</a></td>
+      <td style="text-align: left">11 ms</td>
+      <td style="text-align: left">35.5 MB</td>
       <td style="text-align: left">java</td>
     </tr>
   </tbody>
 </table>
+
+<h3 id="最优解">最优解</h3>
+
+<p>给一个鬼才的方案，只需要一行代码而且不使用循环</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPowerOfThree</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 1162261467 is 3^19,  3^20 is bigger than int  </span>
+        <span class="k">return</span> <span class="o">(</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">&amp;&amp;</span>  <span class="mi">1162261467</span><span class="o">%</span><span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
     
     <div class="post-tag">
