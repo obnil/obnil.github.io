@@ -5,7 +5,7 @@ layout: default
 
 <section class="post-list">
     <div class="container">
-        {% for post in site.categories.android %}
+        {% for post in paginator.posts %}
         {% unless post.next %}
         <h2 class="category-title">{{ post.date | date: '%Y' }}</h2>
         {% else %}
@@ -16,10 +16,28 @@ layout: default
         {% endif %}
         {% endunless %}
         <article class="post-item">
-            <span class="post-meta date-label">{{ post.date | date: "%b %d" }}</span>
+            <span class="post-meta date-label">{{ post.date | date: '%Y年%m月%d日' }}</span>
             <div class="article-title"><a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></div>
         </article>
         {% endfor %}
+        <!-- Pagination links -->
+        <div class="pagination">
+          {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path }}" class="previous">
+              上一页
+            </a>
+          {% else %}
+            <span class="previous">上一页</span>
+          {% endif %}
+          <span class="page_number ">
+            {{ paginator.page }} / {{ paginator.total_pages }}
+          </span>
+          {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path }}" class="next">下一页</a>
+          {% else %}
+            <span class="next ">下一页</span>
+          {% endif %}
+        </div>
     </div>
     
 </section>

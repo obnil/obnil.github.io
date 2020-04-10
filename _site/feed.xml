@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>GitClub</title>
+    <title>佩奇的弟弟乔治</title>
     <link>http://localhost:4000</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     
@@ -11558,7 +11558,8 @@ class GreetGFM {
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;android.support.design.widget.AppBarLayout&lt;/span&gt;
         &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@+id/appbar&quot;&lt;/span&gt;
         &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;match_parent&quot;&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;android:layout_height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;wrap_content&quot;&lt;/span&gt;                                         &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:layout_height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;wrap_content&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;android:theme=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;android.support.v7.widget.Toolbar&lt;/span&gt;
             &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@+id/toolbar&quot;&lt;/span&gt;
             &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;match_parent&quot;&lt;/span&gt;
@@ -12074,34 +12075,50 @@ cond(no)-&amp;gt;op
         <title>Welcome to Jekyll!</title>
         <description>&lt;h2 id=&quot;获取音乐外链&quot;&gt;&lt;a href=&quot;https://music.liuzhijin.cn/?name=Altynai&amp;amp;type=netease&quot;&gt;获取音乐外链&lt;/a&gt;&lt;/h2&gt;
 
+&lt;blockquote&gt;
+  &lt;p&gt;把音乐ID复制后替换下面的songid&lt;/p&gt;
+
+  &lt;p&gt;http://music.163.com/song/media/outer/url?id=${songid}.mp3&lt;/p&gt;
+&lt;/blockquote&gt;
+
 &lt;p&gt;Kevin Kern-Sundial Dreams&lt;/p&gt;
-&lt;p&gt;/music/M500004KDJlk2N7Yni.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=1614642.mp3&lt;/media&gt;
 &lt;p&gt;Through the Arbor&lt;/p&gt;
-&lt;p&gt;/music/M500003q5nUZ1jrWIu.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=1614370.mp3&lt;/media&gt;
 &lt;p&gt;ビルスのティータイム (比鲁斯的下午茶)&lt;/p&gt;
-&lt;p&gt;/music/060b_0609_5252_1ae17af1e41cb18c0d8ae8db9d6b7513.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=405597427.mp3&lt;/media&gt;
 &lt;p&gt;Pretend&lt;/p&gt;
-&lt;p&gt;/music/M500000OOxLI0aWaDE.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=2929765.mp3&lt;/media&gt;
 &lt;p&gt;Stay Here Forever&lt;/p&gt;
-&lt;p&gt;/music/0001_deb9_1efb_f81f7ce0d6a22038ebe0d3c878b6bdcb.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=18836961.mp3&lt;/media&gt;
 &lt;p&gt;Always With Me&lt;/p&gt;
-&lt;p&gt;/music/49a4624a6e62e5276ae0b26bb087022b.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=5267808.mp3&lt;/media&gt;
 &lt;p&gt;Could This Be Love&lt;/p&gt;
-&lt;p&gt;/music/2d4d983bf77a400ac1550546b597fec0.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=3801865.mp3&lt;/media&gt;
 &lt;p&gt;River Flows in You&lt;/p&gt;
-&lt;p&gt;/music/cf448698e6e4a13f026c9d9ae22b8857.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=20110049.mp3&lt;/media&gt;
 &lt;p&gt;Altynai-nurbek feat dia&lt;/p&gt;
-&lt;p&gt;/music/5b4a0a4a1be4f8b1340fc40ef35d313f.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=33252271.mp3&lt;/media&gt;
 &lt;p&gt;Spring Love&lt;/p&gt;
-&lt;p&gt;/music/e856374392be3b02cdee8f8f73dac9fc.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=21698661.mp3&lt;/media&gt;
 &lt;p&gt;Lovely day&lt;/p&gt;
-&lt;p&gt;/music/094d534bf69d8ede9b910b55a67a09d3.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=2587236.mp3&lt;/media&gt;
 &lt;p&gt;Pedalo&lt;/p&gt;
-&lt;p&gt;/music/1163a664392761bbdee32d45cb058084.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=19497991.mp3&lt;/media&gt;
 &lt;p&gt;下午三点四十分&lt;/p&gt;
-&lt;p&gt;/music/80b4316c08cd8bbdc180df0f774dad76.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=77609.mp3&lt;/media&gt;
 &lt;p&gt;Never Grow Old&lt;/p&gt;
-&lt;p&gt;/music/Never%20Grow%20Old.mp3&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=21971060.mp3&lt;/media&gt;
+&lt;p&gt;彩虹糖的梦&lt;/p&gt;
+&lt;media&gt;https://sharefs.yun.kugou.com/202004110119/7170f4ad5ea6321118daa1396c4bc4e3/G077/M05/1E/18/jQ0DAFglPo6AcH6aAELsCY4Zkkg660.mp3&lt;/media&gt;
+&lt;p&gt;Vow to Virtue&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=2424840.mp3&lt;/media&gt;
+&lt;p&gt;February Air&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=2929896.mp3&lt;/media&gt;
+&lt;p&gt;Drive My Soul&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=2929895.mp3&lt;/media&gt;
+&lt;p&gt;Gymnopedie No.1&lt;/p&gt;
+&lt;media&gt;http://music.163.com/song/media/outer/url?id=1339219635.mp3&lt;/media&gt;
 
 &lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 

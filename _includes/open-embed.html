@@ -65,10 +65,10 @@ function video_embed() {
 video_embed();
 
 function mp3_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         if(p[i].innerHTML.indexOf('.mp3') !== -1) {
-            var str = p[i].innerHTML.split('?');
+            var str = p[i].innerHTML.split('&');//replace '?' with '&'
             if(str.length == 1) str[1] = '';
             var str1 = str[1];
             str1 = str1.replace('&','').replace('&','');

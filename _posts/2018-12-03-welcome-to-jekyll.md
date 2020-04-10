@@ -8,34 +8,49 @@ date:   2018-12-03 15:40:42 +0800
 
 ## [获取音乐外链](https://music.liuzhijin.cn/?name=Altynai&type=netease)
 
+> 把音乐ID复制后替换下面的songid
+> 
+> http://music.163.com/song/media/outer/url?id=${songid}.mp3
+
 Kevin Kern-Sundial Dreams
-<p>/music/M500004KDJlk2N7Yni.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=1614642.mp3</media>
 Through the Arbor
-<p>/music/M500003q5nUZ1jrWIu.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=1614370.mp3</media>
 ビルスのティータイム (比鲁斯的下午茶)
-<p>/music/060b_0609_5252_1ae17af1e41cb18c0d8ae8db9d6b7513.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=405597427.mp3</media>
 Pretend
-<p>/music/M500000OOxLI0aWaDE.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=2929765.mp3</media>
 Stay Here Forever
-<p>/music/0001_deb9_1efb_f81f7ce0d6a22038ebe0d3c878b6bdcb.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=18836961.mp3</media>
 Always With Me
-<p>/music/49a4624a6e62e5276ae0b26bb087022b.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=5267808.mp3</media>
 Could This Be Love
-<p>/music/2d4d983bf77a400ac1550546b597fec0.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=3801865.mp3</media>
 River Flows in You
-<p>/music/cf448698e6e4a13f026c9d9ae22b8857.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=20110049.mp3</media>
 Altynai-nurbek feat dia
-<p>/music/5b4a0a4a1be4f8b1340fc40ef35d313f.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=33252271.mp3</media>
 Spring Love
-<p>/music/e856374392be3b02cdee8f8f73dac9fc.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=21698661.mp3</media>
 Lovely day
-<p>/music/094d534bf69d8ede9b910b55a67a09d3.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=2587236.mp3</media>
 Pedalo
-<p>/music/1163a664392761bbdee32d45cb058084.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=19497991.mp3</media>
 下午三点四十分
-<p>/music/80b4316c08cd8bbdc180df0f774dad76.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=77609.mp3</media>
 Never Grow Old
-<p>/music/Never%20Grow%20Old.mp3</p>
+<media>http://music.163.com/song/media/outer/url?id=21971060.mp3</media>
+彩虹糖的梦
+<media>https://sharefs.yun.kugou.com/202004110119/7170f4ad5ea6321118daa1396c4bc4e3/G077/M05/1E/18/jQ0DAFglPo6AcH6aAELsCY4Zkkg660.mp3</media>
+Vow to Virtue
+<media>http://music.163.com/song/media/outer/url?id=2424840.mp3</media>
+February Air
+<media>http://music.163.com/song/media/outer/url?id=2929896.mp3</media>
+Drive My Soul
+<media>http://music.163.com/song/media/outer/url?id=2929895.mp3</media>
+Gymnopedie No.1
+<media>http://music.163.com/song/media/outer/url?id=1339219635.mp3</media>
+
 
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 

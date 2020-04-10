@@ -3,7 +3,7 @@
 # # # # # # # # # # # # #
 
 # Basic
-name:               "GitClub"
+name:               "佩奇的弟弟乔治"
 
 author:
   facebook:         100032298188362
@@ -57,11 +57,11 @@ kramdown:
 nav:
   - name:           "Android"
     url:            "/android/"
-  - name:           "LeetCode"
+  - name:           "算法"
     url:            "/leetcode/"
-  - name:           "Reading"
+  - name:           "读书"
     url:            "/reading/"
-  - name:           "Categories"
+  - name:           "归类"
     url:            "/categories/"
 
 # Sass

@@ -4,10 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>分类</title>
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/images/favicon.ico">
   <!--Leancloud 操作库:-->
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <!-- <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script> -->
   <!--Valine 的核心代码库:-->
-  <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script>
+  <!-- <script src="//cdn.jsdelivr.net/npm/valine@v1.2.0-beta/dist/Valine.min.js"></script> -->
 
   <!-- CSS -->
   <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
@@ -15,19 +17,19 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed for GitClub" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for 佩奇的弟弟乔治" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
 
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>分类 | GitClub</title>
+<title>分类 | 佩奇的弟弟乔治</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="分类" />
 <meta property="og:locale" content="en_US" />
 <link rel="canonical" href="http://localhost:4000/categories/" />
 <meta property="og:url" content="http://localhost:4000/categories/" />
-<meta property="og:site_name" content="GitClub" />
+<meta property="og:site_name" content="佩奇的弟弟乔治" />
 <script type="application/ld+json">
 {"@type":"WebPage","url":"http://localhost:4000/categories/","headline":"分类","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
@@ -56,7 +58,7 @@ ga('send', 'pageview');
     <aside id="metabar" class="metabar">
     <div class="metabar-wrapper">
         <div class="metabar-left">
-            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">GitClub</a>
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
         </div>
         <div class="metabar-right">
             <button id="js-navOpen" class="nav-open">菜单</button>
@@ -72,19 +74,19 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/leetcode/">LeetCode</a>
+        <a class="" href="/leetcode/">算法</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/reading/">Reading</a>
+        <a class="" href="/reading/">读书</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class=" nav-active" href="/categories/">Categories</a>
+        <a class=" nav-active" href="/categories/">归类</a>
     </li>
     
     
@@ -652,10 +654,10 @@ function video_embed() {
 video_embed();
 
 function mp3_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         if(p[i].innerHTML.indexOf('.mp3') !== -1) {
-            var str = p[i].innerHTML.split('?');
+            var str = p[i].innerHTML.split('&');//replace '?' with '&'
             if(str.length == 1) str[1] = '';
             var str1 = str[1];
             str1 = str1.replace('&','').replace('&','');

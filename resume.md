@@ -3,6 +3,8 @@ title: 简历
 permalink: /resume/
 ---
 
+<img src="/images/logo.jpg" class="user-image" alt="My Profile Photo">
+
 ## 林波
 
 - 5年 Android 开发经验
@@ -10,7 +12,7 @@ permalink: /resume/
 - 英语：CET6
 - 电话：18963965124
 - 邮箱：lb891014@126.com
-- Github：[https://gitclub.xyz](https://gitclub.xyz/)
+- Github：[https://obnil.github.io/](https://obnil.github.io/)
 
 ## 教育经历 
 
