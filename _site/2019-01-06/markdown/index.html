@@ -80,7 +80,7 @@ ga('send', 'pageview');
     <div class="post">
     <h1>Markdown基本语法</h1>
     <div class="post-date">
-        2019年01月06日 字数 784
+        2019年01月06日 字数 6101
     </div>
     <p>Markdown是一种纯文本格式的标记语言。通过简单的标记语法，它可以使普通文本内容具有一定的格式。</p>
 
@@ -169,7 +169,7 @@ ga('send', 'pageview');
 <p>示例：</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>**这是加粗的文字**
-*这是倾斜的文字*`
+*这是倾斜的文字*
 ***这是斜体加粗的文字***
 ~~这是加删除线的文字~~
 </code></pre></div></div>
@@ -177,9 +177,9 @@ ga('send', 'pageview');
 <p>效果如下：</p>
 
 <p><strong>这是加粗的文字</strong>
- <em>这是倾斜的文字</em>
- <strong>这是斜体加粗的文字</strong>
- <del>这是加删除线的文字</del></p>
+<em>这是倾斜的文字</em>
+<strong><em>这是斜体加粗的文字</em></strong>
+<del>这是加删除线的文字</del></p>
 
 <hr />
 
@@ -530,7 +530,8 @@ class GreetGFM {
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>​```xml
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+&lt;android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
@@ -539,7 +540,8 @@ class GreetGFM {
     &lt;android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"                                         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"&gt;
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"&gt;
         &lt;android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -571,7 +573,8 @@ class GreetGFM {
 ​```
 </code></pre></div></div>
 <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="nt">&lt;android.support.design.widget.CoordinatorLayout</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+<span class="nt">&lt;android.support.design.widget.CoordinatorLayout</span>
+    <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
     <span class="na">xmlns:app=</span><span class="s">"http://schemas.android.com/apk/res-auto"</span>
     <span class="na">android:id=</span><span class="s">"@+id/main_content"</span>
     <span class="na">android:layout_width=</span><span class="s">"match_parent"</span>

@@ -11147,7 +11147,7 @@ sys	0m0.007s
 &lt;p&gt;示例：&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;**这是加粗的文字**
-*这是倾斜的文字*`
+*这是倾斜的文字*
 ***这是斜体加粗的文字***
 ~~这是加删除线的文字~~
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -11155,9 +11155,9 @@ sys	0m0.007s
 &lt;p&gt;效果如下：&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;这是加粗的文字&lt;/strong&gt;
- &lt;em&gt;这是倾斜的文字&lt;/em&gt;
- &lt;strong&gt;这是斜体加粗的文字&lt;/strong&gt;
- &lt;del&gt;这是加删除线的文字&lt;/del&gt;&lt;/p&gt;
+&lt;em&gt;这是倾斜的文字&lt;/em&gt;
+&lt;strong&gt;&lt;em&gt;这是斜体加粗的文字&lt;/em&gt;&lt;/strong&gt;
+&lt;del&gt;这是加删除线的文字&lt;/del&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -11508,7 +11508,8 @@ class GreetGFM {
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;​```xml
 &amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;
-&amp;lt;android.support.design.widget.CoordinatorLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+&amp;lt;android.support.design.widget.CoordinatorLayout
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
     xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
     android:id=&quot;@+id/main_content&quot;
     android:layout_width=&quot;match_parent&quot;
@@ -11517,7 +11518,8 @@ class GreetGFM {
     &amp;lt;android.support.design.widget.AppBarLayout
         android:id=&quot;@+id/appbar&quot;
         android:layout_width=&quot;match_parent&quot;
-        android:layout_height=&quot;wrap_content&quot;                                         android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;&amp;gt;
+        android:layout_height=&quot;wrap_content&quot;
+        android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;&amp;gt;
         &amp;lt;android.support.v7.widget.Toolbar
             android:id=&quot;@+id/toolbar&quot;
             android:layout_width=&quot;match_parent&quot;
@@ -11549,7 +11551,8 @@ class GreetGFM {
 ​```
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;android.support.design.widget.CoordinatorLayout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://schemas.android.com/apk/res/android&quot;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;android.support.design.widget.CoordinatorLayout&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://schemas.android.com/apk/res/android&quot;&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;xmlns:app=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://schemas.android.com/apk/res-auto&quot;&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;android:id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;@+id/main_content&quot;&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;android:layout_width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;match_parent&quot;&lt;/span&gt;
