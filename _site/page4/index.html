@@ -112,6 +112,16 @@ ga('send', 'pageview');
         
         
         <article class="post-item">
+            <span class="post-meta date-label">2019年01月16日</span>
+            <div class="article-title"><a class="post-link" href="/2019-01-16/anr/">Android App 优化之 ANR 详解</a></div>
+        </article>
+        
+        
+        
+        
+        
+        
+        <article class="post-item">
             <span class="post-meta date-label">2019年01月14日</span>
             <div class="article-title"><a class="post-link" href="/2019-01-14/linux/">Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</a></div>
         </article>
@@ -235,7 +245,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||

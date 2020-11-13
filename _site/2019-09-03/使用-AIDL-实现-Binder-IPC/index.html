@@ -1,8 +1,3 @@
-<!-- ---
-layout: default
---- -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +72,55 @@ ga('send', 'pageview');
 
 <body>
   <div class="content-container">
-    <div class="post">
-    <h1>使用 AIDL 实现 Binder IPC</h1>
-    <div class="post-date">
-        2019年09月03日 字数 6306
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">算法</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">读书</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">归类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
     </div>
-    <p>客户端提供两个数字调用服务端进行加减法，服务端实现加减法的逻辑运算并返回结果给客户端。该项目由两个工程ipc_server(服务端)和ipc_client(客户端)组成，会分别编译成两个apk，完成跨进程通信。</p>
+</aside>
+
+    <div class="page">
+  <h1>使用 AIDL 实现 Binder IPC</h1>
+  <div class="post-date">
+    2019年09月03日 字数 6306
+     预计阅读时间 19 分钟
+    </div>
+  <p>客户端提供两个数字调用服务端进行加减法，服务端实现加减法的逻辑运算并返回结果给客户端。该项目由两个工程ipc_server(服务端)和ipc_client(客户端)组成，会分别编译成两个apk，完成跨进程通信。</p>
 
 <h2 id="服务端">服务端</h2>
 
@@ -342,8 +380,7 @@ ga('send', 'pageview');
 
 <p>源码地址：<a href="https://github.com/obnil/AIDLDemo">https://github.com/obnil/AIDLDemo</a></p>
 
-    
-    <div class="post-tag">
+  <div class="post-tag">
         <ul>
             
         </ul>
@@ -362,7 +399,34 @@ ga('send', 'pageview');
         });
     </script>
     -->
-    </div>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
   </div>
   <style>
 .videoWrapper {
@@ -406,7 +470,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||

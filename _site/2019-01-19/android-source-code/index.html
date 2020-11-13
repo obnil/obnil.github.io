@@ -1,8 +1,3 @@
-<!-- ---
-layout: default
---- -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +72,55 @@ ga('send', 'pageview');
 
 <body>
   <div class="content-container">
-    <div class="post">
-    <h1>如何查看Android 5.0系统源码</h1>
-    <div class="post-date">
-        2019年01月19日 字数 563
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">算法</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">读书</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">归类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
     </div>
-    <p>由于<a href="https://item.jd.com/11760209.html">Android开发艺术探索</a>的所有内容都是基于Android 5.0系统，为了将这本书吃透，所以以后发布的Android文章也都是基于Android 5.0源码。好了废话不多说</p>
+</aside>
+
+    <div class="page">
+  <h1>如何查看Android 5.0系统源码</h1>
+  <div class="post-date">
+    2019年01月19日 字数 563
+     预计阅读时间 2 分钟
+    </div>
+  <p>由于<a href="https://item.jd.com/11760209.html">Android开发艺术探索</a>的所有内容都是基于Android 5.0系统，为了将这本书吃透，所以以后发布的Android文章也都是基于Android 5.0源码。好了废话不多说</p>
 
 <p>首先进入<a href="http://androidxref.com/">AndroidXRef</a>网址，选择<a href="http://androidxref.com/5.0.0_r2/">Lollipop - 5.0.0_r2</a>箭头所指方向</p>
 
@@ -138,8 +176,7 @@ ga('send', 'pageview');
 
 <p>很多Android大佬说不把Android开发艺术探索通读3遍，根本没有信心去找面试。实际上确实是这样的，我经常面试一些Android候选人，有些内容就是出自这本书，我们不仅要了解Api还要了解背后的原理，这样才能在工作中独当一面。</p>
 
-    
-    <div class="post-tag">
+  <div class="post-tag">
         <ul>
             
             <li>
@@ -165,7 +202,34 @@ ga('send', 'pageview');
         });
     </script>
     -->
-    </div>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
   </div>
   <style>
 .videoWrapper {
@@ -209,7 +273,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||

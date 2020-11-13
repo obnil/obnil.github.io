@@ -12,7 +12,6 @@ body {
 
 .content-container {
   max-width: 56rem;
-  padding: 1rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -359,6 +358,7 @@ body {
 .footer {
   text-align: center;
   font-size: .85rem;
+  padding-bottom: 1rem;
 
   &-link {
     margin: .2rem;

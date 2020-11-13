@@ -1,8 +1,3 @@
-<!-- ---
-layout: default
---- -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +72,55 @@ ga('send', 'pageview');
 
 <body>
   <div class="content-container">
-    <div class="post">
-    <h1>Android App 优化之 ANR 详解</h1>
-    <div class="post-date">
-        2019年01月16日 字数 7862
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">算法</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">读书</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">归类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
     </div>
-    <h2 id="1-你碰到anr了吗">1, 你碰到ANR了吗</h2>
+</aside>
+
+    <div class="page">
+  <h1>Android App 优化之 ANR 详解</h1>
+  <div class="post-date">
+    2019年01月16日 字数 7862
+     预计阅读时间 23 分钟
+    </div>
+  <h2 id="1-你碰到anr了吗">1, 你碰到ANR了吗</h2>
 
 <p>在App使用过程中, 你可能遇到过这样的情况:</p>
 
@@ -447,8 +485,7 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
 
 <p>对于ANR问题, 个人认为还是预防为主, 认清代码中的阻塞点, 善用线程. 同时形成良好的编程习惯, 要有MainThread和Worker Thread的概念的…(实际上人的工作状态也是这样的~~哈哈)</p>
 
-    
-    <div class="post-tag">
+  <div class="post-tag">
         <ul>
             
             <li>
@@ -474,7 +511,34 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
         });
     </script>
     -->
-    </div>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
   </div>
   <style>
 .videoWrapper {
@@ -518,7 +582,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||

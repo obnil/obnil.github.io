@@ -1,8 +1,3 @@
-<!-- ---
-layout: default
---- -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +72,55 @@ ga('send', 'pageview');
 
 <body>
   <div class="content-container">
-    <div class="post">
-    <h1>一年Android工作经验，今日头条 阿里 百度 网易 美团 小米 快手面经</h1>
-    <div class="post-date">
-        2019年07月01日 字数 11712
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">算法</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">读书</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">归类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
     </div>
-    <h3 id="前言">前言</h3>
+</aside>
+
+    <div class="page">
+  <h1>一年Android工作经验，今日头条 阿里 百度 网易 美团 小米 快手面经</h1>
+  <div class="post-date">
+    2019年07月01日 字数 11712
+     预计阅读时间 34 分钟
+    </div>
+  <h3 id="前言">前言</h3>
 
 <p>人生困难重重，在漫长而艰辛的前行路上，坚持不懈、脚踏实地的“低头拉车”固然重要。但认清形势、找准目标的“抬头看路”也很关键，甚至决定着你能否达到成功彼岸。只寻求远方的梦想，而不付出当下的努力，那是迷梦；只知道埋头苦干，而不认清方向，那是徒劳。</p>
 
@@ -623,8 +661,7 @@ ga('send', 'pageview');
 
 <p>转载请注明出处：http://blog.csdn.net/a296777513/article/details/73610719</p>
 
-    
-    <div class="post-tag">
+  <div class="post-tag">
         <ul>
             
         </ul>
@@ -643,7 +680,34 @@ ga('send', 'pageview');
         });
     </script>
     -->
-    </div>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
   </div>
   <style>
 .videoWrapper {
@@ -687,7 +751,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||

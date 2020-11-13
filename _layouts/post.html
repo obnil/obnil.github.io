@@ -1,21 +1,14 @@
-<!-- ---
+---
 layout: default
---- -->
-
-
-<!DOCTYPE html>
-<html lang="en">
-{% include head.html %}
-<body>
-  <div class="content-container">
-    <div class="post">
-    <h1>{{ page.title }}</h1>
-    <div class="post-date">
-        {{ page.date | date: '%Y年%m月%d日' }} 字数 {{ page.content | strip_html | strip_newlines | remove: " " | size }}
+---
+<div class="page">
+  <h1>{{ page.title }}</h1>
+  <div class="post-date">
+    {{ page.date | date: '%Y年%m月%d日' }} 字数 {{ page.content | strip_html | strip_newlines | remove: " " | size }}
+     预计阅读时间 {{ page.content | strip_html | strip_newlines | remove: " " | size | divided_by: 350 | plus: 1 }} 分钟
     </div>
-    {{ content }}
-    
-    <div class="post-tag">
+  {{ content }}
+  <div class="post-tag">
         <ul>
             {% for tag in page.tags %}
             <li>
@@ -41,8 +34,4 @@ layout: default
         });
     </script>
     -->
-    </div>
-  </div>
-  {% include open-embed.html %}
-</body>
-</html>
+</div>

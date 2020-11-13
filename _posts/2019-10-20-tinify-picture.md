@@ -1,0 +1,259 @@
+---
+layout: post
+title:  "使用python批处理图片，大小减少60%"
+description: "Git 是用于Linux内核开发的版本控制工具"
+tags: [git]
+date:   2019-03-27 15:40:42 +0800
+---
+Git 是用于 Linux[内核](https://baike.baidu.com/item/%E5%86%85%E6%A0%B8)开发的[版本控制](https://baike.baidu.com/item/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6)工具。与常用的版本控制工具 CVS, Subversion 等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使[源代码](https://baike.baidu.com/item/%E6%BA%90%E4%BB%A3%E7%A0%81)的发布和交流极其方便。。
+## 查看本地修改diff
+```
+NamiLindeMBP:obnil.github.io namilin$ git diff
+diff --git a/_posts/2019-01-14-linux.md b/_posts/2019-01-14-linux.md
+index d62e9b7..f461f61 100644
+--- a/_posts/2019-01-14-linux.md
++++ b/_posts/2019-01-14-linux.md
+@@ -7,15 +7,79 @@ date:   2019-01-14 15:40:42 +0800
+ ---
+ Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码
+。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。
+ ## 查看普通文件ls
+```
+
+
+
+## 查看本地历史记录log
+
+```
+NamiLindeMBP:obnil.github.io namilin$ git log
+commit b4488a9b43f454027ffdc9d364c9328036ce2dc6 (HEAD -> master, origin/master, origin/HEAD)
+Author: lb891014 <lb891014@126.com>
+Date:   Wed Mar 27 16:04:28 2019 +0800
+
+    修复音乐外链
+
+commit 8174cee39fe58f812a92f2432b5f1ccb06de5dbd
+Author: lb891014 <lb891014@126.com>
+Date:   Sun Mar 17 19:07:15 2019 +0800
+
+    修复首页base url问题
+```
+
+
+
+## 删除没有被tracked的文件
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	places_you've_created.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+从上面可以看到没有被tracked的文件即使使用`git reset —hard`也无效，这时候需要使用`git clean -f`
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git clean -n
+Would remove places_you've_created.html
+NamiLindeMBP:SecuritySchoolPro namilin$ git clean -f
+Removing places_you've_created.html
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+nothing to commit, working tree clean
+```
+
+这时候可以看到文件`places_you've_created.html`已经被删除了
+
+## 回退代码reset
+
+回退本地修改的文件`git reset —hard`
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   app/build.gradle
+
+no changes added to commit (use "git add" and/or "git commit -a")
+NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard
+HEAD is now at a63b37e HMFBridge组件及demo演示
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch feature/1.0.0/dev_linbo_hmfbridge
+nothing to commit, working tree clean
+```
+
+先查看历史记录
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit 38ce7f57d2c782c5750bd83e17e7ab47038d2d2e (HEAD -> master, origin/master)
+Merge: 189fbea 9174f4d
+Author: fengbo <fengbo>
+Date:   Mon Mar 18 18:09:05 2019 +0800
+
+    Merge branch 'feature/1.0.0/dev_smc_map_unReadNews_imgCrop_toastStyle' into 'master'
+    
+    Feature/1.0.0/dev smc map un read news img crop toast style
+    
+    新版本功能，修复若干bug
+    
+    See merge request !26
+
+commit 9174f4d16783741d94c5c00dfbeb7671c25d6121
+Author: Sam <chuchuyajun@foxmail.com>
+Date:   Sat Mar 16 16:28:52 2019 +0800
+
+    修复学生管理界面跳转首页，定位学生位置不正确的问题；修复切换学校报警时间不正确的问
+题；支付宝、微信未安装时提示用户；我的帖子可以刷新下拉，优化UI界面。
+
+commit e686dd0b8fb0eda48c172688d73586c2b1412ff6
+Author: Sam <chuchuyajun@foxmail.com>
+Date:   Thu Mar 14 16:50:14 2019 +0800
+
+    添加空网络数据图，增加强制更新功能，修复若干bug
+```
+回退本地的历史记录到指定提交记录`git reset —hard commit-id`
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard e686dd0b8fb0eda48c172688d73586c2b1412ff6
+HEAD is now at e686dd0 添加空网络数据图，增加强制更新功能，修复若干bug
+
+NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit e686dd0b8fb0eda48c172688d73586c2b1412ff6 (HEAD -> master)
+Author: Sam <chuchuyajun@foxmail.com>
+Date:   Thu Mar 14 16:50:14 2019 +0800
+
+    添加空网络数据图，增加强制更新功能，修复若干bug
+commit ef0cfd3680d0f864ea90d1ce1c1aa42c286490ad
+Author: Sam <chuchuyajun@foxmail.com>
+Date:   Tue Mar 12 15:08:51 2019 +0800
+
+    对首页地图显示距离较远两个学校的情况进去优化，融云未读消息首页显示角标，家长用户上传头像进行裁剪，统一toast提示的样式，修复了请假拉取更多数据页码不正确的问题
+```
+
+回退本地的一次历史记录`git reset —hard HEAD^`
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git reset --hard HEAD^
+HEAD is now at ef0cfd3 对首页地图显示距离较远两个学校的情况进去优化，融云未读消息首页显示角标，家长用户上传头像进行裁剪，统一toast提示的样式，修复了请假拉取更多数据页码不正确的问题
+```
+
+## 将其它分支的提交记录同步到自己分支cherry-pick
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git log
+commit 050d3f1ba806b076a425126ab5d6957f533de067 (HEAD -> newDev)
+Author: lb891014 <lb891014@126.com>
+Date:   Fri Mar 29 18:00:29 2019 +0800
+
+    测试cherry-pick功能
+
+NamiLindeMBP:SecuritySchoolPro namilin$ git checkout master
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+NamiLindeMBP:SecuritySchoolPro namilin$ git cherry-pick 050d3f1ba806b076a425126ab5d6957f533de067
+[master fa7b037] 测试cherry-pick功能
+ Date: Fri Mar 29 18:00:29 2019 +0800
+ 1 file changed, 8 deletions(-)
+```
+
+## 查看文件的修改记录blame
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git blame -L 9,20 app/build.gradle
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800  9)     compileSdkVersion 26
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 10)     buildToolsVersion '26.0.2'
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 11) 
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 12)     defaultConfig {
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 13)         applicationId "com.hmf.securityschool"
+57e163e8 (lb891014 2019-01-15 17:11:03 +0800 14)         minSdkVersion 19
+5522cee3 (lb891014 2018-12-13 21:33:13 +0800 15)         targetSdkVersion 26
+9174f4d1 (Sam      2019-03-16 16:28:52 +0800 16)         versionCode 4
+9174f4d1 (Sam      2019-03-16 16:28:52 +0800 17)         versionName "1.1.0"
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 18)         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 19)         vectorDrawables.useSupportLibrary = true
+d0e7b3d5 (lb891014 2018-12-17 21:37:52 +0800 20)         multiDexEnabled true
+```
+
+## 查看历史修改的文件记录show后面可带参数commit-id
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git show
+commit fa7b037b57c18fe4267baa0a30c2066218afcdb5 (HEAD -> master)
+Author: lb891014 <lb891014@126.com>
+Date:   Fri Mar 29 18:00:29 2019 +0800
+
+    测试cherry-pick功能
+
+diff --git a/app/build.gradle b/app/build.gradle
+index b52e86e..856cf19 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -6,14 +6,6 @@ android {
+             jniLibs.srcDirs = ['libs']
+         }
+     }
+-    signingConfigs {
+-        config {
+-            keyAlias 'linbo'
+-            keyPassword '654321'
+-            storeFile file('shellever.jks')
+-            storePassword '123456'
+-        }
+-    }
+     compileSdkVersion 26
+     buildToolsVersion '26.0.2'
+```
+
+## 更新远程服务器代码到本地pull
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git pull
+Updating 189fbea..38ce7f5
+Fast-forward
+ IMLib/build.gradle                                                  |   1 +
+ app/app.iml                                                         |  79 +++-----
+ app/build.gradle                                                    |  19 +-
+ app/release/output.json                                             |   2 +-
+ app/src/main/AndroidManifest.xml                                    |  19 ++
+ .../java/com/hmf/securityschool/activity/AlarmDetailActivity.java   |   3 +-
+ .../java/com/hmf/securityschool/activity/DeviceAddActivity.java     |   7 +
+ .../com/hmf/securityschool/activity/DevicePhotoAddActivity.java     |  37 ++--
+ .../main/java/com/hmf/securityschool/activity/ForumAddActivity.java |   6 +
+ .../java/com/hmf/securityschool/activity/ForumDetailActivity.java   |  67 ++++--
+ 151 files changed, 2714 insertions(+), 572 deletions(-)
+```
+
+## 查看当前状态status
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working tree clean
+```
+
+## 查看当前所有分支branch加参数是创建分支
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git branch mydev
+NamiLindeMBP:SecuritySchoolPro namilin$ git branch
+  bug/1.0.0/smc_fix_CacheBySchool_Amap_UI_RongIm
+  feature/1.0.0/dev_linbo_bindCard
+  feature/1.0.0/dev_linbo_hmfbridge
+  feature/1.0.0/dev_smc_pro
+* master
+  newDev
+```
+
+## 切换当前分支到指定分支checkout
+
+```
+NamiLindeMBP:SecuritySchoolPro namilin$ git checkout newDev
+Switched to branch 'newDev'
+```

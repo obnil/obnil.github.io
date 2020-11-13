@@ -1,8 +1,3 @@
-<!-- ---
-layout: default
---- -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +72,55 @@ ga('send', 'pageview');
 
 <body>
   <div class="content-container">
-    <div class="post">
-    <h1>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</h1>
-    <div class="post-date">
-        2019年01月14日 字数 2895
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">算法</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">读书</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">归类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
     </div>
-    <p>Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。</p>
+</aside>
+
+    <div class="page">
+  <h1>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</h1>
+  <div class="post-date">
+    2019年01月14日 字数 2895
+     预计阅读时间 9 分钟
+    </div>
+  <p>Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。</p>
 <h2 id="查看普通文件ls">查看普通文件ls</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NamiLindeMBP:obnil.github.io namilin$ ls
 404.html	_config.yml	_site		feed.xml	resume.md
@@ -176,8 +214,7 @@ sys	0m0.007s
 <h2 id="远程连接工具ssh">远程连接工具ssh</h2>
 
 
-    
-    <div class="post-tag">
+  <div class="post-tag">
         <ul>
             
             <li>
@@ -203,7 +240,34 @@ sys	0m0.007s
         });
     </script>
     -->
-    </div>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
   </div>
   <style>
 .videoWrapper {
@@ -247,7 +311,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||

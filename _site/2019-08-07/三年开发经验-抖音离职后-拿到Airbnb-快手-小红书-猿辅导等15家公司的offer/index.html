@@ -1,8 +1,3 @@
-<!-- ---
-layout: default
---- -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +72,55 @@ ga('send', 'pageview');
 
 <body>
   <div class="content-container">
-    <div class="post">
-    <h1>三年开发经验，抖音离职后，拿到Airbnb、快手、小红书、猿辅导等15家公司的offer</h1>
-    <div class="post-date">
-        2019年08月07日 字数 15887
+    <aside id="metabar" class="metabar">
+    <div class="metabar-wrapper">
+        <div class="metabar-left">
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+        </div>
+        <div class="metabar-right">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
+                <ul class="nav">
+    
+    
+    <li class="nav-link">
+        <a class="" href="/android/">Android</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/leetcode/">算法</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/reading/">读书</a>
+    </li>
+    
+    
+    
+    <li class="nav-link">
+        <a class="" href="/categories/">归类</a>
+    </li>
+    
+    
+</ul>
+
+            </nav>
+        </div>
     </div>
-    <h1 id="前言">前言</h1>
+</aside>
+
+    <div class="page">
+  <h1>三年开发经验，抖音离职后，拿到Airbnb、快手、小红书、猿辅导等15家公司的offer</h1>
+  <div class="post-date">
+    2019年08月07日 字数 15887
+     预计阅读时间 46 分钟
+    </div>
+  <h1 id="前言">前言</h1>
 
 <p>我这篇文章并不是简单的描述一些面试中的题，或者总结一些Android的知识，而是想记录我整个的想法和准备的过程，以及一些心得体会，让大家更加全面的去看待工作、跳槽和生活（从我的角度，当然肯定有不合理的地方，大家借鉴就好），之前17年跳槽写过的一篇文章 <a href="https://links.jianshu.com/go?to=https%3A%2F%2Fblog.csdn.net%2Fa296777513%2Farticle%2Fdetails%2F73610719">一年Android工作经验，今日头条 阿里 百度 网易 美团 小米 快手面经</a></p>
 
@@ -940,8 +978,7 @@ ga('send', 'pageview');
 
 <p>感谢大家能耐着性子，看完我啰哩啰嗦的面经，以上仅是个人的观点。感觉两年稍纵即逝，在这两年中成长了很多，感谢所有帮助过我的人。</p>
 
-    
-    <div class="post-tag">
+  <div class="post-tag">
         <ul>
             
         </ul>
@@ -960,7 +997,34 @@ ga('send', 'pageview');
         });
     </script>
     -->
-    </div>
+</div>
+
+    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<div class="footer">
+  <hr />
+  <div class="footer-navigation">
+      <div class="footer-links">
+          <nav class="metabar-nav">
+              <ul class="nav">
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                  </li>
+                  <li class="nav-link">
+                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                  </li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  © 2018 obnil. All rights reserved.
+</div>
+
   </div>
   <style>
 .videoWrapper {
@@ -1004,7 +1068,7 @@ function vimeo_embed(url,el) {
     });
 }
 function video_embed() {
-    var p = document.getElementsByTagName('p');
+    var p = document.getElementsByTagName('media');
     for(var i = 0; i < p.length; i++) {
         //check if this is an external url (that starts with https:// or http://
         if (p[i].innerHTML.indexOf("http://") == 0 ||
