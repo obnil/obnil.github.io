@@ -3,7 +3,7 @@
 # # # # # # # # # # # # #
 
 # Basic
-name:               "佩奇的弟弟乔治"
+name:               "Less is More"
 
 author:
   facebook:         100032298188362
@@ -57,12 +57,10 @@ kramdown:
 nav:
   - name:           "Android"
     url:            "/android/"
-  - name:           "算法"
-    url:            "/leetcode/"
-  - name:           "读书"
-    url:            "/reading/"
-  - name:           "归类"
-    url:            "/categories/"
+  - name:           "Tags"
+    url:            "/tags/"
+  - name:           "About"
+    url:            "/about/"
 
 # Sass
 sass:

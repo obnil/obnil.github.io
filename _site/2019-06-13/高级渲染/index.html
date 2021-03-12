@@ -17,26 +17,12 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed for 佩奇的弟弟乔治" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Less is More" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
-
-<script>
-  (function(w, d){
-   var id='embedly-platform', n = 'script';
-   if (!d.getElementById(id)){
-     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
-     var e = d.createElement(n); e.id = id; e.async=1;
-     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
-     var s = d.getElementsByTagName(n)[0];
-     s.parentNode.insertBefore(e, s);
-   }
-  })(window, document);
-</script>
-
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>高级渲染 | 佩奇的弟弟乔治</title>
+<title>高级渲染 | Less is More</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="高级渲染" />
 <meta property="og:locale" content="en_US" />
@@ -44,14 +30,12 @@
 <meta property="og:description" content="渲染功能是应用程序最普遍的功能" />
 <link rel="canonical" href="http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/" />
 <meta property="og:url" content="http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/" />
-<meta property="og:site_name" content="佩奇的弟弟乔治" />
+<meta property="og:site_name" content="Less is More" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-06-13T04:30:42+00:00" />
 <script type="application/ld+json">
 {"description":"渲染功能是应用程序最普遍的功能","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/","headline":"高级渲染","dateModified":"2019-06-13T04:30:42+00:00","datePublished":"2019-06-13T04:30:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/%E9%AB%98%E7%BA%A7%E6%B8%B2%E6%9F%93/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-
-
 
   <!-- Google Analytics -->
 
@@ -71,16 +55,13 @@ ga('send', 'pageview');
 </head>
 
 <body>
-  <div class="content-container">
-    <aside id="metabar" class="metabar">
-    <div class="metabar-wrapper">
+  <header class="site-header">
+    <div class="wrapper">
         <div class="metabar-left">
-            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Less is More</a>
         </div>
         <div class="metabar-right">
-            <button id="js-navOpen" class="nav-open">菜单</button>
-            <nav id="js-metabarNav" class="metabar-nav">
-                <button id="js-navClose" class="nav-close">关闭</button>
+            <nav class="metabar-nav">
                 <ul class="nav">
     
     
@@ -91,19 +72,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/leetcode/">算法</a>
+        <a class="" href="/tags/">Tags</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/reading/">读书</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
-        <a class="" href="/categories/">归类</a>
+        <a class="" href="/about/">About</a>
     </li>
     
     
@@ -112,15 +87,21 @@ ga('send', 'pageview');
             </nav>
         </div>
     </div>
-</aside>
+</header>
 
-    <div class="page">
+  <main class="wrapper">
+  	<div class="page wrapper">
   <h1>高级渲染</h1>
   <div class="post-date">
     2019年06月13日 字数 6981
      预计阅读时间 20 分钟
     </div>
-  <blockquote>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    <blockquote>
   <p>渲染功能是应用程序最普遍的功能，开发任何应用程序都是这样，一方面，设计师要求为用户展现可用性最高的超然体验，另一方面，那些华丽的图片和动画，并不是在所有的设备上都能刘畅地运行。我们来了解一下什么是渲染性能。
 首先，我们要知道Android系统每隔16ms就重新绘制一次Activity，也就是说，我们的应用必须在16ms内完成屏幕刷新的全部逻辑操作，这样才能达到每秒60帧，然而这个每秒帧数的参数由手机硬件所决定，现在大多数手机屏幕刷新率是60赫兹（赫兹是国际单位制中频率的单位，它是每秒中的周期性变动重复次数的计量），也就是说我们有16ms（1000ms/60次=16.66ms）的时间去完成每帧的绘制逻辑操作，如果错过了，比如说我们花费34ms才完成计算，那么就会出现我们称之为丢帧的情况。</p>
 </blockquote>
@@ -422,11 +403,6 @@ ga('send', 'pageview');
 
 <p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
 
-  <div class="post-tag">
-        <ul>
-            
-        </ul>
-    </div>
     <!--
     <hr>
     <div class="comment"></div>
@@ -443,9 +419,9 @@ ga('send', 'pageview');
     -->
 </div>
 
-    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
-<div class="footer">
-  <hr />
+  </main>
+  <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<footer class="footer">
   <div class="footer-navigation">
       <div class="footer-links">
           <nav class="metabar-nav">
@@ -467,9 +443,8 @@ ga('send', 'pageview');
       </div>
   </div>
   © 2018 obnil. All rights reserved.
-</div>
+</footer>
 
-  </div>
   <style>
 .videoWrapper {
 	position: relative;

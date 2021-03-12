@@ -17,26 +17,12 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed for 佩奇的弟弟乔治" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Less is More" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
-
-<script>
-  (function(w, d){
-   var id='embedly-platform', n = 'script';
-   if (!d.getElementById(id)){
-     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
-     var e = d.createElement(n); e.id = id; e.async=1;
-     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
-     var s = d.getElementsByTagName(n)[0];
-     s.parentNode.insertBefore(e, s);
-   }
-  })(window, document);
-</script>
-
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>全面理解Java内存模型(JMM)及volatile关键字 | 佩奇的弟弟乔治</title>
+<title>全面理解Java内存模型(JMM)及volatile关键字 | Less is More</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="全面理解Java内存模型(JMM)及volatile关键字" />
 <meta property="og:locale" content="en_US" />
@@ -44,14 +30,12 @@
 <meta property="og:description" content="先阐明Java内存区域划分、硬件内存架构、Java多线程的实现原理与Java内存模型的具体关系，在弄明白它们间的关系后，进一步分析Java内存模型作用以及一些必要的实现手段" />
 <link rel="canonical" href="http://localhost:4000/2019-06-13/%E5%85%A8%E9%9D%A2%E7%90%86%E8%A7%A3Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B(JMM)%E5%8F%8Avolatile%E5%85%B3%E9%94%AE%E5%AD%97/" />
 <meta property="og:url" content="http://localhost:4000/2019-06-13/%E5%85%A8%E9%9D%A2%E7%90%86%E8%A7%A3Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B(JMM)%E5%8F%8Avolatile%E5%85%B3%E9%94%AE%E5%AD%97/" />
-<meta property="og:site_name" content="佩奇的弟弟乔治" />
+<meta property="og:site_name" content="Less is More" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-06-13T08:40:42+00:00" />
 <script type="application/ld+json">
 {"description":"先阐明Java内存区域划分、硬件内存架构、Java多线程的实现原理与Java内存模型的具体关系，在弄明白它们间的关系后，进一步分析Java内存模型作用以及一些必要的实现手段","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/%E5%85%A8%E9%9D%A2%E7%90%86%E8%A7%A3Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B(JMM)%E5%8F%8Avolatile%E5%85%B3%E9%94%AE%E5%AD%97/","headline":"全面理解Java内存模型(JMM)及volatile关键字","dateModified":"2019-06-13T08:40:42+00:00","datePublished":"2019-06-13T08:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/%E5%85%A8%E9%9D%A2%E7%90%86%E8%A7%A3Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B(JMM)%E5%8F%8Avolatile%E5%85%B3%E9%94%AE%E5%AD%97/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-
-
 
   <!-- Google Analytics -->
 
@@ -71,16 +55,13 @@ ga('send', 'pageview');
 </head>
 
 <body>
-  <div class="content-container">
-    <aside id="metabar" class="metabar">
-    <div class="metabar-wrapper">
+  <header class="site-header">
+    <div class="wrapper">
         <div class="metabar-left">
-            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Less is More</a>
         </div>
         <div class="metabar-right">
-            <button id="js-navOpen" class="nav-open">菜单</button>
-            <nav id="js-metabarNav" class="metabar-nav">
-                <button id="js-navClose" class="nav-close">关闭</button>
+            <nav class="metabar-nav">
                 <ul class="nav">
     
     
@@ -91,19 +72,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/leetcode/">算法</a>
+        <a class="" href="/tags/">Tags</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/reading/">读书</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
-        <a class="" href="/categories/">归类</a>
+        <a class="" href="/about/">About</a>
     </li>
     
     
@@ -112,15 +87,21 @@ ga('send', 'pageview');
             </nav>
         </div>
     </div>
-</aside>
+</header>
 
-    <div class="page">
+  <main class="wrapper">
+  	<div class="page wrapper">
   <h1>全面理解Java内存模型(JMM)及volatile关键字</h1>
   <div class="post-date">
     2019年06月13日 字数 14279
      预计阅读时间 41 分钟
     </div>
-  <p>【版权申明】未经博主同意，谢绝转载！（请尊重原创，博主保留追究权） 
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    <p>【版权申明】未经博主同意，谢绝转载！（请尊重原创，博主保留追究权） 
 http://blog.csdn.net/javazejian/article/details/72772461 
 出自【zejian的博客】</p>
 
@@ -515,11 +496,6 @@ instance(memory);    //2.初始化对象</p>
 <p>由于步骤2和步骤3不存在数据依赖关系，而且无论重排前还是重排后程序的执行结果在单线程中并没有改变，因此这种重排优化是允许的。但是指令重排只会保证串行语义的执行的一致性(单线程)，但并不会关心多线程间的语义一致性。所以当一条线程访问instance不为null时，由于instance实例未必已初始化完成，也就造成了线程安全问题。那么该如何解决呢，很简单，我们使用volatile禁止instance变量被执行指令重排优化即可。</p>
 
 
-  <div class="post-tag">
-        <ul>
-            
-        </ul>
-    </div>
     <!--
     <hr>
     <div class="comment"></div>
@@ -536,9 +512,9 @@ instance(memory);    //2.初始化对象</p>
     -->
 </div>
 
-    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
-<div class="footer">
-  <hr />
+  </main>
+  <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<footer class="footer">
   <div class="footer-navigation">
       <div class="footer-links">
           <nav class="metabar-nav">
@@ -560,9 +536,8 @@ instance(memory);    //2.初始化对象</p>
       </div>
   </div>
   © 2018 obnil. All rights reserved.
-</div>
+</footer>
 
-  </div>
   <style>
 .videoWrapper {
 	position: relative;

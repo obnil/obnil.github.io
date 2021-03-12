@@ -2,11 +2,11 @@
 <html lang="en">
 {% include head.html %}
 <body>
-  <div class="content-container">
-    {% include metabar.html %}
-    {{ content }}
-    {% include footer.html %}
-  </div>
+  {% include metabar.html %}
+  <main class="wrapper">
+  	{{ content }}
+  </main>
+  {% include footer.html %}
   {% include open-embed.html %}
 </body>
 </html>

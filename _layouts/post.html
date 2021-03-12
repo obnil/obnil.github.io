@@ -1,14 +1,13 @@
 ---
 layout: default
 ---
-<div class="page">
+<div class="page wrapper">
   <h1>{{ page.title }}</h1>
   <div class="post-date">
     {{ page.date | date: '%Y年%m月%d日' }} 字数 {{ page.content | strip_html | strip_newlines | remove: " " | size }}
      预计阅读时间 {{ page.content | strip_html | strip_newlines | remove: " " | size | divided_by: 350 | plus: 1 }} 分钟
     </div>
-  {{ content }}
-  <div class="post-tag">
+    <div class="post-tag">
         <ul>
             {% for tag in page.tags %}
             <li>
@@ -20,6 +19,7 @@ layout: default
             {% endfor %}
         </ul>
     </div>
+    {{ content }}
     <!--
     <hr>
     <div class="comment"></div>

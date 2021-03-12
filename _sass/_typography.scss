@@ -32,16 +32,12 @@ body {
   font-size: .875rem !important;
 }
 .pagination {
-  padding: 1em 0 0 0;
+  padding: 1em 0;
   text-align: center;
 }
 
 .post-item a {
   color: #000;
-}
-
-.post-item {
-  border-bottom: 1px solid #f1f3f5;
 }
 
 .post a {
@@ -69,11 +65,6 @@ body {
 p.lead {
   font-size: 1.375rem;
   font-weight: 300;
-}
-
-.site-header {
-  margin-bottom: .75em;
-  min-height: 80px;
 }
 
 .logo {
@@ -185,19 +176,6 @@ p.lead {
   }
 }
 
-.metabar-wrapper {
-  display: block;
-  width: auto;
-  margin-right: auto;
-  margin-left: auto;
-  padding-top: 40px;
-
-
-  @media (max-width: 40rem) {
-    padding: 1rem 0 1rem 0;
-  }
-}
-
 @media (max-width: 35.9375em) {
   .metabar-nav .nav-link {
     color: #343a40;
@@ -217,24 +195,19 @@ p.lead {
   }
 }
 
-.metabar {
-  display: block;
-  width: 100vw;
-  max-width: 100%;
-  clear: both;
-  position: relative;
-  background-color: transparent;
-  box-shadow: 0 0 1px 0 transparent;
-  z-index: 2;
+.site-header {
+  border-bottom: 1px solid #e8e8e8;
+  min-height: 55.95px;
 }
 
 .metabar-left {
   float: left;
-  line-height: 1;
+  line-height: 54px;
 }
 
 .metabar-right {
   float: right;
+  line-height: 54px;
 }
 
 .metabar-title {
@@ -282,19 +255,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  border-bottom: 1px solid #eaecef;
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
 }
 
 h2 {
-  border-bottom: 1px solid #eaecef;
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
 }
 
 h3 {
-  font-size: 1.25em;
 }
 
 h4 {
@@ -393,12 +359,6 @@ dd {
 /*--------------
   
   -------------- */
-
-hr {
-  border: 0;
-  border-top: 1px solid $divider-color;
-  margin: 1.5rem auto;
-}
 
 strong {
   color: #333;

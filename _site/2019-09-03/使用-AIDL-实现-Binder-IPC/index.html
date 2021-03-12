@@ -17,26 +17,12 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed for 佩奇的弟弟乔治" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Less is More" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
-
-<script>
-  (function(w, d){
-   var id='embedly-platform', n = 'script';
-   if (!d.getElementById(id)){
-     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
-     var e = d.createElement(n); e.id = id; e.async=1;
-     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
-     var s = d.getElementsByTagName(n)[0];
-     s.parentNode.insertBefore(e, s);
-   }
-  })(window, document);
-</script>
-
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>使用 AIDL 实现 Binder IPC | 佩奇的弟弟乔治</title>
+<title>使用 AIDL 实现 Binder IPC | Less is More</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="使用 AIDL 实现 Binder IPC" />
 <meta property="og:locale" content="en_US" />
@@ -44,14 +30,12 @@
 <meta property="og:description" content="客户端提供两个数字调用服务端进行加减法，服务端实现加减法的逻辑运算并返回结果给客户端" />
 <link rel="canonical" href="http://localhost:4000/2019-09-03/%E4%BD%BF%E7%94%A8-AIDL-%E5%AE%9E%E7%8E%B0-Binder-IPC/" />
 <meta property="og:url" content="http://localhost:4000/2019-09-03/%E4%BD%BF%E7%94%A8-AIDL-%E5%AE%9E%E7%8E%B0-Binder-IPC/" />
-<meta property="og:site_name" content="佩奇的弟弟乔治" />
+<meta property="og:site_name" content="Less is More" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-09-03T01:40:42+00:00" />
 <script type="application/ld+json">
 {"description":"客户端提供两个数字调用服务端进行加减法，服务端实现加减法的逻辑运算并返回结果给客户端","@type":"BlogPosting","url":"http://localhost:4000/2019-09-03/%E4%BD%BF%E7%94%A8-AIDL-%E5%AE%9E%E7%8E%B0-Binder-IPC/","headline":"使用 AIDL 实现 Binder IPC","dateModified":"2019-09-03T01:40:42+00:00","datePublished":"2019-09-03T01:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-09-03/%E4%BD%BF%E7%94%A8-AIDL-%E5%AE%9E%E7%8E%B0-Binder-IPC/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-
-
 
   <!-- Google Analytics -->
 
@@ -71,16 +55,13 @@ ga('send', 'pageview');
 </head>
 
 <body>
-  <div class="content-container">
-    <aside id="metabar" class="metabar">
-    <div class="metabar-wrapper">
+  <header class="site-header">
+    <div class="wrapper">
         <div class="metabar-left">
-            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Less is More</a>
         </div>
         <div class="metabar-right">
-            <button id="js-navOpen" class="nav-open">菜单</button>
-            <nav id="js-metabarNav" class="metabar-nav">
-                <button id="js-navClose" class="nav-close">关闭</button>
+            <nav class="metabar-nav">
                 <ul class="nav">
     
     
@@ -91,19 +72,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/leetcode/">算法</a>
+        <a class="" href="/tags/">Tags</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/reading/">读书</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
-        <a class="" href="/categories/">归类</a>
+        <a class="" href="/about/">About</a>
     </li>
     
     
@@ -112,15 +87,21 @@ ga('send', 'pageview');
             </nav>
         </div>
     </div>
-</aside>
+</header>
 
-    <div class="page">
+  <main class="wrapper">
+  	<div class="page wrapper">
   <h1>使用 AIDL 实现 Binder IPC</h1>
   <div class="post-date">
     2019年09月03日 字数 6306
      预计阅读时间 19 分钟
     </div>
-  <p>客户端提供两个数字调用服务端进行加减法，服务端实现加减法的逻辑运算并返回结果给客户端。该项目由两个工程ipc_server(服务端)和ipc_client(客户端)组成，会分别编译成两个apk，完成跨进程通信。</p>
+    <div class="post-tag">
+        <ul>
+            
+        </ul>
+    </div>
+    <p>客户端提供两个数字调用服务端进行加减法，服务端实现加减法的逻辑运算并返回结果给客户端。该项目由两个工程ipc_server(服务端)和ipc_client(客户端)组成，会分别编译成两个apk，完成跨进程通信。</p>
 
 <h2 id="服务端">服务端</h2>
 
@@ -380,11 +361,6 @@ ga('send', 'pageview');
 
 <p>源码地址：<a href="https://github.com/obnil/AIDLDemo">https://github.com/obnil/AIDLDemo</a></p>
 
-  <div class="post-tag">
-        <ul>
-            
-        </ul>
-    </div>
     <!--
     <hr>
     <div class="comment"></div>
@@ -401,9 +377,9 @@ ga('send', 'pageview');
     -->
 </div>
 
-    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
-<div class="footer">
-  <hr />
+  </main>
+  <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<footer class="footer">
   <div class="footer-navigation">
       <div class="footer-links">
           <nav class="metabar-nav">
@@ -425,9 +401,8 @@ ga('send', 'pageview');
       </div>
   </div>
   © 2018 obnil. All rights reserved.
-</div>
+</footer>
 
-  </div>
   <style>
 .videoWrapper {
 	position: relative;

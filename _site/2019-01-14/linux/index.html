@@ -17,26 +17,12 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed for 佩奇的弟弟乔治" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Less is More" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
-
-<script>
-  (function(w, d){
-   var id='embedly-platform', n = 'script';
-   if (!d.getElementById(id)){
-     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
-     var e = d.createElement(n); e.id = id; e.async=1;
-     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
-     var s = d.getElementsByTagName(n)[0];
-     s.parentNode.insertBefore(e, s);
-   }
-  })(window, document);
-</script>
-
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh | 佩奇的弟弟乔治</title>
+<title>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh | Less is More</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Linux常用命令ls，grep，find，vim，自定义命令，time，ssh" />
 <meta property="og:locale" content="en_US" />
@@ -44,14 +30,12 @@
 <meta property="og:description" content="Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码" />
 <link rel="canonical" href="http://localhost:4000/2019-01-14/linux/" />
 <meta property="og:url" content="http://localhost:4000/2019-01-14/linux/" />
-<meta property="og:site_name" content="佩奇的弟弟乔治" />
+<meta property="og:site_name" content="Less is More" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-01-14T07:40:42+00:00" />
 <script type="application/ld+json">
 {"description":"Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码","@type":"BlogPosting","url":"http://localhost:4000/2019-01-14/linux/","headline":"Linux常用命令ls，grep，find，vim，自定义命令，time，ssh","dateModified":"2019-01-14T07:40:42+00:00","datePublished":"2019-01-14T07:40:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-01-14/linux/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-
-
 
   <!-- Google Analytics -->
 
@@ -71,16 +55,13 @@ ga('send', 'pageview');
 </head>
 
 <body>
-  <div class="content-container">
-    <aside id="metabar" class="metabar">
-    <div class="metabar-wrapper">
+  <header class="site-header">
+    <div class="wrapper">
         <div class="metabar-left">
-            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Less is More</a>
         </div>
         <div class="metabar-right">
-            <button id="js-navOpen" class="nav-open">菜单</button>
-            <nav id="js-metabarNav" class="metabar-nav">
-                <button id="js-navClose" class="nav-close">关闭</button>
+            <nav class="metabar-nav">
                 <ul class="nav">
     
     
@@ -91,19 +72,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/leetcode/">算法</a>
+        <a class="" href="/tags/">Tags</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/reading/">读书</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
-        <a class="" href="/categories/">归类</a>
+        <a class="" href="/about/">About</a>
     </li>
     
     
@@ -112,15 +87,28 @@ ga('send', 'pageview');
             </nav>
         </div>
     </div>
-</aside>
+</header>
 
-    <div class="page">
+  <main class="wrapper">
+  	<div class="page wrapper">
   <h1>Linux常用命令ls，grep，find，vim，自定义命令，time，ssh</h1>
   <div class="post-date">
     2019年01月14日 字数 2895
      预计阅读时间 9 分钟
     </div>
-  <p>Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。</p>
+    <div class="post-tag">
+        <ul>
+            
+            <li>
+                <a href="http://localhost:4000/tags#linux">
+                    <span>linux</span>
+                </a>
+            </li>
+            
+            
+        </ul>
+    </div>
+    <p>Linux是一款免费的操作系统，用户可以通过网络或其他途径免费获得，并可以任意修改其源代码。这是其他的操作系统所做不到的。正是由于这一点，来自全世界的无数程序员参与了Linux的修改、编写工作，程序员可以根据自己的兴趣和灵感对其进行改变，这让Linux吸收了无数程序员的精华，不断壮大。</p>
 <h2 id="查看普通文件ls">查看普通文件ls</h2>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NamiLindeMBP:obnil.github.io namilin$ ls
 404.html	_config.yml	_site		feed.xml	resume.md
@@ -214,18 +202,6 @@ sys	0m0.007s
 <h2 id="远程连接工具ssh">远程连接工具ssh</h2>
 
 
-  <div class="post-tag">
-        <ul>
-            
-            <li>
-                <a href="http://localhost:4000/tags#linux">
-                    <span>linux</span>
-                </a>
-            </li>
-            
-            
-        </ul>
-    </div>
     <!--
     <hr>
     <div class="comment"></div>
@@ -242,9 +218,9 @@ sys	0m0.007s
     -->
 </div>
 
-    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
-<div class="footer">
-  <hr />
+  </main>
+  <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<footer class="footer">
   <div class="footer-navigation">
       <div class="footer-links">
           <nav class="metabar-nav">
@@ -266,9 +242,8 @@ sys	0m0.007s
       </div>
   </div>
   © 2018 obnil. All rights reserved.
-</div>
+</footer>
 
-  </div>
   <style>
 .videoWrapper {
 	position: relative;

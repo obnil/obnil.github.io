@@ -17,26 +17,12 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
 
-  <link rel="alternate" type="application/rss+xml" title="RSS Feed for 佩奇的弟弟乔治" href="/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for Less is More" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
-
-<script>
-  (function(w, d){
-   var id='embedly-platform', n = 'script';
-   if (!d.getElementById(id)){
-     w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
-     var e = d.createElement(n); e.id = id; e.async=1;
-     e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
-     var s = d.getElementsByTagName(n)[0];
-     s.parentNode.insertBefore(e, s);
-   }
-  })(window, document);
-</script>
-
 
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Android App 优化之 ANR 详解 | 佩奇的弟弟乔治</title>
+<title>Android App 优化之 ANR 详解 | Less is More</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Android App 优化之 ANR 详解" />
 <meta property="og:locale" content="en_US" />
@@ -44,14 +30,12 @@
 <meta property="og:description" content="今天先来聊聊ANR" />
 <link rel="canonical" href="http://localhost:4000/2019-01-16/anr/" />
 <meta property="og:url" content="http://localhost:4000/2019-01-16/anr/" />
-<meta property="og:site_name" content="佩奇的弟弟乔治" />
+<meta property="og:site_name" content="Less is More" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-01-16T01:51:42+00:00" />
 <script type="application/ld+json">
 {"description":"今天先来聊聊ANR","@type":"BlogPosting","url":"http://localhost:4000/2019-01-16/anr/","headline":"Android App 优化之 ANR 详解","dateModified":"2019-01-16T01:51:42+00:00","datePublished":"2019-01-16T01:51:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-01-16/anr/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-
-
 
   <!-- Google Analytics -->
 
@@ -71,16 +55,13 @@ ga('send', 'pageview');
 </head>
 
 <body>
-  <div class="content-container">
-    <aside id="metabar" class="metabar">
-    <div class="metabar-wrapper">
+  <header class="site-header">
+    <div class="wrapper">
         <div class="metabar-left">
-            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">佩奇的弟弟乔治</a>
+            <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Less is More</a>
         </div>
         <div class="metabar-right">
-            <button id="js-navOpen" class="nav-open">菜单</button>
-            <nav id="js-metabarNav" class="metabar-nav">
-                <button id="js-navClose" class="nav-close">关闭</button>
+            <nav class="metabar-nav">
                 <ul class="nav">
     
     
@@ -91,19 +72,13 @@ ga('send', 'pageview');
     
     
     <li class="nav-link">
-        <a class="" href="/leetcode/">算法</a>
+        <a class="" href="/tags/">Tags</a>
     </li>
     
     
     
     <li class="nav-link">
-        <a class="" href="/reading/">读书</a>
-    </li>
-    
-    
-    
-    <li class="nav-link">
-        <a class="" href="/categories/">归类</a>
+        <a class="" href="/about/">About</a>
     </li>
     
     
@@ -112,15 +87,28 @@ ga('send', 'pageview');
             </nav>
         </div>
     </div>
-</aside>
+</header>
 
-    <div class="page">
+  <main class="wrapper">
+  	<div class="page wrapper">
   <h1>Android App 优化之 ANR 详解</h1>
   <div class="post-date">
     2019年01月16日 字数 7862
      预计阅读时间 23 分钟
     </div>
-  <h2 id="1-你碰到anr了吗">1, 你碰到ANR了吗</h2>
+    <div class="post-tag">
+        <ul>
+            
+            <li>
+                <a href="http://localhost:4000/tags#android">
+                    <span>android</span>
+                </a>
+            </li>
+            
+            
+        </ul>
+    </div>
+    <h2 id="1-你碰到anr了吗">1, 你碰到ANR了吗</h2>
 
 <p>在App使用过程中, 你可能遇到过这样的情况:</p>
 
@@ -485,18 +473,6 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
 
 <p>对于ANR问题, 个人认为还是预防为主, 认清代码中的阻塞点, 善用线程. 同时形成良好的编程习惯, 要有MainThread和Worker Thread的概念的…(实际上人的工作状态也是这样的~~哈哈)</p>
 
-  <div class="post-tag">
-        <ul>
-            
-            <li>
-                <a href="http://localhost:4000/tags#android">
-                    <span>android</span>
-                </a>
-            </li>
-            
-            
-        </ul>
-    </div>
     <!--
     <hr>
     <div class="comment"></div>
@@ -513,9 +489,9 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
     -->
 </div>
 
-    <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
-<div class="footer">
-  <hr />
+  </main>
+  <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
+<footer class="footer">
   <div class="footer-navigation">
       <div class="footer-links">
           <nav class="metabar-nav">
@@ -537,9 +513,8 @@ I/O阻塞一般来说就是文件读写或数据库操作执行在主线程了, 
       </div>
   </div>
   © 2018 obnil. All rights reserved.
-</div>
+</footer>
 
-  </div>
   <style>
 .videoWrapper {
 	position: relative;

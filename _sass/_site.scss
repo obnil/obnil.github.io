@@ -10,8 +10,8 @@ body {
   padding: 0;
 }
 
-.content-container {
-  max-width: 56rem;
+.wrapper {
+  max-width: 45rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -114,7 +114,7 @@ body {
   }
 
   &-tag {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 
     ul {
       li:before {
@@ -356,9 +356,10 @@ body {
   Footer
   -------------- */
 .footer {
+  border-top: 1px solid #e8e8e8;
   text-align: center;
   font-size: .85rem;
-  padding-bottom: 1rem;
+  padding: 1rem 0;
 
   &-link {
     margin: .2rem;
