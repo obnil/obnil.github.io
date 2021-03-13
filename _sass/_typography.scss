@@ -26,7 +26,7 @@ body {
 }
 
 .post-item {
-  padding: 0.5em;
+  padding: 1em 0;
 }
 .post-date {
   font-size: .875rem !important;
@@ -98,7 +98,7 @@ p.lead {
     font-size: .8rem;
     font-weight: 600;
     letter-spacing: .25px;
-    line-height: 1.5;
+    line-height: 54px;
     display: block;
     padding: 0;
     border: 0;
@@ -155,7 +155,7 @@ p.lead {
     right: 0;
     bottom: 0;
     left: 0;
-    padding: 2rem 1rem 2rem 1rem;
+    padding: 0 1rem;
     -webkit-transform: translateY(-2rem);
     -ms-transform: translateY(-2rem);
     transform: translateY(-2rem);
@@ -171,7 +171,13 @@ p.lead {
 }
 
 @media (max-width: 35.9375em) {
-  .metabar-nav .nav-close {
+  .metabar-nav .nav-close{
+    float: right;
+  }
+}
+
+@media (max-width: 35.9375em) {
+  .metabar-nav .nav-open{
     float: right;
   }
 }
@@ -252,21 +258,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 16px;
   font-weight: 600;
   line-height: 1.25;
-}
-
-h1 {
-}
-
-h2 {
-}
-
-h3 {
-}
-
-h4 {
-}
-
-h5 {
 }
 
 h6 {
@@ -359,6 +350,11 @@ dd {
 /*--------------
   
   -------------- */
+hr {
+  border: 0;
+  border-top: 1px solid #f1f3f5;
+  margin: 1.5rem auto
+}
 
 strong {
   color: #333;

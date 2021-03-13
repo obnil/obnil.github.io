@@ -5,18 +5,18 @@ layout: default
 <section class="post-list">
     <div class="container">
         {% for post in paginator.posts %}
-        {% unless post.next %}
-        <h2 class="category-title">{{ post.date | date: '%Y' }}</h2>
+        <!-- {% unless post.next %}
+        <div class="category-title">{{ post.date | date: '%Y' }}</div>
         {% else %}
         {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
         {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
         {% if year != nyear %}
-        <h2 class="category-title">{{ post.date | date: '%Y' }}</h2>
+        <div class="category-title">{{ post.date | date: '%Y' }}</div>
         {% endif %}
-        {% endunless %}
+        {% endunless %} -->
         <article class="post-item">
-            <span class="post-meta date-label">{{ post.date | date: '%Y年%m月%d日' }}</span>
             <div class="article-title"><a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></div>
+            <span class="post-meta date-label">{{ post.date | date: '%Y年%m月%d日' }}</span>
         </article>
         {% endfor %}
         <!-- Pagination links -->
@@ -34,7 +34,7 @@ layout: default
           {% if paginator.next_page %}
             <a href="{{ paginator.next_page_path }}" class="next">下一页</a>
           {% else %}
-            <span class="next ">下一页</span>
+            <span class="next">下一页</span>
           {% endif %}
         </div>
     </div>

@@ -14,12 +14,8 @@
   <!-- CSS -->
   <link rel="stylesheet" href="/assets/css/main.css" type="text/css">
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
-
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for Less is More" href="/feed.xml" />
   <script type="text/javascript" src="/assets/scripts.js"></script>
-
 
   <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>xfermode的基本用法 | Less is More</title>
@@ -37,21 +33,6 @@
 {"description":"利用xfermode可以做出许多有趣的UI效果","@type":"BlogPosting","url":"http://localhost:4000/2019-06-13/xfermode%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/","headline":"xfermode的基本用法","dateModified":"2019-06-13T04:34:42+00:00","datePublished":"2019-06-13T04:34:42+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-06-13/xfermode%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
-  <!-- Google Analytics -->
-
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', '', 'auto');
-ga('send', 'pageview');
-
-</script>
-
-
-
 </head>
 
 <body>
@@ -61,7 +42,9 @@ ga('send', 'pageview');
             <a class="metabar-title" href="http://localhost:4000" aria-label="Visit the homepage." title="Visit the homepage.">Less is More</a>
         </div>
         <div class="metabar-right">
-            <nav class="metabar-nav">
+            <button id="js-navOpen" class="nav-open">菜单</button>
+            <nav id="js-metabarNav" class="metabar-nav">
+                <button id="js-navClose" class="nav-close">关闭</button>
                 <ul class="nav">
     
     
@@ -90,7 +73,7 @@ ga('send', 'pageview');
 </header>
 
   <main class="wrapper">
-  	<div class="page wrapper">
+  	<div class="page">
   <h1>xfermode的基本用法</h1>
   <div class="post-date">
     2019年06月13日 字数 4768
@@ -402,27 +385,29 @@ Dc：全称为Destination color，表示目标图的颜色.
   </main>
   <!-- Documents about icons are here: http://fontawesome.io/icons/ -->
 <footer class="footer">
-  <div class="footer-navigation">
-      <div class="footer-links">
-          <nav class="metabar-nav">
-              <ul class="nav">
-                  <li class="nav-link">
-                      <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
-                  </li>
-                  <li class="nav-link">
-                      <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
-                  </li>
-                  <li class="nav-link">
-                      <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
-                  </li>
-                  <li class="nav-link">
-                      <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
-                  </li>
-              </ul>
-          </nav>
-      </div>
+  <div class="wrapper">
+    <div class="footer-navigation">
+        <div class="footer-links">
+            <nav class="metabar-nav">
+                <ul class="nav">
+                    <li class="nav-link">
+                        <a href="http://blog.csdn.net/guolin_blog" target="_blank">郭霖</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="http://blog.csdn.net/lmj623565791" target="_blank">鸿洋</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="http://blog.csdn.net/singwhatiwanna" target="_blank">任玉刚</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="https://blog.csdn.net/Luoshengyang" target="_blank">老罗的Android之旅</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    Copyright © obnil 2018
   </div>
-  © 2018 obnil. All rights reserved.
 </footer>
 
   <style>
